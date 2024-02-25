@@ -1,0 +1,14 @@
+{#  
+<form method="post" action="{{ path('dashboard_admin_category_delete', {id: category.id}) }}" onsubmit="return confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.id) }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <button class="btn btn-sm btn-danger" type="submit">Supprimer</button>
+</form>
+#}
+
+<a href="#" onclick="event.preventDefault(); confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?') && document.getElementById('js-category-delete-form').submit();" class="btn btn-sm btn-danger">Supprimer</a>
+
+<form id="js-category-delete-form" action="{{ path('dashboard_admin_category_delete', {id: category.id}) }}" method="post" class="">
+    <input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.id) }}">
+    <input type="hidden" name="_method" value="DELETE">
+</form> 

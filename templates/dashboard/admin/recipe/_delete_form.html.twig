@@ -1,0 +1,15 @@
+{#  
+<form method="post" action="{{ path('dashboard_admin_recipe_delete', {id: recipe.id}) }}" onsubmit="return confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('recipe_deletion_' ~ recipe.id) }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <button class="btn btn-sm btn-danger" type="submit">Supprimer</button>
+</form>
+#}
+
+
+<a href="#" onclick="event.preventDefault(); confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?') && document.getElementById('js-recipe-delete-form').submit();" class="btn btn-sm btn-danger">Supprimer</a>
+
+<form id="js-recipe-delete-form" action="{{ path('dashboard_admin_recipe_delete', {id: recipe.id}) }}" method="post" class="">
+    <input type="hidden" name="_token" value="{{ csrf_token('recipe_deletion_' ~ recipe.id) }}">
+    <input type="hidden" name="_method" value="DELETE">
+</form> 

@@ -1,5 +1,39 @@
 twig:
     file_name_pattern: '*.twig'
+    form_themes: ['bootstrap_5_layout.html.twig']
+
+    globals:
+        # Setting
+        # setting: '@App\Service\SettingService'
+
+        # Language
+        # locales: "%app_locales%"
+
+        # Google
+        #google_maps_api_key: "%google_maps_api_key%"
+
+        # Date and time
+        date_format: "%date_format%"
+        date_format_date_only: "%date_format_date_only%"
+        date_timezone: "%date_timezone%"
+
+        website_name: '%env(WEBSITE_NAME)%'
+
+        name: '%env(WEBSITE_CONTACT_NAME)%'
+        email: '%env(WEBSITE_CONTACT_EMAIL)%'
+        address: '%env(WEBSITE_CONTACT_ADDRESS)%'
+        company: '%env(WEBSITE_COMPANY)%'
+        phone: '%env(WEBSITE_CONTACT_PHONE)%'
+        siret: '%env(WEBSITE_SIRET)%'
+        ape: '%env(WEBSITE_APE)%'
+        vat: '%env(WEBSITE_VAT)%'
+        quantity: '%env(WEBSITE_QUANTITY)%'
+        host: '%env(WEBSITE_HOST)%'
+        domain: '%env(WEBSITE_DOMAIN)%'
+
+    date:
+        format: "%date_format%"
+        timezone: "%date_timezone%"
 
 when@test:
     twig:

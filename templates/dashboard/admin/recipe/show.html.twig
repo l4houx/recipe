@@ -1,0 +1,50 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Recette :' ~ recipe.title %}
+{% block title pagetitle %}
+
+{% block body %}
+    <h1>{{ pagetitle }}</h1>
+    <p>{{ recipe.content | nl2br }}</p>
+
+{# 
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ recipe.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ recipe.title }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ recipe.slug }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ recipe.content | nl2br }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ recipe.createdAt ? recipe.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ recipe.updatedAt ? recipe.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ recipe.duration }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('dashboard_admin_recipe_index') }}">back to list</a>
+
+    <a href="{{ path('dashboard_admin_recipe_edit', {'id': recipe.id}) }}">edit</a>
+
+    {{ include('dashboard/admin/recipe/_delete_form.html.twig') }}
+#}
+{% endblock %}

@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+
+    nginx:
+        image: nginx:1.22-alpine
+        ports:
+            - 89:80
+        volumes:
+            - ./:/code
+            - ./nginx.conf:/etc/nginx/nginx.conf
+
+    php:
+        build: .
+        volumes:
+            - ./:/code
+
+    db:
+        image: mysql:latest
+        container_name: recipe-db
+        environment:
+            # 🚨 Changer si vous utilisez cette configuration en production
+            MYSQL_ROOT_PASSWORD: password # ⬅︎ 🚨
+            MYSQL_DATABASE: recipe
+            MYSQL_USER: symfony # ⬅︎ 🚨
+            MYSQL_PASSWORD: symfony # ⬅︎ 🚨
+        ports:
+            - "3306:3306"
+        volumes:
+            - data:/var/lib/mysql
+        restart: always
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        container_name: recipe-phpmyadmin
+        environment:
+            PMA_ARBITRARY: 1
+            PMA_HOST: db
+            PMA_USER: root
+            PMA_PASSWORD: password # ⬅︎ 🚨
+            UPLOAD_LIMIT: 20M
+        ports:
+            - 8890:80
+        restart: always
+
+    mailer:
+        image: axllent/mailpit
+        container_name: mailpit
+        ports:
+            - 1025:1025
+            - 8025:8025
+        environment:
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+volumes:
+    data:

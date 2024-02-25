@@ -1,0 +1,16 @@
+vich_uploader:
+    db_driver: orm
+
+    metadata:
+        type: attribute
+
+    mappings:
+
+        recipe_image:
+            uri_prefix: '%recipe_image%'
+            upload_destination: '%kernel.project_dir%/public%recipe_image%'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            #inject_on_load: true
+            #delete_on_update: true
+            #delete_on_remove: true
+

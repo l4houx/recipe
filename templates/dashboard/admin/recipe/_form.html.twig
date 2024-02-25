@@ -1,0 +1,21 @@
+<div class="card border-0 mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">{{ pagetitle }} "{{ recipe.title }}"</h4>
+    </div>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+        <div class="card-body">
+            {% if app.request.attributes.get('_route') == 'dashboard_admin_recipe_edit' %}
+                <div>
+                    <h5 class="mb-3">Images</h5>
+                    <img src="{{ recipe.thumbnail ? asset(recipe.getThumbnailPath) : recipe.getThumbnailPlaceholder }}" alt="{{ recipe.title }}" class="img-4by3-lg rounded">
+                </div>
+            {% endif %}
+            {{ form_widget(form) }}
+            <div class="col-12 pt-2">
+                <button type="submit" class="btn btn-primary me-4">
+                    {{ button_label|default('Sauvegarder') }}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+</div>

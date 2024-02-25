@@ -1,0 +1,25 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Ajouter une nouvelle catégoie' %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="{{ path('dashboard_admin_category_index') }}" class="btn btn-outline-secondary">Retour à toutes les catégories</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="col-xl-9 col-lg-8 col-md-12 col-12">
+        {{ include('dashboard/admin/category/_form.html.twig') }}
+    </div>
+    <div class="col-xl-3 col-lg-4 col-md-12 col-12"></div>
+{% endblock %}
