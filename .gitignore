@@ -27,3 +27,10 @@
 # Liés à l'IDE
 .idea/
 .code/
+
+# Images
+public/images/*
+!public/images/.gitignore
+public/images/recipe/*
+!public/images/recipe/.gitignore
+!/var/images
