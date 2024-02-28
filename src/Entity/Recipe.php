@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,6 +51,32 @@ class Recipe
 
     #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
     private ?Category $category = null;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
+    #[Assert\NotNull(groups: ['create', 'update'])]
+    private bool $enablereviews = true;
+
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
+
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OrderBy(['publishedAt' => 'DESC'])]
+    private Collection $comments;
+
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['remove'])]
+    private Collection $reviews;
+
+    public function __toString(): string
+    {
+        return sprintf('#%d %s', $this->getId(), $this->getTitle());
+    }
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+    }
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -121,5 +149,216 @@ class Recipe
         $this->category = $category;
 
         return $this;
+    }
+
+    public function isEnablereviews(): bool
+    {
+        return $this->enablereviews;
+    }
+
+    public function getEnablereviews(): bool
+    {
+        return $this->enablereviews;
+    }
+
+    public function setEnablereviews(bool $enablereviews): static
+    {
+        $this->enablereviews = $enablereviews;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Provides the overall average rating for this ad.
+     */
+    public function getAvgRatings(): float
+    {
+        // Calculate sum of ratings
+        $sum = array_reduce($this->comments->toArray(), function ($total, $comment) {
+            return $total + $comment->getRating();
+        }, 0);
+
+        // Divide to get the averages
+        if (\count($this->comments) > 0) {
+            return $sum / \count($this->comments);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Returns a user's comment on an article.
+     */
+    public function getCommentFromAuthor(User $author): ?Comment
+    {
+        /** @var Comment $comment */
+        foreach ($this->comments as $comment) {
+            if ($comment->getAuthor() === $author) {
+                return $comment;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getRecipe() === $this) {
+                $comment->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getRecipe() === $this) {
+                $review->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isRatedBy(User $user): Review
+    {
+        /** @var Review $review */
+        foreach ($this->reviews as $review) {
+            if ($review->getAuthor() === $user) {
+                return $review;
+            }
+        }
+
+        return false;
+    }
+
+    public function getRatingsPercentageForRating($rating): int|float
+    {
+        if (!$this->countVisibleReviews()) {
+            return 0;
+        }
+
+        return round(($this->getRatingsCountForRating($rating) / $this->countVisibleReviews()) * 100, 1);
+    }
+
+    public function getRatingsCountForRating($rating): int
+    {
+        if (!$this->countVisibleReviews()) {
+            return 0;
+        }
+
+        $ratingCount = 0;
+
+        /** @var Review $review */
+        foreach ($this->reviews as $review) {
+            if ($review->getVisible() && $review->getRating() === $rating) {
+                ++$ratingCount;
+            }
+        }
+
+        return $ratingCount;
+    }
+
+    public function getRatingAvg(): int|float
+    {
+        if (!$this->countVisibleReviews()) {
+            return 0;
+        }
+
+        $ratingAvg = 0;
+
+        /** @var Review $review */
+        foreach ($this->reviews as $review) {
+            if ($review->getVisible()) {
+                $ratingAvg += $review->getRating();
+            }
+        }
+
+        return round($ratingAvg / $this->countVisibleReviews(), 1);
+    }
+
+    public function getRatingPercentage(): int|float
+    {
+        if (!$this->countVisibleReviews()) {
+            return 0;
+        }
+
+        $ratingPercentage = 0;
+
+        /** @var Review $review */
+        foreach ($this->reviews as $review) {
+            if ($review->getVisible()) {
+                $ratingPercentage += $review->getRatingPercentage();
+            }
+        }
+
+        return round($ratingPercentage / $this->countVisibleReviews(), 1);
+    }
+
+    public function countVisibleReviews(): int
+    {
+        $count = 0;
+
+        /** @var Review $review */
+        foreach ($this->reviews as $review) {
+            if ($review->getVisible()) {
+                ++$count;
+            }
+        }
+
+        return $count;
     }
 }

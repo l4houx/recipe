@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-trait HasIdTitleSlugAssertTrait
+trait HasIdHeadlineAndSlugTrait
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,22 +15,22 @@ trait HasIdTitleSlugAssertTrait
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank(message: "Please don't leave your title blank!")]
+    #[Assert\NotBlank(message: "Please don't leave your headline blank!")]
     #[Assert\Length(
         min: 6,
         max: 128,
-        minMessage: 'The title is too short ({{ limit }} characters minimum)',
-        maxMessage: 'The title is too long ({ limit } characters maximum)'
+        minMessage: 'The headline is too short ({{ limit }} characters minimum)',
+        maxMessage: 'The headline is too long ({ limit } characters maximum)'
     )]
     #[BanWord()]
-    private string $title = '';
+    private string $headline = '';
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\Length(
         min: 6,
         max: 128,
-        minMessage: 'The name is too short ({{ limit }} characters minimum)',
-        maxMessage: 'The name is too long ({ limit } characters maximum)'
+        minMessage: 'The slug is too short ({{ limit }} characters minimum)',
+        maxMessage: 'The slug is too long ({ limit } characters maximum)'
     )]
     #[Assert\Regex(
         pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
@@ -50,14 +50,14 @@ trait HasIdTitleSlugAssertTrait
         return $this;
     }
 
-    public function getTitle(): string
+    public function getHeadline(): string
     {
-        return $this->title;
+        return $this->headline;
     }
 
-    public function setTitle(string $title): static
+    public function setHeadline(string $headline): static
     {
-        $this->title = $title;
+        $this->headline = $headline;
 
         return $this;
     }

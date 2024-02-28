@@ -14,6 +14,10 @@ final class HasLimit
 
     public const CATEGORY_LIMIT = 10;
 
+    public const POST_LIMIT = 10;
+
+    public const POSTCATEGORY_LIMIT = 10;
+
     public const CONTACT_LIMIT = 10;
 
     public const FAQ_LIMIT = 10;

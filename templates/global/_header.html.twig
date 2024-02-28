@@ -51,6 +51,9 @@
 				<li class="nav-item">
 					<a class="nav-link {{ app.current_route starts with 'recipe_' ? 'active' : '' }}" href="{{ path('recipe_index') }}">Recettes</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link {{ app.current_route starts with 'post_' ? 'active' : '' }}" href="{{ path('post_index') }}">Blog</a>
+				</li>
 				#}
 				<li class="nav-item">
 					<a class="nav-link {{ app.current_route == 'contact' ? 'active' : '' }}" href="{{ path('contact') }}">

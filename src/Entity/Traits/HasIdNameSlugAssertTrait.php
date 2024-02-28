@@ -27,8 +27,8 @@ trait HasIdNameSlugAssertTrait
     #[Assert\Length(
         min: 4,
         max: 128,
-        minMessage: 'The name is too short ({{ limit }} characters minimum)',
-        maxMessage: 'The name is too long ({ limit } characters maximum)'
+        minMessage: 'The slug is too short ({{ limit }} characters minimum)',
+        maxMessage: 'The slug is too long ({ limit } characters maximum)'
     )]
     #[Assert\Regex(
         pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
