@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-categories', name: 'dashboard_admin_category_')]
-#[IsGranted(HasRoles::ADMINISTRATOR)]
+//#[IsGranted(HasRoles::ADMINISTRATOR)]
 class CategoryController extends AbstractController
 {
     public function __construct(
@@ -28,7 +28,7 @@ class CategoryController extends AbstractController
     public function index(): Response
     {
         return $this->render('dashboard/admin/category/index.html.twig', [
-            'categories' => $this->categoryRepository->findAll(),
+            'categories' => $this->categoryRepository->findAllWithCount(),
         ]);
     }
 

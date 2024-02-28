@@ -33,6 +33,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>Nom</th>
+                            <th>Recettes</th>
                             <th>Couleur</th>
                             <th>Mise à jour</th>
                             <th>Actions</th>
@@ -54,6 +55,9 @@
                                             </div>
                                         </div>
                                     </a>
+                                </td>
+                                <td>
+                                    {{ category.count }}
                                 </td>
                                 <td>
                                     <span class="text-decoration-none" style="color: {{ category.color }}">{{ category.name }}</span>
