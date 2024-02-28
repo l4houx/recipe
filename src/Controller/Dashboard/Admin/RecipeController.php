@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-recipes', name: 'dashboard_admin_recipe_')]
-//#[IsGranted(HasRoles::ADMINISTRATOR)]
+#[IsGranted(HasRoles::ADMINISTRATOR)]
 class RecipeController extends AbstractController
 {
     public function __construct(
