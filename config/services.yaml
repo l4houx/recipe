@@ -92,3 +92,6 @@ services:
     # IntlExtension
     Twig\Extra\Intl\IntlExtension:
         alias: twig.extension.intl
+
+    # Logout
+    Symfony\Component\Security\Http\Logout\LogoutUrlGenerator: '@security.logout_url_generator'

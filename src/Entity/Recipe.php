@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasContentTrait;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\HasViewsTrait;
 use App\Repository\RecipeRepository;
+use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasTimestampTrait;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Entity\Traits\HasIdTitleSlugAssertTrait;
@@ -25,6 +26,8 @@ class Recipe
     use HasContentTrait;
     use HasViewsTrait;
     use HasTimestampTrait;
+
+    public const RECIPE_LIMIT = HasLimit::RECIPE_LIMIT;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
     #[Vich\UploadableField(mapping: 'recipe_image', fileNameProperty: 'thumbnail')]

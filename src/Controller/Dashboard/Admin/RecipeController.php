@@ -4,15 +4,18 @@ namespace App\Controller\Dashboard\Admin;
 
 use App\Entity\Recipe;
 use App\Form\RecipeType;
+use App\Entity\Traits\HasRoles;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-recipes', name: 'dashboard_admin_recipe_')]
+//#[IsGranted(HasRoles::ADMINISTRATOR)]
 class RecipeController extends AbstractController
 {
     public function __construct(
@@ -22,12 +25,21 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
+    {
+        $page = $request->query->getInt('page', 1);
+        $recipes = $this->recipeRepository->findForPagination($page);
+
+        return $this->render('dashboard/admin/recipe/index.html.twig', compact('recipes'));
+    }
+
+    /*
     {
         return $this->render('dashboard/admin/recipe/index.html.twig', [
             'recipes' => $this->recipeRepository->findWithDurationLowerThan(20),
         ]);
     }
+    */
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response

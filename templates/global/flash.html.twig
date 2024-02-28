@@ -1,5 +1,5 @@
 {% if app.request.hasPreviousSession %}
-    {% for type, messages in app.flashes %}
+    {% for type, messages in app.flashes(['success', 'danger', 'info', 'warning', 'secondary', 'primary']) %}
         {% for message in messages %}
             <div class="container align-items-center justify-content-center p-4">
                 <div class="d-flex alert alert-{{ type }} alert-dismissible fade show" role="alert">

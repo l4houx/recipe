@@ -1,11 +1,41 @@
-<nav class="navbar navbar-expand-lg">
-	<div class="container-fluid px-0">
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+	<div class="container-fluid">
 		<a class="navbar-brand" href="{{ path('home') }}">{{ website_name }}</a>
 		<div class="order-lg-3 d-flex align-items-center">
             <div>
                 <div class="d-flex align-items-center">
-                    <a href="#" class="btn btn-outline-primary shadow-sm me-2 d-none d-md-block">Sign In</a>
-                    <a href="#" class="btn btn-primary d-none d-md-block me-2 me-lg-0">Sign Up</a>
+					{% if app.user %}
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Mon compte
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" href="{{ path('dashboard_main') }}">Tableau de bord</a></li>
+								<li><a class="dropdown-item" href="{{ path('dashboard_main_account')}}">Mon profil</a></li>
+								<li><hr class="dropdown-divider"></li>
+								{% if is_granted('IS_IMPERSONATOR') %}
+									<li>
+										<a id="logout" class="dropdown-item" aria-current="page" href="{{ impersonation_exit_path(path('home')) }}">
+											Déconnexion
+										</a>
+									</li>
+								{% else %}
+									<li>
+										<a id="logout" class="dropdown-item" aria-current="page" href="{{ path('logout') }}">
+											Déconnexion
+										</a>
+									</li>
+								{% endif %}
+							</ul>
+						</li>
+					{% else %}
+						<a href="{{ path('login') }}" class="btn btn-outline-primary shadow-sm me-2 d-none d-md-block">
+							S'identifier
+						</a>
+						<a href="{{ path('register') }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
+							S'inscrire
+						</a>
+					{% endif %}
                 </div>
             </div>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,3 +68,4 @@
 		</div>
 	</div>
 </nav>
+{% include "global/flash.html.twig" %}

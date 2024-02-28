@@ -26,7 +26,7 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom',
+                'label' => 'Nom :',
                 'empty_data' => '',
             ])
             ->add('slug', TextType::class, [
@@ -44,7 +44,7 @@ class CategoryType extends AbstractType
             ])
             */
             ->add('color', ColorType::class, [
-                'label' => 'Couleur',
+                'label' => 'Couleur :',
                 'required' => false,
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('name'))

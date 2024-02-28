@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CategoryRepository;
 use App\Entity\Traits\HasTimestampTrait;
@@ -18,6 +19,8 @@ class Category
 {
     use HasIdNameSlugAssertTrait;
     use HasTimestampTrait;
+
+    public const CATEGORY_LIMIT = HasLimit::CATEGORY_LIMIT;
 
     #[ORM\Column(length: 255, nullable: true, options: ['default' => '#5dade2'])]
     private ?string $color = null;

@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Recipe;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Traits\HasLimit;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Recipe>
@@ -16,8 +19,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RecipeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry, 
+        private readonly PaginatorInterface $paginator
+    ) {
         parent::__construct($registry, Recipe::class);
     }
 
@@ -47,13 +52,18 @@ class RecipeRepository extends ServiceEntityRepository
         ;
     }
 
-    //    public function findOneBySomeField($value): ?Recipe
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findForPagination(int $page): PaginationInterface
+    {
+        return $this->paginator->paginate(
+            $this->createQueryBuilder('r')
+            ->leftJoin('r.category', 'c')
+            ->select('r', 'c'),
+            $page,
+            HasLimit::RECIPE_LIMIT,
+            [
+                'distinct' => false,
+                'sortFieldAllowList' => ['r.id', 'r.title', 'r.category']
+            ]
+        );
+    }
 }

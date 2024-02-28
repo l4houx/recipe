@@ -31,11 +31,11 @@ class RecipeType extends AbstractType
     {
         $builder
             ->add('thumbnailFile', VichFileType::class, [
-                'label' => 'Image',
+                'label' => 'Image :',
             ])
             //->add('thumbnailFile', FileType::class)
             ->add('title', TextType::class, [
-                'label' => 'Titre',
+                'label' => 'Titre :',
                 'empty_data' => '',
             ])
             ->add('slug', TextType::class, [
@@ -43,14 +43,14 @@ class RecipeType extends AbstractType
                 'required' => false,
             ])
             ->add('category', EntityType::class, [
-                'label' => 'Catégorie',
+                'label' => 'Catégorie :',
                 "class" => Category::class,
                 "choice_label" => "name",
                 //'expanded' => true,
                 'empty_data' => '',
             ])
             ->add('content', TextareaType::class, [
-                'label' => 'Contenu',
+                'label' => 'Contenu :',
                 'empty_data' => '',
             ])
             ->add('duration')

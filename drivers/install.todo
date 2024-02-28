@@ -1,0 +1,10 @@
+Installation en cours:
+    ☐ composer require liip/imagine-bundle
+    ☐ composer require excelwebzone/recaptcha-bundle
+    ☐ composer require lexik/jwt-authentication-bundle
+    ☐ composer require exercise/htmlpurifier-bundle
+    ☐ composer require symfony/ux-live-component
+    ☐ composer require symfony/ux-twig-component
+
+
+Autres:

@@ -4,15 +4,18 @@ namespace App\Controller\Dashboard\Admin;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Entity\Traits\HasRoles;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-categories', name: 'dashboard_admin_category_')]
+#[IsGranted(HasRoles::ADMINISTRATOR)]
 class CategoryController extends AbstractController
 {
     public function __construct(

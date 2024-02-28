@@ -1,0 +1,28 @@
+{% extends 'auth.html.twig' %}
+
+{% block layout %}{{ parent() }} reset{% endblock %}
+
+{% set pagetitle = "Réinitialisez votre mot de passe" %}
+{% block title pagetitle %}
+
+{% block content %}
+    <div class="mb-4">
+        <a href="{{ path('home') }}">
+            <img src="../assets/images/brand/logo/logo-icon.svg" class="mb-4" alt="logo-icon">
+        <a>
+        <h1 class="mb-1 fw-bold">{{ pagetitle }}</h1>
+        <p>Remplissez le formulaire pour réinitialiser votre mot de passe.</p>
+    </div>
+    {{ form_start(resetForm, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+        <div class="mb-3">
+            {{ form_row(resetForm.plainPassword) }}
+        </div>
+        <div class="mb-3 d-grid">
+            <button type="submit" class="btn btn-primary">Envoyer le lien de réinitialisation</button>
+        </div>
+        <span>
+            Revenir pour vous
+            <a href="{{ path('login') }}">connecter</a>
+        </span>
+    {{ form_end(resetForm) }}
+{% endblock %}

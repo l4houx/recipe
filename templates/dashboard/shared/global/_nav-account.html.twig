@@ -1,0 +1,101 @@
+<a class="d-xl-none d-lg-none d-md-none text-inherit fw-bold" href="#">Menu</a>
+<button class="navbar-toggler d-md-none icon-shape icon-sm rounded bg-primary text-light" type="button" data-bs-toggle="collapse" data-bs-target="#sidenav" aria-controls="sidenav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fe fe-menu"></span>
+</button>
+<div class="collapse navbar-collapse" id="sidenav">
+    <div class="navbar-nav flex-column">
+        <span class="navbar-header">Tableau de bord</span>
+        <ul class="list-unstyled ms-n2 mb-4">
+            <li class="nav-item active">
+                <a class="nav-link {% if activerd == 'dashboard' %}active{% endif %}" href="{{ path('dashboard_main_account') }}">
+                    <i class="fe fe-home nav-icon"></i>
+                    Mon tableau de bord
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fe fe-book nav-icon"></i>
+                    Mes recettes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fe fe-star nav-icon"></i>
+                    Avis
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fe fe-dollar-sign nav-icon"></i>
+                    Paiements
+                </a>
+            </li>
+        </ul>
+        <span class="navbar-header">Paramètres du compte</span>
+        <ul class="list-unstyled ms-n2 mb-0">
+            <li class="nav-item">
+                <a class="nav-link {% if activerd == 'profile' %}active{% endif %}" href="{{ path('dashboard_account_profile') }}">
+                    <i class="fe fe-user nav-icon"></i>
+                    Mon profil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if activerd == 'edit_profile' %}active{% endif %}" href="{{ path('dashboard_account_edit_profile') }}">
+                    <i class="fe fe-user nav-icon"></i>
+                    Editer mon profil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if activerd == 'edit_avatar' %}active{% endif %}" href="{{ path('dashboard_account_edit_avatar') }}">
+                    <i class="fe fe-user nav-icon"></i>
+                    Editer mon avatar
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if activerd == 'edit_change_password' %}active{% endif %}" href="{{ path('dashboard_account_edit_change_password') }}">
+                    <i class="fe fe-settings nav-icon"></i>
+                    Editer mon mot de passe
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fe fe-refresh-cw nav-icon"></i>
+                    Profils sociaux
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fe fe-bell nav-icon"></i>
+                    Notifications
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fe fe-lock nav-icon"></i>
+                    Confidentialité du profil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fe fe-trash nav-icon"></i>
+                    Supprimer le profil
+                </a>
+            </li>
+            {% if is_granted('IS_IMPERSONATOR') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ impersonation_exit_path(path('home')) }}">
+                        <i class="fe fe-power nav-icon"></i>
+                        Déconnexion
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('logout') }}">
+                        <i class="fe fe-power nav-icon"></i>
+                        Déconnexion
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>

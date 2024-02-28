@@ -14,17 +14,7 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body class="{{ bodyClass is defined ? bodyClass : '' }}">
-        {% block header %}
-            {% include "global/_header.html.twig" %}
-        {% endblock %}
-        <main>
-            {% include "global/flash.html.twig" %}
-            {% block breadcrumb '' %}
-            {% block body '' %}
-        </main>
-        {% block footer %}
-            {% include "global/_footer.html.twig" %}
-        {% endblock %}
+    <body class="{{ bodyClass is defined ? bodyClass : '' }} {% block dashboard %}{% endblock %} {% block page %}{% endblock %} {% block layout %}default{% endblock %}">
+        {% block body '' %}
     </body>
 </html>

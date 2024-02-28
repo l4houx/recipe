@@ -16,12 +16,12 @@ trait HasIdTitleSlugAssertTrait
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank(message: "Please don't leave your name blank!")]
+    #[Assert\NotBlank(message: "Please don't leave your title blank!")]
     #[Assert\Length(
         min: 6,
         max: 128,
-        minMessage: 'The name is too short ({{ limit }} characters minimum)',
-        maxMessage: 'The name is too long ({ limit } characters maximum)'
+        minMessage: 'The title is too short ({{ limit }} characters minimum)',
+        maxMessage: 'The title is too long ({ limit } characters maximum)'
     )]
     #[BanWord()]
     private string $title = '';

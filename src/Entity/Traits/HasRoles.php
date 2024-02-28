@@ -21,4 +21,7 @@ final class HasRoles
 
     // Role User
     public const DEFAULT = 'ROLE_USER';
+
+    // Role isVerified
+    public const VERIFIED = 'ROLE_VERIFIED';
 }

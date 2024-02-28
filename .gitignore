@@ -31,6 +31,9 @@
 # Images
 public/images/*
 !public/images/.gitignore
+!/var/images
+
+# Images Recipe
 public/images/recipe/*
 !public/images/recipe/.gitignore
-!/var/images
+!/var/images/recipes

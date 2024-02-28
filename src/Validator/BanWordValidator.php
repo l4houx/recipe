@@ -7,7 +7,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class BanWordValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         /* @var BanWord $constraint */
 

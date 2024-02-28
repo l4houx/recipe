@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block layout %}{{ parent() }} page{% endblock %}
+
+{% block body %}
+    {% block header %}
+        {% include "global/_header.html.twig" %}
+    {% endblock %}
+    <main>
+        {% block breadcrumb '' %}
+        {% block content '' %}
+    </main>
+    {% block footer %}
+        {% include "global/_footer.html.twig" %}
+    {% endblock %}
+{% endblock %}

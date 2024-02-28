@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FaqRepository;
 use App\Entity\Traits\HasTimestampTrait;
@@ -12,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Faq
 {
     use HasTimestampTrait;
+
+    public const FAQ_LIMIT = HasLimit::FAQ_LIMIT;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
