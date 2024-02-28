@@ -1,15 +1,23 @@
 # En cours
 
-# Création d'un multi-site recette/blog de A à Z (CMS WORDPRESS) avec Symfony 7, Yourdomain | Multipurpose Bootstrap 5 HTML Template (Dark/Light) Version 1.1.0
+# Création d'un multi-site recette/blog de A à Z (CMS WORDPRESS) avec **Symfony 7**, Your**domain** | Multipurpose Bootstrap 5 HTML Template (Dark/Light) Version 1.1.0
 
 ## Environnement de développement
 
 ### Prérequis
-* PHP 8.2
-* Composer
-* Symfony CLI
-* Docker
-* Docker Compose
+
+Your**domain** sera développé en utilisant :
+
+- Docker
+- Symfony 7
+- Mysql 8
+- PHP 8.2
+- PHPMyAdmin
+- Symfony CLI
+- Composer
+- Sass
+
+L'utilisation de bundles sera limitée au strict nécessaire.
 
 Vous pouvez vérifier les prérequis (sauf Docker et Docker Compose) avec la commande suivante (depuis Symfony CLI) :
 
