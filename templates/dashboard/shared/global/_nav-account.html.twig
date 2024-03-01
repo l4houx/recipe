@@ -40,13 +40,19 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {% if activerd == 'edit' %}active{% endif %}" href="{{ path('dashboard_account_edit') }}">
+                    <i class="fe fe-user nav-icon"></i>
+                    Editer mon profil
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {% if activerd == 'edit_profile' %}active{% endif %}" href="{{ path('dashboard_account_edit_profile') }}">
                     <i class="fe fe-user nav-icon"></i>
                     Editer mon profil
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if activerd == 'edit_avatar' %}active{% endif %}" href="{{ path('dashboard_account_edit_avatar') }}">
+                <a class="nav-link {% if activerd == 'edit_avatar' %}active{% endif %}" href="">
                     <i class="fe fe-user nav-icon"></i>
                     Editer mon avatar
                 </a>

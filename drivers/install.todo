@@ -3,8 +3,13 @@ Installation en cours:
     ☐ composer require excelwebzone/recaptcha-bundle
     ☐ composer require lexik/jwt-authentication-bundle
     ☐ composer require exercise/htmlpurifier-bundle
-    ☐ composer require symfony/ux-live-component
-    ☐ composer require symfony/ux-twig-component
+    ✔ composer require symfony/ux-live-component @done(24-02-29 22:26)
+    ✔ composer require symfony/ux-twig-component @done(24-02-29 22:26)
 
 
-Autres:
+Entity:
+    ☐ Setting
+    ☐ AppLayoutSetting
+    ✔ Testimonial @done(24-03-01 21:12)
+    ☐ HelpCenterArticle
+    ☐ HelpCenterCategory

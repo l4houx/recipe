@@ -10,43 +10,65 @@ use function Symfony\Component\String\u;
 
 trait HasSocialMediaTrait
 {
-    #[ORM\Column(type: Types::STRING, length: 5, nullable: true)]
-    #[Assert\Length(max: 5)]
-    private ?string $year = null;
-
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
+    #[Assert\Url(
+        message: "Cette valeur n'est pas une URL valide.", 
+        protocols: ['http', 'https'],
+    )]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'http://example.com'])]
     private ?string $externallink = null;
 
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
+    #[Assert\Url(
+        message: "Cette valeur n'est pas une URL valide.", 
+        protocols: ['http', 'https'],
+    )]
+    #[Assert\Regex(
+        pattern: '^(http|https):\/\/(www\.youtube\.com|www\.dailymotion\.com)\/?',
+        match: true,
+        message: "L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion",
+    )]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://www.youtube.com'])]
     private ?string $youtubeurl = null;
 
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
+    #[Assert\Url(
+        message: "Cette valeur n'est pas une URL valide.", 
+        protocols: ['http', 'https'],
+    )]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://twitter.com/France/'])]
     private ?string $twitterurl = null;
 
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
+    #[Assert\Url(
+        message: "Cette valeur n'est pas une URL valide.", 
+        protocols: ['http', 'https'],
+    )]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://www.instagram.com/'])]
     private ?string $instagramurl = null;
 
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
+    #[Assert\Url(
+        message: "Cette valeur n'est pas une URL valide.", 
+        protocols: ['http', 'https'],
+    )]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://fr-fr.facebook.com/'])]
     private ?string $facebookurl = null;
 
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
+    #[Assert\Url(
+        message: "Cette valeur n'est pas une URL valide.", 
+        protocols: ['http', 'https'],
+    )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
     private ?string $googleplusurl = null;
 
     #[Assert\Length(max: 255)]
-    #[Assert\Url]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
+    #[Assert\Url(
+        message: "Cette valeur n'est pas une URL valide.", 
+        protocols: ['http', 'https'],
+    )]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://fr.linkedin.com/'])]
     private ?string $linkedinurl = null;
 
     public function hasSocialMedia(): bool
@@ -55,18 +77,6 @@ trait HasSocialMediaTrait
             || $this->youtubeurl || $this->twitterurl
             || $this->instagramurl || $this->facebookurl
             || $this->googleplusurl || $this->linkedinurl;
-    }
-
-    public function getYear(): ?string
-    {
-        return $this->year;
-    }
-
-    public function setYear(?string $year): static
-    {
-        $this->year = $year;
-
-        return $this;
     }
 
     public function getExternallink(): ?string

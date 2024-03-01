@@ -1,4 +1,18 @@
 import './bootstrap.js';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+/*
+import canvasConfetti from 'canvas-confetti';
+
+document.body.addEventListener('click', () => {
+    canvasConfetti()
+})
+*/
+
+import './vendor/darkMode.js';
+import './js/theme.min.js';
+
 /*
  * Welcome to your app's main JavaScript file!
  *

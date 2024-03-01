@@ -51,7 +51,9 @@ class RecipeType extends AbstractType
             ])
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu :',
+                'required' => true,
                 'empty_data' => '',
+                'attr' => ['placeholder' => '', 'rows' => 6],
             ])
             ->add('duration')
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('title'))

@@ -9,8 +9,11 @@ use App\Entity\Traits\HasViewsTrait;
 use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasTimestampTrait;
 use App\Entity\Traits\HasIdTitleSlugAssertTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: PageRepository::class)]
+#[UniqueEntity('title')]
+#[UniqueEntity('slug')]
 class Page
 {
     use HasIdTitleSlugAssertTrait;

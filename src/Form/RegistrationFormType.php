@@ -44,6 +44,21 @@ class RegistrationFormType extends AbstractType
                 'empty_data' => '',
                 'required' => false,
             ])
+            ->add('firstname', TextType::class, [
+                'label' => 'Prénom :',
+                //'purify_html' => true,
+                'required' => true,
+                'empty_data' => '',
+                'attr' => ['placeholder' => 'Prénom'],
+            ])
+            ->add('lastname', TextType::class, [
+                'label' => 'Nom :',
+                //'purify_html' => true,
+                'required' => true,
+                'empty_data' => '',
+                'attr' => ['placeholder' => 'Nom'],
+            ])
+            // Contact
             ->add('email', EmailType::class, [
                 'label' => 'Adresse e-mail :',
                 //'purify_html' => true,

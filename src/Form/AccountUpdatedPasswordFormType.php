@@ -3,16 +3,17 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
-class ChangePasswordFormType extends AbstractType
+/** ChangePasswordFormType */
+class AccountUpdatedPasswordFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -23,14 +24,14 @@ class ChangePasswordFormType extends AbstractType
                 ->add('currentPassword', PasswordType::class, [
                     'label' => 'Mot de passe actuel :',
                     'attr' => [
-                        'autocomplete' => 'off'
+                        'autocomplete' => 'off',
                     ],
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Veuillez entrer votre mot de passe actuel',
                         ]),
                         new UserPassword(['message' => 'Mot de passe actuel invalide.']),
-                    ]
+                    ],
                 ])
             ;
         }
@@ -62,8 +63,8 @@ class ChangePasswordFormType extends AbstractType
                 ],
                 */
 
-                'first_options' => ['label' => 'Nouveau mot de passe :', 'attr' => [...$editAttr, ...['placeholder' => "**************"]]],
-                'second_options' => ['label' => 'Confirmez votre nouveau mot de passe :', 'attr' => [...$editAttr, ...['placeholder' => "**************"]]],
+                'first_options' => ['label' => 'Nouveau mot de passe :', 'attr' => [...$editAttr, ...['placeholder' => '**************']]],
+                'second_options' => ['label' => 'Confirmez votre nouveau mot de passe :', 'attr' => [...$editAttr, ...['placeholder' => '**************']]],
                 'translation_domain' => 'message',
                 'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
                 'required' => true,
@@ -124,7 +125,7 @@ class ChangePasswordFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'current_password_is_required' => false
+            'current_password_is_required' => false,
         ]);
 
         $resolver->setAllowedTypes('current_password_is_required', 'bool');

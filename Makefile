@@ -161,6 +161,10 @@ sf-open-email: ## Open Email catcher.
 sf-check-requirements: ## Check requirements.
 	$(SYMFONY) check:requirements
 .PHONY: sf-check-requirements
+
+sf-prod-asset: ## Asset Mapper (Prod: To compile assets into the public folder).
+	$(SYMFONY_CONSOLE) asset-map:compile
+.PHONY: sf-prod-asset
 #---------------------------------------------#
 
 ## === 📦  COMPOSER ==============================================
@@ -180,7 +184,6 @@ composer-validate-deep: ## Validate composer.json and composer.lock files in str
 	$(COMPOSER) validate --strict --check-lock
 .PHONY: composer-validate-deep
 #---------------------------------------------#
-
 
 ## === 🐛  PHPQA =================================================
 qa-cs-fixer-dry-run: ## Run php-cs-fixer in dry-run mode.

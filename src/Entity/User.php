@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasDeletedAtTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -19,12 +20,13 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 //#[Vich\Uploadable]
-#[UniqueEntity(fields: ['email'], message: 'This email address is already in use.')]
-#[UniqueEntity(fields: ['username'], message: 'This username is already used.')]
+#[UniqueEntity(fields: ['email'], message: 'Cette adresse email est déjà utilisée.')]
+#[UniqueEntity(fields: ['username'], message: "Ce nom d'utilisateur est déjà utilisé.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
     use HasProfileDetailsTrait;
     use HasTimestampTrait;
+    use HasDeletedAtTrait;
 
     public const USER_LIMIT = HasLimit::USER_LIMIT;
 
@@ -57,6 +59,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $reviews;
 
+    #[ORM\OneToMany(targetEntity: Testimonial::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $testimonials;
+
     public function __toString(): string
     {
         return $this->username ?? $this->email;
@@ -69,6 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         $this->comments = new ArrayCollection();
         $this->recipes = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->testimonials = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -259,6 +265,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
             // set the owning side to null (unless already changed)
             if ($review->getAuthor() === $this) {
                 $review->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Testimonial>
+     */
+    public function getTestimonials(): Collection
+    {
+        return $this->testimonials;
+    }
+
+    public function addTestimonial(Testimonial $testimonial): static
+    {
+        if (!$this->testimonials->contains($testimonial)) {
+            $this->testimonials->add($testimonial);
+            $testimonial->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTestimonial(Testimonial $testimonial): static
+    {
+        if ($this->testimonials->removeElement($testimonial)) {
+            // set the owning side to null (unless already changed)
+            if ($testimonial->getAuthor() === $this) {
+                $testimonial->setAuthor(null);
             }
         }
 

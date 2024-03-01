@@ -49,7 +49,101 @@
   vertical-align: middle;
 }
 
-:root,
+.theme-icon-active {
+  line-height: 1.5;
+}
+
+.btn-scroll-top {
+  background-color: var(--gk- #fff);
+  border-radius: 10px;
+  bottom: 1.5rem;
+  box-shadow: inset 0 0 0 0.1rem rgba(227, 229, 233, 0.25);
+  opacity: 0;
+  position: fixed;
+  right: 1.5rem;
+  transform: translateY(0.75rem);
+  transition: all 0.2s linear, margin-right 0;
+  visibility: hidden;
+  z-index: 1010;
+}
+
+.btn-scroll-top,
+.btn-scroll-top:after {
+  cursor: pointer;
+  display: block;
+  height: 3rem;
+  width: 3rem;
+}
+
+.btn-scroll-top:after {
+  color: #754ffe;
+  content: "\f145";
+  font-family: bootstrap-icons !important;
+  font-size: 1.5rem;
+  left: 0;
+  line-height: 3rem;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  transition: all 0.2s linear;
+  z-index: 1;
+}
+
+.btn-scroll-top.active-progress {
+  transform: translateY(0);
+  visibility: visible;
+}
+
+@media (min-width: 320px) {
+  .btn-scroll-top.active-progress {
+    opacity: 1;
+  }
+}
+.btn-scroll-top svg path {
+  fill: none;
+}
+
+.btn-scroll-top svg.progress-square path {
+  stroke: #754ffe;
+  stroke-width: 2;
+  box-sizing: border-box;
+  transition: all 0.2s linear;
+}
+
+.btn-icon {
+  align-items: center;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 0.92969rem;
+  font-weight: 400;
+  height: 2.5rem;
+  justify-content: center;
+  padding: 0;
+  position: relative;
+  width: 2.5rem;
+}
+
+.btn-icon.btn-xs {
+  font-size: 0.75rem;
+  height: 1.53125rem;
+  width: 1.53125rem;
+}
+
+.btn-group-sm > .btn-icon.btn,
+.btn-icon.btn-sm {
+  font-size: 0.875rem;
+  height: 2.1875rem;
+  width: 2.1875rem;
+}
+
+.btn-group-lg > .btn-icon.btn,
+.btn-icon.btn-lg {
+  font-size: 1rem;
+  height: 3.36875rem;
+  width: 3.36875rem;
+}
+
+s :root,
 [data-bs-theme=light] {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;

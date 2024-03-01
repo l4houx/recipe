@@ -1,33 +1,52 @@
-<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+<nav class="navbar navbar-expand-lg">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="{{ path('home') }}">{{ website_name }}</a>
 		<div class="order-lg-3 d-flex align-items-center">
             <div>
                 <div class="d-flex align-items-center">
+					<div class="dropdown me-2">
+						<button class="btn btn-light btn-icon rounded-circle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+							<i class="bi theme-icon-active"><i class="bi theme-icon bi-circle-half"></i></i>
+							<span class="visually-hidden bs-theme-text">Toggle theme</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bs-theme-text">
+							<li>
+								<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+									<i class="bi theme-icon bi-sun-fill"></i>
+									<span class="ms-2">Clair</span>
+								</button>
+							</li>
+							<li>
+								<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+									<i class="bi theme-icon bi-moon-stars-fill"></i>
+									<span class="ms-2">Foncé</span>
+								</button>
+							</li>
+							<li>
+								<button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+									<i class="bi theme-icon bi-circle-half"></i>
+									<span class="ms-2">Auto</span>
+								</button>
+							</li>
+						</ul>
+					</div>
 					{% if app.user %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Mon compte
+						<a class="btn btn-outline-primary shadow-sm me-2 d-none d-md-block" href="{{ path('dashboard_main') }}">
+							{% if is_granted("ROLE_TEAM") %}
+								Tableau de bord
+							{% else %}
+								Mon tableau de bord 
+							{% endif %}
+						</a>
+						{% if is_granted('IS_IMPERSONATOR') %}
+							<a href="{{ impersonation_exit_path(path('home')) }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
+								Déconnexion
 							</a>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="{{ path('dashboard_main') }}">Tableau de bord</a></li>
-								<li><a class="dropdown-item" href="{{ path('dashboard_main_account')}}">Mon profil</a></li>
-								<li><hr class="dropdown-divider"></li>
-								{% if is_granted('IS_IMPERSONATOR') %}
-									<li>
-										<a id="logout" class="dropdown-item" aria-current="page" href="{{ impersonation_exit_path(path('home')) }}">
-											Déconnexion
-										</a>
-									</li>
-								{% else %}
-									<li>
-										<a id="logout" class="dropdown-item" aria-current="page" href="{{ path('logout') }}">
-											Déconnexion
-										</a>
-									</li>
-								{% endif %}
-							</ul>
-						</li>
+						{% else %}
+							<a href="{{ path('logout') }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
+								Déconnexion
+							</a>
+						{% endif %}
 					{% else %}
 						<a href="{{ path('login') }}" class="btn btn-outline-primary shadow-sm me-2 d-none d-md-block">
 							S'identifier

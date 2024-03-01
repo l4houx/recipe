@@ -2,6 +2,7 @@
 
 namespace App\Entity\Traits;
 
+use App\Validator\BanWord;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,11 +11,13 @@ trait HasProfileDetailsTrait
 {
     // use HasAvatarVichTrait;
     use HasIsTeamTrait;
-    // use HasIdentifyTrait;
-    // use HasEmailTrait;
-    // use HasSocialMediaTrait;
+    use HasIdentifyTrait;
+    use HasSocialMediaTrait;
     // use HasKnpUOAuthLoggableTrait;
     use HasRegistrationDetailsTrait;
+
+    #[ORM\Column(type: Types::STRING, length: 2, nullable: true, options: ['default' => 'FR'])]
+    private ?string $country = null;
 
     #[Assert\NotBlank(message: "Please don't leave your username blank!")]
     #[Assert\Length(
@@ -23,6 +26,7 @@ trait HasProfileDetailsTrait
         minMessage: 'The username is too short ({{ limit }} characters minimum)',
         maxMessage: 'The username is too long ({ limit } characters maximum)'
     )]
+    #[BanWord()]
     #[ORM\Column(type: Types::STRING, length: 30, unique: true)]
     private string $username = '';
 
@@ -30,8 +34,8 @@ trait HasProfileDetailsTrait
     #[Assert\Length(
         min: 4,
         max: 30,
-        minMessage: 'The username is too short ({{ limit }} characters minimum)',
-        maxMessage: 'The username is too long ({ limit } characters maximum)'
+        minMessage: 'The slug is too short ({{ limit }} characters minimum)',
+        maxMessage: 'The slug is too long ({ limit } characters maximum)'
     )]
     #[Assert\Regex(
         pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
@@ -49,6 +53,18 @@ trait HasProfileDetailsTrait
     public function __toString(): string
     {
         return (string) $this->getFullName();
+    }
+
+    public function getCountry(): string
+    {
+        return $this->country ?: 'FR';
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country;
+
+        return $this;
     }
 
     public function getUsername(): string

@@ -1,0 +1,12 @@
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header align-items-center">
+        <span class="bi bi-{{ this.icon}} me-2 text-{{ this.color }}"></span>
+        <strong class="me-auto">{{ this.title }}</strong>
+        <a href="#" data-bs-dismiss="toast" aria-label="{{ 'action.close'|trans }}" class="text-dark">
+            <span class="bi bi-cross"></span>
+        </a>
+    </div>
+    <div class="toast-body">
+        {{ message }}
+    </div>
+</div>

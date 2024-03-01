@@ -10,13 +10,21 @@ use function Symfony\Component\String\u;
 
 trait HasIdentifyTrait
 {
-    #[Assert\Length(min: 2, max: 20)]
+    #[Assert\Length(min: 4, max: 20)]
     #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern: "/^(?:[\u00c0-\u01ffa-zA-Z'-]){2,}(?:\s[\u00c0-\u01ffa-zA-Z'-]{2,})+$/i",
+        message: 'Prénom invalide.',
+    )]
     #[ORM\Column(type: Types::STRING, length: 20)]
     private string $firstname = '';
 
-    #[Assert\Length(min: 2, max: 20)]
+    #[Assert\Length(min: 4, max: 20)]
     #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern: "/^(?:[\u00c0-\u01ffa-zA-Z'-]){2,}(?:\s[\u00c0-\u01ffa-zA-Z'-]{2,})+$/i",
+        message: 'Nom de famille invalide.',
+    )]
     #[ORM\Column(type: Types::STRING, length: 20)]
     private string $lastname = '';
 

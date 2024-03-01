@@ -30,6 +30,12 @@
                 <p class="mb-4">Modifier vos informations personnelles et votre adresse.</p>
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
                     <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(formEditProfile.firstname) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(formEditProfile.lastname) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
                         {{ form_row(form.username) }}
                     </div>
                     <div class="mb-3 col-12 col-md-6">

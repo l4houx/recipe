@@ -8,6 +8,7 @@ use App\Repository\ReviewRepository;
 use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasTimestampTrait;
 use App\Entity\Traits\HasIdHeadlineAndSlugTrait;
+use App\Entity\Traits\HasRatingTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -16,13 +17,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('slug')]
 class Review
 {
+    use HasRatingTrait;
     use HasIdHeadlineAndSlugTrait;
     use HasContentTrait;
     use HasTimestampTrait;
-
-    #[ORM\Column(type: Types::INTEGER)]
-    #[Assert\NotBlank]
-    private int $rating;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
     #[Assert\NotNull]
@@ -39,23 +37,6 @@ class Review
     public function __construct()
     {
         $this->isVisible = true;
-    }
-
-    public function getRatingPercentage(): int|float
-    {
-        return ($this->rating / 5) * 100;
-    }
-
-    public function getRating(): int
-    {
-        return $this->rating;
-    }
-
-    public function setRating(int $rating): static
-    {
-        $this->rating = $rating;
-
-        return $this;
     }
 
     public function isVisible(): bool

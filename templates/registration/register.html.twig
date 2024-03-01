@@ -27,6 +27,12 @@
     {% endif %}
     {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
         <div class="mb-3">
+            {{ form_row(registrationForm.firstname) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(registrationForm.lastname) }}
+        </div>
+        <div class="mb-3">
             {{ form_row(registrationForm.username) }}
         </div>
         {% if registrationForm.email is defined %}
