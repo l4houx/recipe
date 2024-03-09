@@ -43,4 +43,21 @@ return [
         'version' => '5.3.3',
         'type' => 'css',
     ],
+    'jquery' => [
+        'version' => '3.7.1',
+    ],
+    '@fortawesome/fontawesome-free' => [
+        'version' => '6.5.1',
+    ],
+    '@fortawesome/fontawesome-free/css/fontawesome.min.css' => [
+        'version' => '6.5.1',
+        'type' => 'css',
+    ],
+    'tom-select' => [
+        'version' => '2.3.1',
+    ],
+    'tom-select/dist/css/tom-select.bootstrap5.css' => [
+        'version' => '2.3.1',
+        'type' => 'css',
+    ],
 ];

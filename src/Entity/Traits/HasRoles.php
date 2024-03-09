@@ -13,8 +13,8 @@ final class HasRoles
     // Role Admin
     public const ADMIN = 'ROLE_ADMIN';
 
-    // Role Author
-    public const BOOK = 'ROLE_AUTHOR_ADMIN';
+    // Role Team
+    public const TEAM = 'ROLE_TEAM';
 
     // Role Moderator editor the article
     public const MODERATOR = 'ROLE_MODERATOR';

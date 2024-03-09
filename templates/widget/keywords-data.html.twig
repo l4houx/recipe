@@ -1,0 +1,7 @@
+{% if keywords %}
+    {% for keyword in keywords %}
+        <a href="{{ path('blog_keyword', {slug: keyword.slug}) }}" class="btn btn-light btn-xs mb-2">
+            {{ keyword.name }}
+        </a>
+    {% endfor %}
+{% endif %}

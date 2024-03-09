@@ -2,9 +2,14 @@
 
 namespace App\Repository;
 
+use App\Entity\Post;
+use App\Entity\User;
+use App\Entity\Recipe;
 use App\Entity\Comment;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Traits\HasLimit;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -21,28 +26,75 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    //    /**
-    //     * @return Comment[] Returns an array of Comment objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findRecentComments($value) // (BlogController)
+    {
+        if ($value instanceof Post) {
+            $object = 'post';
+        }
 
-    //    public function findOneBySomeField($value): ?Comment
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($value instanceof Recipe) {
+            $object = 'recipe';
+        }
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.'.$object.' = :val')
+            ->andWhere('c.isApproved = true')
+            ->setParameter('val', $value->getId())
+            ->orderBy('c.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return array<array-key, Comment>
+     */
+    public function getCommentsByEntityAndPage($value, int $page): array
+    {
+        if ($value instanceof Post) {
+            $object = 'post';
+        }
+
+        if ($value instanceof Recipe) {
+            $object = 'recipe';
+        }
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.'.$object.' = :val')
+            ->andWhere('c.isApproved = true')
+            ->setParameter('val', $value->getId())
+            ->orderBy('c.id', 'DESC')
+            ->setMaxResults(HasLimit::COMMENT_LIMIT)
+            ->setFirstResult(($page - 1) * HasLimit::COMMENT_LIMIT)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Retrieves the latest comments created by the user.
+     *
+     * @return Comment[] Returns an array of Comments objects
+     */
+    public function findLastByUser(User $user, int $maxResults): array //  (UserController)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.post', 'p')
+            ->where('p.isOnline = true')
+            ->andWhere('c.author = :user')
+            ->andWhere('c.isApproved = true')
+            ->orderBy('c.publishedAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public static function createIsActiveCriteria(): Criteria
+    {
+        return Criteria::create()
+            ->andWhere(Criteria::expr()->eq('isApproved', true))
+            ->orderBy(['publishedAt' => 'ASC']);
+    }
 }

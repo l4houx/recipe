@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasIdTrait;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasIdTrait;
 use App\Entity\Traits\HasIPTrait;
 use App\Repository\CommentRepository;
+use App\Entity\Traits\HasContentTrait;
 use function Symfony\Component\String\u;
 
+use App\Entity\Traits\HasIsApprovedTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,7 +21,10 @@ class Comment
 {
     use HasIdTrait;
     use HasIPTrait;
+    use HasIsApprovedTrait;
     use HasContentTrait;
+
+    public const COMMENT_LIMIT = HasLimit::COMMENT_LIMIT;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $publishedAt;
@@ -33,11 +38,11 @@ class Comment
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    //#[ORM\JoinColumn(nullable: false)]
     private ?Post $post = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    //#[ORM\JoinColumn(nullable: false)]
     private ?Recipe $recipe = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]

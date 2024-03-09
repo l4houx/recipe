@@ -3,19 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Category;
-use App\Entity\Recipe;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
-class CategoryType extends AbstractType
+class CategoryFormType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
     {
@@ -51,34 +46,6 @@ class CategoryType extends AbstractType
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;
     }
-
-    /*
-    public function slug(PreSubmitEvent $event): void
-    {
-        $data = $event->getData();
-
-        if (empty($data['slug'])) {
-            $slugger = new AsciiSlugger();
-            $data['slug'] = strtolower($slugger->slug($data['name']));
-            $event->setData($data);
-        }
-    }
-
-    public function timestamps(PostSubmitEvent $event): void
-    {
-        $data = $event->getData();
-
-        if (!($data instanceof Category)) {
-            return;
-        }
-
-        $data->setUpdatedAt(new \DateTimeImmutable());
-
-        if (!$data->getId()) {
-            $data->setCreatedAt(new \DateTimeImmutable());
-        }
-    }
-    */
 
     public function configureOptions(OptionsResolver $resolver): void
     {

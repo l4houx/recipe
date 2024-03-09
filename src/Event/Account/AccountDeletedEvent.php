@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Account;
+namespace App\Event\Account;
 
 use App\Entity\User;
 

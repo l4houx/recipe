@@ -1,0 +1,18 @@
+<div {{ attributes }}>
+    <div class="form-group">
+        <input type="search"
+            class="form-control search-field"
+            placeholder="{{ 'Search...'|trans }}"
+            autocomplete="off"
+            data-model="query"
+            autofocus
+        >
+    </div>
+    {% for post in this.posts %}
+        {% include "global/post-card.html.twig" with {post: post, showdate: 1} only %}
+    {% else %}
+        {% if query is not empty %}
+            {% include "global/message.html.twig" with { type: "info", message: ('No result'|trans), icon: "bi bi-info-circle" } %}
+        {% endif %}
+    {% endfor %}
+</div>

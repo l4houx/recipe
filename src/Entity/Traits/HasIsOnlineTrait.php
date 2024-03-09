@@ -12,7 +12,7 @@ trait HasIsOnlineTrait
     #[Assert\NotNull]
     private bool $isOnline = false;
 
-    public function isIsOnline(): bool
+    public function isOnline(): bool
     {
         return $this->isOnline;
     }

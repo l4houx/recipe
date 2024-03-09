@@ -1,0 +1,27 @@
+<div class="d-flex d-block d-sm-flex review">
+	<div class="text-md-center flex-shrink-0 me-4 me-xl-5">
+        {% set runtimeConfig = {"thumbnail": {"size": [80, 80] } } %}
+        <img 
+            src="{{ review.user.avatarName ? asset(review.user.getAvatarPath | imagine_filter('thumbnail', runtimeConfig)) : review.user.getAvatarPlaceholder }}" 
+            alt="{{ review.user.nickname }}" 
+            class="d-block avatar avatar-xl p-2 mb-2"
+        >
+        <span class="text-uppercase text-muted text-sm">
+            {{ review.createdAt | date('M Y') }}
+        </span>
+	</div>
+	<div>
+		<h6 class="mt-2 mb-1">
+            {{ 'Review'|trans }} 
+            #{{ index }} 
+            {{ 'by'|trans }} 
+            {{ review.user.nickname}}
+        </h6>
+		<div class="mb-2">
+            {% include 'global/rating.html.twig' with {'rating' : review.rating} %}
+		</div>
+        {% if review.details %}
+            <p class="text-muted text-sm">{{ review.details | html_markdown_untrusted }}</p>
+        {% endif %}
+	</div>
+</div>

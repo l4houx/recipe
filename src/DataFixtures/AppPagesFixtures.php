@@ -83,6 +83,8 @@ class AppPagesFixtures extends Fixture
             $faq
                 ->setQuestion($this->faker()->sentence)
                 ->setAnswer($content)
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ;
 
             $manager->persist($faq);
@@ -97,6 +99,8 @@ class AppPagesFixtures extends Fixture
                 ->setSlug($value['slug'])
                 ->setContent($value['content'])
                 ->setViews($value['views'])
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ;
 
             $manager->persist($page);

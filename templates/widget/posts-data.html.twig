@@ -1,0 +1,11 @@
+<ul class="list-unstyled mb-0">
+	{% for post in posts %}
+		<li class="mb-3">
+			<h4 class="lh-lg">
+				<a href="{{ path('blog_article', { slug: post.slug }) }}" class="text-inherit">
+					{{ post.title | html_markdown_excerpt(20)}}
+				</a>
+			</h4>
+		</li>
+	{% endfor %}
+</ul>

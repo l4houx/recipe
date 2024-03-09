@@ -9,13 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 trait HasRegistrationDetailsTrait
 {
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
-    private bool $suspended = false;
+    private bool $isSuspended = false;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
     private bool $isVerified = false;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
-    private bool $agreeTerms = false;
+    private bool $isAgreeTerms = false;
 
     #[ORM\Column(nullable: true)]
     private ?array $bill = [];
@@ -28,12 +28,17 @@ trait HasRegistrationDetailsTrait
 
     public function isSuspended(): bool
     {
-        return $this->suspended;
+        return $this->isSuspended;
     }
 
-    public function setSuspended(bool $suspended): static
+    public function getIsSuspended(): bool
     {
-        $this->suspended = $suspended;
+        return $this->isSuspended;
+    }
+
+    public function setIsSuspended(bool $isSuspended): static
+    {
+        $this->isSuspended = $isSuspended;
 
         return $this;
     }
@@ -57,12 +62,12 @@ trait HasRegistrationDetailsTrait
 
     public function isAgreeTerms(): ?bool
     {
-        return $this->agreeTerms;
+        return $this->isAgreeTerms;
     }
 
-    public function setAgreeTerms(bool $agreeTerms): static
+    public function setIsAgreeTerms(bool $isAgreeTerms): static
     {
-        $this->agreeTerms = $agreeTerms;
+        $this->isAgreeTerms = $isAgreeTerms;
 
         return $this;
     }

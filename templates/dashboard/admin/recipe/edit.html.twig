@@ -10,16 +10,24 @@
                 {% set breadcrumb = [{ "dashboard_admin_recipe_index": 'Recettes', "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary">Retour à toutes les recettes</a>
+                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary me-2">Revenir à la liste</a>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
 
-{% block body %}
+{% block content %}
     <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-        {{ include('dashboard/admin/recipe/_form.html.twig', {'button_label': 'Mise à jour'}) }}
+        {# {{ include('dashboard/admin/recipe/_form.html.twig', {'button_label': 'Mise à jour'}) }} #}
+        {{ include('dashboard/admin/recipe/_form.html.twig', {
+            pagetitle: pagetitle,
+            recipe: recipe,
+            form: form,
+            button_css: 'btn btn-warning',
+            button_label: 'Mise à jour',
+            include_back_to_home_link: true,
+        }, with_context = false) }}
     </div>
     <div class="col-xl-3 col-lg-4 col-md-12 col-12"></div>
 {% endblock %}

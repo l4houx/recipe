@@ -65,7 +65,7 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'attr' => ['placeholder' => 'Adresse email ici'],
             ])
-            ->add('agreeTerms', CheckboxType::class, [
+            ->add('isAgreeTerms', CheckboxType::class, [
                 'mapped' => true,
                 'constraints' => [
                     new IsTrue([
@@ -77,6 +77,7 @@ class RegistrationFormType extends AbstractType
                 'type' => PasswordType::class,
                 'options' => [
                     //'purify_html' => true,
+                    'toggle' => true,
                     'translation_domain' => 'message',
                     'attr' => [
                         'placeholder' => 'Mot de passe',
@@ -127,7 +128,7 @@ class RegistrationFormType extends AbstractType
         /*
         $builder
             ->add('username')
-            ->add('agreeTerms', CheckboxType::class, [
+            ->add('isAgreeTerms', CheckboxType::class, [
                                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([

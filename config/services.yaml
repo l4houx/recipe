@@ -55,21 +55,14 @@ parameters:
     # resize_picture_key: '%env(RESIZE_PICTURE_KEY)%'
 
     # Vich
-    #attachments:                     /uploads/attachments
-    #categories:                      /uploads/categories
-    #homepage_hero_custom_background: /uploads/home/hero
-    #app_layout:                      /uploads/layout
-    #article_image:                   /uploads/article
-    #thumbnail:                       /uploads/thumbnail
-    #user_avatar:                     /uploads/user
-    #payment_gateway:                 /uploads/payment/gateways
+    #homepage_hero_custom_background: /images/home/hero
+    #app_layout:                      /images/layout
+    post_image:                       /images/post
+    #thumbnail:                       /images/thumbnail
+    #user_avatar:                     /images/user
+    #payment_gateway:                 /images/payment/gateways
     recipe_image:                     /images/recipe
-    #badges:                          /uploads/badges
-    #photo_testimonial:               /uploads/testimonial
-
-    # Media Post
-    # medias_directory:                'public/uploads/post/'
-    # uploads_directory:               'uploads/post/'
+    #photo_testimonial:               /images/testimonial
 
 services:
     # default configuration for services in *this* file

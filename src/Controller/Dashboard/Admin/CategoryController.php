@@ -3,7 +3,7 @@
 namespace App\Controller\Dashboard\Admin;
 
 use App\Entity\Category;
-use App\Form\CategoryType;
+use App\Form\CategoryFormType;
 use App\Entity\Traits\HasRoles;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,7 +37,7 @@ class CategoryController extends AbstractController
     public function new(Request $request): Response
     {
         $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category)->handleRequest($request);
+        $form = $this->createForm(CategoryFormType::class, $category)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($category);
@@ -54,7 +54,7 @@ class CategoryController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Category $category): Response
     {
-        $form = $this->createForm(CategoryType::class, $category)->handleRequest($request);
+        $form = $this->createForm(CategoryFormType::class, $category)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();

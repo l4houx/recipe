@@ -1,0 +1,126 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Toutes les articles' %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="{{ path('dashboard_admin_blog_new') }}" class="btn btn-primary me-2">Créer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <div class="col-xl-2 col-lg-4 col-md-6 col-12">
+            <div class="mb-lg-4 mb-2">
+                <input type="search" class="form-control" placeholder="Rechercher des articles">
+            </div>
+        </div>
+        <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
+            <select class="form-select" data-ddg-inputtype="unknown">
+                <option value="">Filter</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Pending">Pending</option>
+                <option value="Modified">Modified</option>
+                <option value="Finished">Finished</option>
+                <option value="Cancel">Cancel</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="table-responsive overflow-y-hidden">
+                    <table class="table mb-0 text-nowrap table-hover table-centered">
+                        <thead class="">
+                            <tr>
+                                <th>{{ knp_pagination_sortable(posts, '#', 'p.id') }}</th>
+                                <th>{{ knp_pagination_sortable(posts, 'Titre', 'p.title') }}</th>
+                                <th>En ligne</th>
+                                <th>Vues</th>
+                                <th>Mise à jour</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for post in posts %}
+                            {% set link = path('dashboard_admin_blog_edit', { id : post.id }) %}
+                            <tr>
+                                <td>{{ post.id }}</td>
+                                <td>
+                                    <a href="{{ link }}" class="text-inherit">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <img src="{{ post.thumbnail ? asset(post.getThumbnailPath) : post.getThumbnailPlaceholder }}" alt="{{ post.title }}" class="img-4by3-lg rounded">
+                                            </div>
+                                            <div class="ms-3">
+                                                <h4 class="mb-1 text-primary-hover">{{ post.title }}</h4>
+                                                <span>
+                                                    Publié {{ post.createdAt ? post.createdAt | ago() }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>
+                                    {# {{ post.isOnline ? 'Yes' : 'No' }} #}
+                                    {% if post.isOnline == false %}
+                                        <span class="badge bg-danger-soft">Non</span>
+                                    {% else %}
+                                        <span class="badge bg-success-soft">Oui</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ post.views }}</td>
+                                <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                {#  
+                                <td>
+                                    <a href="{{ path('dashboard_admin_blog_show', {'id': post.id}) }}" class="btn btn-outline-success btn-sm">Afficher</a>
+                                    <a href="{{ link }}" class="btn btn-outline-warning btn-sm">Modifier</a>
+                                    {{ include('dashboard/admin/blog/_delete_form.html.twig', {post: post}, with_context = false) }}
+                                </td>
+                                #}
+                                <td>
+                                    <div class="dropdown dropstart">
+                                        <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+                                            <span class="dropdown-header">Paramètres</span>
+                                            <a class="dropdown-item" href="{{ path('dashboard_admin_blog_show', {'id': post.id}) }}">
+                                                <i class="bi bi-eye dropdown-item-icon"></i>
+                                                Afficher
+                                            </a>
+                                            <a class="dropdown-item" href="{{ link }}">
+                                                <i class="bi bi-pencil dropdown-item-icon"></i>
+                                                Modifier
+                                            </a>
+                                            {{ include('dashboard/admin/blog/_delete_form.html.twig', {post: post}, with_context = false) }}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">
+                                {% include "global/message.html.twig" with { type: "info", message: ('No records found'|trans), icon: "bi bi-exclamation-circle" } %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    {{ knp_pagination_render(posts, null, {}, {'align': 'center'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

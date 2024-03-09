@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasKeywordPostCategoryTrait;
-use App\Repository\KeywordRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\KeywordRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Traits\HasKeywordPostCategoryTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: KeywordRepository::class)]
+#[UniqueEntity('name')]
+#[UniqueEntity('slug')]
 class Keyword
 {
     use HasKeywordPostCategoryTrait;

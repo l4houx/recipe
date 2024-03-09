@@ -46,7 +46,7 @@ class NotificationCommentsSubscriber implements EventSubscriberInterface
         /** @var string $emailAddress */
         $emailAddress = $author->getEmail();
 
-        $UrlToPost = $this->urlGenerator->generate('blog_show', [
+        $UrlToPost = $this->urlGenerator->generate('blog_article', [
             'slug' => $post->getSlug(),
             '_fragment' => 'comment_'.$comment->getId(),
         ], UrlGeneratorInterface::ABSOLUTE_URL);

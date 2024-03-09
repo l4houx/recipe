@@ -6,14 +6,20 @@ use App\Entity\User;
 use App\Entity\Traits\HasRoles;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppAdminTeamUserFixtures extends Fixture
 {
     use FakerTrait;
 
+    public const ADMINISTRATOR = 'ADMINISTRATOR';
+    public const ADMIN = 'ADMIN';
+    public const MODERATOR = 'MODERATOR';
+
     public function __construct(
-        protected readonly UserPasswordHasherInterface $hasher
+        private readonly UserPasswordHasherInterface $hasher,
+        private readonly SluggerInterface $slugger
     ) {
     }
 
@@ -25,6 +31,7 @@ class AppAdminTeamUserFixtures extends Fixture
         $superadmin
             ->setId(1)
             ->setRoles([HasRoles::ADMINISTRATOR])
+            ->setCountry('US')
             ->setLastname('Cameron')
             ->setFirstname('Williamson')
             ->setUsername('superadmin')
@@ -32,9 +39,16 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setEmail('superadmin@yourdomain.com')
             //->setPhone($this->faker()->phoneNumber())
             ->setIsTeam(true)
+            ->setIsVerified(true)
             ->setAbout($this->faker()->realText(254))
             ->setDesignation('Super Admin Staff')
+            ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setLastLoginIp($this->faker()->ipv4())
+            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
+
+        $this->addReference(self::ADMINISTRATOR, $superadmin);
 
         $manager->persist(
             $superadmin->setPassword(
@@ -48,6 +62,7 @@ class AppAdminTeamUserFixtures extends Fixture
         $admin
             ->setId(2)
             ->setRoles([HasRoles::ADMIN])
+            ->setCountry('BE')
             ->setLastname('Wade')
             ->setFirstname('Warren')
             ->setUsername('admin')
@@ -55,9 +70,16 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setEmail('admin@yourdomain.com')
             //->setPhone($this->faker()->phoneNumber())
             ->setIsTeam(true)
+            ->setIsVerified(true)
             ->setAbout($this->faker()->realText(254))
             ->setDesignation('Admin Staff')
+            ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setLastLoginIp($this->faker()->ipv4())
+            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
+
+        $this->addReference(self::ADMIN, $admin);
 
         $manager->persist(
             $admin->setPassword(
@@ -71,6 +93,7 @@ class AppAdminTeamUserFixtures extends Fixture
         $moderator
             ->setId(3)
             ->setRoles([HasRoles::MODERATOR])
+            ->setCountry('DE')
             ->setLastname('Jane')
             ->setFirstname('Cooper')
             ->setUsername('moderator')
@@ -78,9 +101,16 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setEmail('moderator@yourdomain.com')
             //->setPhone($this->faker()->phoneNumber())
             ->setIsTeam(true)
+            ->setIsVerified(true)
             ->setAbout($this->faker()->realText(254))
             ->setDesignation('Moderator Staff')
+            ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setLastLoginIp($this->faker()->ipv4())
+            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
+
+        $this->addReference(self::MODERATOR, $moderator);
 
         $manager->persist(
             $moderator->setPassword(
@@ -91,16 +121,31 @@ class AppAdminTeamUserFixtures extends Fixture
         // Create 10 Users
         $genres = ['male', 'female'];
         $genre = $this->faker()->randomElement($genres);
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i <= 10; ++$i) {
             /** @var User $user */
             $user = (new User());
             $user
+                ->setCountry($this->faker()->countryCode())
                 ->setLastname($this->faker()->lastName)
                 ->setFirstname($this->faker()->firstName($genre))
                 ->setUsername($this->faker()->unique()->userName())
+                ->setSlug($this->slugger->slug($user->getUsername())->lower())
                 ->setEmail($this->faker()->email())
-                ->setSuspended($this->faker()->boolean(0.1))
+                ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                ->setLastLoginIp($this->faker()->ipv4())
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ;
+
+            if ($i > 5) {
+                $user->setIsVerified(false);
+                $user->setIsSuspended($this->faker()->numberBetween(0, 1));
+                $user->setIsAgreeTerms($this->faker()->numberBetween(0, 1));
+            } else {
+                $user->setIsVerified(true);
+            }
+
+            $this->addReference('user-' . $i, $user);
 
             $manager->persist(
                 $user->setPassword(

@@ -39,11 +39,14 @@
 							{% endif %}
 						</a>
 						{% if is_granted('IS_IMPERSONATOR') %}
-							<a href="{{ impersonation_exit_path(path('home')) }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
+							<a href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
 								Déconnexion
 							</a>
+							<form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
+								<input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+							</form>
 						{% else %}
-							<a href="{{ path('logout') }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
+							<a href="{{ impersonation_exit_path(path('home')) }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
 								Déconnexion
 							</a>
 						{% endif %}
@@ -70,10 +73,10 @@
 				<li class="nav-item">
 					<a class="nav-link {{ app.current_route starts with 'recipe_' ? 'active' : '' }}" href="{{ path('recipe_index') }}">Recettes</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'post_' ? 'active' : '' }}" href="{{ path('post_index') }}">Blog</a>
-				</li>
 				#}
+				<li class="nav-item">
+					<a class="nav-link {{ app.current_route starts with 'blog_' ? 'active' : '' }}" href="{{ path('blog_list') }}">Blog</a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link {{ app.current_route == 'contact' ? 'active' : '' }}" href="{{ path('contact') }}">
 						Contact
@@ -82,12 +85,23 @@
 			</ul>
             <form class="mt-3 mt-lg-0 ms-lg-3 d-flex align-items-center">
                 <span class="position-absolute ps-3 search-icon">
-                    <i class="fe fe-search"></i>
+                    <i class="bi bi-search"></i>
                 </span>
                 <label for="search" class="visually-hidden"></label>
-                <input type="search" id="search" class="form-control ps-6" placeholder="Search Courses">
+                <input type="search" id="search" class="form-control ps-6" placeholder="Recherche...">
             </form>
 		</div>
 	</div>
 </nav>
-{% include "global/flash.html.twig" %}
+
+{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+	<div class="container-fluid mt-3">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-12">
+				<div class="pb-1 mb-1 d-md-flex align-items-center justify-content-between">
+					{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-info-circle', message: ('You are connected as "%username%'|trans({'%username%' : app.user.username})~ '", <a href="'~ path('dashboard_main', {'_switch_user': '_exit'}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to return to your dashboard'|trans) } %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endif %}

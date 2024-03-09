@@ -1,0 +1,10 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Rechercher...' %}
+{% block title pagetitle %}
+
+{% block content %}
+    {{ component('blog_search', {
+        query: query
+    }) }}
+{% endblock %}

@@ -14,3 +14,10 @@ vich_uploader:
             #delete_on_update: true
             #delete_on_remove: true
 
+        post_image:
+            uri_prefix: '%post_image%'
+            upload_destination: '%kernel.project_dir%/public%post_image%'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            #inject_on_load: true
+            #delete_on_update: true
+            #delete_on_remove: true

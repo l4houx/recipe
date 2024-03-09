@@ -32,7 +32,7 @@ class AccountDeletedController extends Controller
 
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        if (!$this->isCsrfTokenValid('account-deleted', $data['csrf'] ?? '')) {
+        if (!$this->isCsrfTokenValid('account_deleted_', $data['csrf'] ?? '')) {
             return new JsonResponse([
                 'title' => $translator->trans('Invalid CSRF token.'),
             ], Response::HTTP_BAD_REQUEST);

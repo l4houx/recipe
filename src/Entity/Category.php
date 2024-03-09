@@ -5,11 +5,9 @@ namespace App\Entity;
 use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CategoryRepository;
-use App\Entity\Traits\HasTimestampTrait;
 use Doctrine\Common\Collections\Collection;
-use App\Entity\Traits\HasIdNameSlugAssertTrait;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Traits\HasKeywordPostCategoryTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -17,13 +15,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('slug')]
 class Category
 {
-    use HasIdNameSlugAssertTrait;
-    use HasTimestampTrait;
+    use HasKeywordPostCategoryTrait;
 
     public const CATEGORY_LIMIT = HasLimit::CATEGORY_LIMIT;
-
-    #[ORM\Column(length: 255, nullable: true, options: ['default' => '#5dade2'])]
-    private ?string $color = null;
 
     #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'category')]
     private Collection $recipes;
@@ -31,18 +25,6 @@ class Category
     public function __construct()
     {
         $this->recipes = new ArrayCollection();
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(?string $color): static
-    {
-        $this->color = $color;
-
-        return $this;
     }
 
     /**

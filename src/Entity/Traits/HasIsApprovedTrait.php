@@ -12,7 +12,7 @@ trait HasIsApprovedTrait
     #[Assert\NotNull]
     private bool $isApproved = false;
 
-    public function isIsApproved(): bool
+    public function isApproved(): bool
     {
         return $this->isApproved;
     }

@@ -1,0 +1,17 @@
+<h3 class="mb-4">Laissez un commentaire</h3>
+{{ form_start(form, {method: 'post', action: path('blog_comment_add', {'slug': post.slug}), attr: {class: 'needs-validation', id: 'comment-form'} }) }}
+    {{ form_errors(form) }}
+    <div class="mb-3">
+        {{ form_row(form.content) }}
+    </div>
+    {#  
+    <div class="mb-3">
+        {{ form_row(form.isRGPD) }}
+    </div>
+    #}
+    <div>
+        <button class="btn btn-primary" type="submit">
+            Laisse un commentaire
+        </button>
+    </div>
+{{ form_end(form) }}

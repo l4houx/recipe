@@ -17,8 +17,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('slug')]
 class Review
 {
-    use HasRatingTrait;
     use HasIdHeadlineAndSlugTrait;
+    use HasRatingTrait;
     use HasContentTrait;
     use HasTimestampTrait;
 
@@ -31,7 +31,7 @@ class Review
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'reviews')]
-    #[ORM\JoinColumn(nullable: false)]
+    //#[ORM\JoinColumn(nullable: false)]
     private ?Recipe $recipe = null;
 
     public function __construct()

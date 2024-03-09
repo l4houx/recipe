@@ -1,0 +1,41 @@
+{# {% set runtimeConfig = {"thumbnail": {"size": thumbnailsize } } %} #}
+{% set link = path('blog_article', { slug : post.slug }) %}
+<div class="col-lg-6 col-md-12 col-12">
+    <div class="card mb-4 shadow-lg card-lift">
+        <a href="{{ link }}">
+            <img src="{{ asset('images/post/blogpost-4.jpg') }}" class="card-img-top" alt="{{ post.title }}">
+            {#
+			<img 
+                src="{{ vich_uploader_asset(post.thumbnail, 'thumbnailFile') | imagine_filter('thumbnail', runtimeConfig) }}"
+                {#src="{{ post.thumbnailName ? asset(post.getThumbnailPath | imagine_filter('thumbnail', runtimeConfig)) : post.getThumbnailPlaceholder }}" }
+                alt="{{ post.title }}" 
+                class="rounded-t-lg"
+            >#}
+        </a>
+        <div class="card-body">
+			{% include "global/post-categories.html.twig" with {
+				postcategories: post.postcategories 
+			} only %}
+            <h3>
+                <a href="{{ link }}" class="text-inherit">{{ post.title | html_markdown_excerpt(20)}}</a>
+            </h3>
+            <p>{{ post.content | html_markdown_excerpt(72) }}</p>
+            <div class="row align-items-center g-0 mt-4">
+                <div class="col-auto">
+                    <img src="{{ asset('images/avatar/avatar-1.jpg') }}" alt="avatar" class="rounded-circle avatar-sm me-2">
+                </div>
+                <div class="col lh-1">
+                    <h5 class="mb-1">{{ post.author.username }}</h5>
+                    {% if showdate is defined %}
+                        <p class="fs-6 mb-0">{{ post.createdAt | ago() }}</p>
+                    {% endif %}
+                </div>
+                {% if post.readtime %}
+                    <div class="col-auto">
+                        <p class="fs-6 mb-0">{{ post.readtime }} Lecture min</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

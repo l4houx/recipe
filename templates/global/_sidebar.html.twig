@@ -15,6 +15,17 @@
 				<li class="nav-item">
 					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_category_index') }}">Catégories</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_index') }}">Blog</a>
+				</li>
+				{#  
+				<li class="nav-item">
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_category_index') }}">Blog Catégories</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_keyword_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_keyword_index') }}">Blog Mot-clé</a>
+				</li>
+				#}
 			</ul>
 		</div>
 	</div>

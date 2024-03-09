@@ -7,20 +7,14 @@ use App\Entity\Category;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
-use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\Validator\Constraints\Image;
-use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class RecipeType extends AbstractType
+class RecipeFormType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
     {
@@ -42,13 +36,17 @@ class RecipeType extends AbstractType
                 'empty_data' => '',
                 'required' => false,
             ])
+            ->add('category', CategoryAutocompleteField::class)
+            /*
             ->add('category', EntityType::class, [
                 'label' => 'Catégorie :',
                 "class" => Category::class,
                 "choice_label" => "name",
+                'autocomplete' => true,
                 //'expanded' => true,
                 'empty_data' => '',
             ])
+            */
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu :',
                 'required' => true,
@@ -56,38 +54,22 @@ class RecipeType extends AbstractType
                 'attr' => ['placeholder' => '', 'rows' => 6],
             ])
             ->add('duration')
+            ->add('quantities', CollectionType::class, [
+                'entry_type' => QuantityFormType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'entry_options' => ['label' => false],
+                'attr' => [
+                    #'data-controller' => 'form-collection',
+                    'data-form-collection-add-label-value' => 'Ajouter un ingrèdient',
+                    'data-form-collection-delete-label-value' => 'Supprimer un ingrèdient'
+                ]
+            ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('title'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;
     }
-
-    /*
-    public function slug(PreSubmitEvent $event): void
-    {
-        $data = $event->getData();
-
-        if (empty($data['slug'])) {
-            $slugger = new AsciiSlugger();
-            $data['slug'] = strtolower($slugger->slug($data['title']));
-            $event->setData($data);
-        }
-    }
-
-    public function timestamps(PostSubmitEvent $event): void
-    {
-        $data = $event->getData();
-
-        if (!($data instanceof Recipe)) {
-            return;
-        }
-
-        $data->setUpdatedAt(new \DateTimeImmutable());
-
-        if (!$data->getId()) {
-            $data->setCreatedAt(new \DateTimeImmutable());
-        }
-    }
-    */
 
     public function configureOptions(OptionsResolver $resolver): void
     {

@@ -45,6 +45,7 @@
                     Editer mon profil
                 </a>
             </li>
+            {#
             <li class="nav-item">
                 <a class="nav-link {% if activerd == 'edit_profile' %}active{% endif %}" href="{{ path('dashboard_account_edit_profile') }}">
                     <i class="fe fe-user nav-icon"></i>
@@ -69,6 +70,7 @@
                     Profils sociaux
                 </a>
             </li>
+            #}
             <li class="nav-item">
                 <a class="nav-link" href="">
                     <i class="fe fe-bell nav-icon"></i>
@@ -81,12 +83,14 @@
                     Confidentialité du profil
                 </a>
             </li>
+            {#
             <li class="nav-item">
                 <a class="nav-link" href="">
                     <i class="fe fe-trash nav-icon"></i>
                     Supprimer le profil
                 </a>
             </li>
+            #}
             {% if is_granted('IS_IMPERSONATOR') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ impersonation_exit_path(path('home')) }}">

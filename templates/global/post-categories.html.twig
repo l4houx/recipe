@@ -1,0 +1,11 @@
+{% if postcategories %}
+	{% for category in postcategories %}
+		<a 
+			class="fs-5 mb-2 fw-semibold d-block text-{{ category.color }}"
+			style="color: {{ category.color }}"
+			href="{{ path('blog_category', {slug: category.slug}) }}"
+		>
+			{{ category.name }}
+		</a>
+	{% endfor %}
+{% endif %}

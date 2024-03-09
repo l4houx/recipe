@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Update;
+namespace App\Form;
 
 use App\Entity\User;
 use App\DTO\AccountUpdatedSocialDTO;
@@ -28,45 +28,57 @@ class AccountUpdatedSocialFormType extends AbstractType
                 'required' => false,
                 'empty_data' => '',
                 'help' => "Si vous disposez d'un site Web dédié, entrez son URL ici",
+                'attr' => ['placeholder' => 'URL du lien externe', 'class' => 'mb-1'],
             ])
             ->add('twitterurl', TextType::class, [
-                'label' => 'Twitter :',
+                'label' => 'URL du profil Twitter :',
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
+                'help' => "Ajoutez l'URL de votre profil Twitter.",
+                'attr' => ['placeholder' => 'URL du profil Twitter', 'class' => 'mb-1'],
             ])
             ->add('instagramurl', TextType::class, [
-                'label' => 'Instagram :',
+                'label' => 'URL du profil Instagram :',
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
+                'help' => "Ajoutez l'URL de votre profil Instagram.",
+                'attr' => ['placeholder' => 'URL du profil Instagram', 'class' => 'mb-1'],
             ])
             ->add('facebookurl', TextType::class, [
-                'label' => 'Facebook :',
+                'label' => 'URL du profil Facebook :',
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
+                'help' => "Ajoutez l'URL de votre profil Facebook.",
+                'attr' => ['placeholder' => 'URL du profil Facebook', 'class' => 'mb-1'],
             ])
             ->add('googleplusurl', TextType::class, [
-                'label' => 'Google Plus :',
+                'label' => 'URL du profil Google Plus :',
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
+                'help' => "Ajoutez l'URL de votre profil Google Plus.",
+                'attr' => ['placeholder' => 'URL du profil Google Plus', 'class' => 'mb-1'],
             ])
             ->add('linkedinurl', TextType::class, [
-                'label' => 'LinkedIn :',
+                'label' => 'URL du profil LinkedIn :',
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
+                'help' => "Ajoutez l'URL de votre profil LinkedIn",
+                'attr' => ['placeholder' => 'URL du profil LinkedIn', 'class' => 'mb-1'],
             ])
 
             // Video
             ->add('youtubeurl', TextType::class, [
-                'label' => 'URL de vidéo Youtube :',
+                'label' => 'URL du profil Youtube :',
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => 'Si vous avez une vidéo Youtube qui représente vos activités, ajoutez-la au format standard: https://www.youtube.com/',
+                'help' => "Ajoutez l'URL de votre profil Youtube.",
+                'attr' => ['placeholder' => 'URL YouTube', 'class' => 'mb-1'],
             ])
         ;
     }

@@ -12,7 +12,7 @@ trait HasIsAcceptedTrait
     #[Assert\NotNull]
     private bool $isAccepted = false;
 
-    public function isIsAccepted(): bool
+    public function isAccepted(): bool
     {
         return $this->isAccepted;
     }

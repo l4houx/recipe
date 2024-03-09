@@ -1,0 +1,113 @@
+<nav class="navbar-vertical navbar">
+	<div class="vh-100 simplebar-scrollable-y" data-simplebar="init">
+		<div class="simplebar-wrapper">
+			<div class="simplebar-height-auto-observer-wrapper">
+				<div class="simplebar-height-auto-observer"></div>
+			</div>
+			<div class="simplebar-mask">
+				<div class="simplebar-offset">
+					<div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content">
+						<div class="simplebar-content">
+							<a class="navbar-brand" href="{{ path('home') }}">
+								{# <img src="images/brand/logo/logo-inverse.svg" alt="{{ website_name }}"> #}
+								{{ website_name }}
+							</a>
+							<ul class="navbar-nav flex-column" id="sideNavbar">
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('home') }}">
+										<i class="nav-icon bi bi-house-dash me-2"></i>
+										Accueil
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{ app.current_route starts with 'dashboard_main_panel' ? 'active' : '' }}" href="{{ path('dashboard_main_panel') }}">
+										<i class="nav-icon bi bi-speedometer2 me-2"></i>
+										Tableau de bord
+									</a>
+								</li>
+								<li class="nav-item">
+									<div class="nav-divider"></div>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navRecipe" aria-expanded="false" aria-controls="navRecipe">
+										<i class="nav-icon bi bi-file me-2"></i>
+										Recette
+									</a>
+									<div id="navRecipe" class="collapse" data-bs-parent="#sideNavbar">
+										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_recipe_' ? 'active' : '' }}" href="{{ path('dashboard_admin_recipe_index') }}">
+													Recette
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_category_index') }}">
+													Catégorie
+												</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navBlog" aria-expanded="false" aria-controls="navBlog">
+										<i class="nav-icon bi bi-file me-2"></i>
+										Blog
+									</a>
+									<div id="navBlog" class="collapse " data-bs-parent="#sideNavbar">
+										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_index') }}">
+													Blog
+												</a>
+											</li>
+											{#
+											<li class="nav-item">
+												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_category_index') }}">
+													Blog Catégorie
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_keyword_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_keyword_index') }}">
+													Blog Mot-clé
+												</a>
+											</li>
+											#}
+										</ul>
+									</div>
+								</li>
+								<li class="nav-item">
+									<div class="navbar-heading">Autre</div>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#!">
+										<i class="nav-icon bi bi-app me-2"></i>
+										Autre
+									</a>
+								</li>
+							</ul>
+							{#
+							<div class="card bg-dark-primary shadow-none text-center mx-4 my-8">
+								<div class="card-body py-6">
+									<img src="images/background/giftbox.png" alt="">
+									<div class="mt-4">
+										<h5 class="text-white">Unlimited Access</h5>
+										<p class="text-white-50 fs-6">Upgrade</p>
+										<a href="#" class="btn btn-white btn-sm mt-2">Upgrade Now</a>
+									</div>
+								</div>
+							</div>
+							#}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="simplebar-placeholder"></div>
+		</div>
+		<div class="simplebar-track simplebar-horizontal">
+			<div class="simplebar-scrollbar"></div>
+		</div>
+		<div class="simplebar-track simplebar-vertical">
+			<div class="simplebar-scrollbar"></div>
+		</div>
+	</div>
+</nav>

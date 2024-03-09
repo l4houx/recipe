@@ -1,0 +1,8 @@
+{% use 'bootstrap_5_layout.html.twig' %}
+
+{%- block collection_widget -%}
+    {% if prototype is defined and not prototype.rendered %}
+        {%- set attr = attr|merge({'data-prototype': form_row(prototype), 'data-controller': 'form-collection' }) -%}
+    {% endif %}
+    {{- block('form_widget') -}}
+{%- endblock collection_widget -%}

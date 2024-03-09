@@ -46,7 +46,7 @@ class Testimonial
 
     public function __toString(): string
     {
-        return (string) $this->user->getUsername();
+        return (string) $this->author->getUsername();
     }
 
     /**

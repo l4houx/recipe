@@ -1,0 +1,30 @@
+<div class="d-flex d-block d-sm-flex review">
+	<div class="text-md-center flex-shrink-0 me-4 me-xl-5">
+        {% set runtimeConfig = {"thumbnail": {"size": [80, 80] } } %}
+        <img 
+            src="{{ comment.author.avatarName ? asset(comment.author.getAvatarPath | imagine_filter('thumbnail', runtimeConfig)) : comment.author.getAvatarPlaceholder }}" 
+            alt="{{ comment.author.nickname }}" 
+            class="d-block avatar avatar-xl p-2 mb-2"
+        >
+        <span class="text-uppercase text-muted text-sm">
+            {{ comment.publishedAt | date('M Y') }}
+        </span>
+	</div>
+	<div>
+		<h6 class="mt-2 mb-1">
+			{{ 'Comment'|trans }}
+			#{{ index }}
+			{{ 'by'|trans }}
+            {{ comment.author.nickname }}
+        </h6>
+		<div class="mb-2">
+			<span class="ms-3 text-dark fw-bold">
+				{{ 'On'|trans }}
+				<a class="text-primary" href="{{ path(comment.article) }}#c{{ comment.id }}">
+					{{ comment.article.title }}
+				</a>
+			</span>
+		</div>
+		<p class="text-muted text-sm">{{ comment.content | html_markdown_untrusted }}</p>
+	</div>
+</div>

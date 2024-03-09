@@ -1,0 +1,15 @@
+{% if postcategories %}
+	<ul class="list-unstyled mb-0 nav nav-x-0 flex-column">
+		{% for category in postcategories %}
+			<li class="lh-lg mb-1">
+				<i class="bi bi-arrow-right-short"></i>
+				<a 
+					href="{{ path('blog_category', {slug: category.slug}) }}" 
+					class="text-link d-inline"
+				>
+					{{ category.name }}
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+{% endif %}

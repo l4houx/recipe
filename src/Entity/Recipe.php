@@ -2,17 +2,18 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\HasViewsTrait;
 use App\Repository\RecipeRepository;
 use App\Entity\Traits\HasContentTrait;
+use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasTimestampTrait;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Entity\Traits\HasIdTitleSlugAssertTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,6 +27,7 @@ class Recipe
 {
     use HasIdTitleSlugAssertTrait;
     use HasContentTrait;
+    use HasIsOnlineTrait;
     use HasViewsTrait;
     use HasTimestampTrait;
 
@@ -67,6 +69,10 @@ class Recipe
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['remove'])]
     private Collection $reviews;
 
+    #[ORM\OneToMany(targetEntity: Quantity::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist'])]
+    #[Assert\Valid()]
+    private Collection $quantities;
+
     public function __toString(): string
     {
         return sprintf('#%d %s', $this->getId(), $this->getTitle());
@@ -76,6 +82,7 @@ class Recipe
     {
         $this->comments = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->quantities = new ArrayCollection();
     }
 
     /**
@@ -360,5 +367,35 @@ class Recipe
         }
 
         return $count;
+    }
+
+    /**
+     * @return Collection<int, Quantity>
+     */
+    public function getQuantities(): Collection
+    {
+        return $this->quantities;
+    }
+
+    public function addQuantity(Quantity $quantity): static
+    {
+        if (!$this->quantities->contains($quantity)) {
+            $this->quantities->add($quantity);
+            $quantity->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuantity(Quantity $quantity): static
+    {
+        if ($this->quantities->removeElement($quantity)) {
+            // set the owning side to null (unless already changed)
+            if ($quantity->getRecipe() === $this) {
+                $quantity->setRecipe(null);
+            }
+        }
+
+        return $this;
     }
 }

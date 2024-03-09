@@ -3,8 +3,20 @@ Installation en cours:
     ☐ composer require excelwebzone/recaptcha-bundle
     ☐ composer require lexik/jwt-authentication-bundle
     ☐ composer require exercise/htmlpurifier-bundle
+    ☐ composer require intervention/image
+    ☐ composer require symfony/polyfill-intl-messageformatter
+    ✔ composer require symfony/ux-toggle-password @done(24-03-07 13:35)
+    ✔ composer require symfony/ux-autocomplete @done(24-03-07 13:16)
     ✔ composer require symfony/ux-live-component @done(24-02-29 22:26)
     ✔ composer require symfony/ux-twig-component @done(24-02-29 22:26)
+    ✔ composer require symfonycasts/sass-bundle @done(24-03-06 19:44)
+    ✔ composer require league/commonmark @done(24-03-06 19:44)
+    ✔ composer require symfony/html-sanitizer @done(24-03-06 19:44)
+    ✔ composer require twbs/bootstrap --dev @done(24-03-06 19:42)
+    ✔ composer require jzonta/faker-restaurant --dev @done(24-03-04 14:56)
+
+Import:
+    ✔ symfony console importmap:require tom-select/dist/css/tom-select.bootstrap5.css @done(24-03-07 13:26)
 
 
 Entity:

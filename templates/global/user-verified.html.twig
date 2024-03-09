@@ -1,5 +1,5 @@
 {% if user.isVerified %}
-    <a href="javascript:void(0);" class="position-absolute top-0 end-0" data-bs-toggle="tooltip" data-placement="top" aria-label="Verified" data-bs-original-title="Verified">
+    <a href="javascript:void(0);" class="position-absolute top-0 end-0 {{ class }}" data-bs-toggle="tooltip" data-placement="top" aria-label="Verified" data-bs-original-title="Verified">
         <img src="{{ asset('images/svg/checked-mark.svg') }}" alt="checked" height="30" width="30">
     </a>
 {% endif %}

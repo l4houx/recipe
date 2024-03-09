@@ -1,0 +1,53 @@
+<div class="mb-4">
+	{% include "widget/search-data.html.twig" %}
+</div>
+<div class="card mb-4 border">
+	<div class="card-body p-4">
+		<h3>Total</h3>
+		<div class="mt-3">
+            <p>
+                Oh oh ! {{ totalPosts }} messages rédigés jusqu'à présent.
+            </p>
+		</div>
+	</div>
+</div>
+<div class="card mb-4 border">
+	<div class="card-body p-4">
+		<h3>Dernières publications</h3>
+		<div class="mt-3">
+			{% include "widget/posts-data.html.twig" with { posts: latestPosts} only %}
+		</div>
+	</div>
+</div>
+<div class="card mb-4 border">
+	<div class="card-body p-4">
+		<h3>Publications les plus commentées</h3>
+		<div class="mt-3">
+			{% include "widget/posts-data.html.twig" with { posts: mostCommentedPosts} only %}
+		</div>
+	</div>
+</div>
+<div class="card mb-4 border">
+	<div class="card-body p-4">
+		<h3>Catégories</h3>
+		<div class="mt-3">
+			{% include "widget/categories-data.html.twig" with { postcategories: postCategories} only %}
+		</div>
+	</div>
+</div>
+<div class="card mb-4 border">
+	<div class="card-body p-4">
+		<h3>Archive</h3>
+		<div class="mt-3">
+			{% include "widget/archive-data.html.twig" %}
+		</div>
+	</div>
+</div>
+<div class="card mb-4 border">
+	<div class="card-body p-4">
+		<h3>Mots clés</h3>
+		<div class="mt-3">
+			{% include "widget/keywords-data.html.twig" with { keywords: postKeywords} only %}
+		</div>
+	</div>
+</div>

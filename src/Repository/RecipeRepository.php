@@ -52,12 +52,16 @@ class RecipeRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findForPagination(int $page): PaginationInterface
+    public function findForPagination(int $page, ?int $userId): PaginationInterface
     {
+        $builder = $this->createQueryBuilder('r')->leftJoin('r.category', 'c')->select('r', 'c');
+
+        if ($userId) {
+            $builder = $builder->andWhere('r.author = :user')->setParameter('user', $userId);
+        }
+
         return $this->paginator->paginate(
-            $this->createQueryBuilder('r')
-            ->leftJoin('r.category', 'c')
-            ->select('r', 'c'),
+            $builder,
             $page,
             HasLimit::RECIPE_LIMIT,
             [

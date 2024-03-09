@@ -266,6 +266,18 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/ux-autocomplete": {
+        "version": "2.16",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.6",
+            "ref": "07d9602b7231ba355f484305d6cea58310c01741"
+        },
+        "files": [
+            "config/routes/ux_autocomplete.yaml"
+        ]
+    },
     "symfony/ux-live-component": {
         "version": "2.16",
         "recipe": {
@@ -277,6 +289,9 @@
         "files": [
             "config/routes/ux_live_component.yaml"
         ]
+    },
+    "symfony/ux-toggle-password": {
+        "version": "v2.16.0"
     },
     "symfony/ux-turbo": {
         "version": "v2.15.0"
@@ -329,6 +344,9 @@
         "files": [
             "config/packages/reset_password.yaml"
         ]
+    },
+    "symfonycasts/sass-bundle": {
+        "version": "v0.6.0"
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.16.2"
