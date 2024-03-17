@@ -11,14 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-categories', name: 'dashboard_admin_category_')]
-#[IsGranted(HasRoles::ADMINISTRATOR)]
+#[IsGranted(HasRoles::ADMIN)]
 class CategoryController extends AbstractController
 {
     public function __construct(
+        private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
         private readonly CategoryRepository $categoryRepository,
     ) {
@@ -43,7 +45,7 @@ class CategoryController extends AbstractController
             $this->em->persist($category);
             $this->em->flush();
 
-            $this->addFlash('success', 'La catégorie a été créé avec succès.');
+            $this->addFlash('success', $this->translator->trans('Category was created successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_category_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -59,7 +61,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
 
-            $this->addFlash('info', 'La catégorie a été modifié avec succès.');
+            $this->addFlash('info', $this->translator->trans('Category was edited successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_category_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -74,7 +76,7 @@ class CategoryController extends AbstractController
             $this->em->remove($category);
             $this->em->flush();
 
-            $this->addFlash('danger', 'La catégorie a été supprimé avec succès.');
+            $this->addFlash('danger', $this->translator->trans('Category was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_admin_category_index', [], Response::HTTP_SEE_OTHER);

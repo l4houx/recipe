@@ -53,5 +53,11 @@ services:
             MP_SMTP_AUTH_ACCEPT_ANY: 1
             MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
+    gotenberg:
+        image: gotenberg/gotenberg:latest
+        container_name: recipe-gotenberg
+        ports:
+            - 3001:3000
+
 volumes:
     data:

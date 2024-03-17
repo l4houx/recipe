@@ -55,12 +55,25 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    /**
+     * @var collection<int, PostCategory>
+     */
     #[ORM\ManyToMany(targetEntity: PostCategory::class, inversedBy: 'posts')]
+    #[Assert\NotBlank]
+    #[Assert\Count(min: 1, max: 3)]
     private Collection $postcategories;
 
+    /**
+     * @var collection<int, Keyword>
+     */
     #[ORM\ManyToMany(targetEntity: Keyword::class, inversedBy: 'posts')]
+    #[Assert\NotBlank]
+    #[Assert\Count(min: 1, max: 3)]
     private Collection $keywords;
 
+    /**
+     * @var collection<int, Comment>
+     */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true, cascade: ['persist'])]
     #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $comments;

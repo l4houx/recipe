@@ -1,0 +1,5 @@
+{% extends 'bundles/TwigBundle/Exception/index.html.twig' %}
+
+{% block code  'Error 405'|trans %}
+{% block title 'Method Not Supported'|trans %}
+{% block description "The request method is known by the server but is not supported by the target resource"|trans %}

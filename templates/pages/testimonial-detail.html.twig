@@ -1,0 +1,49 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Testimonials'|trans %}
+{% block title pagetitle %}
+
+{% block content %}
+    <section class="py-7 py-lg-8 bg-gray-100">
+        <div class="container my-lg-8">
+            <div class="row mb-8 justify-content-center">
+                <div class="col-lg-6 col-md-12 col-12 text-center">
+                    <span class="text-primary mb-3 d-block text-uppercase fw-semibold ls-xl">{{ pagetitle }}</span>
+                    <h2 class="mb-2 display-4 fw-bold">{{ 'What our users are saying'|trans }}</h2>
+                    <p class="lead">{{ '12+ million people are already learning on'|trans }} {{ website_name }}</p>
+                </div>
+            </div>
+            {% if testimonials | length > 0 %}
+                <div class="row">
+                    {% for testimonial in testimonials %}
+                        <div class="col-md-6 col-12 mb-4">
+                            <div class="card h-100 shadow-lg">
+                                <div class="card-body p-4 p-md-8 text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-quote {{ testimonial.id is odd ? 'text-light-primary' : 'text-light-info' }}" viewBox="0 0 16 16">
+                                        <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z">
+                                    </path></svg>
+                                    <p class="lead text-dark mt-3">
+                                        {{ testimonial.content | html_markdown_excerpt() }}
+                                    </p>
+                                </div>
+                                <div class="card-footer {{ testimonial.id is odd ? 'bg-primary' : 'bg-info' }} text-center border-top-0">
+                                    <div class="mt-n8">
+                                        {% include "global/user-avatar.html.twig" with { user: app.user, type: "xl", class: testimonial.id is odd ? 'border-primary' : 'border-info' } %}
+                                    </div>
+                                    <div class="mt-2 text-white">
+                                        <h3 class="text-white mb-0">{{ testimonial.author.getFullName | lower | capitalize }}</h3>
+                                        {% if testimonial.author.designation %}
+                                            <p class="text-white-50 mb-1">{{ testimonial.author.designation | lower | raw | capitalize }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {% include "global/message.html.twig" with { type: "info", message: ('No testimonials found'|trans), icon: "bi bi-exclamation-circle" } %}
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

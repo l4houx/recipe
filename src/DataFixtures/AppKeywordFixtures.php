@@ -20,14 +20,14 @@ class AppKeywordFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Create of 7 Keywords
-        $this->createKeyword('Plat chaud', '#3f7fca', $manager);
-        $this->createKeyword('Entrée', '#1e81b0', $manager);
-        $this->createKeyword('Dessert', '#9141ac', $manager);
-        $this->createKeyword('Goûter', '#21130d', $manager);
-        //$this->createKeyword('', '#063970', $manager);
+        // Create of 6 Keywords
+        $this->createKeyword('Apéritifs', '#e07b39', $manager);
+        $this->createKeyword('Plats', '#3f7fca', $manager);
+        $this->createKeyword('Desserts', '#9141ac', $manager);
+        $this->createKeyword('Entrées', '#1e81b0', $manager);
+        $this->createKeyword('Boissons', '#21130d', $manager);
+        $this->createKeyword('Petit-déj/brunch', '#063970', $manager);
         //$this->createKeyword('', '#154c79', $manager);
-        //$this->createKeyword('', '#e07b39', $manager);
 
         $manager->flush();
     }

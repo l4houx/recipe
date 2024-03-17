@@ -31,6 +31,15 @@ class AccountUpdatedService
 
         // Pays
         $data->user->setCountry($data->country);
+
+        // User Theme
+        if (true === $data->useSystemTheme) {
+            $data->user->setTheme(null);
+        } else {
+            $data->user->setTheme($data->useDarkTheme ? 'dark' : 'light');
+        }
+
+        // User Locale
     }
 
     public function updatedAvatar(AccountUpdatedAvatarDTO $data): void

@@ -38,6 +38,9 @@ class AccountUpdatedDTO
 
     public User $user;
 
+    public bool $useSystemTheme;
+    public bool $useDarkTheme;
+
     public function __construct(User $user)
     {
         // Contact
@@ -50,6 +53,10 @@ class AccountUpdatedDTO
         $this->country = $user->getCountry();
         // User
         $this->user = $user;
+        // User Theme
+        $this->useSystemTheme = null === $user->getTheme();
+        $this->useDarkTheme = 'dark' === $user->getTheme();
+        // User Locale
     }
 
     public function getId(): int

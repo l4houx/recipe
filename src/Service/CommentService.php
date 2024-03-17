@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class CommentService
@@ -18,6 +19,7 @@ class CommentService
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly RequestStack $stack,
+        private readonly TranslatorInterface $translator,
         private readonly FlashBagInterface $flash,
         private readonly Security $security
     ) {
@@ -40,7 +42,7 @@ class CommentService
         $this->em->persist($comment);
         $this->em->flush();
 
-        $this->flash->add('success', 'Votre commentaire a été envoyé, merci. Il sera publié après validation par un modérateur!');
+        $this->flash->add('success', $this->translator->trans('Your comment has been sent, thank you. It will be published after validation by a moderator!'));
     }
 
     public function updatedComment(Comment $comment, string $content): Comment
@@ -56,6 +58,6 @@ class CommentService
         $this->em->remove($comment);
         $this->em->flush();
 
-        $this->flash->add('danger', 'Votre commentaire a été supprimé avec succès!');
+        $this->flash->add('danger', $this->translator->trans('Your comment has been deleted successfully!'));
     }
 }

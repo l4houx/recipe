@@ -10,9 +10,11 @@ use App\Repository\RecipeRepository;
 use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasTimestampTrait;
+use App\Entity\Setting\HomepageHeroSetting;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Entity\Traits\HasIdTitleSlugAssertTrait;
+use App\Entity\Traits\HasLevelTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,6 +31,7 @@ class Recipe
     use HasContentTrait;
     use HasIsOnlineTrait;
     use HasViewsTrait;
+    use HasLevelTrait;
     use HasTimestampTrait;
 
     public const RECIPE_LIMIT = HasLimit::RECIPE_LIMIT;
@@ -42,7 +45,7 @@ class Recipe
     )]
     private ?File $thumbnailFile = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $thumbnail = null;
 
     #[ORM\Column(nullable: true)]
@@ -62,16 +65,40 @@ class Recipe
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    /**
+     * @var collection<int, Comment>
+     */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist'])]
     #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $comments;
 
+    /**
+     * @var collection<int, Review>
+     */
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['remove'])]
     private Collection $reviews;
 
+    /**
+     * @var collection<int, Quantity>
+     */
     #[ORM\OneToMany(targetEntity: Quantity::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist'])]
     #[Assert\Valid()]
     private Collection $quantities;
+
+    /**
+     * @var collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favorites', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'favorites')]
+    #[ORM\JoinColumn(name: 'recipe_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    private Collection $addedtofavoritesby;
+
+    #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
+    private ?HomepageHeroSetting $isonhomepageslider = null;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
+    private bool $premium = false;
 
     public function __toString(): string
     {
@@ -83,6 +110,7 @@ class Recipe
         $this->comments = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->quantities = new ArrayCollection();
+        $this->addedtofavoritesby = new ArrayCollection();
     }
 
     /**
@@ -395,6 +423,59 @@ class Recipe
                 $quantity->setRecipe(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getAddedtofavoritesby(): Collection
+    {
+        return $this->addedtofavoritesby;
+    }
+
+    public function addAddedtofavoritesby(User $addedtofavoritesby): self
+    {
+        if (!$this->addedtofavoritesby->contains($addedtofavoritesby)) {
+            $this->addedtofavoritesby->add($addedtofavoritesby);
+        }
+
+        return $this;
+    }
+
+    public function removeAddedtofavoritesby(User $addedtofavoritesby): self
+    {
+        $this->addedtofavoritesby->removeElement($addedtofavoritesby);
+
+        return $this;
+    }
+
+    public function isAddedToFavoritesBy(User $user): bool
+    {
+        return $this->addedtofavoritesby->contains($user);
+    }
+
+    public function getIsonhomepageslider(): ?HomepageHeroSetting
+    {
+        return $this->isonhomepageslider;
+    }
+
+    public function setIsonhomepageslider(?HomepageHeroSetting $isonhomepageslider): static
+    {
+        $this->isonhomepageslider = $isonhomepageslider;
+
+        return $this;
+    }
+
+    public function getPremium(): bool
+    {
+        return $this->premium;
+    }
+
+    public function setPremium(bool $premium): static
+    {
+        $this->premium = $premium;
 
         return $this;
     }

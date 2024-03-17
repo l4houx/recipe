@@ -20,8 +20,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/blog')]
 class BlogController extends AbstractController
 {
-    #[Route('/', name: 'blog_list', defaults: ['_format' => 'html'], methods: ['GET'])]
-    #[Route('/rss.xml', name: 'blog_rss', defaults: ['_format' => 'xml'], methods: ['GET'])]
+    #[Route(path: '/', name: 'blog_list', defaults: ['_format' => 'html'], methods: ['GET'])]
+    #[Route(path: '/rss.xml', name: 'blog_rss', defaults: ['_format' => 'xml'], methods: ['GET'])]
     #[Cache(smaxage: 10)]
     public function blogList(Request $request, string $_format, PostRepository $post): Response
     {

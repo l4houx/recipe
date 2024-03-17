@@ -1,0 +1,70 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'My invoices'|trans %}
+{% block title pagetitle %}
+
+{% block content %}
+	<div class="card mb-4">
+		<div class="card-header border-bottom-0">
+			<h3 class="mb-0">{{ 'My last payments'|trans }}</h3>
+			<p class="mb-0">{{ 'You can find all of your order Invoices.'|trans }}</p>
+		</div>
+        {% if transactions is empty %}
+            <div class="card-header border-bottom-0">
+                {% include "global/message.html.twig" with { type: "info", message: ("You don't have any invoices"|trans), icon: "bi bi-exclamation-circle" } %}
+            </div>
+        {% else %}
+            <div class="table-invoice table-responsive">
+                <table class="table mb-0 text-nowrap table-centered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>{{ 'Date'|trans }}</th>
+                            <th>{{ 'Description'|trans }}</th>
+                            <th>{{ 'Price'|trans }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.createdAt | format_date('long') }}</td>
+                                <td>{{ transaction.createdAt | format_date('short') }}</td>
+                                <td>{{ 'Premium account'|trans }} {{ transaction.duration }} {{ 'month'|trans }}</td>
+                                <td>{{ transaction.price | format_currency('EUR') }}</td>
+                                <td>
+                                    <a target="_blank" href="{{ path('dashboard_account_invoice_show', {id: transaction.id}) }}" class="bi bi-download" download="">{{ 'Download the invoice'|trans }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+	</div>
+    {{ render(controller('App\\Controller\\SubscriptionController::subscription')) }}
+    {% if transactions is not empty %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0">{{ 'Billing information'|trans }}</h3>
+                <p class="mb-0">
+                    {{ "If you wish to specify additional information (VAT number, SIRET number or others) you can add it here."|trans }}
+                </p>
+            </div>
+            <div class="card-body">
+                <div>
+                    <h4 class="mb-0"></h4>
+                    <p class="mb-4"></p>
+                    <form method="post" action="" class="row gx-3 needs-validation" novalidate="">
+                        <div class="mb-3 col-12 col-md-12">
+                            <label class="form-label" for="invoice-info">{{ 'Billing information'|trans }}</label>
+                            <textarea class="form-control" id="invoice-info" name="invoiceInfo" rows="3" placeholder="{{ 'Information to be included on each invoice'|trans }}">{{ app.user.invoiceInfo }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

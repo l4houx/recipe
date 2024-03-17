@@ -4,6 +4,7 @@ namespace App\Entity\Traits;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use function Symfony\Component\String\u;
@@ -11,21 +12,23 @@ use function Symfony\Component\String\u;
 trait HasIdentifyTrait
 {
     #[Assert\Length(min: 4, max: 20)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ['user:create'])]
     #[Assert\Regex(
         pattern: "/^(?:[\u00c0-\u01ffa-zA-Z'-]){2,}(?:\s[\u00c0-\u01ffa-zA-Z'-]{2,})+$/i",
         message: 'Prénom invalide.',
     )]
     #[ORM\Column(type: Types::STRING, length: 20)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private string $firstname = '';
 
     #[Assert\Length(min: 4, max: 20)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(groups: ['user:create'])]
     #[Assert\Regex(
         pattern: "/^(?:[\u00c0-\u01ffa-zA-Z'-]){2,}(?:\s[\u00c0-\u01ffa-zA-Z'-]{2,})+$/i",
         message: 'Nom de famille invalide.',
     )]
     #[ORM\Column(type: Types::STRING, length: 20)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private string $lastname = '';
 
     public function getFullName(): string

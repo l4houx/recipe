@@ -1,33 +1,32 @@
 {% extends 'dashboard.html.twig' %}
 
-{% set activerd = 'edit' %}
-{% set pagetitle = 'Editer mon profil' %}
+{% set pagetitle = 'Edit my profile'|trans %}
 {% block title pagetitle %}
 
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h3 class="mb-0">Détails du profil</h3>
-            <p class="mb-0">Vous avez le contrôle total pour gérer les paramètres de votre propre compte.</p>
+            <h3 class="mb-0">{{ 'Profile details'|trans }}</h3>
+            <p class="mb-0">{{ 'You have full control to manage your own account settings.'|trans }}</p>
         </div>
         <div class="card-body">
             <div class="d-lg-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center mb-4 mb-lg-0">
                     <img src="{{ asset('images/avatar/avatar-1.jpg') }}" id="img-uploaded" class="avatar-xl rounded-circle" alt="avatar">
                     <div class="ms-3">
-                        <h4 class="mb-0">Votre avatar</h4>
-                        <p class="mb-0">PNG ou JPG ne dépassant pas 800 px de large et de haut.</p>
+                        <h4 class="mb-0">{{ 'Your avatar'|trans }}</h4>
+                        <p class="mb-0">{{ 'PNG or JPG no larger than 800 px wide and high.'|trans }}</p>
                     </div>
                 </div>
                 <div>
-                    <a href="#" class="btn btn-outline-secondary btn-sm">Mise à jour</a>
-                    <a href="#" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                    <a href="#" class="btn btn-outline-secondary btn-sm">{{ 'Update'|trans }}</a>
+                    <a href="#" class="btn btn-outline-danger btn-sm">{{ 'Remove'|trans }}</a>
                 </div>
             </div>
             <hr class="my-5">
             <div>
-                <h4 class="mb-0">Détails personnels</h4>
-                <p class="mb-4">Modifier vos informations personnelles et votre adresse.</p>
+                <h4 class="mb-0">{{ 'Personal details'|trans }}</h4>
+                <p class="mb-4">{{ 'Change your personal information and address.'|trans }}</p>
                 {{ form_start(formEditProfile, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
                     {{ form_errors(formEditProfile) }}
                     <div class="mb-3 col-12 col-md-6">
@@ -51,7 +50,7 @@
                         </div>
                     {% endif %}
                     <div class="col-12">
-                        <button class="btn btn-primary" type="submit" name="action" value="profile">Appliquer les changements</button>
+                        <button class="btn btn-primary" type="submit" name="action" value="profile">{{ 'Apply changes'|trans }}</button>
                     </div>
                 {{ form_end(formEditProfile, {'render_rest': false}) }}
             </div>
@@ -59,13 +58,13 @@
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3 class="mb-0">Sécurité</h3>
-            <p class="mb-0">Modifiez les paramètres de votre compte et modifiez votre mot de passe ici.</p>
+            <h3 class="mb-0">{{ 'Security'|trans }}</h3>
+            <p class="mb-0">{{ 'Edit your account settings and change your password here.'|trans }}</p>
         </div>
         <div class="card-body">
-            <h4 class="mb-0">Adresse e-mail</h4>
+            <h4 class="mb-0">{{ 'E-mail address'|trans }}</h4>
             <p>
-                Votre adresse e-mail actuelle est
+                {{ 'Your current email address is'|trans }}
                 <span class="text-success">{{ user.email }}</span>
             </p>
             {#  
@@ -73,15 +72,15 @@
                 {{ form_errors(form) }}
                 <div class="mb-3 col-lg-6 col-md-12 col-12">
                     {{ form_row(form.email) }}
-                    <button type="submit" class="btn btn-primary mt-2">Appliquer les changements</button>
+                    <button type="submit" class="btn btn-primary mt-2">{{ 'Apply changes'|trans }}</button>
                 </div>
             {{ form_end(form) }}
             #}
             <hr class="my-5">
             <div>
-                <h4 class="mb-0">Editer mon mot de passe</h4>
+                <h4 class="mb-0">{{ 'Edit my password'|trans }}</h4>
                 <p>
-                    Nous vous enverrons une confirmation par e-mail lors de la modification de votre mot de passe, veuillez donc attendre cet e-mail après l'avoir soumis..
+                    {{ 'We will send you an email confirmation when you change your password, so please wait for this email after submitting it.'|trans }}
                 </p>
                 {{ form_start(formEditPassword, {'attr': {'novalidate': 'novalidate', 'class': 'row needs-validation'} }) }}
                     {{ form_errors(formEditPassword) }}
@@ -95,14 +94,14 @@
                         <div class="mb-3">
                             {{ form_row(formEditPassword.newPassword.second) }}
                         </div>
-                        <button type="submit" name="action" value="password" class="btn btn-primary">Appliquer les changements</button>
+                        <button type="submit" name="action" value="password" class="btn btn-primary">{{ 'Apply changes'|trans }}</button>
                         <div class="col-6"></div>
                     </div>
                     <div class="col-12 mt-4">
                         <p class="mb-0">
-                            Impossible de me souvenir de votre mot de passe actuel?
+                            {{ "Can't remember your current password?"|trans }}
                             <a href="{{ path('forgot_password_request') }}">
-                                Réinitialisez votre mot de passe par e-mail
+                                {{ 'Reset your password by email'|trans }}
                             </a>
                         </p>
                     </div>
@@ -112,8 +111,8 @@
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3 class="mb-0">Profils sociaux</h3>
-            <p class="mb-0">Ajoutez les liens de votre profil social dans les comptes sociaux ci-dessous.</p>
+            <h3 class="mb-0">{{ 'Social profiles'|trans }}</h3>
+            <p class="mb-0">{{ 'Add your social profile links to the social accounts below.'|trans }}</p>
         </div>
         <div class="card-body">
             <div>
@@ -184,64 +183,38 @@
                     </div>
                     <div class="row">
                         <div class="offset-lg-3 col-lg-6 col-12">
-                            <button type="submit" name="action" value="social" class="btn btn-primary">Appliquer les changements</button>
+                            <button type="submit" name="action" value="social" class="btn btn-primary">{{ 'Apply changes'|trans }}</button>
                         </div>
                     </div>
-
-
-                    {#
-                    <div class="mb-3 col-12 col-md-6">
-                        {{ form_row(formEditSocial.externallink) }}
-                    </div>
-                    <div class="mb-3 col-12 col-md-6">
-                        {{ form_row(formEditSocial.twitterurl) }}
-                    </div>
-                    <div class="mb-3 col-12 col-md-6">
-                        {{ form_row(formEditSocial.instagramurl) }}
-                    </div>
-                    <div class="mb-3 col-12 col-md-6">
-                        {{ form_row(formEditSocial.facebookurl) }}
-                    </div>
-                    <div class="mb-3 col-12 col-md-6">
-                        {{ form_row(formEditSocial.googleplusurl) }}
-                    </div>
-                    <div class="mb-3 col-12 col-md-6">
-                        {{ form_row(formEditSocial.linkedinurl) }}
-                    </div>
-                    <div class="mb-3 col-12 col-md-6">
-                        {{ form_row(formEditSocial.youtubeurl) }}
-                    </div>
-                    <div class="col-12">
-                        <button type="submit" name="action" value="social" class="btn btn-primary">Appliquer les changements</button>
-                    </div>
-                    #}
                 {{ form_end(formEditSocial, {'render_rest': false}) }}
             </div>
         </div>
     </div>
     <div class="card mt-4">
         <div class="card-header">
-            <h3 class="mb-0">Supprimer votre compte</h3>
+            <h3 class="mb-0">{{ 'Delete your account'|trans }}</h3>
             <p class="mb-0">
                 {% if user.deletedAt %}
-                    Votre compte sera supprimé automatiquement <strong>{{ user.deletedAt | ago }}</strong>
+                    {{ 'Your account will be deleted automatically'|trans }} <strong>{{ user.deletedAt | ago }}</strong>
                 {% else %}
-                    Vous n'êtes pas satisfait du contenu du site ?<br>
-                    Ou vous souhaitez supprimer toutes les informations associées à ce compte ?
+                    {{ 'Are you not satisfied with the content of the site?'|trans }}<br>
+                    {{ 'Or do you want to delete all information associated with this account?'|trans }}
                 {% endif %}
             </p>
         </div>
         <div class="card-body p-4">
-            <span class="text-danger h4">Avertissement</span>
-            <p>Si vous fermez votre compte, vous serez désabonné de tous vos 0 cours et en perdrez définitivement l'accès.</p>
+            <span class="text-danger h4">{{ 'Warning'|trans }}</span>
+            <p>
+                {{ 'If you close your account, you will be unsubscribed from all your 0 courses and will permanently lose access to them.'|trans }}
+            </p>
             {% if user.deletedAt %}
                 <form method="post" action="{{ path('dashboard_account_deleted_cancel') }}">
                     <button class="btn btn-danger">
-                        Annuler la suppression
+                        {{ 'Undelete'|trans }}
                     </button>
                 </form>
             {% else %}
-                <a href="#" days="5" onclick="event.preventDefault(); confirm('Êtes-vous sûr de bien vouloir supprimer votre compte?') && document.getElementById('js-account-deleted-form').submit();" class="btn btn-danger">Fermer mon compte</a>
+                <a href="#" days="5" onclick="event.preventDefault(); confirm({{ 'Are you sure you want to delete your account?'|trans }}) && document.getElementById('js-account-deleted-form').submit();" class="btn btn-danger">{{ 'Close my account'|trans }}</a>
 
                 <form id="js-account-deleted-form" action="{{ path('dashboard_main_account') }}" method="post" class="">
                     <input type="hidden" name="_token" value="{{ csrf_token('account_deleted_' ~ user.id) }}">

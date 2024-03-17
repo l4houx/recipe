@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+use function Symfony\Component\Translation\t;
+
 /**
  * //@method AccountUpdatedDTO getData()
  */
@@ -30,47 +32,47 @@ class AccountUpdatedProfileFormType extends AbstractType
         $builder
             // Profil
             ->add('username', TextType::class, [
-                'label' => "Nom d'utilisateur :",
+                'label' => t("User name :"),
                 // 'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => "Nom d'utilisateur"],
+                'attr' => ['placeholder' => t("User name")],
             ])
             ->add('slug', HiddenType::class, [
                 'empty_data' => '',
                 'required' => false,
             ])
             ->add('firstname', TextType::class, [
-                'label' => 'Prénom :',
+                'label' => t('First name :'),
                 // 'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => 'Prénom'],
+                'attr' => ['placeholder' => t('First name')],
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Nom :',
+                'label' => t('Last name :'),
                 // 'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => 'Nom'],
+                'attr' => ['placeholder' => t('Last name')],
             ])
             // Contact
             ->add('email', EmailType::class, [
-                'label' => 'Adresse e-mail :',
+                'label' => t('Email address :'),
                 // 'purify_html' => true,
                 'required' => true,
-                'attr' => ['placeholder' => 'Adresse email ici'],
+                'attr' => ['placeholder' => t('Email address here')],
             ])
             // Team
             ->add('designation', TextType::class, [
-                'label' => 'Désignation :',
+                'label' => t('Designation :'),
                 // 'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
                 'attr' => ['placeholder' => ''],
             ])
             ->add('about', TextareaType::class, [
-                'label' => 'À propos :',
+                'label' => t('About :'),
                 // 'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',

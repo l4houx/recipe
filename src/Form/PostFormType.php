@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+use function Symfony\Component\Translation\t;
+
 class PostFormType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
@@ -31,10 +33,10 @@ class PostFormType extends AbstractType
 
         $builder
             ->add('thumbnailFile', VichFileType::class, [
-                'label' => 'Image :',
+                'label' => t('Image :'),
             ])
             ->add('title', TextType::class, [
-                'label' => 'Titre :',
+                'label' => t('Title :'),
                 'empty_data' => '',
                 //'purify_html' => true,
             ])
@@ -44,21 +46,19 @@ class PostFormType extends AbstractType
                 //'purify_html' => true,
             ])
             ->add('content', TextareaType::class, [
-                'label' => 'Contenu :',
+                'label' => t('Content :'),
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
             ])
             ->add('author', EntityType::class, [
-                'label' => 'Auteur :',
+                'label' => t('Author :'),
                 'class' => User::class,
                 'choice_label' => 'username',
                 'empty_data' => '',
             ])
-            //->add('createdAt')
-            //->add('updatedAt')
             ->add('postcategories', EntityType::class, [
-                'label' => 'Catégorie :',
+                'label' => t('Categorie :'),
                 'class' => PostCategory::class,
                 'choice_label' => 'name',
                 'required' => true,
@@ -66,23 +66,23 @@ class PostFormType extends AbstractType
                 //'expanded' => false,
                 //'by_reference' => false,
                 'empty_data' => '',
-                'help' => 'Assurez-vous de sélectionner la bonne catégorie pour permettre aux utilisateurs de la trouver rapidement',
+                'help' => t('Make sure you select the correct category to allow users to find it quickly.'),
             ])
             ->add('keywords', EntityType::class, [
-                'label' => 'Mot clé :',
+                'label' => t('Keywords :'),
                 'class' => Keyword::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'empty_data' => '',
-                'help' => 'Assurez-vous de sélectionner le bon mot-clé pour permettre aux utilisateurs de le trouver rapidement',
+                'help' => t('Make sure you select the correct keyword to allow users to find it quickly.'),
             ])
             ->add('readtime', TextType::class, [
-                'label' => 'Temps de lecture en minutes',
+                'label' => t('Reading time in minutes'),
                 'required' => false,
                 //'purify_html' => true,
                 'attr' => ['class' => 'touchspin-integer', 'data-min' => 1, 'data-max' => 1000000],
             ])
-            ->add('isOnline', CheckboxType::class, ['label' => 'En ligne'])
+            ->add('isOnline', CheckboxType::class, ['label' => t('Online')])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('title'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;

@@ -16,17 +16,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+use function Symfony\Component\Translation\t;
+
 class CommentFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('content', TextareaType::class, [
-                'label' => 'Commentaire :',
+                'label' => t('Comment :'),
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
-                'help' => 'Les commentaires non conformes à notre code de conduite seront modérés.',
+                'help' => t('Comments that do not comply with our code of conduct will be moderated.'),
             ])
             /*
             ->add('isRGPD', CheckboxType::class, [

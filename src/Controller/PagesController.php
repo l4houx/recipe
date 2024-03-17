@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Page;
 use App\Repository\FaqRepository;
 use App\Repository\UserRepository;
+use App\Repository\PricingRepository;
+use App\Repository\TestimonialRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -15,6 +17,20 @@ class PagesController extends AbstractController
 {
     public function __construct(private readonly TranslatorInterface $translator)
     {
+    }
+
+    #[Route(path: '/pricing', name: 'pricing', methods: ['GET'])]
+    public function pricing(PricingRepository $pricingRepository): Response
+    {
+        $pricings = $pricingRepository->findAllPricing();
+
+        if (!$pricings) {
+            $this->addFlash('danger', $this->translator->trans('The pricing can not be found'));
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('pages/pricing-detail.html.twig', compact('pricings'));
     }
 
     #[Route(path: '/terms-condition', name: 'terms_condition', methods: ['GET'])]
@@ -61,6 +77,20 @@ class PagesController extends AbstractController
         }
 
         return $this->render('pages/faq-detail.html.twig', compact('faqs'));
+    }
+
+    #[Route('/testimonial', name: 'testimonial', methods: ['GET'])]
+    public function testimonial(TestimonialRepository $testimonialRepository): Response
+    {
+        $testimonials = $testimonialRepository->findLastRecent(12);
+
+        if (!$testimonials) {
+            $this->addFlash('danger', $this->translator->trans('The testimonial can not be found'));
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('pages/testimonial-detail.html.twig', compact('testimonials'));
     }
 
     #[Route(path: '/access-denied', name: 'access_denied', methods: ['GET'])]

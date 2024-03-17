@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-12">
                             <div class="pb-1 mb-1 d-md-flex align-items-center justify-content-between">
-                                {% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-info-circle', message: ('You are connected as "%username%'|trans({'%username%' : app.user.username})~ '", <a href="'~ path('dashboard_main', {'_switch_user': '_exit'}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to return to your dashboard'|trans) } %}
+                                {% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('You are connected as "%username%'|trans({'%username%' : app.user.username})~ '", <a href="'~ path('dashboard_main', {'_switch_user': '_exit'}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to return to your dashboard'|trans) } %}
                             </div>
                         </div>
                     </div>

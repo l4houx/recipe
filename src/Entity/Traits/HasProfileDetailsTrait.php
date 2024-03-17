@@ -5,6 +5,8 @@ namespace App\Entity\Traits;
 use App\Validator\BanWord;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait HasProfileDetailsTrait
@@ -19,6 +21,12 @@ trait HasProfileDetailsTrait
     #[ORM\Column(type: Types::STRING, length: 2, nullable: true, options: ['default' => 'FR'])]
     private ?string $country = null;
 
+    #[ORM\Column(type: Types::STRING, options: ['default' => null], nullable: true)]
+    private ?string $theme = null;
+
+    #[ORM\Column(type: Types::STRING, length: 2, options: ['default' => 'fr'])]
+    private string $locale = 'fr';
+
     #[Assert\NotBlank(message: "Please don't leave your username blank!")]
     #[Assert\Length(
         min: 4,
@@ -28,6 +36,7 @@ trait HasProfileDetailsTrait
     )]
     #[BanWord()]
     #[ORM\Column(type: Types::STRING, length: 30, unique: true)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private string $username = '';
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -41,6 +50,7 @@ trait HasProfileDetailsTrait
         pattern: '/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
         message: 'Invalid slug.',
     )]
+    //#[Gedmo\Slug(fields: ['username'], unique: true, updatable: true)]
     private string $slug = '';
 
     #[Assert\NotBlank]
@@ -48,6 +58,7 @@ trait HasProfileDetailsTrait
     #[Assert\NotNull]
     #[Assert\Length(min: 5, max: 180)]
     #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private string $email = '';
 
     public function __toString(): string
@@ -63,6 +74,30 @@ trait HasProfileDetailsTrait
     public function setCountry(?string $country): static
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?string $theme): static
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): static
+    {
+        $this->locale = $locale;
 
         return $this;
     }

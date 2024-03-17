@@ -28,7 +28,7 @@ security:
                 path: /
                 always_remember_me: true
 
-            # switch_user: { role: ROLE_ADMINISTRATOR }
+            # switch_user: { role: ROLE_APPLICATION }
             access_denied_handler: App\Security\AccessDeniedHandler
 
     # Easy way to control access for large sections of your site
@@ -41,8 +41,8 @@ security:
         - { path: ^/%website_dashboard_path%/account, roles: ROLE_USER }
 
     role_hierarchy:
-        ROLE_ADMINISTRATOR: [ROLE_CUSTOMER_TRAINING, ROLE_CUSTOMER, ROLE_TEAM, ROLE_USER, ROLE_ADMIN, ROLE_MODERATOR, ROLE_ALLOWED_TO_SWITCH]
-        ROLE_ADMIN: [ROLE_CUSTOMER, ROLE_CUSTOMER_TRAINING, ROLE_TEAM, ROLE_USER, ROLE_MODERATOR]
+        ROLE_ADMIN_APPLICATION: [ROLE_CUSTOMER_TRAINING, ROLE_CUSTOMER, ROLE_TEAM, ROLE_USER, ROLE_ADMIN, ROLE_MODERATOR, ROLE_APPLICATION,ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN: [ROLE_CUSTOMER, ROLE_CUSTOMER_TRAINING, ROLE_TEAM, ROLE_USER, ROLE_MODERATOR, ROLE_APPLICATION]
         ROLE_MODERATOR: [ROLE_CUSTOMER, ROLE_TEAM, ROLE_USER]
         ROLE_CUSTOMER_TRAINING: [ROLE_TEAM, ROLE_USER]
         ROLE_CUSTOMER: [ROLE_USER]

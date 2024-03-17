@@ -10,7 +10,7 @@ class CategoryWithCountDTO
         public readonly int $count,
         public readonly string $color,
         public readonly \DateTimeImmutable $createdAt,
-        public \DateTimeImmutable $updatedAt
+        public readonly \DateTimeImmutable $updatedAt
     ) {
         # code...
     }

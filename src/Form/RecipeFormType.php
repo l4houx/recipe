@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
+use function Symfony\Component\Translation\t;
+
 class RecipeFormType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
@@ -25,11 +27,11 @@ class RecipeFormType extends AbstractType
     {
         $builder
             ->add('thumbnailFile', VichFileType::class, [
-                'label' => 'Image :',
+                'label' => t('Image :'),
             ])
             //->add('thumbnailFile', FileType::class)
             ->add('title', TextType::class, [
-                'label' => 'Titre :',
+                'label' => t('Title :'),
                 'empty_data' => '',
             ])
             ->add('slug', TextType::class, [
@@ -39,7 +41,7 @@ class RecipeFormType extends AbstractType
             ->add('category', CategoryAutocompleteField::class)
             /*
             ->add('category', EntityType::class, [
-                'label' => 'Catégorie :',
+                'label' => t('Categorie :'),
                 "class" => Category::class,
                 "choice_label" => "name",
                 'autocomplete' => true,
@@ -48,12 +50,14 @@ class RecipeFormType extends AbstractType
             ])
             */
             ->add('content', TextareaType::class, [
-                'label' => 'Contenu :',
+                'label' => t('Content :'),
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
             ])
-            ->add('duration')
+            ->add('duration', null, [
+                'label' => t('Duration :'),
+            ])
             ->add('quantities', CollectionType::class, [
                 'entry_type' => QuantityFormType::class,
                 'allow_add' => true,
@@ -62,8 +66,8 @@ class RecipeFormType extends AbstractType
                 'entry_options' => ['label' => false],
                 'attr' => [
                     #'data-controller' => 'form-collection',
-                    'data-form-collection-add-label-value' => 'Ajouter un ingrèdient',
-                    'data-form-collection-delete-label-value' => 'Supprimer un ingrèdient'
+                    'data-form-collection-add-label-value' => t('Add an ingredient'),
+                    'data-form-collection-delete-label-value' => t('Remove an ingredient')
                 ]
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('title'))

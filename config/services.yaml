@@ -7,7 +7,7 @@ parameters:
 
     # The above parameters are declared here to be catched by the related event subscriber
     #is_website_configured: '%env(IS_WEBSITE_CONFIGURED)%'
-    #maintenance_mode:      '%env(MAINTENANCE_MODE)%'
+    maintenance_mode:        '%env(MAINTENANCE_MODE)%'
 
     # Website configuration
     website_name:            '%env(WEBSITE_NAME)%'
@@ -27,6 +27,12 @@ parameters:
     #website_jwt_secret:      '%env(WEBSITE_JWT_SECRET)%'
     #website_dkim_key:        '%env(resolve:default::WEBSITE_MAILER_DKIM)%'
     # website_geoip_database:  '%kernel.project_dir%/var/GeoLite2-Country.mmdb'
+    website_security_alt:    '%env(WEBSITE_APP_SALT)%'
+    website_facebook_url:    '%env(WEBSITE_FACEBOOK_URL)%'
+    website_instagram_url:   '%env(WEBSITE_INSTAGRAM_URL)%'
+    website_youtube_url:     '%env(WEBSITE_YOUTUBE_URL)%'
+    website_twitter_url:     '%env(WEBSITE_TWITTER_URL)%'
+    website_github_url:      '%env(WEBSITE_GITHUB_URL)%'
 
     # Date and time
     date_format:           '%env(DATE_FORMAT)%'
@@ -35,17 +41,17 @@ parameters:
     date_timezone:         '%env(DATE_TIMEZONE)%'
 
     # Language
-    #locale: '%env(DEFAULT_LOCALE)%'
+    locale: '%env(DEFAULT_LOCALE)%'
     # This parameter defines the codes of the locales (languages) enabled in the application
-    #app_locales: ar|en|fr|de|es|cs|nl|ru|uk|ro|pt_BR|pl|it|ja|id|ca|sl|hr|zh_CN|bg|tr|lt|bs|sr_Cyrl|sr_Latn|eu
+    app_locales: en|fr|de|eu
 
-    #router.request_context.host: "%website_root_url%"
-    #router.request_context.scheme: 'https'
-    #asset.request_context.secure: true
+    router.request_context.host: "%website_root_url%"
+    router.request_context.scheme: 'https'
+    asset.request_context.secure: true
     # router.request_context.base_url: "%website_root_url%"
     # asset.request_context.base_path: '%router.request_context.base_url%'
-    #container.dumper.inline_factories: true
-    #container.dumper.inline_class_loader: true
+    container.dumper.inline_factories: true
+    container.dumper.inline_class_loader: true
 
     # Google Map & Google Recaptcha
     #google_maps_api_key: '%env(GOOGLE_MAPS_API_KEY)%'
@@ -55,10 +61,10 @@ parameters:
     # resize_picture_key: '%env(RESIZE_PICTURE_KEY)%'
 
     # Vich
-    #homepage_hero_custom_background: /images/home/hero
-    #app_layout:                      /images/layout
+    homepage_hero_custom_background:  /images/home
+    app_layout:                       /images/layout
     post_image:                       /images/post
-    #thumbnail:                       /images/thumbnail
+    icon:                             /images/icon
     #user_avatar:                     /images/user
     #payment_gateway:                 /images/payment/gateways
     recipe_image:                     /images/recipe
@@ -70,7 +76,13 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+        public: false
+
         bind:
+            # Website locales
+            string $locales: '%app_locales%'
+            string $defaultLocale: '%locale%'
+
             # Website email
             string $emailSender: '%website_no_reply_email%'
 
@@ -97,14 +109,24 @@ services:
     App\Infrastructural\Uploads\Naming\PropertyGroupedDirectoryNamer:
         public: true
 
+    #App\Infrastructural\Uploads\Naming\ThumbnailDirectoryNamer:
+        #public: true
+
     #App\Twig\TwigUrlExtension:
         #arguments:
             #$uploaderHelper: '@Vich\UploaderBundle\Templating\Helper\UploaderHelper'
 
     # Setting
-    # app.setting:
-    #     alias: App\Service\SettingService
+    app.setting:
+        alias: App\Service\SettingService
 
     # Notification Comment
     App\EventSubscriber\Post\NotificationCommentsSubscriber:
         $sender: '%website_no_reply_email%'
+
+    # Doctrine
+    App\Infrastructural\Doctrine\TicketsExtension: ~
+    App\Infrastructural\Doctrine\ApplicationsExtension:
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }

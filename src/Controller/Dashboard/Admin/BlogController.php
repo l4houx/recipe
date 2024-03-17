@@ -15,20 +15,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-blogs', name: 'dashboard_admin_blog_')]
+#[Route(path: '/%website_dashboard_path%/main-panel/manage-blogs', name: 'dashboard_admin_blog_')]
 #[IsGranted(HasRoles::TEAM)]
 class BlogController extends Controller
 {
     public function __construct(
+        private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
         private readonly PostRepository $postRepository
     ) {
     }
 
-    #[Route('/', name: 'index', methods: ['GET'])]
+    #[Route(path: '/', name: 'index', methods: ['GET'])]
     #[IsGranted(PostVoter::LIST)]
     public function index(Request $request, Security $security): Response
     {
@@ -40,7 +42,7 @@ class BlogController extends Controller
         return $this->render('dashboard/admin/blog/index.html.twig', compact('posts'));
     }
 
-    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
     #[IsGranted(PostVoter::CREATE)]
     public function new(Request $request, #[CurrentUser] User $user): Response
     {
@@ -53,7 +55,7 @@ class BlogController extends Controller
             $this->em->persist($post);
             $this->em->flush();
 
-            $this->addFlash('success', 'Article a été créé avec succès.');
+            $this->addFlash('success', $this->translator->trans('Article was created successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -61,24 +63,26 @@ class BlogController extends Controller
         return $this->render('dashboard/admin/blog/new.html.twig', compact('post', 'form'));
     }
 
-    #[Route('/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function show(Post $post): Response
     {
-        $this->denyAccessUnlessGranted(PostVoter::SHOW, $post, "Les publications ne peuvent être montrées qu'à leurs auteurs.");
+        $this->denyAccessUnlessGranted(PostVoter::SHOW, $post, $this->translator->trans("Posts can only be shown to their authors."));
     
         return $this->render('dashboard/admin/blog/show.html.twig', compact('post'));
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
-    #[IsGranted(PostVoter::MANAGE, subject: 'post', message: 'Les publications ne peuvent être modifiées que par leurs auteurs.')]
+    #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    //#[IsGranted(PostVoter::MANAGE, subject: 'post', message: 'Posts can only be edited by their authors.')]
     public function edit(Request $request, Post $post): Response
     {
+        $this->denyAccessUnlessGranted(PostVoter::MANAGE, $post, $this->translator->trans("Posts can only be edited by their authors."));
+
         $form = $this->createForm(PostFormType::class, $post)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
 
-            $this->addFlash('info', 'Article a été modifié avec succès.');
+            $this->addFlash('info', $this->translator->trans('Article was edited successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -86,7 +90,7 @@ class BlogController extends Controller
         return $this->render('dashboard/admin/blog/edit.html.twig', compact('post', 'form'));
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     #[IsGranted(PostVoter::MANAGE, subject: 'post')]
     public function delete(Request $request, Post $post): Response
     {
@@ -94,7 +98,7 @@ class BlogController extends Controller
             $this->em->remove($post);
             $this->em->flush();
 
-            $this->addFlash('danger', 'Article a été supprimé avec succès.');
+            $this->addFlash('danger', $this->translator->trans('Article was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);

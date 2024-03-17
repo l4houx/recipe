@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
-use App\Events\Account\AccountSuspendedEvent;
+use App\Event\Account\AccountSuspendedEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 class AccountSuspendedService
@@ -14,7 +14,7 @@ class AccountSuspendedService
 
     public function suspended(User $user): void
     {
-        $user->setSuspended(true);
+        $user->setIsSuspended(true);
         $this->dispatcher->dispatch(new AccountSuspendedEvent($user));
     }
 }

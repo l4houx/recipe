@@ -10,15 +10,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use function Symfony\Component\Translation\t;
+
 class QuantityFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('quantity')
-            ->add('unit')
+            ->add('quantity', null, [
+                'label' => t('Quantity :'),
+            ])
+            ->add('unit', null, [
+                'label' => t('Unit :'),
+            ])
             ->add('ingredient', EntityType::class, [
-                'label' => 'Ingrédient :',
+                'label' => t('Ingredient :'),
                 'class' => Ingredient::class,
                 'choice_label' => 'name',
             ])

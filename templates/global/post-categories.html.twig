@@ -1,8 +1,10 @@
 {% if postcategories %}
 	{% for category in postcategories %}
 		<a 
-			class="fs-5 mb-2 fw-semibold d-block text-{{ category.color }}"
-			style="color: {{ category.color }}"
+			class="fs-5 mb-2 fw-semibold d-block"
+			{% if category.color != '#5dade2' %}
+				style="color: {{ category.color }}"
+			{% endif %}
 			href="{{ path('blog_category', {slug: category.slug}) }}"
 		>
 			{{ category.name }}

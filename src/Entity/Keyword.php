@@ -16,6 +16,9 @@ class Keyword
 {
     use HasKeywordPostCategoryTrait;
 
+    /**
+     * @var collection<int, Post>
+     */
     #[ORM\ManyToMany(targetEntity: Post::class, mappedBy: 'keywords')]
     private Collection $posts;
 

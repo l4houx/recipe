@@ -16,13 +16,13 @@
 								<li class="nav-item">
 									<a class="nav-link" href="{{ path('home') }}">
 										<i class="nav-icon bi bi-house-dash me-2"></i>
-										Accueil
+										{{ 'Home'|trans }}
 									</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link {{ app.current_route starts with 'dashboard_main_panel' ? 'active' : '' }}" href="{{ path('dashboard_main_panel') }}">
 										<i class="nav-icon bi bi-speedometer2 me-2"></i>
-										Tableau de bord
+										{{ 'Dashboard'|trans }}
 									</a>
 								</li>
 								<li class="nav-item">
@@ -31,18 +31,18 @@
 								<li class="nav-item">
 									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navRecipe" aria-expanded="false" aria-controls="navRecipe">
 										<i class="nav-icon bi bi-file me-2"></i>
-										Recette
+										{{ 'Recipe'|trans }}
 									</a>
 									<div id="navRecipe" class="collapse" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
 												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_recipe_' ? 'active' : '' }}" href="{{ path('dashboard_admin_recipe_index') }}">
-													Recette
+													{{ 'Recipe'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
 												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_category_index') }}">
-													Catégorie
+													{{ 'Category'|trans }}
 												</a>
 											</li>
 										</ul>
@@ -51,24 +51,24 @@
 								<li class="nav-item">
 									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navBlog" aria-expanded="false" aria-controls="navBlog">
 										<i class="nav-icon bi bi-file me-2"></i>
-										Blog
+										{{ 'Blog'|trans }}
 									</a>
 									<div id="navBlog" class="collapse " data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
 												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_index') }}">
-													Blog
+													{{ 'Blog'|trans }}
 												</a>
 											</li>
 											{#
 											<li class="nav-item">
 												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_category_index') }}">
-													Blog Catégorie
+													{{ 'Blog Category'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
 												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_keyword_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_keyword_index') }}">
-													Blog Mot-clé
+													{{ 'Blog Keyword'|trans }}
 												</a>
 											</li>
 											#}

@@ -1,108 +1,83 @@
-<a class="d-xl-none d-lg-none d-md-none text-inherit fw-bold" href="#">Menu</a>
+<a class="d-xl-none d-lg-none d-md-none text-inherit fw-bold" href="#">{{ 'Menu'|trans }}</a>
 <button class="navbar-toggler d-md-none icon-shape icon-sm rounded bg-primary text-light" type="button" data-bs-toggle="collapse" data-bs-target="#sidenav" aria-controls="sidenav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="fe fe-menu"></span>
+    <span class="bi bi-list"></span>
 </button>
 <div class="collapse navbar-collapse" id="sidenav">
     <div class="navbar-nav flex-column">
-        <span class="navbar-header">Tableau de bord</span>
+        <span class="navbar-header">{{ 'Dashboard'|trans }}</span>
         <ul class="list-unstyled ms-n2 mb-4">
-            <li class="nav-item active">
-                <a class="nav-link {% if activerd == 'dashboard' %}active{% endif %}" href="{{ path('dashboard_main_account') }}">
-                    <i class="fe fe-home nav-icon"></i>
-                    Mon tableau de bord
+            <li class="nav-item {{ app.current_route == 'dashboard_main_account' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_main_account') }}">
+                    <i class="bi bi-house nav-icon"></i>
+                    {{ 'My dashboard'|trans }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="">
-                    <i class="fe fe-book nav-icon"></i>
-                    Mes recettes
+                    <i class="bi bi-book nav-icon"></i>
+                    {{ 'My recipes'|trans }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="">
-                    <i class="fe fe-star nav-icon"></i>
-                    Avis
+                    <i class="bi bi-star nav-icon"></i>
+                    {{ 'My reviews'|trans }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="">
-                    <i class="fe fe-dollar-sign nav-icon"></i>
-                    Paiements
+                    <i class="bi bi-credit-card nav-icon"></i>
+                    {{ 'My payments'|trans }}
+                </a>
+            </li>
+            <li class="nav-item {{ app.current_route starts with 'dashboard_account_invoice_' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_invoice_index') }}">
+                    <i class="bi bi-clipboard nav-icon"></i>
+                    {{ 'My invoices'|trans }}
                 </a>
             </li>
         </ul>
-        <span class="navbar-header">Paramètres du compte</span>
+        <span class="navbar-header">{{ 'Account settings'|trans }}</span>
         <ul class="list-unstyled ms-n2 mb-0">
-            <li class="nav-item">
-                <a class="nav-link {% if activerd == 'profile' %}active{% endif %}" href="{{ path('dashboard_account_profile') }}">
-                    <i class="fe fe-user nav-icon"></i>
-                    Mon profil
+            <li class="nav-item {{ app.current_route == 'dashboard_account_profile' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_profile') }}">
+                    <i class="bi bi-person nav-icon"></i>
+                    {{ 'My profile'|trans }}
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {% if activerd == 'edit' %}active{% endif %}" href="{{ path('dashboard_account_edit') }}">
-                    <i class="fe fe-user nav-icon"></i>
-                    Editer mon profil
-                </a>
-            </li>
-            {#
-            <li class="nav-item">
-                <a class="nav-link {% if activerd == 'edit_profile' %}active{% endif %}" href="{{ path('dashboard_account_edit_profile') }}">
-                    <i class="fe fe-user nav-icon"></i>
-                    Editer mon profil
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if activerd == 'edit_avatar' %}active{% endif %}" href="">
-                    <i class="fe fe-user nav-icon"></i>
-                    Editer mon avatar
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if activerd == 'edit_change_password' %}active{% endif %}" href="{{ path('dashboard_account_edit_change_password') }}">
-                    <i class="fe fe-settings nav-icon"></i>
-                    Editer mon mot de passe
+            <li class="nav-item {{ app.current_route == 'dashboard_account_edit' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_edit') }}">
+                    <i class="bi bi-pen nav-icon"></i>
+                    {{ 'Edit my profile'|trans }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="">
-                    <i class="fe fe-refresh-cw nav-icon"></i>
-                    Profils sociaux
-                </a>
-            </li>
-            #}
-            <li class="nav-item">
-                <a class="nav-link" href="">
-                    <i class="fe fe-bell nav-icon"></i>
-                    Notifications
+                    <i class="bi bi-bell nav-icon"></i>
+                    {{ 'Notifications'|trans }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="">
-                    <i class="fe fe-lock nav-icon"></i>
-                    Confidentialité du profil
+                    <i class="bi bi-lock nav-icon"></i>
+                    {{ 'Profile privacy'|trans }}
                 </a>
             </li>
-            {#
-            <li class="nav-item">
-                <a class="nav-link" href="">
-                    <i class="fe fe-trash nav-icon"></i>
-                    Supprimer le profil
-                </a>
-            </li>
-            #}
             {% if is_granted('IS_IMPERSONATOR') %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ impersonation_exit_path(path('home')) }}">
-                        <i class="fe fe-power nav-icon"></i>
-                        Déconnexion
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();" class="nav-link">
+                        <i class="bi bi-power nav-icon"></i>
+                        {{ 'Logout'|trans }}
                     </a>
+                    <form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                    </form>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('logout') }}">
-                        <i class="fe fe-power nav-icon"></i>
-                        Déconnexion
+                    <a href="{{ impersonation_exit_path(path('home')) }}" class="nav-link">
+                        <i class="bi bi-power nav-icon"></i>
+                        {{ 'Logout'|trans }}
                     </a>
                 </li>
             {% endif %}

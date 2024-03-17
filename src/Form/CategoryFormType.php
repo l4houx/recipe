@@ -10,6 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 
+use function Symfony\Component\Translation\t;
+
 class CategoryFormType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
@@ -21,7 +23,7 @@ class CategoryFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom :',
+                'label' => t('name :'),
                 'empty_data' => '',
             ])
             ->add('slug', TextType::class, [
@@ -39,7 +41,7 @@ class CategoryFormType extends AbstractType
             ])
             */
             ->add('color', ColorType::class, [
-                'label' => 'Couleur :',
+                'label' => t('Color :'),
                 'required' => false,
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('name'))

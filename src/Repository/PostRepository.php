@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\Keyword;
 use App\DTO\SearchDataDTO;
 use App\Entity\PostCategory;
+use Doctrine\ORM\QueryBuilder;
 use App\Entity\Traits\HasLimit;
 use function Symfony\Component\String\u;
 use Doctrine\Persistence\ManagerRegistry;
@@ -57,6 +58,19 @@ class PostRepository extends ServiceEntityRepository
             ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    /**
+     * @return QueryBuilder<Post>
+     */
+    public function findRecent(int $maxResults): QueryBuilder // (HomeController)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->where('p.isOnline = true AND p.createdAt < NOW()')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults($maxResults)
         ;
     }
 

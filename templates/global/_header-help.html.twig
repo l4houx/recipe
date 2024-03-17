@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand navbar-transparent shadow-none">
+	<div class="container px-0">
+		<div class="d-flex align-items-center">
+			<a class="navbar-brand me-4" href="{{ path('home') }}">
+				{# <img src="{{ asset('images/brand/logo/logo.svg') }}" alt="{{ website_name }}"> #}
+				{{ website_name }}
+			</a>
+			<ul class="list-unstyled mb-0 lh-1">
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle text-dark" href="#" id="navbarBrowse" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-display="static">
+						{{ "Help Center"|trans }}
+					</a>
+					<ul class="dropdown-menu dropdown-menu-arrow" aria-labelledby="navbarBrowse">
+						<li>
+							<a class="dropdown-item" href="{{ path('help_center') }}">{{ "Help Center"|trans }}</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="#!">{{ "FAQ's"|trans }}</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ path('help_center_support') }}">{{ "Support"|trans }}</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="ms-auto d-flex align-items-center">
+		<div class="dropdown me-2">
+			{% include "global/_bs-theme-text.html.twig" %}
+		</div>
+		<div class="d-flex align-items-center">
+			<a href="#" class="ms-2 me-md-4 text-dark" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				<i class="fe fe-search fs-3"></i>
+			</a>
+			<a href="#!" class="btn btn-primary d-lg-block d-none">{{ "Submit Ticket"|trans }}</a>
+		</div>
+	</div>
+</nav>

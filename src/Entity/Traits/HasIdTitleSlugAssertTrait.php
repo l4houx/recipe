@@ -5,6 +5,7 @@ namespace App\Entity\Traits;
 use App\Validator\BanWord;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait HasIdTitleSlugAssertTrait
@@ -23,7 +24,8 @@ trait HasIdTitleSlugAssertTrait
         maxMessage: 'The title is too long ({ limit } characters maximum)'
     )]
     #[BanWord()]
-    private string $title = '';
+    #[Gedmo\Translatable]
+    private ?string $title = '';
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\Length(
@@ -52,7 +54,7 @@ trait HasIdTitleSlugAssertTrait
 
     public function getTitle(): string
     {
-        return $this->title;
+        return $this->title ?? '';
     }
 
     public function setTitle(string $title): static

@@ -165,6 +165,18 @@ sf-check-requirements: ## Check requirements.
 sf-prod-asset: ## Asset Mapper (Prod: To compile assets into the public folder).
 	$(SYMFONY_CONSOLE) asset-map:compile
 .PHONY: sf-prod-asset
+
+sf-translate-dump: ## Dump.
+	$(SYMFONY_CONSOLE) translation:extract --dump-messages fr
+.PHONY: sf-translate-dump
+
+sf-translate-fr: ## Extract strings to translate.
+	$(SYMFONY_CONSOLE) translation:extract --force fr --format=yaml
+.PHONY: sf-translate-fr
+
+sf-translate-en: ## Extract strings to translate.
+	$(SYMFONY_CONSOLE) translation:extract --force en --format=yaml
+.PHONY: sf-translate-en
 #---------------------------------------------#
 
 ## === 📦  COMPOSER ==============================================

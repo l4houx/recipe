@@ -46,7 +46,7 @@
                                     {% include "global/post-card.html.twig" with {post: post, showdate: 1} only %}
                                 {% endfor %}
                             {% else %}
-                                {% include "global/message.html.twig" with { type: "info", message: ('Article no found'|trans), icon: "bi bi-info-circle" } %}
+                                {% include "global/message.html.twig" with { type: "info", message: ('Article no found'|trans), icon: "bi bi-exclamation-circle" } %}
                             {% endif %}
                             <div class="col-xl-12 col-lg-12 col-md-12 col-12 my-4">
                                 {{ knp_pagination_render(pagination, null, {}, {'align': 'center'}) }}

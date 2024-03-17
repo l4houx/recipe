@@ -1,9 +1,32 @@
 Installation en cours:
-    ☐ composer require liip/imagine-bundle
     ☐ composer require excelwebzone/recaptcha-bundle
     ☐ composer require lexik/jwt-authentication-bundle
     ☐ composer require exercise/htmlpurifier-bundle
-    ☐ composer require intervention/image
+    ☐ composer require illuminate/collections intervention/image liip/imagine-bundle
+
+    ☐ composer require geoip2/geoip2 geertw/ip-anonymizer
+
+    ✔ composer require api-platform/core @done(24-03-15 17:35)
+
+
+    // Translate your doctrine objects easily with some helpers
+    ☐ composer require a2lix/translation-form-bundle
+    // Puts the Symfony Translation Component on steroids
+    ☐ composer require jms/translation-bundle
+    // A pretty nice way to expose your translation messages to your JavaScript.
+    ☐ composer require willdurand/js-translation-bundle
+
+
+    ☐ composer require presta/sitemap-bundle
+    ☐ composer require debril/rss-atom-bundle
+
+    // Auth
+    ☐ composer require knpuniversity/oauth2-client-bundle league/oauth2-facebook league/oauth2-github league/oauth2-google wohali/oauth2-discord-new
+
+    // Payment
+    ☐ composer require stripe/stripe-php
+    ☐ composer require paypal/paypal-checkout-sdk ou composer require phpjuice/paypal-checkout-sdk ou composer require league/omnipay
+
     ☐ composer require symfony/polyfill-intl-messageformatter
     ✔ composer require symfony/ux-toggle-password @done(24-03-07 13:35)
     ✔ composer require symfony/ux-autocomplete @done(24-03-07 13:16)
@@ -20,8 +43,16 @@ Import:
 
 
 Entity:
-    ☐ Setting
-    ☐ AppLayoutSetting
+    ✔ Setting @done(24-03-11 18:43)
+    ✔ AppLayoutSetting @done(24-03-11 18:43)
     ✔ Testimonial @done(24-03-01 21:12)
-    ☐ HelpCenterArticle
-    ☐ HelpCenterCategory
+    ✔ HelpCenterArticle @done(24-03-13 16:58)
+    ✔ HelpCenterCategory @done(24-03-13 16:58)
+    ✔ Subscription @done(24-03-12 18:54)
+    ✔ Pricing @done(24-03-12 18:54)
+    ✔ Transaction @done(24-03-12 18:54)
+    ✔ Level @done(24-03-15 18:11)
+    ✔ Response @done(24-03-15 19:34)
+    ✔ Application @done(24-03-15 19:25)
+    ✔ Status @done(24-03-15 18:08)
+    ✔ Ticket @done(24-03-15 18:00)

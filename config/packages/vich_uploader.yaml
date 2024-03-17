@@ -21,3 +21,26 @@ vich_uploader:
             #inject_on_load: true
             #delete_on_update: true
             #delete_on_remove: true
+
+        homepage_hero_custom_background:
+            uri_prefix: '%homepage_hero_custom_background%'
+            upload_destination: '%kernel.project_dir%/public%homepage_hero_custom_background%'
+            namer: vich_uploader.namer_uniqid
+            inject_on_load: true
+            delete_on_update: true
+            delete_on_remove: true
+
+        app_layout:
+            uri_prefix: '%app_layout%'
+            upload_destination: '%kernel.project_dir%/public%app_layout%'
+            namer: vich_uploader.namer_uniqid
+            inject_on_load: true
+            delete_on_update: true
+            delete_on_remove: true
+
+        icon:
+            upload_destination: '%kernel.project_dir%/public%icon%'
+            uri_prefix: '%icon%'
+            namer:
+                service: Vich\UploaderBundle\Naming\PropertyNamer
+                options: { property: 'slug' }

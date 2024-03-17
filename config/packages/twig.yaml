@@ -5,10 +5,10 @@ twig:
 
     globals:
         # Setting
-        # setting: '@App\Service\SettingService'
+        setting: '@App\Service\SettingService'
 
         # Language
-        # locales: "%app_locales%"
+        locales: "%app_locales%"
 
         # Google
         #google_maps_api_key: "%google_maps_api_key%"
@@ -24,6 +24,7 @@ twig:
         email: '%env(WEBSITE_CONTACT_EMAIL)%'
         address: '%env(WEBSITE_CONTACT_ADDRESS)%'
         company: '%env(WEBSITE_COMPANY)%'
+        law: '%env(WEBSITE_LAW)%'
         phone: '%env(WEBSITE_CONTACT_PHONE)%'
         siret: '%env(WEBSITE_SIRET)%'
         ape: '%env(WEBSITE_APE)%'
@@ -31,6 +32,11 @@ twig:
         quantity: '%env(WEBSITE_QUANTITY)%'
         host: '%env(WEBSITE_HOST)%'
         domain: '%env(WEBSITE_DOMAIN)%'
+        facebook_url: '%env(WEBSITE_FACEBOOK_URL)%'
+        instagram_url: '%env(WEBSITE_INSTAGRAM_URL)%'
+        youtube_url: '%env(WEBSITE_YOUTUBE_URL)%'
+        twitter_url: '%env(WEBSITE_TWITTER_URL)%'
+        github_url: '%env(WEBSITE_GITHUB_URL)%'
 
     date:
         format: "%date_format%"

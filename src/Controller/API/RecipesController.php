@@ -11,8 +11,7 @@ class RecipesController extends AbstractController
     #[Route("/api/recipes", methods: ["GET"])]
     public function index(
         RecipeRepository $repository,
-    )
-    {
+    ) {
         $recipes = $repository->findAll();
 
         return $this->json($recipes, 200, [], [

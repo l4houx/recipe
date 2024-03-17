@@ -20,6 +20,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
+use function Symfony\Component\Translation\t;
+
 class RegistrationFormType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
@@ -29,47 +31,47 @@ class RegistrationFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $passwordAttrs = ['minlength' => 8];
+        $passwordAttrs = ['minlength' => 16];
 
         $builder
             // Profil
             ->add('username', TextType::class, [
-                'label' => "Nom d'utilisateur :",
+                'label' => t("User name :"),
                 //'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => "Nom d'utilisateur"],
+                'attr' => ['placeholder' => t("User name")],
             ])
             ->add('slug', HiddenType::class, [
                 'empty_data' => '',
                 'required' => false,
             ])
             ->add('firstname', TextType::class, [
-                'label' => 'Prénom :',
+                'label' => t('First name :'),
                 //'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => 'Prénom'],
+                'attr' => ['placeholder' => t('First name')],
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Nom :',
+                'label' => t('Last name :'),
                 //'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => 'Nom'],
+                'attr' => ['placeholder' => t('Last name')],
             ])
             // Contact
             ->add('email', EmailType::class, [
-                'label' => 'Adresse e-mail :',
+                'label' => t('Email address :'),
                 //'purify_html' => true,
                 'required' => true,
-                'attr' => ['placeholder' => 'Adresse email ici'],
+                'attr' => ['placeholder' => t('Email address here')],
             ])
             ->add('isAgreeTerms', CheckboxType::class, [
                 'mapped' => true,
                 'constraints' => [
                     new IsTrue([
-                        'message' => "Vous devez accepter les conditions d'utilisation de vos données personnelles.",
+                        'message' => t("You must accept the conditions of use of your personal data."),
                     ]),
                 ],
             ])
@@ -78,30 +80,30 @@ class RegistrationFormType extends AbstractType
                 'options' => [
                     //'purify_html' => true,
                     'toggle' => true,
-                    'translation_domain' => 'message',
+                    'translation_domain' => 'messages',
                     'attr' => [
-                        'placeholder' => 'Mot de passe',
+                        'placeholder' => t('Password'),
                         'autocomplete' => 'new-password',
                     ],
                 ],
                 'label_attr' => ['class' => 'form-label'],
-                'first_options' => ['label' => 'Mot de passe :', 'attr' => [...$passwordAttrs, ...['placeholder' => "**************"]]],
-                'second_options' => ['label' => 'Confirmez le mot de passe :', 'attr' => [...$passwordAttrs, ...['placeholder' => "**************"]]],
-                'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
+                'first_options' => ['label' => t('Password :'), 'attr' => [...$passwordAttrs, ...['placeholder' => "**************"]]],
+                'second_options' => ['label' => t('Confirm password :'), 'attr' => [...$passwordAttrs, ...['placeholder' => "**************"]]],
+                'invalid_message' => t('Password fields must correspond.'),
                 'mapped' => false,
                 'required' => true,
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-                        'htmlPattern' => '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$/',
+                        'htmlPattern' => '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$',
                         'groups' => ['password'],
                     ]),
                     new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
+                        'message' => t('Please enter a password'),
                     ]),
                     new Length([
-                        'min' => 8,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
+                        'min' => 16,
+                        'minMessage' => t('Your password must have at least {{ limit }} characters'),
                         'max' => 4096,
                     ]),
                 ],
@@ -124,37 +126,6 @@ class RegistrationFormType extends AbstractType
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('username'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;
-
-        /*
-        $builder
-            ->add('username')
-            ->add('isAgreeTerms', CheckboxType::class, [
-                                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
-            ->add('plainPassword', PasswordType::class, [
-                                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-            ])
-        ;
-        */
     }
 
     public function configureOptions(OptionsResolver $resolver): void

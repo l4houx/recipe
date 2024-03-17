@@ -27,7 +27,7 @@ class UserChecker implements UserCheckerInterface
         }
 
         if ($user->isSuspended()) {
-            throw new AccountSuspendedException($user, $this->translator->trans('Votre compte a été suspendu.'));
+            throw new AccountSuspendedException($user, $this->translator->trans('Your account has been suspended.'));
         }
     }
 

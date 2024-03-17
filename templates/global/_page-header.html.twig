@@ -8,32 +8,32 @@
                 <span class="position-absolute ps-3 search-icon">
                     <i class="bi bi-search"></i>
                 </span>
-                <input type="search" class="form-control ps-6" placeholder="Recherche">
+                <input type="search" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
             </form>
         </div>
         <div class="ms-auto d-flex">
             <div class="dropdown">
-                <button class="btn btn-light btn-icon rounded-circle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+                <button class="btn btn-light btn-icon rounded-circle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="{{ "Toggle theme (auto)"|trans }}">
                     <i class="bi theme-icon-active"><i class="bi theme-icon bi-moon-stars-fill"></i></i>
-                    <span class="visually-hidden bs-theme-text">Toggle theme</span>
+                    <span class="visually-hidden bs-theme-text">{{ 'Toggle theme'|trans }}</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bs-theme-text">
                     <li>
                         <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
                             <i class="bi theme-icon bi-sun-fill"></i>
-                            <span class="ms-2">Clair</span>
+                            <span class="ms-2">{{ 'Light'|trans }}</span>
                         </button>
                     </li>
                     <li>
                         <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="dark" aria-pressed="true">
                             <i class="bi theme-icon bi-moon-stars-fill"></i>
-                            <span class="ms-2">Foncé</span>
+                            <span class="ms-2">{{ 'Dark'|trans }}</span>
                         </button>
                     </li>
                     <li>
                         <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="false">
                             <i class="bi theme-icon bi-circle-half"></i>
-                            <span class="ms-2">Auto</span>
+                            <span class="ms-2">{{ 'Auto'|trans }}</span>
                         </button>
                     </li>
                 </ul>
@@ -225,22 +225,22 @@
                                 <a class="dropdown-item" href="{{ path('dashboard_main') }}">
                                     <i class="bi bi-person me-2"></i>
                                     {% if is_granted("ROLE_TEAM") %}
-                                        Tableau de bord
+                                        {{ 'Dashboard'|trans }}
                                     {% else %}
-                                        Mon tableau de bord 
+                                        {{ 'My dashboard'|trans }}
                                     {% endif %}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#!">
                                     <i class="bi bi-star me-2"></i>
-                                    Subscription
+                                    {{ 'Subscription'|trans }}
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#!">
                                     <i class="bi bi-gear me-2"></i>
-                                    Settings
+                                    {{ 'Settings'|trans }}
                                 </a>
                             </li>
                         </ul>
@@ -250,7 +250,7 @@
                                 <li>
                                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();">
                                         <i class="bi bi-power me-2"></i>
-                                        Déconnexion
+                                        {{ 'Logout'|trans }}
                                     </a>
                                     <form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
                                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
@@ -260,7 +260,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ impersonation_exit_path(path('home')) }}">
                                         <i class="bi bi-power me-2"></i>
-                                        Déconnexion
+                                        {{ 'Logout'|trans }}
                                     </a>
                                 </li>
                             {% endif %}

@@ -17,7 +17,7 @@
                             <div class="d-flex align-items-end justify-content-between">
                                 <div class="d-flex align-items-center">
                                     <div class="me-2 position-relative d-flex justify-content-end align-items-end mt-n5">
-                                        {% include "global/user-avatar.html.twig" with { user: app.user, type: "xl" } %}
+                                        {% include "global/user-avatar.html.twig" with { user: app.user, type: "xl", class: "position-relative border-white" } %}
                                         {% include 'global/user-verified.html.twig' with { user: app.user } %}
                                     </div>
                                     <div class="lh-1">
@@ -27,24 +27,20 @@
                                 </div>
                                 <div>
                                     {% if app.request.attributes.get('_route') == 'dashboard_account_profile' %}
-                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary d-none d-md-block">
-                                            Tableau de bord
+                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                            {{ 'My dashboard'|trans }}
                                         </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_edit_profile' %}
-                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary d-none d-md-block">
-                                            Tableau de bord
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_edit' %}
+                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                            {{ 'My dashboard'|trans }}
                                         </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_edit_avatar' %}
-                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary d-none d-md-block">
-                                            Tableau de bord
-                                        </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_edit_change_password' %}
-                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary d-none d-md-block">
-                                            Tableau de bord
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_avatar' %}
+                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                            {{ 'My dashboard'|trans }}
                                         </a>
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_main_account' %}
-                                        <a href="{{ path('dashboard_account_edit_profile') }}" class="btn btn-primary d-none d-md-block">
-                                            Paramètre du compte
+                                        <a href="{{ path('dashboard_account_edit') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                            {{ 'Account Setting'|trans }}
                                         </a>
                                     {% endif %}
                                 </div>

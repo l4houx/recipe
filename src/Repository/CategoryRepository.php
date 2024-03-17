@@ -2,12 +2,15 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\Query;
 use App\Entity\Category;
 use App\Entity\Traits\HasLimit;
 use App\DTO\CategoryWithCountDTO;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use Gedmo\Translatable\TranslatableListener;
 use Knp\Component\Pager\Pagination\PaginationInterface;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -52,32 +55,12 @@ class CategoryRepository extends ServiceEntityRepository
             ->leftJoin('c.recipes', 'r')
             ->groupBy('c.id')
             ->getQuery()
+            ->setHint(
+                Query::HINT_CUSTOM_OUTPUT_WALKER,
+                TranslationWalker::class
+            )
+            ->setHint(TranslatableListener::HINT_FALLBACK, 1)
             ->getResult()
         ;
     }
-
-    //    /**
-    //     * @return Category[] Returns an array of Category objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Category
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

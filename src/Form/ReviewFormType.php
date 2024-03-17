@@ -13,25 +13,27 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use function Symfony\Component\Translation\t;
+
 class ReviewFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('rating', ChoiceType::class, [
-                'label' => 'Votre note (sur 5 étoiles)',
+                'label' => t('Your rating (out of 5 stars)'),
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'choices' => ['5 étoiles' => 5, '4 étoiles' => 4, '3 étoiles' => 3, '2 étoiles' => 2, '1 étoile' => 1],
+                'choices' => [t('5 stars') => 5, t('4 stars') => 4, t('3 stars') => 3, t('2 stars') => 2, t('1 star') => 1],
             ])
             ->add('headline', TextType::class, [
-                'label' => 'Titre de votre avis',
+                'label' => t('Title of your review'),
                 //'purify_html' => true,
                 'required' => true,
             ])
             ->add('content', TextareaType::class, [
-                'label' => "Informez l'autre participant de plus de détails sur votre expérience",
+                'label' => t("Tell the other participant more details about your experience"),
                 //'purify_html' => true,
                 'required' => true,
                 'attr' => ['rows' => 10],

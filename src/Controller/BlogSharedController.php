@@ -33,7 +33,7 @@ class BlogSharedController extends AbstractController
         $form = $this->createForm(PostSharedFormType::class)->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $subject = sprintf('%s vous conseille de lire "%s"', $data['sender_name'], $post->getTitle());
+            $subject = sprintf('%s advises you to read "%s"', $data['sender_name'], $post->getTitle());
 
             $mail->send(
                 $this->getParameter('website_no_reply_email'),

@@ -11,6 +11,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+use function Symfony\Component\Translation\t;
+
 /**
  * @method AccountUpdatedSocialDTO getData()
  */
@@ -23,62 +25,62 @@ class AccountUpdatedSocialFormType extends AbstractType
         $builder
             // Social Media
             ->add('externallink', TextType::class, [
-                'label' => 'Lien externe :',
+                'label' => t('External link :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => "Si vous disposez d'un site Web dédié, entrez son URL ici",
-                'attr' => ['placeholder' => 'URL du lien externe', 'class' => 'mb-1'],
+                'help' => t("If you have a dedicated website, enter its URL here"),
+                'attr' => ['placeholder' => t('External link URL'), 'class' => 'mb-1'],
             ])
             ->add('twitterurl', TextType::class, [
-                'label' => 'URL du profil Twitter :',
+                'label' => t('Twitter profile URL :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => "Ajoutez l'URL de votre profil Twitter.",
-                'attr' => ['placeholder' => 'URL du profil Twitter', 'class' => 'mb-1'],
+                'help' => t("Add your Twitter profile URL."),
+                'attr' => ['placeholder' => t('Twitter profile URL'), 'class' => 'mb-1'],
             ])
             ->add('instagramurl', TextType::class, [
-                'label' => 'URL du profil Instagram :',
+                'label' => t('Instagram profile URL :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => "Ajoutez l'URL de votre profil Instagram.",
-                'attr' => ['placeholder' => 'URL du profil Instagram', 'class' => 'mb-1'],
+                'help' => t("Add your Instagram profile URL."),
+                'attr' => ['placeholder' => t('Instagram profile URL'), 'class' => 'mb-1'],
             ])
             ->add('facebookurl', TextType::class, [
-                'label' => 'URL du profil Facebook :',
+                'label' => t('Facebook profile URL :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => "Ajoutez l'URL de votre profil Facebook.",
-                'attr' => ['placeholder' => 'URL du profil Facebook', 'class' => 'mb-1'],
+                'help' => t("Add your Facebook profile URL."),
+                'attr' => ['placeholder' => t('Facebook profile URL'), 'class' => 'mb-1'],
             ])
             ->add('googleplusurl', TextType::class, [
-                'label' => 'URL du profil Google Plus :',
+                'label' => t('Google Plus profile URL :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => "Ajoutez l'URL de votre profil Google Plus.",
-                'attr' => ['placeholder' => 'URL du profil Google Plus', 'class' => 'mb-1'],
+                'help' => t("Add your Google Plus profile URL."),
+                'attr' => ['placeholder' => t('Google Plus profile URL'), 'class' => 'mb-1'],
             ])
             ->add('linkedinurl', TextType::class, [
-                'label' => 'URL du profil LinkedIn :',
+                'label' => t('LinkedIn profile URL :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => "Ajoutez l'URL de votre profil LinkedIn",
-                'attr' => ['placeholder' => 'URL du profil LinkedIn', 'class' => 'mb-1'],
+                'help' => t("Add your LinkedIn profile URL."),
+                'attr' => ['placeholder' => t('LinkedIn profile URL'), 'class' => 'mb-1'],
             ])
 
             // Video
             ->add('youtubeurl', TextType::class, [
-                'label' => 'URL du profil Youtube :',
+                'label' => t('Youtube profile URL :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
-                'help' => "Ajoutez l'URL de votre profil Youtube.",
-                'attr' => ['placeholder' => 'URL YouTube', 'class' => 'mb-1'],
+                'help' => t("Add your YouTube profile URL."),
+                'attr' => ['placeholder' => t('YouTube URL'), 'class' => 'mb-1'],
             ])
         ;
     }

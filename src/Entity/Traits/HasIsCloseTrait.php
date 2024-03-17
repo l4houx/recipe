@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Entity\Traits;
+
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+trait HasIsCloseTrait
+{
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
+    #[Assert\NotNull]
+    private bool $isClose = false;
+
+    public function isClose(): bool
+    {
+        return $this->isClose;
+    }
+
+    public function getIsClose(): bool
+    {
+        return $this->isClose;
+    }
+
+    public function setIsClose(bool $isClose): static
+    {
+        $this->isClose = $isClose;
+
+        return $this;
+    }
+}

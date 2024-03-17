@@ -23,6 +23,6 @@ class TeamVoter extends Voter
             return false;
         }
 
-        return in_array(HasRoles::ADMINISTRATOR, $user->getRoles());
+        return in_array(HasRoles::APPLICATION, $user->getRoles());
     }
 }

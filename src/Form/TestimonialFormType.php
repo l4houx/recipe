@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Testimonial;
 use Symfony\Component\Form\AbstractType;
+use function Symfony\Component\Translation\t;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,22 +25,22 @@ class TestimonialFormType extends AbstractType
                 'download_uri' => false,
                 'image_uri' => false,
                 'imagine_pattern' => 'scale',
-                'label' => 'Image de profil',
+                'label' => t('Profile picture'),
                 'translation_domain' => 'messages'
             ])
             ->add('comment', TextareaType::class, [
-                'label' => 'Commentaire :',
+                'label' => t('Comment :'),
                 //'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
             ])
             ->add('rating', ChoiceType::class, [
-                'label' => 'Votre note (sur 5 étoiles)',
+                'label' => t('Your rating (out of 5 stars)'),
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'choices' => ['5 étoiles' => 5, '4 étoiles' => 4, '3 étoiles' => 3, '2 étoiles' => 2, '1 étoile' => 1],
+                'choices' => [t('5 stars') => 5, t('4 stars') => 4, t('3 stars') => 3, t('2 stars') => 2, t('1 star') => 1],
             ])
             //->add('user')
         ;
@@ -47,7 +49,7 @@ class TestimonialFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            //'data_class' => Testimonial::class,
+            'data_class' => Testimonial::class,
         ]);
     }
 }

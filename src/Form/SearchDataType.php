@@ -12,6 +12,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+use function Symfony\Component\Translation\t;
+
 class SearchDataType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -19,8 +21,8 @@ class SearchDataType extends AbstractType
         $builder
             ->add('keywords', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'Mots clés',
-                    'aria-label' => 'Recherche',
+                    'placeholder' => t('Keywords'),
+                    'aria-label' => t('Search'),
                 ],
                 'empty_data' => '',
                 'required' => false,

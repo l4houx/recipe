@@ -1,6 +1,6 @@
 {% extends 'page.html.twig' %}
 
-{% set pagetitle = 'Accès refusé' %}
+{% set pagetitle = 'Access denied'|trans %}
 {% block title pagetitle %}
 
 {% block content %}
@@ -8,7 +8,6 @@
         <div class="container">
 			<div class="row">
 				<div class="col-md-9 text-center mx-auto my-0 my-md-5 py-0 py-lg-5 position-relative z-index-9">
-					<!-- SVG shape START -->
 					<figure class="position-absolute top-50 start-50 translate-middle opacity-7 z-index-n9">
 						<svg width="650" height="379" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewbox="0 0 510 297">
 							<g>
@@ -25,8 +24,6 @@
 							</g>
 						</svg>
 					</figure>
-					<!-- SVG shape START -->
-					<!-- Content -->
 					<h1 class="display-1 text-primary">{{ pagetitle }}</h1>
                     {% include "global/message.html.twig" with { type: "danger", message: ('Access is denied. You may not have the appropriate permissions to access this resource.'|trans) ~ " " ~ ("You are logged in as:"|trans) ~ " " ~ app.user.getFullName, icon: "bi bi-ban" } %}
 				</div>

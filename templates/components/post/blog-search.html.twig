@@ -12,7 +12,7 @@
         {% include "global/post-card.html.twig" with {post: post, showdate: 1} only %}
     {% else %}
         {% if query is not empty %}
-            {% include "global/message.html.twig" with { type: "info", message: ('No result'|trans), icon: "bi bi-info-circle" } %}
+            {% include "global/message.html.twig" with { type: "info", message: ('No result'|trans), icon: "bi bi-exclamation-circle" } %}
         {% endif %}
     {% endfor %}
 </div>

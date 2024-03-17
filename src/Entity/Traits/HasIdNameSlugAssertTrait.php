@@ -4,6 +4,7 @@ namespace App\Entity\Traits;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait HasIdNameSlugAssertTrait
@@ -21,7 +22,8 @@ trait HasIdNameSlugAssertTrait
         minMessage: 'The name is too short ({{ limit }} characters minimum)',
         maxMessage: 'The name is too long ({ limit } characters maximum)'
     )]
-    private string $name = '';
+    #[Gedmo\Translatable]
+    private ?string $name = '';
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\Length(
@@ -50,7 +52,7 @@ trait HasIdNameSlugAssertTrait
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
     public function setName(string $name): static

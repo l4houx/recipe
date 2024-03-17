@@ -1,0 +1,13 @@
+{% extends 'email.html.twig' %}
+
+{% block body %}
+    <p>Une nouvelle demande de support a été reçue</p>
+
+    <p>Nom : {{ data.name }}</p>
+    <p>Email : {{ data.email }}</p>
+
+    <p>
+        <strong>Message :</strong><br>
+        {{ data.message | nl2br }}
+    </p>
+{% endblock %}

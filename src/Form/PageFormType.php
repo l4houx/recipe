@@ -13,6 +13,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+use function Symfony\Component\Translation\t;
+
 class PageFormType extends AbstractType
 {
     public function __construct(private FormListenerFactory $formListenerFactory)
@@ -26,7 +28,7 @@ class PageFormType extends AbstractType
 
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Titre :',
+                'label' => t('Title :'),
                 'empty_data' => '',
             ])
             ->add('slug', TextType::class, [
@@ -34,7 +36,7 @@ class PageFormType extends AbstractType
                 'required' => false,
             ])
             ->add('content', TextareaType::class, [
-                'label' => 'Contenu :',
+                'label' => t('Content :'),
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],

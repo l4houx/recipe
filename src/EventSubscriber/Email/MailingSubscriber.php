@@ -5,6 +5,8 @@ namespace App\EventSubscriber\Email;
 use App\Entity\User;
 use App\Service\SendMailService;
 use App\Event\ContactRequestEvent;
+use App\Event\HelpCenterSupportRequestEvent;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -12,6 +14,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class MailingSubscriber implements EventSubscriberInterface
 {
     public function __construct(
+        private readonly TranslatorInterface $translator,
         private readonly SendMailService $mail,
         private readonly ParameterBagInterface $params
     ) {
@@ -24,6 +27,7 @@ class MailingSubscriber implements EventSubscriberInterface
     {
         return [
             ContactRequestEvent::class => 'onContactRequestEvent',
+            HelpCenterSupportRequestEvent::class => 'onHelpCenterSupportRequestEvent',
             InteractiveLoginEvent::class => 'onLogin',
         ];
     }
@@ -35,8 +39,21 @@ class MailingSubscriber implements EventSubscriberInterface
         $this->mail->send(
             $data->service,
             $data->email,
-            'Demande de contact',
+            $this->translator->trans('Request contact'),
             'contact',
+            compact('data')
+        );
+    }
+
+    public function onHelpCenterSupportRequestEvent(HelpCenterSupportRequestEvent $event): void
+    {
+        $data = $event->data;
+
+        $this->mail->send(
+            $data->service,
+            $data->email,
+            $this->translator->trans('Request support'),
+            'support',
             compact('data')
         );
     }

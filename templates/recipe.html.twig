@@ -1,0 +1,255 @@
+{% extends 'base.html.twig' %}
+
+{% block layout %}{{ parent() }} recipe{% endblock %}
+
+{% block title pagetitle %}
+
+{% block body %}
+    {% block header %}
+        {% include "global/_header.html.twig" %}
+    {% endblock %}
+    <main>
+        {% block pageheader %}
+            <section class="bg-primary py-4 py-lg-6">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                            <div>
+                                <h1 class="mb-0 text-white display-4">{{ pagetitle }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endblock %}
+        <section class="py-7">
+            <div class="container">
+                <div class="row">
+                    {% block tablist %}
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
+                            <div class="row d-md-flex justify-content-between align-items-center">
+                                <div class="col-md-6 col-lg-8 col-xl-9">
+                                    <h4 class="mb-3 mb-md-0">Displaying 9 out of 68 recipes</h4>
+                                </div>
+                                <div class="d-inline-flex col-md-6 col-lg-4 col-xl-3">
+                                    <div class="me-2">
+                                        <div class="nav btn-group flex-nowrap" role="tablist">
+                                            <button class="btn btn-outline-secondary active" data-bs-toggle="tab" data-bs-target="#tabPaneGrid" role="tab" aria-controls="tabPaneGrid" aria-selected="true">
+                                                <span class="bi bi-grid"></span>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" data-bs-toggle="tab" data-bs-target="#tabPaneList" role="tab" aria-controls="tabPaneList" aria-selected="false" tabindex="-1">
+                                                <span class="bi bi-list"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <select class="form-select" data-ddg-inputtype="unknown">
+                                        <option value="">Sort by</option>
+                                        <option value="Newest">Newest</option>
+                                        <option value="Free">Free</option>
+                                        <option value="Most Popular">Most Popular</option>
+                                        <option value="Highest Rated">Highest Rated</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}
+                    {% block sidebar %}
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-12 mb-4 mb-lg-0">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="mb-0">Filter</h4>
+                                </div>
+                                <div class="card-body">
+                                    <span class="dropdown-header px-0 mb-2">Category</span>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="reactCheck" checked="">
+                                        <label class="form-check-label" for="reactCheck">React</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="javascriptCheck">
+                                        <label class="form-check-label" for="javascriptCheck">Javascript</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="angularCheck">
+                                        <label class="form-check-label" for="angularCheck">Angular</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="nodeCheck">
+                                        <label class="form-check-label" for="nodeCheck">Node</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="angularJSCheck">
+                                        <label class="form-check-label" for="angularJSCheck">Angular JS</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="gatsbyCheck">
+                                        <label class="form-check-label" for="gatsbyCheck">GatsBy</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="graphQlCheck">
+                                        <label class="form-check-label" for="graphQlCheck">GraphQL</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="vueJsCheck">
+                                        <label class="form-check-label" for="vueJsCheck">VueJs</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="bootstrapCheck">
+                                        <label class="form-check-label" for="bootstrapCheck">Bootstrap</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="figmaCheck">
+                                        <label class="form-check-label" for="figmaCheck">Figma</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="sketchCheck">
+                                        <label class="form-check-label" for="sketchCheck">Sketch</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="HTML5Check">
+                                        <label class="form-check-label" for="HTML5Check">HTML5</label>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <span class="dropdown-header px-0 mb-2">Ratings</span>
+                                    <div class="custom-control custom-radio mb-1">
+                                        <input type="radio" class="form-check-input" id="starRadio1" name="customRadio">
+                                        <label class="form-check-label" for="starRadio1">
+                                            <span class="fs-6 align-top me-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                            </span>
+                                            <span class="fs-6">4.5 &amp; UP</span>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-radio mb-1">
+                                        <input type="radio" class="form-check-input" id="starRadio2" name="customRadio" checked="">
+                                        <label class="form-check-label" for="starRadio2">
+                                            <span class="fs-6 align-top me-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                            </span>
+
+                                            <span class="fs-6">4.0 &amp; UP</span>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-radio mb-1">
+                                        <input type="radio" class="form-check-input" id="starRadio3" name="customRadio">
+                                        <label class="form-check-label" for="starRadio3">
+                                            <span class="fs-6 align-top me-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                            </span>
+                                            <span class="fs-6">3.5 &amp; UP</span>
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-radio mb-1">
+                                        <input type="radio" class="form-check-input" id="starRadio4" name="customRadio">
+                                        <label class="form-check-label" for="starRadio4">
+                                            <span class="fs-6 align-top me-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                </path></svg>
+                                            </span>
+                                            <span class="fs-6">3.0 &amp; UP</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <span class="dropdown-header px-0 mb-2">Skill Level</span>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="allTwoCheck">
+                                        <label class="form-check-label" for="allTwoCheck">All Level</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="beginnerTwoCheck" checked="">
+                                        <label class="form-check-label" for="beginnerTwoCheck">Beginner</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="intermediateCheck">
+                                        <label class="form-check-label" for="intermediateCheck">Intermediate</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="checkbox" class="form-check-input" id="AdvancedTwoCheck">
+                                        <label class="form-check-label" for="AdvancedTwoCheck">Advance</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}
+                    <div class="col-xl-9 col-lg-9 col-md-8 col-12">
+                        <div class="tab-content">
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum adipisci sunt asperiores. Sunt autem vel et quia quis. Esse commodi iusto ad distinctio cumque tempore ab eos et, tempora dolores?
+                            </p>
+                            <ul>
+                                {% for recipe in pagination %}
+                                    <li>
+                                        <a href="{{ path('recipe_show', {id: recipe.id, slug: recipe.slug}) }}">
+                                            {{ recipe.title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {{ knp_pagination_render(pagination, null, {}, {'align': 'center'}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% block footer %}
+        {% include "global/_footer-2.html.twig" %}
+    {% endblock %}
+{% endblock %}

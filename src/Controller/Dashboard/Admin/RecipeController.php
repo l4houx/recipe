@@ -14,6 +14,8 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Infrastructural\Message\RecipePDFMessage;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -72,12 +74,14 @@ class RecipeController extends Controller
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     #[IsGranted(RecipeVoter::MANAGE, subject: 'recipe', message: 'Les recettes ne peuvent être modifiées que par leurs auteurs.')]
-    public function edit(Request $request, Recipe $recipe): Response
+    public function edit(Request $request, Recipe $recipe, MessageBusInterface $messageBusInterface): Response
     {
         $form = $this->createForm(RecipeFormType::class, $recipe)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
+
+            $messageBusInterface->dispatch(new RecipePDFMessage($recipe->getId()));
 
             $this->addFlash('info', 'La recette a été modifié avec succès.');
 

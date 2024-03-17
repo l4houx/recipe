@@ -7,23 +7,23 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ path('home') }}">Accueil</a>
+					<a class="nav-link {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ path('home') }}">{{ 'Home'|trans }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_recipe_' ? 'active' : '' }}" href="{{ path('dashboard_admin_recipe_index') }}">Recettes</a>
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_recipe_' ? 'active' : '' }}" href="{{ path('dashboard_admin_recipe_index') }}">{{ 'Recipes'|trans }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_category_index') }}">Catégories</a>
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_category_index') }}">{{ 'Categories'|trans }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_index') }}">Blog</a>
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_index') }}">{{ 'Blog'|trans }}</a>
 				</li>
 				{#  
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_category_index') }}">Blog Catégories</a>
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_category_index') }}">{{ 'Blog Category'|trans }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_keyword_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_keyword_index') }}">Blog Mot-clé</a>
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_keyword_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_keyword_index') }}">{{ 'Blog Keyword'|trans }}</a>
 				</li>
 				#}
 			</ul>

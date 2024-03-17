@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+use function Symfony\Component\Translation\t;
+
 class PostSharedFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -24,7 +26,7 @@ class PostSharedFormType extends AbstractType
 
         $builder
             ->add('sender_name', TextType::class, [
-                'label' => 'Nom et prénom :',
+                'label' => t('First and last name :'),
                 'required' => true,
                 'empty_data' => '',
                 'constraints' => [
@@ -32,7 +34,7 @@ class PostSharedFormType extends AbstractType
                 ],
             ])
             ->add('sender_email', EmailType::class, [
-                'label' => 'Adresse e-mail :',
+                'label' => t('Email address :'),
                 'required' => true,
                 'empty_data' => '',
                 'constraints' => [
@@ -42,7 +44,7 @@ class PostSharedFormType extends AbstractType
                 ],
             ])
             ->add('receiver_email', EmailType::class, [
-                'label' => "Courriel d'un ami :",
+                'label' => t("Email from a friend :"),
                 'required' => true,
                 'empty_data' => '',
                 'constraints' => [
@@ -52,9 +54,9 @@ class PostSharedFormType extends AbstractType
                 ],
             ])
             ->add('sender_comments', TextareaType::class, [
-                'label' => 'Commentaire :',
+                'label' => t('Comment :'),
                 'attr' => ['rows' => 6],
-                'help' => 'Laissez-le vide si vous le souhaitez (facultatif).',
+                'help' => t('Leave it blank if you want (optional).'),
             ])
             /*
             ->add('recaptcha', EWZRecaptchaType::class, [

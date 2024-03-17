@@ -13,26 +13,28 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
+use function Symfony\Component\Translation\t;
+
 /** ChangePasswordFormType */
 class AccountUpdatedPasswordFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $editAttr = ['minlength' => 8];
+        $editAttr = ['minlength' => 16];
 
         if ($options['current_password_is_required']) {
             $builder
                 ->add('currentPassword', PasswordType::class, [
-                    'label' => 'Mot de passe actuel :',
+                    'label' => t('Current Password :'),
                     'mapped' => false,
                     'attr' => [
                         'autocomplete' => 'off',
                     ],
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Veuillez entrer votre mot de passe actuel',
+                            'message' => t('Please enter your current password'),
                         ]),
-                        new UserPassword(['message' => 'Mot de passe actuel invalide.']),
+                        new UserPassword(['message' => t('Current password is invalid.')]),
                     ],
                 ])
             ;
@@ -43,29 +45,29 @@ class AccountUpdatedPasswordFormType extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => [
                     'hash_property_path' => 'password', 
-                    'label' => 'Nouveau mot de passe :', 
+                    'label' => t('New Password :'), 
                     'attr' => [...$editAttr, ...['placeholder' => '**************']]
                 ],
                 'second_options' => [
-                    'label' => 'Confirmez votre nouveau mot de passe :', 
+                    'label' => t('Confirm your new password :'), 
                     'attr' => [...$editAttr, ...['placeholder' => '**************']]
                 ],
-                'translation_domain' => 'message',
-                'invalid_message' => 'Les champs du mot de passe doivent correspondre.',
+                'translation_domain' => 'messages',
+                'invalid_message' => t('Password fields must correspond.'),
                 'required' => true,
                 'mapped' => false,
                 'constraints' => [
                     new Regex([
-                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-                        'htmlPattern' => '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$/',
+                        'htmlPattern' => '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$',
                         'groups' => ['password'],
                     ]),
                     new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
+                        'message' => t('Please enter a password'),
                     ]),
                     new Length([
-                        'min' => 8,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
+                        'min' => 16,
+                        'minMessage' => t('Your password must have at least {{ limit }} characters'),
                         'max' => 128,
                     ]),
                 ],

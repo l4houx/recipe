@@ -1,18 +1,18 @@
 {% for role in user.roles %}
-    {% if role == "ROLE_ADMINISTRATOR" %}
-        {% set name = "Super Admin"|trans %}
+    {% if role == "ROLE_ADMIN_APPLICATION" %}
+        {% set name = "Application"|trans %}
         {% set color = "danger" %}
     {% elseif role == "ROLE_ADMIN" %}
         {% set name = "Admin"|trans %}
         {% set color = "dark" %}
     {% elseif role == "ROLE_MODERATOR" %}
-        {% set name = "Modérateur"|trans %}
+        {% set name = "Moderator"|trans %}
         {% set color = "secondary" %}
     {% elseif role == "ROLE_TEAM" %}
-        {% set name = "Equipe"|trans %}
+        {% set name = "Team"|trans %}
         {% set color = "primary" %}
     {% else %}
-        {% set name = "Utilisateur"|trans %}
+        {% set name = "User"|trans %}
         {% set color = "success" %}
     {% endif %}
     <span class="badge me-2 bg-{{ color }}">{{ name }}</span>

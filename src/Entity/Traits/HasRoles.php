@@ -7,8 +7,11 @@ namespace App\Entity\Traits;
  */
 final class HasRoles
 {
-    // Role SuperAdmin
-    public const ADMINISTRATOR = 'ROLE_ADMINISTRATOR';
+    // Role Admin Application
+    public const ADMINAPPLICATION = 'ROLE_ADMIN_APPLICATION';
+
+    // Role Application
+    public const APPLICATION = 'ROLE_APPLICATION';
 
     // Role Admin
     public const ADMIN = 'ROLE_ADMIN';

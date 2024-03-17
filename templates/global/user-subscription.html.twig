@@ -1,0 +1,127 @@
+<div class="card border-0">
+    {% if subscription %}
+        <div class="card-header d-lg-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ 'My Subscriptions'|trans }}</h3>
+            </div>
+            {% if subscription.active %}
+                <div class="mb-3 mb-lg-0">
+                    <p class="mb-0">
+                        {{ 'You are currently subscribed. Your next collection will take place on'|trans }}
+                        <strong>{{ subscription.nextPayment | format_date('short') }}</strong>.
+                    </p>
+                </div>
+                <div>
+                    <form action="{{ path('dashboard_account_subscription') }}" method="post" target="_blank">
+                        <button class="btn btn-primary btn-sm">{{ 'Manage my subscription'|trans }}</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="mb-3 mb-lg-0">
+                    <p class="mb-0">
+                        {{ 'You have canceled your subscription. It will be automatically suspended after'|trans }}
+                        <strong>{{ subscription.nextPayment | format_date('short') }}</strong>.
+                    </p>
+                </div>
+                <div>
+                    <form action="{{ path('dashboard_account_subscription') }}" method="post" target="_blank">
+                        <button class="btn btn-primary btn-sm">{{ 'Reactivate my subscription'|trans }}</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <div class="border-bottom pt-0 pb-5">
+                <div class="row mb-4">
+                    <div class="col-lg-6 col-md-8 col-7 mb-2 mb-lg-0">
+                        <span class="d-block">
+                            <span class="h4">Monthly</span>
+                            <span class="badge bg-success ms-2">Active</span>
+                        </span>
+                        <p class="mb-0 fs-6">Subscription ID: #100010002</p>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-5 mb-2 mb-lg-0">
+                        <span>Auto Renewal</span>
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" id="customSwitch1" checked="">
+                            <label class="form-check-label" for="customSwitch1"></label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12 col-12 d-lg-flex align-items-start justify-content-end">
+                        <a href="#" class="btn btn-outline-primary btn-sm">Change Plan</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Started On</span>
+                        <h6 class="mb-0">Oct 1, 2020</h6>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Price</span>
+                        <h6 class="mb-0">Monthly</h6>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Access</span>
+                        <h6 class="mb-0">Access All Courses</h6>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Billing Date</span>
+                        <h6 class="mb-0">Next Billing on Nov 1, 2020</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-5">
+                <div class="row mb-4">
+                    <div class="col mb-2 mb-lg-0">
+                        <span class="d-block">
+                            <span class="h4">Free Plan</span>
+                            <span class="badge bg-danger ms-2">Expired</span>
+                        </span>
+                        <p class="mb-0 fs-6">Subscription ID: #100010001</p>
+                    </div>
+                    <div class="col-auto">
+                        <a href="#" class="btn btn-light btn-sm disabled">Disabled</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Started On</span>
+                        <h6 class="mb-0">Sept 1, 2020</h6>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Price</span>
+                        <h6 class="mb-0">Free - Trial a Month</h6>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Access</span>
+                        <h6 class="mb-0">Access All Courses</h6>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-6 mb-2 mb-lg-0">
+                        <span class="fs-6">Billing Date</span>
+                        <h6 class="mb-0">Next Billing on Oct 1, 2020</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elseif (user.premium) %}
+        <div class="card-header d-lg-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ 'My Subscriptions'|trans }}</h3>
+                <p class="mb-0">
+                    {{ 'You are currently premium until'|trans }}
+                    <strong>{{ user.premiumEnd | format_date('short') }}</strong>.
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div class="card-header d-lg-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ 'You are not premium'|trans }}</h3>
+                <p class="mb-0"></p>
+            </div>
+            <div>
+                <a href="{{ path('pricing') }}" class="btn btn-success btn-sm">{{ 'Become premium'|trans }}</a>
+            </div>
+        </div>
+    {% endif %}
+</div>

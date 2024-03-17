@@ -20,14 +20,14 @@ class AppCategoryFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Create of 7 Categories
-        $this->createCategory('Plat chaud', '#3f7fca', $manager);
-        $this->createCategory('Dessert', '#9141ac', $manager);
-        $this->createCategory('Entrée', '#1e81b0', $manager);
-        $this->createCategory('Goûter', '#21130d', $manager);
-        //$this->createCategory('', '#063970', $manager);
+        // Create of 6 Categories
+        $this->createCategory('Apéritifs', '#e07b39', $manager);
+        $this->createCategory('Plats', '#3f7fca', $manager);
+        $this->createCategory('Desserts', '#9141ac', $manager);
+        $this->createCategory('Entrées', '#1e81b0', $manager);
+        $this->createCategory('Boissons', '#21130d', $manager);
+        $this->createCategory('Petit-déj/brunch', '#063970', $manager);
         //$this->createCategory('', '#154c79', $manager);
-        //$this->createCategory('', '#e07b39', $manager);
 
         $manager->flush();
     }

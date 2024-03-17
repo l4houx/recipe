@@ -3,7 +3,7 @@
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item">
-				<a href="{{ path('dashboard_main_panel') }}">Tableau de bord</a>
+				<a href="{{ path('dashboard_main_panel') }}">{{ 'Dashboard'|trans }}</a>
 			</li>
 			{% for li in breadcrumb%}
 				{% for routename, pagetitle in li %}

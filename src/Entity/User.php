@@ -2,17 +2,21 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasDeletedAtTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Traits\HasLimit;
 use App\Entity\Traits\HasRoles;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use App\Entity\Traits\HasTimestampTrait;
 //use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Traits\HasPremiumTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
+use App\Entity\Traits\HasTimestampTrait;
+use App\Entity\Setting\HomepageHeroSetting;
+use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\HasProfileDetailsTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -22,9 +26,22 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 //#[Vich\Uploadable]
 #[UniqueEntity(fields: ['email'], message: 'Cette adresse email est déjà utilisée.')]
 #[UniqueEntity(fields: ['username'], message: "Ce nom d'utilisateur est déjà utilisé.")]
+#[ApiResource(
+    security: "is_granted('ROLE_APPLICATION_ADMIN')",
+    operations: [
+        new \ApiPlatform\Metadata\Get(openapi: false),
+        new \ApiPlatform\Metadata\Post(openapi: false),
+        new \ApiPlatform\Metadata\Put(openapi: false),
+        new \ApiPlatform\Metadata\Patch(openapi: false),
+        new \ApiPlatform\Metadata\Delete(openapi: false),
+    ],
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:create', 'user:update']],
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
     use HasProfileDetailsTrait;
+    use HasPremiumTrait;
     use HasTimestampTrait;
     use HasDeletedAtTrait;
 
@@ -33,12 +50,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups(['user:read'])]
     private ?int $id = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column(type: Types::JSON)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private array $roles = [HasRoles::DEFAULT];
 
     /**
@@ -47,20 +66,51 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\Column(type: Types::STRING)]
     private ?string $password = null;
 
+    /**
+     * @var collection<int, Post>
+     */
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $posts;
 
+    /**
+     * @var collection<int, Comment>
+     */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $comments;
 
+    /**
+     * @var collection<int, Recipe>
+     */
     #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $recipes;
 
+    /**
+     * @var collection<int, Review>
+     */
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $reviews;
 
+    /**
+     * @var collection<int, Testimonial>
+     */
     #[ORM\OneToMany(targetEntity: Testimonial::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $testimonials;
+
+    /**
+     * @var collection<int, Recipe>
+     */
+    #[ORM\ManyToMany(targetEntity: Recipe::class, mappedBy: 'addedtofavoritesby', fetch: 'LAZY', cascade: ['remove'])]
+    private Collection $favorites;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?HomepageHeroSetting $isuseronhomepageslider = null;
+
+    /**
+     * @var Collection<int,Application>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Application::class, orphanRemoval: true)]
+    #[Groups(['user:read'])]
+    private Collection $applications;
 
     public function __toString(): string
     {
@@ -75,6 +125,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         $this->recipes = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->testimonials = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -295,6 +347,75 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
             // set the owning side to null (unless already changed)
             if ($testimonial->getAuthor() === $this) {
                 $testimonial->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recipe>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Recipe $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->addAddedtofavoritesby($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Recipe $favorite): static
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            $favorite->removeAddedtofavoritesby($this);
+        }
+
+        return $this;
+    }
+
+    public function getIsuseronhomepageslider(): ?HomepageHeroSetting
+    {
+        return $this->isuseronhomepageslider;
+    }
+
+    public function setIsuseronhomepageslider(?HomepageHeroSetting $isuseronhomepageslider): static
+    {
+        $this->isuseronhomepageslider = $isuseronhomepageslider;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            // set the owning side to null (unless already changed)
+            if ($application->getUser() === $this) {
+                $application->setUser(null);
             }
         }
 

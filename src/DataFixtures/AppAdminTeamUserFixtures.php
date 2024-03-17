@@ -13,7 +13,7 @@ class AppAdminTeamUserFixtures extends Fixture
 {
     use FakerTrait;
 
-    public const ADMINISTRATOR = 'ADMINISTRATOR';
+    public const ADMINAPPLICATION = 'ADMINAPPLICATION';
     public const ADMIN = 'ADMIN';
     public const MODERATOR = 'MODERATOR';
 
@@ -25,12 +25,12 @@ class AppAdminTeamUserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // User Super Admin
+        // User Super Admin Application
         /** @var User $superadmin */
         $superadmin = (new User());
         $superadmin
             ->setId(1)
-            ->setRoles([HasRoles::ADMINISTRATOR])
+            ->setRoles([HasRoles::ADMINAPPLICATION])
             ->setCountry('US')
             ->setLastname('Cameron')
             ->setFirstname('Williamson')
@@ -48,7 +48,7 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
 
-        $this->addReference(self::ADMINISTRATOR, $superadmin);
+        $this->addReference(self::ADMINAPPLICATION, $superadmin);
 
         $manager->persist(
             $superadmin->setPassword(

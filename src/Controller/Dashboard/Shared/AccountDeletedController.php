@@ -17,10 +17,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /** MyProfile */
+#[Route(path: '/%website_dashboard_path%/account')]
 #[IsGranted(HasRoles::DEFAULT)]
 class AccountDeletedController extends Controller
 {
-    #[Route(path: '/%website_dashboard_path%/account', methods: ['DELETE'])]
+    #[Route(path: '/', methods: ['DELETE'])]
     public function deleted(
         Request $request,
         AccountDeletedService $accountDeletedService,
@@ -51,7 +52,7 @@ class AccountDeletedController extends Controller
         ]);
     }
 
-    #[Route(path: '/%website_dashboard_path%/account/deleted-cancel', name: 'dashboard_account_deleted_cancel', methods: ['POST'])]
+    #[Route(path: '/deleted-cancel', name: 'dashboard_account_deleted_cancel', methods: ['POST'])]
     public function deletedCancel(EntityManagerInterface $em, TranslatorInterface $translator): RedirectResponse
     {
         /** @var User $user */

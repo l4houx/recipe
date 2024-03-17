@@ -1,0 +1,29 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Become a premium member'|trans %}
+{% block title pagetitle %}
+
+{% block pageheader %}
+	<section class="py-8 bg-primary">
+		<div class="container my-lg-8">
+			<div class="row align-items-center">
+				<div class="offset-xl-2 col-xl-8">
+					<div class="text-center mb-6 px-md-8">
+						<h1 class="text-white display-3 fw-bold">{{ pagetitle }}</h1>
+						<p class="text-white lead mb-4"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block content %}
+	<section class="mt-n8 pb-8">
+		<div class="container">
+			<div class="row">
+				{% include 'global/pricing.html.twig' %}
+			</div>
+		</div>
+	</section>
+{% endblock %}
