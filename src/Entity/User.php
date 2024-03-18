@@ -18,12 +18,14 @@ use App\Entity\Traits\HasProfileDetailsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 //#[Vich\Uploadable]
+//#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 #[UniqueEntity(fields: ['email'], message: 'Cette adresse email est déjà utilisée.')]
 #[UniqueEntity(fields: ['username'], message: "Ce nom d'utilisateur est déjà utilisé.")]
 #[ApiResource(
@@ -43,6 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     use HasProfileDetailsTrait;
     use HasPremiumTrait;
     use HasTimestampTrait;
+    //use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
 
     public const USER_LIMIT = HasLimit::USER_LIMIT;

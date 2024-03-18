@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Ingredient
 {
     use HasIdNameSlugAssertTrait;
+    //use HasIdGedmoNameSlugAssertTrait;
 
     #[ORM\OneToMany(targetEntity: Quantity::class, mappedBy: 'ingredient', orphanRemoval: true)]
     private Collection $quantities;

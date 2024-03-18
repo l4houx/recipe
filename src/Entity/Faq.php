@@ -2,24 +2,25 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasIdTrait;
 use App\Repository\FaqRepository;
+use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasTimestampTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FaqRepository::class)]
 class Faq
 {
+    use HasIdTrait;
+    use HasIsOnlineTrait;
     use HasTimestampTrait;
+    //use HasGedmoTimestampTrait;
 
     public const FAQ_LIMIT = HasLimit::FAQ_LIMIT;
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
@@ -32,11 +33,6 @@ class Faq
     public function __toString(): string
     {
         return (string) $this->getQuestion() ?: '';
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getQuestion(): string

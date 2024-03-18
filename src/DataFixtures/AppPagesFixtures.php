@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Faq;
 use App\Entity\Page;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -75,22 +74,6 @@ class AppPagesFixtures extends Fixture
                 'views' => $views,
             ],
         ];
-
-        // Create 10 Faqs
-        $faqs = [];
-        for ($i = 0; $i < 10; ++$i) {
-            $faq = (new Faq());
-            $faq
-                ->setQuestion($this->faker()->sentence)
-                ->setAnswer($content)
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ;
-
-            $manager->persist($faq);
-
-            $faqs[] = $faq;
-        }
 
         // Create 9 Pages
         foreach ($pages as $key => $value) {

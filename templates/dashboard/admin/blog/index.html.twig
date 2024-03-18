@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Toutes les articles' %}
+{% set pagetitle = 'All articles'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_blog_new') }}" class="btn btn-primary me-2">Créer</a>
+                    <a href="{{ path('dashboard_admin_blog_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
     <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
         <div class="col-xl-2 col-lg-4 col-md-6 col-12">
             <div class="mb-lg-4 mb-2">
-                <input type="search" class="form-control" placeholder="Rechercher des articles">
+                <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
             </div>
         </div>
         <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
@@ -43,10 +43,10 @@
                         <thead class="">
                             <tr>
                                 <th>{{ knp_pagination_sortable(posts, '#', 'p.id') }}</th>
-                                <th>{{ knp_pagination_sortable(posts, 'Titre', 'p.title') }}</th>
-                                <th>En ligne</th>
-                                <th>Vues</th>
-                                <th>Mise à jour</th>
+                                <th>{{ knp_pagination_sortable(posts, 'Title'|trans, 'p.title') }}</th>
+                                <th>{{ 'IsOnline'|trans }}</th>
+                                <th>{{ 'Views'|trans }}</th>
+                                <th>{{ 'Update'|trans }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -64,26 +64,26 @@
                                             <div class="ms-3">
                                                 <h4 class="mb-1 text-primary-hover">{{ post.title }}</h4>
                                                 <span>
-                                                    Publié {{ post.createdAt ? post.createdAt | ago() }}
+                                                    {{ 'Published'|trans }} {{ post.createdAt ? post.createdAt | ago() }}
                                                 </span>
                                             </div>
                                         </div>
                                     </a>
                                 </td>
                                 <td>
-                                    {# {{ post.isOnline ? 'Yes' : 'No' }} #}
+                                    {# {{ post.isOnline ? 'Yes'|trans : 'No'|trans }} #}
                                     {% if post.isOnline == false %}
-                                        <span class="badge bg-danger-soft">Non</span>
+                                        <span class="badge bg-danger-soft">{{ 'No'|trans }}</span>
                                     {% else %}
-                                        <span class="badge bg-success-soft">Oui</span>
+                                        <span class="badge bg-success-soft">{{ 'Yes'|trans }}</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ post.views }}</td>
                                 <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                                 {#  
                                 <td>
-                                    <a href="{{ path('dashboard_admin_blog_show', {'id': post.id}) }}" class="btn btn-outline-success btn-sm">Afficher</a>
-                                    <a href="{{ link }}" class="btn btn-outline-warning btn-sm">Modifier</a>
+                                    <a href="{{ path('dashboard_admin_blog_show', {'id': post.id}) }}" class="btn btn-outline-success btn-sm">{{ 'Show'|trans }}</a>
+                                    <a href="{{ link }}" class="btn btn-outline-warning btn-sm">{{ 'Edit'|trans }}</a>
                                     {{ include('dashboard/admin/blog/_delete_form.html.twig', {post: post}, with_context = false) }}
                                 </td>
                                 #}
@@ -93,14 +93,14 @@
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
-                                            <span class="dropdown-header">Paramètres</span>
+                                            <span class="dropdown-header">{{ 'Settings'|trans }}</span>
                                             <a class="dropdown-item" href="{{ path('dashboard_admin_blog_show', {'id': post.id}) }}">
                                                 <i class="bi bi-eye dropdown-item-icon"></i>
-                                                Afficher
+                                                {{ 'Show'|trans }}
                                             </a>
                                             <a class="dropdown-item" href="{{ link }}">
                                                 <i class="bi bi-pencil dropdown-item-icon"></i>
-                                                Modifier
+                                                {{ 'Edit'|trans }}
                                             </a>
                                             {{ include('dashboard/admin/blog/_delete_form.html.twig', {post: post}, with_context = false) }}
                                         </div>

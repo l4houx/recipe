@@ -26,7 +26,7 @@ class CategoryController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'index', methods: ['GET'])]
+    #[Route(path: '/', name: 'index', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
@@ -35,7 +35,7 @@ class CategoryController extends AbstractController
         return $this->render('dashboard/admin/category/index.html.twig', compact('categories'));
     }
 
-    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $category = new Category();
@@ -53,7 +53,7 @@ class CategoryController extends AbstractController
         return $this->render('dashboard/admin/category/new.html.twig', compact('category', 'form'));
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Category $category): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category)->handleRequest($request);
@@ -69,7 +69,7 @@ class CategoryController extends AbstractController
         return $this->render('dashboard/admin/category/edit.html.twig', compact('category', 'form'));
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Category $category): Response
     {
         if ($this->isCsrfTokenValid('category_deletion_'.$category->getId(), $request->request->get('_token'))) {

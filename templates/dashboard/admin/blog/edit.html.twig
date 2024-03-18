@@ -1,16 +1,18 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = "Modifier l'article" %}
+{% set pagetitle = "Edit article"|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
     <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
-                {% set breadcrumb = [{ "dashboard_admin_blog_index": 'Articles', "current":(pagetitle) }] %}
+                {% set breadcrumb = [{ "dashboard_admin_blog_index": 'Articles'|trans, "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_blog_index') }}" class="btn btn-outline-secondary me-2">Revenir à la liste</a>
+                    <a href="{{ path('dashboard_admin_blog_index') }}" class="btn btn-outline-secondary me-2">
+                        {{ 'Return to list'|trans }}
+                    </a>
                 </div>
             </div>
         </div>
@@ -19,13 +21,13 @@
 
 {% block content %}
     <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-        {# {{ include('dashboard/admin/blog/_form.html.twig', {'button_label': 'Mise à jour'}) }} #}
+        {# {{ include('dashboard/admin/blog/_form.html.twig', {'button_label': 'Update'}) }} #}
         {{ include('dashboard/admin/blog/_form.html.twig', {
             pagetitle: pagetitle,
             post: post,
             form: form,
             button_css: 'btn btn-warning',
-            button_label: 'Mise à jour',
+            button_label: 'Update'|trans,
             include_back_to_home_link: true,
         }, with_context = false) }}
     </div>

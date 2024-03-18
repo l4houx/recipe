@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Service\SettingService;
 use App\DTO\HelpCenterSupportDTO;
 use App\Entity\HelpCenterArticle;
+use App\Repository\FaqRepository;
 use App\Entity\HelpCenterCategory;
 use App\Form\HelpCenterSupportFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,15 +28,18 @@ class HelpCenterController extends AbstractController
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly SettingService $settingService,
+        private readonly FaqRepository $faqRepository,
         private readonly HelpCenterArticleRepository $helpCenterArticleRepository,
         private readonly HelpCenterCategoryRepository $helpCenterCategoryRepository
     ) {
     }
 
-    #[Route('/', name: 'help_center', methods: ['GET'])]
+    #[Route('', name: 'help_center', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('helpCenter/index.html.twig');
+        $faqs = $this->faqRepository->findRand(6);
+
+        return $this->render('helpCenter/index.html.twig', compact('faqs'));
     }
 
     #[Route('/{slug}-{id}', name: 'help_center_category', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
@@ -106,5 +110,19 @@ class HelpCenterController extends AbstractController
         }
 
         return $this->render('helpCenter/support.html.twig', compact('data', 'form'));
+    }
+
+    #[Route('/faq', name: 'help_center_faq', methods: ['GET'])]
+    public function faq(Request $reques): Response
+    {
+        $faqs = $this->faqRepository->findAlls();
+
+        if (!$faqs) {
+            $this->addFlash('danger', $this->translator->trans('The faq can not be found'));
+
+            return $this->redirectToRoute('help_center', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('helpCenter/faq.html.twig', compact('faqs'));
     }
 }

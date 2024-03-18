@@ -11,18 +11,18 @@
         <div class="card-body">
             {% if app.request.attributes.get('_route') == 'dashboard_admin_blog_edit' %}
                 <div>
-                    <h5 class="mb-3">Images</h5>
+                    <h5 class="mb-3">{{ 'Pictures'|trans }}</h5>
                     <img src="{{ post.thumbnail ? asset(post.getThumbnailPath) : post.getThumbnailPlaceholder }}" alt="{{ post.title }}" class="img-4by3-lg rounded">
                 </div>
             {% endif %}
             {{ form_widget(form) }}
             <div class="col-12 pt-2">
                 <button type="submit" class="{{ button_css|default("btn btn-primary") }} me-4">
-                    {{ button_label|default('Sauvegarder') }}
+                    {{ button_label|default('Save'|trans) }}
                 </button>
                 {% if include_back_to_home_link|default(false) %}
                     <a href="{{ path('dashboard_admin_blog_index') }}" class="btn btn-outline-secondary">
-                        Revenir à la liste
+                        {{ 'Return to list'|trans }}
                     </a>
                 {% endif %}
             </div>

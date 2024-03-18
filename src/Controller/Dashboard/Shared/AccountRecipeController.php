@@ -81,7 +81,7 @@ class AccountRecipeController extends Controller
             $this->em->remove($recipe);
             $this->em->flush();
 
-            $this->addFlash('danger', $this->translator->trans('Recipe was successfully deleted.'));
+            $this->addFlash('danger', $this->translator->trans('Recipe was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_account_recipe_index', [], Response::HTTP_SEE_OTHER);

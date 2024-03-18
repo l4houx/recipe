@@ -48,7 +48,7 @@ class BlogController extends AbstractController
         TranslatorInterface $translator
     ): Response {
         if (!$post) {
-            $this->addFlash('secondary', $translator->trans('The post not be found'));
+            $this->addFlash('secondary', $translator->trans('The article not be found'));
             return $this->redirectToRoute('blog_list');
         }
 

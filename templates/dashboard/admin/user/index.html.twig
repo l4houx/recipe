@@ -1,0 +1,128 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'All users'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="{{ path('dashboard_admin_user_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <div class="col-xl-2 col-lg-4 col-md-6 col-12">
+            <div class="mb-lg-4 mb-2">
+                <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
+            </div>
+        </div>
+        <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
+            <select class="form-select" data-ddg-inputtype="unknown">
+                <option value="">Filter</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Pending">Pending</option>
+                <option value="Modified">Modified</option>
+                <option value="Finished">Finished</option>
+                <option value="Cancel">Cancel</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="table-responsive overflow-y-hidden">
+                    <table class="table mb-0 text-nowrap table-hover table-centered">
+                        <thead class="">
+                            <tr>
+                                <th># {# {{ knp_pagination_sortable(users, '#', 'u.id') }} #}</th>
+                                <th>{{'User name'|trans}} / {{'Email'|trans}}  {# {{ knp_pagination_sortable(users, 'User name'|trans, 'u.username') }} #} </th>
+                                <th>{{ 'Name'|trans }}</th>
+                                <th>{{'Last login'|trans}}</th>
+                                <th>{{'IP'|trans}}</th>
+                                <th>{{ 'Roles'|trans }}</th>
+                                <th>{{ 'Update'|trans }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                                {% set link = path('dashboard_admin_user_edit', { id : user.id }) %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>
+                                        <a href="{{ link }}" class="text-inherit">
+                                            <div class="d-flex align-items-center">
+                                                <div class="ms-3">
+                                                    <h4 class="mb-1 text-primary-hover">{{ user.username }} {{ user.email }}</h4>
+                                                    <span>
+                                                        {{ 'Joined'|trans }} {{ user.createdAt ? user.createdAt | ago()}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <tr>
+                                        {{ user.getFullName() }}
+                                        {% if user.countries %}
+                                            <i class="bi bi-geo-alt me-1 fs-6"></i>
+                                            {{ user.countries.code | lower }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if user.lastLogin %}
+                                            {{ user.lastLogin|ago}}
+                                        {% else %}
+                                            {{ "N/A"|trans }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="https://ipinfo.io/{{ user.lastLoginIp }}" target="_blank">{{ user.lastLoginIp }}</a>
+                                        {% if user.lastLoginIp %}
+                                            {{ ipService.getLocation(user.lastLoginIp).emoji ?? '' }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% include "global/user-roles.html.twig" %}
+                                    </td>
+                                    <td>{{ user.updatedAt ? user.updatedAt | date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>
+                                        <div class="dropdown dropstart">
+                                            <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+                                                <span class="dropdown-header">{{ 'Settings'|trans }}</span>
+                                                <a class="dropdown-item" href="{{ link }}">
+                                                    <i class="bi bi-pencil dropdown-item-icon"></i>
+                                                    {{ 'Edit'|trans }}
+                                                </a>
+                                                {{ include('dashboard/admin/user/_delete_form.html.twig') }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6">
+                                    {% include "global/message.html.twig" with { type: "info", message: ('No users found'|trans), icon: "bi bi-exclamation-circle" } %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    {# {{ knp_pagination_render(users, null, {}, {'align': 'center'}) }} #}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

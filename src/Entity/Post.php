@@ -11,10 +11,12 @@ use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasTimestampTrait;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Entity\Traits\HasIdTitleSlugAssertTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -26,10 +28,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Post
 {
     use HasIdTitleSlugAssertTrait;
+    //use HasIdGedmoTitleSlugAssertTrait;
     use HasContentTrait;
     use HasIsOnlineTrait;
     use HasViewsTrait;
     use HasTimestampTrait;
+    //use HasGedmoTimestampTrait;
 
     public const POST_LIMIT = HasLimit::POST_LIMIT;
 

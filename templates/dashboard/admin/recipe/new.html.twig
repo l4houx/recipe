@@ -1,16 +1,18 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Ajouter une nouvelle recette' %}
+{% set pagetitle = 'Add a new recipe'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
     <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
-                {% set breadcrumb = [{ "dashboard_admin_recipe_index": 'Recettes', "current":(pagetitle) }] %}
+                {% set breadcrumb = [{ "dashboard_admin_recipe_index": 'Recipes'|trans, "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary me-2">Revenir à la liste</a>
+                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary me-2">
+                        {{ 'Return to list'|trans }}
+                    </a>
                 </div>
             </div>
         </div>

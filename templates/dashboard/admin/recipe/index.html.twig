@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Toutes les recettes' %}
+{% set pagetitle = 'All recipes'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_recipe_new') }}" class="btn btn-primary me-2">Créer</a>
+                    <a href="{{ path('dashboard_admin_recipe_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
     <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
         <div class="col-xl-2 col-lg-4 col-md-6 col-12">
             <div class="mb-lg-4 mb-2">
-                <input type="search" class="form-control" placeholder="Rechercher des recettes">
+                <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
             </div>
         </div>
         <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
@@ -43,11 +43,11 @@
                         <thead class="">
                             <tr>
                                 <th>{{ knp_pagination_sortable(recipes, '#', 'r.id') }}</th>
-                                <th>{{ knp_pagination_sortable(recipes, 'Titre', 'r.title') }}</th>
-                                <th>{{ knp_pagination_sortable(recipes, 'Catégorie', 'r.category') }}</th>
-                                <th>Duration</th>
-                                <th>Vues</th>
-                                <th>Mise à jour</th>
+                                <th>{{ knp_pagination_sortable(recipes, 'Title'|trans, 'r.title') }}</th>
+                                <th>{{ knp_pagination_sortable(recipes, 'Category'|trans, 'r.category') }}</th>
+                                <th>{{ 'Duration'|trans }}</th>
+                                <th>{{ 'Views'|trans }}</th>
+                                <th>{{ 'Update'|trans }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -65,7 +65,7 @@
                                                 <div class="ms-3">
                                                     <h4 class="mb-1 text-primary-hover">{{ recipe.title }}</h4>
                                                     <span>
-                                                        Publié {{ recipe.createdAt ? recipe.createdAt | ago() }}
+                                                        {{ 'Published'|trans }} {{ recipe.createdAt ? recipe.createdAt | ago() }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -84,7 +84,7 @@
                                     {#  
                                     <td>
                                         <a href="{{ link }}" class="btn btn-outline-warning btn-sm">
-                                            Modifier
+                                            {{ 'Edit'|trans }}
                                         </a>
                                         {{ include('dashboard/admin/recipe/_delete_form.html.twig', {recipe: recipe}, with_context = false) }}
                                     </td>
@@ -95,10 +95,10 @@
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
-                                                <span class="dropdown-header">Paramètres</span>
+                                                <span class="dropdown-header">{{ 'Settings'|trans }}</span>
                                                 <a class="dropdown-item" href="{{ link }}">
                                                     <i class="bi bi-pencil dropdown-item-icon"></i>
-                                                    Modifier
+                                                    {{ 'Edit'|trans }}
                                                 </a>
                                                 {{ include('dashboard/admin/recipe/_delete_form.html.twig', {recipe: recipe}, with_context = false) }}
                                             </div>

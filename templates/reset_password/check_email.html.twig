@@ -2,25 +2,23 @@
 
 {% block layout %}{{ parent() }} check_email{% endblock %}
 
-{% set pagetitle = "E-mail de réinitialisation du mot de passe envoyé" %}
+{% set pagetitle = "Password reset email sent"|trans %}
 {% block title pagetitle %}
 
 {% block content %}
     <div class="mb-4">
-        <a href="{{ path('home') }}">
-            <img src="../assets/images/brand/logo/logo-icon.svg" class="mb-4" alt="logo">
-        </a>
+        <a href="{{ path('home') }}"><img src="{{ asset('images/brand/logo/logo-icon.svg') }}" class="mb-4" alt="logo"></a>
         <h1 class="mb-1 fw-bold">{{ pagetitle }}</h1>
         <span>
-            Vous avez déjà un compte?
-            <a href="{{ path('login') }}" class="ms-1">S'identifier</a>
+            {{ 'Already have an account?'|trans }}
+            <a href="{{ path('login') }}" class="ms-1">{{ 'Sign in'|trans }}</a>
         </span>
         <p>
-            If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
-            This link will expire in 
+            {{ 'If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.'|trans }}
+            {{ 'This link will expire in'|trans }}
             {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
         </p>
-        <p>If you don't receive an email please check your spam folder or 
-        <a href="{{ path('forgot_password_request') }}">try again</a>.</p>
+        <p>{{ "If you don't receive an email please check your spam folder or"|trans }} 
+        <a href="{{ path('forgot_password_request') }}">{{ 'try again'|trans }}</a>.</p>
     </div>
 {% endblock %}

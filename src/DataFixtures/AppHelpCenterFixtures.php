@@ -2,10 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Faq;
 use App\Entity\HelpCenterArticle;
 use App\Entity\HelpCenterCategory;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppHelpCenterFixtures extends Fixture
@@ -53,6 +54,22 @@ class AppHelpCenterFixtures extends Fixture
             ;
 
             $manager->persist($helpcenterarticle);
+        }
+
+        // Create 10 Faqs
+        $faqs = [];
+        for ($i = 0; $i <= 10; ++$i) {
+            $faq = (new Faq())
+                ->setQuestion($this->faker()->sentence)
+                ->setAnswer($content)
+                ->setIsOnline($this->faker()->randomElement([true, false]))
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ;
+
+            $manager->persist($faq);
+
+            $faqs[] = $faq;
         }
 
         $manager->flush();

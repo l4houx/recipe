@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Page;
-use App\Repository\FaqRepository;
+use App\Repository\PageRepository;
 use App\Repository\UserRepository;
 use App\Repository\PricingRepository;
 use App\Repository\TestimonialRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -25,7 +26,7 @@ class PagesController extends AbstractController
         $pricings = $pricingRepository->findAllPricing();
 
         if (!$pricings) {
-            $this->addFlash('danger', $this->translator->trans('The pricing can not be found'));
+            $this->addFlash('danger', $this->translator->trans('The plan can not be found'));
 
             return $this->redirectToRoute('home');
         }
@@ -65,20 +66,6 @@ class PagesController extends AbstractController
         return $this->render('pages/team-detail.html.twig', compact('teams'));
     }
 
-    #[Route('/faq-rules', name: 'faq', methods: ['GET'])]
-    public function faq(FaqRepository $faqRepository): Response
-    {
-        $faqs = $faqRepository->findAll();
-
-        if (!$faqs) {
-            $this->addFlash('danger', $this->translator->trans('The faq can not be found'));
-
-            return $this->redirectToRoute('home');
-        }
-
-        return $this->render('pages/faq-detail.html.twig', compact('faqs'));
-    }
-
     #[Route('/testimonial', name: 'testimonial', methods: ['GET'])]
     public function testimonial(TestimonialRepository $testimonialRepository): Response
     {
@@ -99,9 +86,24 @@ class PagesController extends AbstractController
         return $this->render('pages/access-denied.html.twig');
     }
 
-    #[Route(path: '/{slug}', name: 'page', methods: ['GET'])]
-    public function pages(Page $page): Response
+    #[Route(path: '', name: 'pages', methods: ['GET'])]
+    public function pages(): Response
     {
+        return $this->render('pages/pages.html.twig');
+    }
+
+    #[Route(path: '/{slug}-{id}', name: 'page', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
+    public function page(Request $request, PageRepository $pageRepository, string $slug, int $id): Response
+    {
+        $page = $pageRepository->find($id);
+
+        if ($page->getSlug() !== $slug) {
+            return $this->redirectToRoute('page', [
+                'id' => $page->getId(),
+                'slug' => $page->getSlug(),
+            ], 301);
+        }
+
         if (!$page) {
             $this->addFlash('danger', $this->translator->trans('The page can not be found'));
 

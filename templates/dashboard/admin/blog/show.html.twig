@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Article :' ~ post.title %}
+{% set pagetitle = 'Article :'|trans ~ post.title %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,9 @@
                 {% set breadcrumb = [{ "dashboard_admin_blog_index": 'Articles', "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_blog_index') }}" class="btn btn-outline-secondary">Revenir à la liste</a>
+                    <a href="{{ path('dashboard_admin_blog_index') }}" class="btn btn-outline-secondary">
+                        {{ 'Return to list'|trans }}
+                    </a>
                 </div>
             </div>
         </div>
@@ -24,43 +26,43 @@
                 <table class="table mb-0 text-nowrap table-centered table-hover">
                     <tbody>
                         <tr>
-                            <th>Thumbnail</th>
+                            <th>{{ 'Thumbnail'|trans }}</th>
                             <td>{{ post.thumbnail }}</td>
                         </tr>
                         <tr>
-                            <th>Readtime</th>
+                            <th>{{ 'Readtime'|trans }}</th>
                             <td>{{ post.readtime }}</td>
                         </tr>
                         <tr>
-                            <th>Id</th>
+                            <th>#</th>
                             <td>{{ post.id }}</td>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>{{ 'Title'|trans }}</th>
                             <td>{{ post.title }}</td>
                         </tr>
                         <tr>
-                            <th>Slug</th>
+                            <th>{{ 'Slug'|trans }}</th>
                             <td>{{ post.slug }}</td>
                         </tr>
                         <tr>
-                            <th>Content</th>
+                            <th>{{ 'Content'|trans }}</th>
                             <td>{{ post.content | nl2br }}</td>
                         </tr>
                         <tr>
-                            <th>IsOnline</th>
-                            <td>{{ post.isOnline ? 'Yes' : 'No' }}</td>
+                            <th>{{ 'IsOnline'|trans }}</th>
+                            <td>{{ post.isOnline ? 'Yes'|trans : 'No'|trans }}</td>
                         </tr>
                         <tr>
-                            <th>Views</th>
+                            <th>{{ 'Views'|trans }}</th>
                             <td>{{ post.views }}</td>
                         </tr>
                         <tr>
-                            <th>CreatedAt</th>
+                            <th>{{ 'CreatedAt'|trans }}</th>
                             <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                         </tr>
                         <tr>
-                            <th>UpdatedAt</th>
+                            <th>{{ 'UpdatedAt'|trans }}</th>
                             <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                         </tr>
                     </tbody>
@@ -68,10 +70,10 @@
             </div>
             <div class="card-footer">
                 <a href="{{ path('dashboard_admin_blog_index') }}" class="btn btn-outline-secondary btn-sm">
-                    Revenir à la liste
+                    {{ 'Return to list'|trans }}
                 </a>
                 <a href="{{ path('dashboard_admin_blog_edit', {'id': post.id}) }}" class="btn btn-outline-warning btn-sm">
-                    Modifier
+                    {{ 'Edit'|trans }}
                 </a>
                 {{ include('dashboard/admin/blog/_delete_form.html.twig') }}
             </div>

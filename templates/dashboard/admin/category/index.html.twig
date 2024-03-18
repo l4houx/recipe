@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Toutes les catégories' %}
+{% set pagetitle = 'All categories'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_category_new') }}" class="btn btn-primary me-2">Créer</a>
+                    <a href="{{ path('dashboard_admin_category_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
     <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
         <div class="col-xl-2 col-lg-4 col-md-6 col-12">
             <div class="mb-lg-4 mb-2">
-                <input type="search" class="form-control" placeholder="Rechercher des catégories">
+                <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
             </div>
         </div>
         <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
@@ -43,10 +43,10 @@
                         <thead class="">
                             <tr>
                                 <th>{{ knp_pagination_sortable(categories, '#', 'c.id') }}</th>
-                                <th>{{ knp_pagination_sortable(categories, 'Nom', 'c.name') }}</th>
+                                <th>{{ knp_pagination_sortable(categories, 'Name'|trans, 'c.name') }}</th>
                                 {# <th>Recettes</th> #}
-                                <th>Couleur</th>
-                                <th>Mise à jour</th>
+                                <th>{{ 'Color'|trans }}</th>
+                                <th>{{ 'Update'|trans }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -61,7 +61,7 @@
                                                 <div class="ms-3">
                                                     <h4 class="mb-1 text-primary-hover">{{ category.name }}</h4>
                                                     <span>
-                                                        Publié {{ category.createdAt ? category.createdAt | ago()}}
+                                                        {{ 'Published'|trans }} {{ category.createdAt ? category.createdAt | ago()}}
                                                     </span>
                                                 </div>
                                             </div>
@@ -79,7 +79,7 @@
                                     {#  
                                     <td>
                                         <a class="btn btn-outline-warning btn-sm" href="{{ link }}">
-                                            Modifier
+                                            {{ 'Edit'|trans }}
                                         </a>
                                         {{ include('dashboard/admin/category/_delete_form.html.twig') }}
                                     </td>
@@ -90,10 +90,10 @@
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
-                                                <span class="dropdown-header">Paramètres</span>
+                                                <span class="dropdown-header">{{ 'Settings'|trans }}</span>
                                                 <a class="dropdown-item" href="{{ link }}">
                                                     <i class="bi bi-pencil dropdown-item-icon"></i>
-                                                    Modifier
+                                                    {{ 'Edit'|trans }}
                                                 </a>
                                                 {{ include('dashboard/admin/category/_delete_form.html.twig') }}
                                             </div>

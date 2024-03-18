@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Recette :' ~ recipe.title %}
+{% set pagetitle = 'Recipe :'|trans ~ recipe.title %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "dashboard_admin_recipe_index": 'Recettes', "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary">Revenir à la liste</a>
+                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary">{{ 'Return to list'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -24,31 +24,31 @@
                 <table class="table mb-0 text-nowrap table-centered table-hover">
                     <tbody>
                         <tr>
-                            <th>Id</th>
+                            <th>#</th>
                             <td>{{ recipe.id }}</td>
                         </tr>
                         <tr>
-                            <th>Title</th>
+                            <th>{{ 'Title'|trans }}</th>
                             <td>{{ recipe.title }}</td>
                         </tr>
                         <tr>
-                            <th>Slug</th>
+                            <th>{{ 'Slug'|trans }}</th>
                             <td>{{ recipe.slug }}</td>
                         </tr>
                         <tr>
-                            <th>Content</th>
+                            <th>{{ 'Content'|trans }}</th>
                             <td>{{ recipe.content | nl2br }}</td>
                         </tr>
                         <tr>
-                            <th>CreatedAt</th>
+                            <th>{{ 'CreatedAt'|trans }}</th>
                             <td>{{ recipe.createdAt ? recipe.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                         </tr>
                         <tr>
-                            <th>UpdatedAt</th>
+                            <th>{{ 'UpdatedAt'|trans }}</th>
                             <td>{{ recipe.updatedAt ? recipe.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                         </tr>
                         <tr>
-                            <th>Duration</th>
+                            <th>{{ 'Duration'|trans }}</th>
                             <td>{{ recipe.duration }}</td>
                         </tr>
                     </tbody>
@@ -56,10 +56,10 @@
             </div>
             <div class="card-footer">
                 <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary btn-sm">
-                    Revenir à la liste
+                    {{ 'Return to list'|trans }}
                 </a>
                 <a href="{{ path('dashboard_admin_recipe_edit', {'id': recipe.id}) }}" class="btn btn-outline-warning btn-sm">
-                    Modifier
+                    {{ 'Edit'|trans }}
                 </a>
                 {{ include('dashboard/admin/recipe/_delete_form.html.twig') }}
             </div>

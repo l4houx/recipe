@@ -170,13 +170,21 @@ sf-translate-dump: ## Dump.
 	$(SYMFONY_CONSOLE) translation:extract --dump-messages fr
 .PHONY: sf-translate-dump
 
-sf-translate-fr: ## Extract strings to translate.
+sf-translate-fr-yaml: ## Extract strings to translate.
 	$(SYMFONY_CONSOLE) translation:extract --force fr --format=yaml
-.PHONY: sf-translate-fr
+.PHONY: sf-translate-fr-yaml
 
-sf-translate-en: ## Extract strings to translate.
+sf-translate-en-yaml: ## Extract strings to translate.
 	$(SYMFONY_CONSOLE) translation:extract --force en --format=yaml
-.PHONY: sf-translate-en
+.PHONY: sf-translate-en-yaml
+
+sf-translate-fr-xlf: ## Extract strings to translate.
+	$(SYMFONY_CONSOLE) translation:extract --force fr --format=xlf
+.PHONY: sf-translate-fr-xlf
+
+sf-translate-en-xlf: ## Extract strings to translate.
+	$(SYMFONY_CONSOLE) translation:extract --force en --format=xlf
+.PHONY: sf-translate-en-xlf
 #---------------------------------------------#
 
 ## === 📦  COMPOSER ==============================================

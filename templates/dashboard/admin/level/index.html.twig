@@ -1,0 +1,105 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'All levels'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="{{ path('dashboard_admin_level_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <div class="col-xl-2 col-lg-4 col-md-6 col-12">
+            <div class="mb-lg-4 mb-2">
+                <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
+            </div>
+        </div>
+        <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
+            <select class="form-select" data-ddg-inputtype="unknown">
+                <option value="">Filter</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Pending">Pending</option>
+                <option value="Modified">Modified</option>
+                <option value="Finished">Finished</option>
+                <option value="Cancel">Cancel</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="table-responsive overflow-y-hidden">
+                    <table class="table mb-0 text-nowrap table-hover table-centered">
+                        <thead class="">
+                            <tr>
+                                <th># {# {{ knp_pagination_sortable(levels, '#', 'l.id') }} #}</th>
+                                <th>{{ 'Name'|trans }} {# {{ knp_pagination_sortable(levels, 'Name'|trans, 'l.name') }} #}</th>
+                                <th>{{ 'Color'|trans }}</th>
+                                <th>{{ 'Update'|trans }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for level in levels %}
+                                {% set link = path('dashboard_admin_level_edit', { id : level.id }) %}
+                                <tr>
+                                    <td>{{ level.id }}</td>
+                                    <td>
+                                        <a href="{{ link }}" class="text-inherit">
+                                            <div class="d-flex align-items-center">
+                                                <div class="ms-3">
+                                                    <h4 class="mb-1 text-primary-hover">{{ level.name }}</h4>
+                                                    <span>
+                                                        {{ 'Published'|trans }} {{ level.createdAt ? level.createdAt | ago()}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="text-decoration-none" style="color: {{ level.color }};">{{ level.color }}</span>
+                                    </td>
+                                    <td>{{ level.updatedAt ? level.updatedAt | date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>
+                                        <div class="dropdown dropstart">
+                                            <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+                                                <span class="dropdown-header">{{ 'Settings'|trans }}</span>
+                                                <a class="dropdown-item" href="{{ link }}">
+                                                    <i class="bi bi-pencil dropdown-item-icon"></i>
+                                                    {{ 'Edit'|trans }}
+                                                </a>
+                                                {{ include('dashboard/admin/level/_delete_form.html.twig') }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6">
+                                    {% include "global/message.html.twig" with { type: "info", message: ('No levels found'|trans), icon: "bi bi-exclamation-circle" } %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    {# {{ knp_pagination_render(levels, null, {}, {'align': 'center'}) }} #}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

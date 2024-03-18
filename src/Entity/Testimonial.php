@@ -24,6 +24,7 @@ class Testimonial
     use HasRatingTrait;
     use HasIsOnlineTrait;
     use HasTimestampTrait;
+    //use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
 
     /*

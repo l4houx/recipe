@@ -42,7 +42,7 @@ class ContactFormType extends AbstractType
                 ],
             ])
             ->add('service', ChoiceType::class, options: [
-                'label' => t('Choose a service'),
+                'label' => t('Choose a service :'),
                 'required' => true,
                 'choices' => [
                     'Support' => $this->params->get('website_support'),

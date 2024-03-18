@@ -5,10 +5,12 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReviewRepository;
+use App\Entity\Traits\HasRatingTrait;
 use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasTimestampTrait;
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use App\Entity\Traits\HasIdHeadlineAndSlugTrait;
-use App\Entity\Traits\HasRatingTrait;
+use App\Entity\Traits\HasIdGedmoHeadlineAndSlugTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -18,9 +20,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Review
 {
     use HasIdHeadlineAndSlugTrait;
+    //use HasIdGedmoHeadlineAndSlugTrait;
     use HasRatingTrait;
     use HasContentTrait;
     use HasTimestampTrait;
+    //use HasGedmoTimestampTrait;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
     #[Assert\NotNull]

@@ -1,6 +1,6 @@
 {% extends 'page.html.twig' %}
 
-{% set pagetitle = 'Profile de ' ~ user.username %}
+{% set pagetitle = 'Profile of '|trans ~ user.username %}
 {% block title pagetitle %}
 
 {% block bg %}
@@ -63,17 +63,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-12">
-                    <div class="card border-0 mb-4">
-                        <div class="card-body">
-                            <h4>About me</h4>
-                            <p>
-                                I am an Innovation designer focussing on UX/UI based in Berlin. As a creative resident at
-                                Figma explored the city of the future and how new technologies like
-                                AI, voice control, and augmented reality will change our interfaces.
-                            </p>
-                            <a href="#" class="btn-link">Read more</a>
+                    {% if user.team == '1' %}
+                        <div class="card border-0 mb-4">
+                            <div class="card-body">
+                                {% if user.about %}
+                                    <h4>{{ 'About me'|trans }}</h4>
+                                    <p>
+                                        {{ user.about | html_markdown }}
+                                    </p>
+                                    <a href="#" class="btn-link">{{ 'Read more'|trans }}</a>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="card border-0 mb-4 mb-lg-0">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">

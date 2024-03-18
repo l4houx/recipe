@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasLevelTrait;
 use App\Entity\Traits\HasViewsTrait;
 use App\Repository\RecipeRepository;
 use App\Entity\Traits\HasContentTrait;
@@ -12,11 +13,12 @@ use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasTimestampTrait;
 use App\Entity\Setting\HomepageHeroSetting;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Entity\Traits\HasIdTitleSlugAssertTrait;
-use App\Entity\Traits\HasLevelTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -28,11 +30,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Recipe
 {
     use HasIdTitleSlugAssertTrait;
+    //use HasIdGedmoTitleSlugAssertTrait;
     use HasContentTrait;
     use HasIsOnlineTrait;
     use HasViewsTrait;
     use HasLevelTrait;
     use HasTimestampTrait;
+    //use HasGedmoTimestampTrait;
 
     public const RECIPE_LIMIT = HasLimit::RECIPE_LIMIT;
 

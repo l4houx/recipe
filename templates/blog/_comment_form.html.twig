@@ -1,4 +1,4 @@
-<h3 class="mb-4">Laissez un commentaire</h3>
+<h3 class="mb-4">{{ 'Leave a comment'|trans }}</h3>
 {{ form_start(form, {method: 'post', action: path('blog_comment_add', {'slug': post.slug}), attr: {class: 'needs-validation', id: 'comment-form'} }) }}
     {{ form_errors(form) }}
     <div class="mb-3">
@@ -11,7 +11,7 @@
     #}
     <div>
         <button class="btn btn-primary" type="submit">
-            Laisse un commentaire
+            {{ 'Leave a comment'|trans }}
         </button>
     </div>
 {{ form_end(form) }}

@@ -38,4 +38,33 @@ class FaqRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    /**
+     * Retrieves questions/answers randomly.
+     * @return Faq[]
+     */
+    public function findRand(int $maxResults): array // HelpCenterController
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('Rand()')
+            ->where('f.isOnline = true')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Retrieves all questions/answers.
+     * @return Faq[]
+     */
+    public function findAlls() // HelpCenterController
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.isOnline = true')
+            ->orderBy('f.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -1,13 +1,13 @@
 {% extends 'email.html.twig' %}
 
 {% block body %}
-    <p>Une nouvelle demande de contact a été reçue</p>
+    <p>{{ 'A new contact request has been received'|trans }}</p>
 
-    <p>Nom : {{ data.name }}</p>
-    <p>Email : {{ data.email }}</p>
+    <p>{{ 'Name :'|trans }} {{ data.name }}</p>
+    <p>{{ 'Email :'|trans }} {{ data.email }}</p>
 
     <p>
-        <strong>Message :</strong><br>
+        <strong>{{ 'Message :'|trans }}</strong><br>
         {{ data.message | nl2br }}
     </p>
 {% endblock %}

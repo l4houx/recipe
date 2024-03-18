@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Infrastructural\Message\RecipePDFMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,11 +28,12 @@ class RecipeController extends Controller
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly RecipeRepository $recipeRepository
+        private readonly RecipeRepository $recipeRepository,
+        private readonly TranslatorInterface $translator
     ) {
     }
 
-    #[Route('/', name: 'index', methods: ['GET'])]
+    #[Route(path: '/', name: 'index', methods: ['GET'])]
     #[IsGranted(RecipeVoter::LIST)]
     public function index(Request $request, Security $security): Response
     {
@@ -43,7 +45,7 @@ class RecipeController extends Controller
         return $this->render('dashboard/admin/recipe/index.html.twig', compact('recipes'));
     }
 
-    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
     #[IsGranted(RecipeVoter::CREATE)]
     public function new(Request $request, #[CurrentUser] User $user): Response
     {
@@ -56,7 +58,7 @@ class RecipeController extends Controller
             $this->em->persist($recipe);
             $this->em->flush();
 
-            $this->addFlash('success', 'La recette a été créé avec succès.');
+            $this->addFlash('success', $this->translator->trans('Recipe was created successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -64,18 +66,19 @@ class RecipeController extends Controller
         return $this->render('dashboard/admin/recipe/new.html.twig', compact('recipe', 'form'));
     }
 
-    #[Route('/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function show(Recipe $recipe): Response
     {
-        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, "Les recettes ne peuvent être montrées qu'à leurs auteurs.");
+        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans("Recipes can only be shown to their authors."));
     
         return $this->render('dashboard/admin/recipe/show.html.twig', compact('recipe'));
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
-    #[IsGranted(RecipeVoter::MANAGE, subject: 'recipe', message: 'Les recettes ne peuvent être modifiées que par leurs auteurs.')]
+    #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function edit(Request $request, Recipe $recipe, MessageBusInterface $messageBusInterface): Response
     {
+        $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans("Recipes can only be edited by their authors."));
+
         $form = $this->createForm(RecipeFormType::class, $recipe)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,7 +86,7 @@ class RecipeController extends Controller
 
             $messageBusInterface->dispatch(new RecipePDFMessage($recipe->getId()));
 
-            $this->addFlash('info', 'La recette a été modifié avec succès.');
+            $this->addFlash('info', $this->translator->trans('The recipe was edited successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -91,7 +94,7 @@ class RecipeController extends Controller
         return $this->render('dashboard/admin/recipe/edit.html.twig', compact('recipe', 'form'));
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     #[IsGranted(RecipeVoter::MANAGE, subject: 'recipe')]
     public function delete(Request $request, Recipe $recipe): Response
     {
@@ -99,7 +102,7 @@ class RecipeController extends Controller
             $this->em->remove($recipe);
             $this->em->flush();
 
-            $this->addFlash('danger', 'La recette a été supprimé avec succès.');
+            $this->addFlash('danger', $this->translator->trans('Recipe was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);

@@ -7,10 +7,19 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
+        app_api_user_provider:
+            entity:
+                class: App\Entity\Application
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api/
+            stateless: true
+            provider: app_api_user_provider
+            custom_authenticator: App\Security\ApiAuthenticator
         main:
             lazy: true
             provider: app_user_provider
@@ -21,24 +30,20 @@ security:
                 path: logout
                 # where to redirect after logout
                 target: home
-
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
                 path: /
                 always_remember_me: true
-
-            # switch_user: { role: ROLE_APPLICATION }
+            switch_user: { role: ROLE_APPLICATION }
             access_denied_handler: App\Security\AccessDeniedHandler
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-
         - { path: ^/%website_dashboard_path%/main-panel, roles: ROLE_ADMIN }
         - { path: ^/%website_dashboard_path%/account, roles: ROLE_USER }
+        - { path: ^/api/, roles: ROLE_APPLICATION}
 
     role_hierarchy:
         ROLE_ADMIN_APPLICATION: [ROLE_CUSTOMER_TRAINING, ROLE_CUSTOMER, ROLE_TEAM, ROLE_USER, ROLE_ADMIN, ROLE_MODERATOR, ROLE_APPLICATION,ROLE_ALLOWED_TO_SWITCH]
