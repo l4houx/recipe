@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Traits\HasRoles;
 use App\Service\SettingService;
 use App\DTO\HelpCenterSupportDTO;
 use App\Entity\HelpCenterArticle;
@@ -99,6 +101,13 @@ class HelpCenterController extends AbstractController
     public function support(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
         $data = new HelpCenterSupportDTO();
+
+        if ($this->isGranted(HasRoles::DEFAULT)) {
+            /** @var User $user */
+            $user = $this->getUser();
+            $data->name = $user->getFullName();
+            $data->email = $user->getEmail();
+        }
 
         $form = $this->createForm(HelpCenterSupportFormType::class, $data)->handleRequest($request);
 

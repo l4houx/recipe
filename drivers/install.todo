@@ -4,7 +4,7 @@ Installation en cours:
     ☐ composer require exercise/htmlpurifier-bundle
     ☐ composer require illuminate/collections intervention/image liip/imagine-bundle
 
-    ☐ composer require geoip2/geoip2 geertw/ip-anonymizer
+    ✔ composer require geoip2/geoip2 geertw/ip-anonymizer @done(24-03-18 22:36)
 
     ✔ composer require api-platform/core @done(24-03-15 17:35)
 
@@ -56,3 +56,4 @@ Entity:
     ✔ Application @done(24-03-15 19:25)
     ✔ Status @done(24-03-15 18:08)
     ✔ Ticket @done(24-03-15 18:00)
+    ✔ ContactRequest @done(24-03-18 22:32)

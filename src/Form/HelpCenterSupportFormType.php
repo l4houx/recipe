@@ -28,14 +28,17 @@ class HelpCenterSupportFormType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => t('Name :'),
                 'empty_data' => '',
+                'required' => true,
             ])
             ->add('email', EmailType::class, [
                 'label' => t('Email address :'),
                 'empty_data' => '',
+                'required' => true,
             ])
             ->add('message', TextareaType::class, [
                 'label' => t('Message :'),
                 'empty_data' => '',
+                'required' => true,
                 'attr' => [
                     'rows' => 10,
                     'cols' => 30,

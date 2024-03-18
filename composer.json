@@ -14,6 +14,8 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.19",
         "erusev/parsedown": "^1.7",
+        "geertw/ip-anonymizer": "^1.1",
+        "geoip2/geoip2": "^3.0",
         "knplabs/knp-paginator-bundle": "^6.3",
         "knplabs/knp-time-bundle": "^2.2",
         "league/commonmark": "^2.4",

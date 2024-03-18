@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Recipe;
 use Doctrine\ORM\Query;
 use Doctrine\DBAL\Types\Types;
@@ -28,6 +29,17 @@ class RecipeRepository extends ServiceEntityRepository
         private readonly PaginatorInterface $paginator
     ) {
         parent::__construct($registry, Recipe::class);
+    }
+
+    public function deleteForUser(User $user): void
+    {
+        $this->createQueryBuilder('r')
+            ->where('r.author = :user')
+            ->setParameter('user', $user)
+            ->delete()
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**

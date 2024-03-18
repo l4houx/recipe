@@ -1,0 +1,95 @@
+{% extends 'help.html.twig' %}
+
+{% set bodyClass = 'bg-white' %}
+{% set pagetitle = 'Help Center Support for'|trans ~ " " ~ category.name %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "help_center": ('Help center'|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+	<section class="py-8">
+		<div class="container my-lg-8">
+			<div class="row">
+				<div class="offset-md-2 col-md-8 col-12">
+					<div class="mb-8">
+						<h1 class="display-4 fw-semibold">
+                            <i class="{{ category.icon }}"></i>
+                            {{ category.name }}
+                        </h1>
+						<p class="mb-5 lead"></p>
+						<div class="mb-3">
+							<h2 class="fw-semibold"></h2>
+                            {% for article in services.getHelpCenterArticles({"category":category.slug}).getQuery().getResult() %}
+                                <p>
+                                    <a href="{{ path('help_center_article', {slug: article.slug}) }}">
+                                        {{ article.title }}
+                                    </a>
+                                </p>
+                            {% endfor %}
+						</div>
+					</div>
+					<div class="card border">
+						<div class="card-body">
+							<h3 class="mb-3 fw-semibold">{{ 'Related articles'|trans }}</h3>
+							<ul class="list-unstyled mb-0">
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>Billing and Plans Guide</span>
+									</a>
+								</li>
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>Manage Your User Profile</span>
+									</a>
+								</li>
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>Signing in to the dashboard</span>
+									</a>
+								</li>
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>What's New With Annual Payments?</span>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>User Roles and Permissions</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

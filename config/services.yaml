@@ -26,7 +26,7 @@ parameters:
     website_dashboard_path:  '%env(WEBSITE_DASHBOARD_PATH)%'
     #website_jwt_secret:      '%env(WEBSITE_JWT_SECRET)%'
     #website_dkim_key:        '%env(resolve:default::WEBSITE_MAILER_DKIM)%'
-    # website_geoip_database:  '%kernel.project_dir%/var/GeoLite2-Country.mmdb'
+    website_geoip_database:  '%kernel.project_dir%/var/GeoLite2-Country.mmdb'
     website_security_salt:    '%env(WEBSITE_SECURITY_SALT)%'
     website_facebook_url:    '%env(WEBSITE_FACEBOOK_URL)%'
     website_instagram_url:   '%env(WEBSITE_INSTAGRAM_URL)%'
