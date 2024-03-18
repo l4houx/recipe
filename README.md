@@ -1,6 +1,6 @@
 # En cours
 
-# Création d'un multi-site recette/blog de A à Z (CMS WORDPRESS) avec **Symfony 7**, Your**domain** | Multipurpose Bootstrap 5 HTML Template (Dark/Light) Version 1.1.0
+# Création d'un multi-site recette/blog de A à Z (CMS WORDPRESS) avec **Symfony 7**, Your**domain** | Multipurpose Bootstrap 5 HTML Template (Dark/Light) Version 1.1.0 multi-lang en,fr,de,eu......
 
 ## Environnement de développement
 
