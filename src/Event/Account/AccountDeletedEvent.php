@@ -10,7 +10,7 @@ class AccountDeletedEvent
     {
     }
 
-    public function getUsers(): User
+    public function getUser(): User
     {
         return $this->user;
     }

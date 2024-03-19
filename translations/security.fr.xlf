@@ -75,7 +75,7 @@
       </trans-unit>
       <trans-unit id="9qGC3hG" resname="Too many failed login attempts, please try again in %minutes% minute.">
         <source>Too many failed login attempts, please try again in %minutes% minute.</source>
-        <target>Plusieurs tentatives de connexion ont échoué, veuillez réessayer dans %minutes% minute.</target>
+        <target>Plusieurs tentatives de connexion ont échoué, veuillez réessayer dans {minutes} minute.</target>
       </trans-unit>
     </body>
   </file>

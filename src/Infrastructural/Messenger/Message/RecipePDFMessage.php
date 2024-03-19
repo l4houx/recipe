@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructural\Message;
+namespace App\Infrastructural\Messenger\Message;
 
 final class RecipePDFMessage
 {

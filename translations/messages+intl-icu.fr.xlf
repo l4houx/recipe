@@ -209,7 +209,7 @@
         <source>Message :</source>
         <target>Message :</target>
       </trans-unit>
-      <trans-unit id="d_067EU" resname="Choose a service :">
+      <trans-unit id="lfoBfOx" resname="Choose a service :">
         <source>Choose a service :</source>
         <target>Choisir un service :</target>
       </trans-unit>
@@ -605,7 +605,7 @@
         <source>Article was deleted successfully.</source>
         <target>__Article was deleted successfully.</target>
       </trans-unit>
-      <trans-unit id="gZtm6ws" resname="The plan can not be found">
+      <trans-unit id="Z4gchO4" resname="The plan can not be found">
         <source>The plan can not be found</source>
         <target>Le plan ne peut pas être trouvé</target>
       </trans-unit>
@@ -669,7 +669,7 @@
         <source>Total</source>
         <target>Total</target>
       </trans-unit>
-      <trans-unit id="fqQWA.u" resname="Oh oh ! %totalPosts% messages written so far.">
+      <trans-unit id="SyULbmT" resname="Oh oh ! %totalPosts% messages written so far.">
         <source>Oh oh ! %totalPosts% messages written so far.</source>
         <target>Oh oh ! {totalPosts} messages écrits jusqu'à présent.</target>
       </trans-unit>
@@ -713,23 +713,23 @@
         <source>Support</source>
         <target>Soutien</target>
       </trans-unit>
-      <trans-unit id="voGUC3n" resname="Marketing">
+      <trans-unit id="9ZBM96E" resname="Marketing">
         <source>Marketing</source>
         <target>Marketing</target>
       </trans-unit>
-      <trans-unit id="viGUC3n" resname="Accounting">
+      <trans-unit id="q0j89wb" resname="Accounting">
         <source>Accounting</source>
         <target>Comptabilité</target>
       </trans-unit>
-      <trans-unit id="vnGUC3n" resname="General">
+      <trans-unit id="yRDUdNz" resname="General">
         <source>General</source>
         <target>Général</target>
       </trans-unit>
-      <trans-unit id="vrGUC3n" resname="Accounts">
+      <trans-unit id="inyLZ.6" resname="Accounts">
         <source>Accounts</source>
         <target>Comptes</target>
       </trans-unit>
-      <trans-unit id="vaGUC3n" resname="Payment">
+      <trans-unit id="cEjzizP" resname="Payment">
         <source>Payment</source>
         <target>Paiement</target>
       </trans-unit>
@@ -761,7 +761,7 @@
         <source>Get the app</source>
         <target>Obtenez l'application</target>
       </trans-unit>
-      <trans-unit id="AYrH5mM" resname="FAQ">
+      <trans-unit id="28RooUt" resname="FAQ">
         <source>FAQ</source>
         <target>FAQ</target>
       </trans-unit>
@@ -889,7 +889,7 @@
         <source>Register</source>
         <target>Inscrivez-vous</target>
       </trans-unit>
-      <trans-unit id=".4vB.0b" resname="You are connected as %username%">
+      <trans-unit id="ZiBJCct" resname="You are connected as %username%">
         <source>You are connected as %username%</source>
         <target>Vous êtes connecté en tant que {username}</target>
       </trans-unit>
@@ -1717,13 +1717,101 @@
         <source>Category :</source>
         <target>Catégorie :</target>
       </trans-unit>
-      <trans-unit id="SyULbmT" resname="Oh oh ! %totalPosts% messages written so far.">
-        <source>Oh oh ! %totalPosts% messages written so far.</source>
-        <target>Oh oh ! {totalPosts} messages écrits jusqu'à présent.</target>
-      </trans-unit>
       <trans-unit id="OZVvvXe" resname="You are connected as &quot;%username%">
         <source>You are connected as "%username%</source>
         <target>Vous êtes connecté en tant que {username}</target>
+      </trans-unit>
+      <trans-unit id="tzU9Rat" resname="Contact Request">
+        <source>Contact Request</source>
+        <target>Demande de contact</target>
+      </trans-unit>
+      <trans-unit id="d_067EU" resname="Choose a service">
+        <source>Choose a service</source>
+        <target>Choisir un service</target>
+      </trans-unit>
+      <trans-unit id="Jq1qbP_" resname="Unable to capture this payment">
+        <source>Unable to capture this payment</source>
+        <target>Impossible de capturer ce paiement</target>
+      </trans-unit>
+      <trans-unit id=".E5Upu." resname="You have made too many contact requests in a row.">
+        <source>You have made too many contact requests in a row.</source>
+        <target>Vous avez fait trop de demandes de contact d'affilée.</target>
+      </trans-unit>
+      <trans-unit id="2eAn_g1" resname="Help Center Support for">
+        <source>Help Center Support for</source>
+        <target>Centre d'aide Assistance pour</target>
+      </trans-unit>
+      <trans-unit id="4vVchPO" resname="Help center">
+        <source>Help center</source>
+        <target>Centre d'aide</target>
+      </trans-unit>
+      <trans-unit id="ZTyYth3" resname="Related articles">
+        <source>Related articles</source>
+        <target>Articles Liés</target>
+      </trans-unit>
+      <trans-unit id="qi8QmYu" resname="Help Center Support">
+        <source>Help Center Support</source>
+        <target>Centre d'aide Assistance</target>
+      </trans-unit>
+      <trans-unit id="DKvs2tR" resname="Can't find the answer you're looking for? Don't worry! Get in touch with the Docs Support team, we will be glad to assist you.">
+        <source>Can't find the answer you're looking for? Don't worry! Get in touch with the Docs Support team, we will be glad to assist you.</source>
+        <target>Vous ne trouvez pas la réponse que vous cherchez ? Ne t'inquiète pas! Contactez l'équipe d'assistance Docs, nous serons ravis de vous aider..</target>
+      </trans-unit>
+      <trans-unit id="fAGuw7H" resname="Contact Information">
+        <source>Contact Information</source>
+        <target>Informations de contact</target>
+      </trans-unit>
+      <trans-unit id="gi3oxQx" resname="Submit a Request">
+        <source>Submit a Request</source>
+        <target>Soumettre une demande</target>
+      </trans-unit>
+      <trans-unit id="FV_BbAQ" resname="Submit">
+        <source>Submit</source>
+        <target>Soumettre</target>
+      </trans-unit>
+      <trans-unit id="4Y7B1on" resname="Help Center FAQ">
+        <source>Help Center FAQ</source>
+        <target>FAQ du Centre d’aide</target>
+      </trans-unit>
+      <trans-unit id="ikH7s2U" resname="Help Center Article">
+        <source>Help Center Article</source>
+        <target>Article du centre d'aide</target>
+      </trans-unit>
+      <trans-unit id="bpPVKTV" resname="How can we help you?">
+        <source>How can we help you?</source>
+        <target>Comment pouvons-nous vous aider?</target>
+      </trans-unit>
+      <trans-unit id="pbgVV.p" resname="Have questions? Search through our Help Center">
+        <source>Have questions? Search through our Help Center</source>
+        <target>Avoir des questions? Effectuez une recherche dans notre centre d'aide</target>
+      </trans-unit>
+      <trans-unit id="FmLCAsP" resname="Search Help">
+        <source>Search Help</source>
+        <target>Rechercher de l'aide</target>
+      </trans-unit>
+      <trans-unit id="BGLu58N" resname="Enter a question, topic or keyword">
+        <source>Enter a question, topic or keyword</source>
+        <target>Entrez une question, un sujet ou un mot-clé</target>
+      </trans-unit>
+      <trans-unit id=".oeLSON" resname="... or choose a category to quickly find the help you need">
+        <source>... or choose a category to quickly find the help you need</source>
+        <target>... ou choisissez une catégorie pour trouver rapidement l'aide dont vous avez besoin</target>
+      </trans-unit>
+      <trans-unit id="F5v5fsi" resname="FAQ, short for frequently asked questions, is a list of commonly asked questions and answers about a specific topic.">
+        <source>FAQ, short for frequently asked questions, is a list of commonly asked questions and answers about a specific topic.</source>
+        <target>FAQ, abréviation de questions fréquemment posées, est une liste de questions et de réponses fréquemment posées sur un sujet spécifique..</target>
+      </trans-unit>
+      <trans-unit id="tRbwdjE" resname="View FAQ">
+        <source>View FAQ</source>
+        <target>Voir la FAQ</target>
+      </trans-unit>
+      <trans-unit id="a_R8LcB" resname="The good news is that youre not alone, and youre in the right place. Contact us for more detailed support.">
+        <source>The good news is that youre not alone, and youre in the right place. Contact us for more detailed support.</source>
+        <target>La bonne nouvelle est que vous n’êtes pas seul et que vous êtes au bon endroit. Contactez-nous pour une assistance plus détaillée.</target>
+      </trans-unit>
+      <trans-unit id="5PGRWdg" resname="%website_name% is here to help. We can provide you with the support you need. Just contact us and our team will reply quick to you.">
+        <source>%website_name% is here to help. We can provide you with the support you need. Just contact us and our team will reply quick to you.</source>
+        <target>{website_name} est là pour vous aider. Nous pouvons vous fournir le soutien dont vous avez besoin. Contactez-nous et notre équipe vous répondra rapidement.</target>
       </trans-unit>
     </body>
   </file>

@@ -2,19 +2,24 @@
 
 namespace App\Service;
 
-use App\DTO\AccountUpdatedDTO;
 use App\DTO\AccountUpdatedAvatarDTO;
+use App\DTO\AccountUpdatedDTO;
 use App\DTO\AccountUpdatedSocialDTO;
+use App\Entity\UserEmailVerification;
+use App\Event\Email\UserEmailVerificationEvent;
+use App\Repository\UserEmailVerificationRepository;
+use App\Security\Exception\UserEmailChangeException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AccountUpdatedService
 {
     public function __construct(
         private readonly EventDispatcherInterface $dispatcher,
-        private readonly TranslatorInterface $translator,
         private readonly GeneratorTokenService $generatorTokenService,
+        private readonly TranslatorInterface $translator,
+        private readonly UserEmailVerificationRepository $userEmailVerificationRepository,
         private readonly EntityManagerInterface $em
     ) {
     }
@@ -40,6 +45,29 @@ class AccountUpdatedService
         }
 
         // User Locale
+
+        // User Email
+        if ($data->email !== $data->user->getEmail()) {
+            $lastRequest = $this->userEmailVerificationRepository->findLastForUser($data->user);
+
+            if ($lastRequest && $lastRequest->getCreatedAt() > new \DateTime('-1 hour')) {
+                throw new UserEmailChangeException($lastRequest);
+            } else {
+                if ($lastRequest) {
+                    $this->em->remove($lastRequest);
+                }
+            }
+
+            $userEmailVerification = (new UserEmailVerification())
+                ->setEmail($data->email)
+                ->setAuthor($data->user)
+                ->setCreatedAt(new \DateTime())
+                ->setToken($this->generatorTokenService->generateToken())
+            ;
+
+            $this->em->persist($userEmailVerification);
+            $this->dispatcher->dispatch(new UserEmailVerificationEvent($userEmailVerification));
+        }
     }
 
     public function updatedAvatar(AccountUpdatedAvatarDTO $data): void
@@ -49,11 +77,11 @@ class AccountUpdatedService
         }
 
         // We resize the image
-        //$image = new ImageManager(['driver' => 'imagick']);
-        //$image->make($data->file)->fit(110, 110)->save($data->file->getRealPath());
+        // $image = new ImageManager(['driver' => 'imagick']);
+        // $image->make($data->file)->fit(110, 110)->save($data->file->getRealPath());
 
         // We move it to the user profile
-        //$data->user->setAvatarFile($data->file);
+        // $data->user->setAvatarFile($data->file);
         $data->user->setUpdatedAt(new \DateTimeImmutable());
     }
 
@@ -70,8 +98,9 @@ class AccountUpdatedService
         $data->user->getLinkedinUrl($data->linkedinurl);
     }
 
-    public function updatedEmail(): void
+    public function updatedEmail(UserEmailVerification $userEmailVerification): void
     {
-        // Code
+        $userEmailVerification->getAuthor()->setEmail($userEmailVerification->getEmail());
+        $this->em->remove($userEmailVerification);
     }
 }

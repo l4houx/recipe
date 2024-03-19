@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructural\MessageHandler;
+namespace App\Infrastructural\Messenger\MessageHandler;
 
 use Symfony\Component\Process\Process;
-use App\Infrastructural\Message\RecipePDFMessage;
+use App\Infrastructural\Messenger\Message\RecipePDFMessage;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
