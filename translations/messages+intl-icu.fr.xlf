@@ -713,6 +713,26 @@
         <source>Support</source>
         <target>Soutien</target>
       </trans-unit>
+      <trans-unit id="voGUC3n" resname="Marketing">
+        <source>Marketing</source>
+        <target>Marketing</target>
+      </trans-unit>
+      <trans-unit id="viGUC3n" resname="Accounting">
+        <source>Accounting</source>
+        <target>Comptabilité</target>
+      </trans-unit>
+      <trans-unit id="vnGUC3n" resname="General">
+        <source>General</source>
+        <target>Général</target>
+      </trans-unit>
+      <trans-unit id="vrGUC3n" resname="Accounts">
+        <source>Accounts</source>
+        <target>Comptes</target>
+      </trans-unit>
+      <trans-unit id="vaGUC3n" resname="Payment">
+        <source>Payment</source>
+        <target>Paiement</target>
+      </trans-unit>
       <trans-unit id="3kdDyHl" resname="Company">
         <source>Company</source>
         <target>Entreprise</target>

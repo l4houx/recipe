@@ -24,7 +24,7 @@ Installation en cours:
     ☐ composer require knpuniversity/oauth2-client-bundle league/oauth2-facebook league/oauth2-github league/oauth2-google wohali/oauth2-discord-new
 
     // Payment
-    ☐ composer require stripe/stripe-php
+    ✔ composer require stripe/stripe-php phpjuice/paypal-checkout-sdk @done(24-03-19 10:41)
     ☐ composer require paypal/paypal-checkout-sdk ou composer require phpjuice/paypal-checkout-sdk ou composer require league/omnipay
 
     ☐ composer require symfony/polyfill-intl-messageformatter

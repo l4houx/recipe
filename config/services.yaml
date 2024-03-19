@@ -70,6 +70,9 @@ parameters:
     recipe_image:                     /images/recipe
     #photo_testimonial:               /images/testimonial
 
+imports:
+    - { resource: entities/ }
+
 services:
     # default configuration for services in *this* file
     _defaults:
