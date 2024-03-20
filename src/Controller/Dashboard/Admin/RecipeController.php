@@ -14,12 +14,12 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Infrastructural\Message\RecipePDFMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use App\Infrastructural\Messenger\Message\RecipePDFMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-recipes', name: 'dashboard_admin_recipe_')]
@@ -58,7 +58,7 @@ class RecipeController extends Controller
             $this->em->persist($recipe);
             $this->em->flush();
 
-            $this->addFlash('success', $this->translator->trans('Recipe was created successfully.'));
+            $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -69,7 +69,7 @@ class RecipeController extends Controller
     #[Route(path: '/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function show(Recipe $recipe): Response
     {
-        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans("Recipes can only be shown to their authors."));
+        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans("Content can only be shown to their authors."));
     
         return $this->render('dashboard/admin/recipe/show.html.twig', compact('recipe'));
     }
@@ -77,7 +77,7 @@ class RecipeController extends Controller
     #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function edit(Request $request, Recipe $recipe, MessageBusInterface $messageBusInterface): Response
     {
-        $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans("Recipes can only be edited by their authors."));
+        $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans("Content can only be edited by their authors."));
 
         $form = $this->createForm(RecipeFormType::class, $recipe)->handleRequest($request);
 
@@ -86,7 +86,7 @@ class RecipeController extends Controller
 
             $messageBusInterface->dispatch(new RecipePDFMessage($recipe->getId()));
 
-            $this->addFlash('info', $this->translator->trans('The recipe was edited successfully.'));
+            $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -102,7 +102,7 @@ class RecipeController extends Controller
             $this->em->remove($recipe);
             $this->em->flush();
 
-            $this->addFlash('danger', $this->translator->trans('Recipe was deleted successfully.'));
+            $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);

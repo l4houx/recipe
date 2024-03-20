@@ -57,7 +57,7 @@ class UserController extends Controller
             $this->em->persist($user);
             $this->em->flush();
 
-            $this->addFlash('success', $this->translator->trans('User was created successfully.'));
+            $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -72,7 +72,7 @@ class UserController extends Controller
             $this->em->remove($user);
             $this->em->flush();
 
-            $this->addFlash('danger', $this->translator->trans('User was deleted successfully.'));
+            $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);

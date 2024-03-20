@@ -11,14 +11,14 @@ class AccountUpdatedSocialDTO
 {
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     public ?string $externallink = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[Assert\Regex(
@@ -30,35 +30,35 @@ class AccountUpdatedSocialDTO
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     public ?string $twitterurl = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     public ?string $instagramurl = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     public ?string $facebookurl = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     public ?string $googleplusurl = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     public ?string $linkedinurl = null;

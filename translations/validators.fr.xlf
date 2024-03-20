@@ -573,109 +573,109 @@
         <source>Please enter a valid week.</source>
         <target>Veuillez entrer une semaine valide.</target>
       </trans-unit>
-      <trans-unit id="bsh2Z5Y" resname="Cette valeur n'est pas une URL valide.">
-        <source>Cette valeur n'est pas une URL valide.</source>
-        <target>__Cette valeur n'est pas une URL valide.</target>
+      <trans-unit id="bsh2Z5Y" resname="This value is not a valid URL.">
+        <source>This value is not a valid URL.</source>
+        <target>Cette valeur n'est pas une URL valide.</target>
       </trans-unit>
-      <trans-unit id="eEbM.AO" resname="L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion">
-        <source>L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion</source>
-        <target>__L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion</target>
+      <trans-unit id="eEbM.AO" resname="The URL must match the URL of a Youtube or DailyMotion video">
+        <source>The URL must match the URL of a Youtube or DailyMotion video</source>
+        <target>L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion</target>
       </trans-unit>
       <trans-unit id="w1El3uJ" resname="Please don't leave your title blank!">
         <source>Please don't leave your title blank!</source>
-        <target>__Please don't leave your title blank!</target>
+        <target>S'il vous plaît, ne laissez pas votre titre vide!</target>
       </trans-unit>
       <trans-unit id="oMlVVCw" resname="The title is too short ({{ limit }} characters minimum)">
         <source>The title is too short ({{ limit }} characters minimum)</source>
-        <target>__The title is too short ({{ limit }} characters minimum)</target>
+        <target>Le titre est trop court ({{ limit }} caractères minimum)</target>
       </trans-unit>
       <trans-unit id="QW1sDNR" resname="The title is too long ({ limit } characters maximum)">
         <source>The title is too long ({ limit } characters maximum)</source>
-        <target>__The title is too long ({ limit } characters maximum)</target>
+        <target>Le titre est trop long ({ limit } caractères maximum)</target>
       </trans-unit>
       <trans-unit id="MuvoYku" resname="The name is too short ({{ limit }} characters minimum)">
         <source>The name is too short ({{ limit }} characters minimum)</source>
-        <target>__The name is too short ({{ limit }} characters minimum)</target>
+        <target>Le nom est trop court ({{ limit }} caractères minimum)</target>
       </trans-unit>
       <trans-unit id="_hNCdwL" resname="The name is too long ({ limit } characters maximum)">
         <source>The name is too long ({ limit } characters maximum)</source>
-        <target>__The name is too long ({ limit } characters maximum)</target>
+        <target>Le nom est trop long ({ limit } caractères maximum)</target>
       </trans-unit>
       <trans-unit id="LgUwK2_" resname="Invalid slug.">
         <source>Invalid slug.</source>
-        <target>__Invalid slug.</target>
+        <target>Slug invalide.</target>
       </trans-unit>
       <trans-unit id="JwMMWdg" resname="The file should be an image">
         <source>The file should be an image</source>
-        <target>__The file should be an image</target>
+        <target>Le fichier doit être une image</target>
       </trans-unit>
       <trans-unit id="0GkbH8m" resname="Please don't leave your headline blank!">
         <source>Please don't leave your headline blank!</source>
-        <target>__Please don't leave your headline blank!</target>
+        <target>S'il vous plaît, ne laissez pas votre titre vide!</target>
       </trans-unit>
       <trans-unit id="mu6mmUB" resname="The headline is too short ({{ limit }} characters minimum)">
         <source>The headline is too short ({{ limit }} characters minimum)</source>
-        <target>__The headline is too short ({{ limit }} characters minimum)</target>
+        <target>Le titre est trop court ({{ limit }} caractères minimum)</target>
       </trans-unit>
       <trans-unit id="YsJD6s3" resname="The headline is too long ({ limit } characters maximum)">
         <source>The headline is too long ({ limit } characters maximum)</source>
-        <target>__The headline is too long ({ limit } characters maximum)</target>
+        <target>Le titre est trop long ({ limit } caractères maximum)</target>
       </trans-unit>
       <trans-unit id="u_KQZb8" resname="Please don't leave your label blank!">
         <source>Please don't leave your label blank!</source>
-        <target>__Please don't leave your label blank!</target>
+        <target>S'il vous plaît, ne laissez pas votre libellé vide!</target>
       </trans-unit>
       <trans-unit id="ffIIwND" resname="The label is too short ({{ limit }} characters minimum)">
         <source>The label is too short ({{ limit }} characters minimum)</source>
-        <target>__The label is too short ({{ limit }} characters minimum)</target>
+        <target>Le libellé est trop court ({{ limit }} caractères minimum)</target>
       </trans-unit>
       <trans-unit id="p_e9OJY" resname="The label is too long ({ limit } characters maximum)">
         <source>The label is too long ({ limit } characters maximum)</source>
-        <target>__The label is too long ({ limit } characters maximum)</target>
+        <target>Le libellé est trop long ({ limit } caractères maximum)</target>
       </trans-unit>
       <trans-unit id="Nm3seDe" resname="Please don't leave your username blank!">
         <source>Please don't leave your username blank!</source>
-        <target>__Please don't leave your username blank!</target>
+        <target>S'il vous plaît, ne laissez pas votre nom d'utilisateur vide!</target>
       </trans-unit>
       <trans-unit id="6FiVMCY" resname="The username is too short ({{ limit }} characters minimum)">
         <source>The username is too short ({{ limit }} characters minimum)</source>
-        <target>__The username is too short ({{ limit }} characters minimum)</target>
+        <target>Le nom d'utilisateur est trop court ({{ limit }} caractères minimum)</target>
       </trans-unit>
       <trans-unit id="dfIi5c." resname="The username is too long ({ limit } characters maximum)">
         <source>The username is too long ({ limit } characters maximum)</source>
-        <target>__The username is too long ({ limit } characters maximum)</target>
+        <target>Le nom d'utilisateur est trop long ({ limit } caractères maximum)</target>
       </trans-unit>
       <trans-unit id="8lihtCv" resname="The slug is too short ({{ limit }} characters minimum)">
         <source>The slug is too short ({{ limit }} characters minimum)</source>
-        <target>__The slug is too short ({{ limit }} characters minimum)</target>
+        <target>Le slug est trop court ({{ limit }} caractères minimum)</target>
       </trans-unit>
       <trans-unit id="gfQpR5l" resname="The slug is too long ({ limit } characters maximum)">
         <source>The slug is too long ({ limit } characters maximum)</source>
-        <target>__The slug is too long ({ limit } characters maximum)</target>
+        <target>Le slug est trop long ({ limit } caractères maximum)</target>
       </trans-unit>
       <trans-unit id="SyoyLpK" resname="Please don't leave your name blank!">
         <source>Please don't leave your name blank!</source>
-        <target>__Please don't leave your name blank!</target>
+        <target>S'il vous plaît, ne laissez pas votre nom vide!</target>
       </trans-unit>
-      <trans-unit id="Q2mV.ZW" resname="Prénom invalide.">
-        <source>Prénom invalide.</source>
-        <target>__Prénom invalide.</target>
+      <trans-unit id="Q2mV.ZW" resname="Invalid first name">
+        <source>Invalid first name</source>
+        <target>Prénom invalide</target>
       </trans-unit>
-      <trans-unit id="s_qbQoh" resname="Nom de famille invalide.">
-        <source>Nom de famille invalide.</source>
-        <target>__Nom de famille invalide.</target>
+      <trans-unit id="s_qbQoh" resname="Invalid last name">
+        <source>Invalid last name</source>
+        <target>Nom de famille invalide</target>
       </trans-unit>
       <trans-unit id="WYQvzo0" resname="The content of this comment is considered spam.">
         <source>The content of this comment is considered spam.</source>
-        <target>__The content of this comment is considered spam.</target>
+        <target>Le contenu de ce commentaire est considéré comme du spam.</target>
       </trans-unit>
-      <trans-unit id="JEbb.81" resname="Cette adresse email est déjà utilisée.">
-        <source>Cette adresse email est déjà utilisée.</source>
-        <target>__Cette adresse email est déjà utilisée.</target>
+      <trans-unit id="JEbb.81" resname="This email address is already in use">
+        <source>This email address is already in use</source>
+        <target>Cette adresse email est déjà utilisée</target>
       </trans-unit>
-      <trans-unit id="vYoCBSg" resname="Ce nom d'utilisateur est déjà utilisé.">
-        <source>Ce nom d'utilisateur est déjà utilisé.</source>
-        <target>__Ce nom d'utilisateur est déjà utilisé.</target>
+      <trans-unit id="vYoCBSg" resname="This username is already in use">
+        <source>This username is already in use</source>
+        <target>Ce nom d'utilisateur est déjà utilisé</target>
       </trans-unit>
     </body>
   </file>

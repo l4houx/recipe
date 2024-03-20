@@ -463,147 +463,79 @@
       </trans-unit>
       <trans-unit id="dLzMRPR" resname="Invalid CSRF token.">
         <source>Invalid CSRF token.</source>
-        <target>__Invalid CSRF token.</target>
+        <target>Jeton CSRF invalide.</target>
       </trans-unit>
       <trans-unit id="iU7nKt0" resname="Unable to delete account, invalid password.">
         <source>Unable to delete account, invalid password.</source>
-        <target>__Unable to delete account, invalid password.</target>
+        <target>Impossible de supprimer le compte, mot de passe invalide.</target>
       </trans-unit>
       <trans-unit id="MGlk31D" resname="The deletion of your account has been successfully canceled.">
         <source>The deletion of your account has been successfully canceled.</source>
-        <target>__The deletion of your account has been successfully canceled.</target>
-      </trans-unit>
-      <trans-unit id="tUghVyF" resname="Recipes can only be shown to their authors.">
-        <source>Recipes can only be shown to their authors.</source>
-        <target>__Recipes can only be shown to their authors.</target>
-      </trans-unit>
-      <trans-unit id="hWR.Sra" resname="Recipes can only be edited by their authors.">
-        <source>Recipes can only be edited by their authors.</source>
-        <target>__Recipes can only be edited by their authors.</target>
-      </trans-unit>
-      <trans-unit id="j6usfyF" resname="Recipe was deleted successfully.">
-        <source>Recipe was deleted successfully.</source>
-        <target>__Recipe was deleted successfully.</target>
+        <target>La suppression de votre compte a été annulée avec succès.</target>
       </trans-unit>
       <trans-unit id="aUW2_hQ" resname="Avatar updated successfully.">
         <source>Avatar updated successfully.</source>
-        <target>__Avatar updated successfully.</target>
+        <target>Avatar mis à jour avec succès.</target>
       </trans-unit>
       <trans-unit id="XyGZ5yg" resname="Account updated successfully!">
         <source>Account updated successfully!</source>
-        <target>__Account updated successfully!</target>
+        <target>Compte mis à jour avec succès!</target>
       </trans-unit>
       <trans-unit id="GTFv6me" resname="Password updated successfully!">
         <source>Password updated successfully!</source>
-        <target>__Password updated successfully!</target>
+        <target>Mot de passe mis à jour avec succès!</target>
       </trans-unit>
       <trans-unit id="L3kICXo" resname="Your social networks have been updated successfully!">
         <source>Your social networks have been updated successfully!</source>
-        <target>__Your social networks have been updated successfully!</target>
+        <target>Vos réseaux sociaux ont été mis à jour avec succès!</target>
       </trans-unit>
       <trans-unit id="OFMFRZ9" resname="You do not have an active subscription.">
         <source>You do not have an active subscription.</source>
-        <target>__You do not have an active subscription.</target>
+        <target>Vous n'avez pas d'abonnement actif.</target>
       </trans-unit>
       <trans-unit id="wjy_Vv9" resname="Your information has been saved successfully.">
         <source>Your information has been saved successfully.</source>
-        <target>__Your information has been saved successfully.</target>
-      </trans-unit>
-      <trans-unit id="MK5VVpC" resname="Application was created successfully.">
-        <source>Application was created successfully.</source>
-        <target>__Application was created successfully.</target>
+        <target>Vos informations ont été enregistrées avec succès.</target>
       </trans-unit>
       <trans-unit id="5dLgCgi" resname="Application in you does not belong.">
         <source>Application in you does not belong.</source>
-        <target>__Application in you does not belong.</target>
+        <target>L'application en vous n'appartient pas.</target>
       </trans-unit>
       <trans-unit id="GP3VSbL" resname="New">
         <source>New</source>
-        <target>__New</target>
+        <target>Nouveau</target>
       </trans-unit>
       <trans-unit id="lUGCGc0" resname="Clos">
         <source>Clos</source>
-        <target>__Clos</target>
-      </trans-unit>
-      <trans-unit id="MlVbkN8" resname="Level was created successfully.">
-        <source>Level was created successfully.</source>
-        <target>__Level was created successfully.</target>
-      </trans-unit>
-      <trans-unit id="HTDyGcl" resname="Level was edited successfully.">
-        <source>Level was edited successfully.</source>
-        <target>__Level was edited successfully.</target>
-      </trans-unit>
-      <trans-unit id="uO1C6op" resname="Level was deleted successfully.">
-        <source>Level was deleted successfully.</source>
-        <target>__Level was deleted successfully.</target>
-      </trans-unit>
-      <trans-unit id="DmbTJ3b" resname="Category was created successfully.">
-        <source>Category was created successfully.</source>
-        <target>__Category was created successfully.</target>
-      </trans-unit>
-      <trans-unit id="CvnDwJX" resname="Category was edited successfully.">
-        <source>Category was edited successfully.</source>
-        <target>__Category was edited successfully.</target>
-      </trans-unit>
-      <trans-unit id="XkqDlJg" resname="Category was deleted successfully.">
-        <source>Category was deleted successfully.</source>
-        <target>__Category was deleted successfully.</target>
-      </trans-unit>
-      <trans-unit id="JIbFUkB" resname="Recipe was created successfully.">
-        <source>Recipe was created successfully.</source>
-        <target>__Recipe was created successfully.</target>
-      </trans-unit>
-      <trans-unit id="I8soVSU" resname="The recipe was edited successfully.">
-        <source>The recipe was edited successfully.</source>
-        <target>__The recipe was edited successfully.</target>
-      </trans-unit>
-      <trans-unit id="1b1Oa3S" resname="User was created successfully.">
-        <source>User was created successfully.</source>
-        <target>__User was created successfully.</target>
-      </trans-unit>
-      <trans-unit id="tRg0chi" resname="User was deleted successfully.">
-        <source>User was deleted successfully.</source>
-        <target>__User was deleted successfully.</target>
+        <target>Fermer</target>
       </trans-unit>
       <trans-unit id="F7Eidv1" resname="Unable to suspended a premium user.">
         <source>Unable to suspended a premium user.</source>
-        <target>__Unable to suspended a premium user.</target>
+        <target>Impossible de suspendre un utilisateur premium.</target>
       </trans-unit>
       <trans-unit id="qLVyg7E" resname="The account has been verified successfully.">
         <source>The account has been verified successfully.</source>
-        <target>__The account has been verified successfully.</target>
+        <target>Le compte a été vérifié avec succès.</target>
       </trans-unit>
-      <trans-unit id="agon9oG" resname="Status was created successfully.">
-        <source>Status was created successfully.</source>
-        <target>__Status was created successfully.</target>
+      <trans-unit id="AH8QkHS" resname="Content can only be shown to their authors.">
+        <source>Content can only be shown to their authors.</source>
+        <target>Le contenu ne peut être montré qu'à leurs auteurs.</target>
       </trans-unit>
-      <trans-unit id="4Zm2Kvg" resname="Status was edited successfully.">
-        <source>Status was edited successfully.</source>
-        <target>__Status was edited successfully.</target>
+      <trans-unit id="v6TXrqg" resname="Content can only be edited by their authors.">
+        <source>Content can only be edited by their authors.</source>
+        <target>Le contenu ne peut être modifié que par leurs auteurs.</target>
       </trans-unit>
-      <trans-unit id="FfptplQ" resname="Status was deleted successfully.">
-        <source>Status was deleted successfully.</source>
-        <target>__Status was deleted successfully.</target>
+      <trans-unit id="VPMJj_C" resname="Content was created successfully.">
+        <source>Content was created successfully.</source>
+        <target>Le contenu a été créé avec succès.</target>
       </trans-unit>
-      <trans-unit id="VPMJj_C" resname="Article was created successfully.">
-        <source>Article was created successfully.</source>
-        <target>__Article was created successfully.</target>
+      <trans-unit id="lTIHqAv" resname="Content was edited successfully.">
+        <source>Content was edited successfully.</source>
+        <target>Le contenu a été modifié avec succès.</target>
       </trans-unit>
-      <trans-unit id="AH8QkHS" resname="Posts can only be shown to their authors.">
-        <source>Posts can only be shown to their authors.</source>
-        <target>__Posts can only be shown to their authors.</target>
-      </trans-unit>
-      <trans-unit id="v6TXrqg" resname="Posts can only be edited by their authors.">
-        <source>Posts can only be edited by their authors.</source>
-        <target>__Posts can only be edited by their authors.</target>
-      </trans-unit>
-      <trans-unit id="lTIHqAv" resname="Article was edited successfully.">
-        <source>Article was edited successfully.</source>
-        <target>__Article was edited successfully.</target>
-      </trans-unit>
-      <trans-unit id="_112gO9" resname="Article was deleted successfully.">
-        <source>Article was deleted successfully.</source>
-        <target>__Article was deleted successfully.</target>
+      <trans-unit id="_112gO9" resname="Content was deleted successfully.">
+        <source>Content was deleted successfully.</source>
+        <target>Le contenu a été supprimé avec succès.</target>
       </trans-unit>
       <trans-unit id="Z4gchO4" resname="The plan can not be found">
         <source>The plan can not be found</source>
@@ -1815,35 +1747,35 @@
       </trans-unit>
       <trans-unit id="u9REkYq" resname=" | Updating your email address">
         <source> | Updating your email address</source>
-        <target>__ | Updating your email address</target>
+        <target> | Mise à jour de votre adresse e-mail</target>
       </trans-unit>
-      <trans-unit id="wBI9XyC" resname=" | Request for email change pending(">
-        <source> | Request for email change pending(</source>
-        <target>__ | Request for email change pending(</target>
+      <trans-unit id="wBI9XyC" resname=" | Request for email change pending">
+        <source> | Request for email change pending</source>
+        <target> | Demande de changement d'e-mail en attente</target>
       </trans-unit>
       <trans-unit id="_DJnJOt" resname=" | Confirming the account">
         <source> | Confirming the account</source>
-        <target>__ | Confirming the account</target>
+        <target> | Confirmation du compte</target>
       </trans-unit>
       <trans-unit id="yllZBnu" resname=" | Delete your account">
         <source> | Delete your account</source>
-        <target>__ | Delete your account</target>
+        <target> | Supprimer votre compte</target>
       </trans-unit>
       <trans-unit id="zhJD_YQ" resname="This confirmation request has timed out">
         <source>This confirmation request has timed out</source>
-        <target>__This confirmation request has timed out</target>
+        <target>Cette demande de confirmation a expiré</target>
       </trans-unit>
       <trans-unit id="4cvvxok" resname="This email has already been used">
         <source>This email has already been used</source>
-        <target>__This email has already been used</target>
+        <target>Cet email a déjà été utilisé</target>
       </trans-unit>
       <trans-unit id="mWJhp4c" resname="Your email has been changed successfully">
         <source>Your email has been changed successfully</source>
-        <target>__Your email has been changed successfully</target>
+        <target>Votre email a été modifié avec succès</target>
       </trans-unit>
       <trans-unit id="ji0GZNu" resname="Choose your language">
         <source>Choose your language</source>
-        <target>__Choose your language</target>
+        <target>Choisissez votre langue</target>
       </trans-unit>
     </body>
   </file>

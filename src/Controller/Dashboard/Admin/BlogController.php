@@ -55,7 +55,7 @@ class BlogController extends Controller
             $this->em->persist($post);
             $this->em->flush();
 
-            $this->addFlash('success', $this->translator->trans('Article was created successfully.'));
+            $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -66,23 +66,23 @@ class BlogController extends Controller
     #[Route(path: '/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function show(Post $post): Response
     {
-        $this->denyAccessUnlessGranted(PostVoter::SHOW, $post, $this->translator->trans("Posts can only be shown to their authors."));
+        $this->denyAccessUnlessGranted(PostVoter::SHOW, $post, $this->translator->trans("Content can only be shown to their authors."));
     
         return $this->render('dashboard/admin/blog/show.html.twig', compact('post'));
     }
 
     #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
-    //#[IsGranted(PostVoter::MANAGE, subject: 'post', message: 'Posts can only be edited by their authors.')]
+    //#[IsGranted(PostVoter::MANAGE, subject: 'post', message: 'Content can only be edited by their authors.')]
     public function edit(Request $request, Post $post): Response
     {
-        $this->denyAccessUnlessGranted(PostVoter::MANAGE, $post, $this->translator->trans("Posts can only be edited by their authors."));
+        $this->denyAccessUnlessGranted(PostVoter::MANAGE, $post, $this->translator->trans("Content can only be edited by their authors."));
 
         $form = $this->createForm(PostFormType::class, $post)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
 
-            $this->addFlash('info', $this->translator->trans('Article was edited successfully.'));
+            $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -98,7 +98,7 @@ class BlogController extends Controller
             $this->em->remove($post);
             $this->em->flush();
 
-            $this->addFlash('danger', $this->translator->trans('Article was deleted successfully.'));
+            $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);

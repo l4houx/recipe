@@ -19,7 +19,9 @@
                     <h3 class="fw-bold mb-3">{{ 'Company'|trans }}</h3>
                     <ul class="list-unstyled nav nav-footer flex-column nav-x-0">
                         <li><a href="#" class="nav-link">{{ 'About'|trans }}</a></li>
-                        <li><a href="{{ path('pricing') }}" class="nav-link">{{ 'Pricing'|trans }}</a></li>
+                        {% if not app.user or not app.user.premium  %}
+                            <li><a href="{{ path('pricing') }}" class="nav-link">{{ 'Pricing'|trans }}</a></li>
+                        {% endif %}
                         <li><a href="{{ path('blog_list') }}" class="nav-link">{{ 'Blog'|trans }}</a></li>
                         <li><a href="{{ path('contact') }}" class="nav-link">{{ 'Contact'|trans }}</a></li>
                     </ul>
@@ -80,7 +82,7 @@
                             <span id="copyright2">
                                 <script>
                                     document.getElementById("copyright2").appendChild(document.createTextNode(new Date().getFullYear()));
-                                </script>2020
+                                </script>-2020
                             </span>
                             {{ website_name }}-{{ 'UI, Inc. All rights reserved.'|trans }}
                         </span>

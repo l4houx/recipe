@@ -36,7 +36,7 @@ class AccountSubscriber implements EventSubscriberInterface
             'email' => $event->userEmailVerification->getEmail(),
         ])
             ->to($event->userEmailVerification->getAuthor()->getEmail())
-            ->subject($this->params->get('website_name').''.$this->translator->trans(' | Request for email change pending('))
+            ->subject($this->params->get('website_name').''.$this->translator->trans(' | Request for email change pending'))
         ;
 
         $this->mail->send($email);

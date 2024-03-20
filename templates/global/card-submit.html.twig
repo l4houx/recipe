@@ -1,0 +1,7 @@
+{% extends 'global/card.html.twig' %}
+
+{% block actions %}
+    <button class="btn btn-primary me-2" onclick="document.querySelector('main form').submit()">
+        {{ 'Save'|trans }}
+    </button>
+{% endblock %}

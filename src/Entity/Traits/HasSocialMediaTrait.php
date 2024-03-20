@@ -12,7 +12,7 @@ trait HasSocialMediaTrait
 {
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'http://example.com'])]
@@ -20,20 +20,20 @@ trait HasSocialMediaTrait
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[Assert\Regex(
         pattern: '^(http|https):\/\/(www\.youtube\.com|www\.dailymotion\.com)\/?',
         match: true,
-        message: "L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion",
+        message: "The URL must match the URL of a Youtube or DailyMotion video",
     )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://www.youtube.com'])]
     private ?string $youtubeurl = null;
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://twitter.com/France/'])]
@@ -41,7 +41,7 @@ trait HasSocialMediaTrait
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://www.instagram.com/'])]
@@ -49,7 +49,7 @@ trait HasSocialMediaTrait
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://fr-fr.facebook.com/'])]
@@ -57,7 +57,7 @@ trait HasSocialMediaTrait
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => '#'])]
@@ -65,7 +65,7 @@ trait HasSocialMediaTrait
 
     #[Assert\Length(max: 255)]
     #[Assert\Url(
-        message: "Cette valeur n'est pas une URL valide.", 
+        message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, options: ['default' => 'https://fr.linkedin.com/'])]

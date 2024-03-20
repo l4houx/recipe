@@ -15,7 +15,7 @@ trait HasIdentifyTrait
     #[Assert\NotBlank(groups: ['user:create'])]
     #[Assert\Regex(
         pattern: "/^(?:[\u00c0-\u01ffa-zA-Z'-]){2,}(?:\s[\u00c0-\u01ffa-zA-Z'-]{2,})+$/i",
-        message: 'Prénom invalide.',
+        message: 'Invalid first name',
     )]
     #[ORM\Column(type: Types::STRING, length: 20)]
     #[Groups(['user:read', 'user:create', 'user:update'])]
@@ -25,7 +25,7 @@ trait HasIdentifyTrait
     #[Assert\NotBlank(groups: ['user:create'])]
     #[Assert\Regex(
         pattern: "/^(?:[\u00c0-\u01ffa-zA-Z'-]){2,}(?:\s[\u00c0-\u01ffa-zA-Z'-]{2,})+$/i",
-        message: 'Nom de famille invalide.',
+        message: 'Invalid last name',
     )]
     #[ORM\Column(type: Types::STRING, length: 20)]
     #[Groups(['user:read', 'user:create', 'user:update'])]

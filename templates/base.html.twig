@@ -15,7 +15,15 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body class="{{ bodyClass is defined ? bodyClass : '' }} {% block dashboard %}{% endblock %} {% block page %}{% endblock %} {% block layout %}default{% endblock %}">
+    <body 
+        class="
+        {{ bodyClass is defined ? bodyClass : '' }} 
+        {% block dashboard %}{% endblock %} 
+        {% block page %}{% endblock %} 
+        {% block layout %}default{% endblock %}"
+        {{ bs_theme() }}
+        {{ app.user and app.user.premium ? 'user-premium' : 'user-not-premium' }}
+    >
         {% block body '' %}
         {{ component('flash_messages') }}
     </body>

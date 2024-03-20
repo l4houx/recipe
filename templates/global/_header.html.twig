@@ -31,7 +31,7 @@
 							</a>
 						{% endif %}
 					{% else %}
-						<a href="{{ path('login') }}" class="btn btn-outline-primary shadow-sm me-2 d-none d-md-block">
+						<a href="{{ path('login', {redirect: app.request.pathInfo}) }}" class="btn btn-outline-primary shadow-sm me-2 d-none d-md-block">
 							{{ 'Login'|trans }}
 						</a>
 						<a href="{{ path('register') }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
@@ -56,10 +56,17 @@
 					<a class="nav-link {{ app.current_route starts with 'blog_' ? 'active' : '' }}" href="{{ path('blog_list') }}">{{ 'Blog'|trans }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{ path('help_center') }}">
+					<a class="nav-link {{ app.current_route == 'help_center' ? 'active' : '' }}" href="{{ path('help_center') }}">
 						{{ 'Help Center'|trans }}
 					</a>
 				</li>
+				{% if not app.user or not app.user.premium  %}
+					<li class="nav-item">
+						<a class="nav-link {{ app.current_route == 'pricing' ? 'active' : '' }}" href="{{ path('pricing') }}">
+							{{ 'Pricing'|trans }}
+						</a>
+					</li>
+				{% endif %}
 				<li class="nav-item">
 					<a class="nav-link {{ app.current_route == 'contact' ? 'active' : '' }}" href="{{ path('contact') }}">
 						{{ 'Contact'|trans }}

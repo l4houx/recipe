@@ -60,7 +60,7 @@ class ApplicationController extends AbstractController
             $em->persist($application);
             $em->flush();
 
-            $this->addFlash('success', $translator->trans('Application was created successfully.'));
+            $this->addFlash('success', $translator->trans('Content was created successfully.'));
 
             return $this->redirectToRoute('dashboard_application_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -76,7 +76,7 @@ class ApplicationController extends AbstractController
         EntityManagerInterface $em
     ): Response {
         if ($application->getUser() !== $user && !$this->security->isGranted(HasRoles::ADMIN)) {
-            $this->addFlash('secondary', $translator->trans('Application in you does not belong.'));
+            $this->addFlash('secondary', $translator->trans('Application  in you does not belong.'));
 
             return $this->redirectToRoute('dashboard_application_index', [], Response::HTTP_SEE_OTHER);
         }

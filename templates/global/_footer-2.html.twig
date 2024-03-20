@@ -1,24 +1,32 @@
 <footer class="footer">
     <div class="container">
         <div class="row align-items-center g-0 border-top py-2">
-            <div class="col-md-6 col-12 text-center text-md-start">
-                <span>
-                    ©
-                    <span id="copyright">
-                        <script>
-                            document.getElementById("copyright").appendChild(document.createTextNode(new Date().getFullYear()));
-                        </script>2020
-                    </span>
-                    {{ website_name }}-{{ 'UI, Inc. All rights reserved.'|trans }}
-                </span>
+            <div class="col-md-10 col-12">
+                <div class="d-lg-flex align-items-center">
+                    <div class="me-4">
+                        <span>
+                            ©
+                            <span id="copyright2">
+                                <script>
+                                    document.getElementById("copyright2").appendChild(document.createTextNode(new Date().getFullYear()));
+                                </script>-2020
+                            </span>
+                            {{ website_name }}-{{ 'UI, Inc. All rights reserved.'|trans }}
+                        </span>
+                    </div>
+                    <div>
+                        <nav class="nav nav-footer">
+                            <a class="nav-link active ps-0" href="#!">{{ 'Privacy'|trans }}</a>
+                            <a class="nav-link" href="#!">{{ 'Terms'|trans }}</a>
+                            <a class="nav-link" href="{{ path('testimonial') }}">{{ 'Feedback'|trans }}</a>
+                            <a class="nav-link" href="{{ path('help_center') }}">{{ 'Support'|trans }}</a>
+                        </nav>
+                    </div>
+                </div>
             </div>
-            <div class="col-12 col-md-6">
-                <nav class="nav nav-footer justify-content-center justify-content-md-end">
-                    <a class="nav-link active ps-0" href="#!">{{ 'Privacy'|trans }}</a>
-                    <a class="nav-link" href="#!">{{ 'Terms'|trans }}</a>
-                    <a class="nav-link" href="{{ path('testimonial') }}">{{ 'Feedback'|trans }}</a>
-                    <a class="nav-link" href="{{ path('help_center') }}">{{ 'Support'|trans }}</a>
-                </nav>
+            <div class="col-12 col-md-2 d-md-flex justify-content-end">
+                {% from 'global/_language_selector.html.twig' import render_language_selector %}
+                {{ render_language_selector() }}
             </div>
         </div>
     </div>

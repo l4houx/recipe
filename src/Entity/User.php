@@ -26,8 +26,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 //#[Vich\Uploadable]
 //#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-#[UniqueEntity(fields: ['email'], message: 'Cette adresse email est déjà utilisée.')]
-#[UniqueEntity(fields: ['username'], message: "Ce nom d'utilisateur est déjà utilisé.")]
+#[UniqueEntity(fields: ['email'], message: 'This email address is already in use')]
+#[UniqueEntity(fields: ['username'], message: "This username is already in use")]
 #[ApiResource(
     security: "is_granted('ROLE_APPLICATION_ADMIN')",
     operations: [

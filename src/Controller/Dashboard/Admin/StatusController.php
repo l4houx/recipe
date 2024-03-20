@@ -44,7 +44,7 @@ class StatusController extends AbstractController
             $this->em->persist($status);
             $this->em->flush();
 
-            $this->addFlash('success', $this->translator->trans('Status was created successfully.'));
+            $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_status_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -60,7 +60,7 @@ class StatusController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
 
-            $this->addFlash('info', $this->translator->trans('Status was edited successfully.'));
+            $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
 
             return $this->redirectToRoute('dashboard_admin_status_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -75,7 +75,7 @@ class StatusController extends AbstractController
             $this->em->remove($status);
             $this->em->flush();
 
-            $this->addFlash('danger', $this->translator->trans('Status was deleted successfully.'));
+            $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_admin_status_index', [], Response::HTTP_SEE_OTHER);
