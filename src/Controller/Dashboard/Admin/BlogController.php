@@ -5,7 +5,6 @@ namespace App\Controller\Dashboard\Admin;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\PostFormType;
-use App\Controller\Controller;
 use App\Entity\Traits\HasRoles;
 use App\Security\Voter\PostVoter;
 use App\Repository\PostRepository;
@@ -21,7 +20,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route(path: '/%website_dashboard_path%/main-panel/manage-blogs', name: 'dashboard_admin_blog_')]
 #[IsGranted(HasRoles::TEAM)]
-class BlogController extends Controller
+class BlogController extends AdminBaseController
 {
     public function __construct(
         private readonly TranslatorInterface $translator,

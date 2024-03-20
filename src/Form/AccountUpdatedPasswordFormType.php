@@ -27,6 +27,7 @@ class AccountUpdatedPasswordFormType extends AbstractType
                 ->add('currentPassword', PasswordType::class, [
                     'label' => t('Current Password :'),
                     'mapped' => false,
+                    'toggle' => true,
                     'attr' => [
                         'autocomplete' => 'off',
                     ],
@@ -43,6 +44,11 @@ class AccountUpdatedPasswordFormType extends AbstractType
         $builder
             ->add('newPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
+                'options' => [
+                    // 'purify_html' => true,
+                    'toggle' => true,
+                    'translation_domain' => 'messages',
+                ],
                 'first_options' => [
                     'hash_property_path' => 'password', 
                     'label' => t('New Password :'), 

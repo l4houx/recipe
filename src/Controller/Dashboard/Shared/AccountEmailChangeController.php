@@ -2,7 +2,7 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\Controller;
+use App\Controller\BaseController;
 use App\Entity\Traits\HasRoles;
 use App\Entity\UserEmailVerification;
 use App\Repository\UserRepository;
@@ -16,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /** MyProfile */
 #[Route(path: '/%website_dashboard_path%/account')]
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountEmailChangeController extends Controller
+class AccountEmailChangeController extends BaseController
 {
     #[Route(path: '/email-confirm/{token}', name: 'dashboard_account_user_email_confirm')]
     public function confirm(

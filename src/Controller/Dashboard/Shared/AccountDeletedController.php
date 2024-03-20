@@ -2,7 +2,7 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\Controller;
+use App\Controller\BaseController;
 use App\Entity\Traits\HasRoles;
 use App\Entity\User;
 use App\Service\AccountDeletedService;
@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /** MyProfile */
 #[Route(path: '/%website_dashboard_path%/account')]
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountDeletedController extends Controller
+class AccountDeletedController extends BaseController
 {
     #[Route(path: '/', methods: ['DELETE'])]
     public function deleted(

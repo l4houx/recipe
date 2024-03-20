@@ -2,8 +2,9 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\Controller;
+use App\DTO\AccountUpdatedDTO;
 use App\Entity\Traits\HasRoles;
+use App\Controller\BaseController;
 use App\DTO\AccountUpdatedSocialDTO;
 use App\Service\AccountUpdatedService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +14,7 @@ use App\Form\AccountUpdatedPasswordFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Security\Exception\UserEmailChangeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
@@ -21,7 +23,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 /** MyProfile */
 #[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_account_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountController extends Controller
+class AccountController extends BaseController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -73,7 +75,7 @@ class AccountController extends Controller
     {
         $user = $this->getUserOrThrow();
 
-        $form = $this->createForm(AccountUpdatedProfileFormType::class, $user);
+        $form = $this->createForm(AccountUpdatedProfileFormType::class, new AccountUpdatedDTO($user));
 
         if ('profile' !== $request->get('action')) {
             return [$form, null];
@@ -81,12 +83,26 @@ class AccountController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
+        try {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $data = $form->getData();
+                $this->accountUpdatedService->updatedProfile($data);
 
-            $this->addFlash('success', $this->translator->trans('Account updated successfully!'));
+                $this->em->flush();
 
-            return [$form, $this->redirectToRoute('dashboard_account_edit')];
+                if ($user->getEmail() !== $data->email) {
+                    $this->addFlash(
+                        'info',
+                        $this->translator->trans("Your profile has been updated, an email has been sent to {$data->email} to confirm your change")
+                    );
+                } else {
+                    $this->addFlash('success', $this->translator->trans('Account updated successfully!'));
+                }
+
+                return [$form, $this->redirectToRoute('dashboard_account_edit')];
+            }            
+        } catch (UserEmailChangeException) {
+            $this->addFlash('danger', $this->translator->trans("You already have an email change in progress."));
         }
 
         return [$form, null];

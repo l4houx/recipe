@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Repository\SubscriptionRepository;
 use Symfony\Component\HttpFoundation\Response;
 
-class SubscriptionController extends Controller
+class SubscriptionController extends BaseController
 {
     public function subscription(SubscriptionRepository $subscriptionRepository): Response
     {

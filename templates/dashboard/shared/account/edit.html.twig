@@ -29,18 +29,23 @@
                 <p class="mb-4">{{ 'Change your personal information and address.'|trans }}</p>
                 {{ form_start(formEditProfile, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
                     {{ form_errors(formEditProfile) }}
-                    <div class="mb-3 col-12 col-md-6">
+                    <div class="mb-3 col-12 col-md-4">
                         {{ form_row(formEditProfile.firstname) }}
                     </div>
-                    <div class="mb-3 col-12 col-md-6">
+                    <div class="mb-3 col-12 col-md-4">
                         {{ form_row(formEditProfile.lastname) }}
                     </div>
-                    <div class="mb-3 col-12 col-md-6">
+                    <div class="mb-3 col-12 col-md-4">
                         {{ form_row(formEditProfile.username) }}
                     </div>
+                    <div class="mb-3 col-12 col-md-12">
+                        {{ form_row(formEditProfile.country) }}
+                    </div>
+                    {#  
                     <div class="mb-3 col-12 col-md-6">
                         {{ form_row(formEditProfile.email) }}
                     </div>
+                    #}
                     {% if is_granted("ROLE_TEAM") %}
                         <div class="mb-3 col-12 col-md-6">
                             {{ form_row(formEditProfile.designation) }}
@@ -66,16 +71,14 @@
             <p>
                 {{ 'Your current email address is'|trans }}
                 <span class="text-success">{{ user.email }}</span>
-            </p>
-            {#  
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row needs-validation'} }) }}
-                {{ form_errors(form) }}
+            </p> 
+            {{ form_start(formEditProfile, {'attr': {'novalidate': 'novalidate', 'class': 'row needs-validation'} }) }}
+                {{ form_errors(formEditProfile) }}
                 <div class="mb-3 col-lg-6 col-md-12 col-12">
-                    {{ form_row(form.email) }}
-                    <button type="submit" class="btn btn-primary mt-2">{{ 'Apply changes'|trans }}</button>
+                    {{ form_row(formEditProfile.email) }}
+                    <button class="btn btn-primary mt-2" type="submit" name="action" value="profile">{{ 'Apply changes'|trans }}</button>
                 </div>
-            {{ form_end(form) }}
-            #}
+            {{ form_end(formEditProfile, {'render_rest': false}) }}
             <hr class="my-5">
             <div>
                 <h4 class="mb-0">{{ 'Edit my password'|trans }}</h4>

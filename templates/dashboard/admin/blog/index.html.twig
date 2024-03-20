@@ -44,7 +44,7 @@
                             <tr>
                                 <th>{{ knp_pagination_sortable(posts, '#', 'p.id') }}</th>
                                 <th>{{ knp_pagination_sortable(posts, 'Title'|trans, 'p.title') }}</th>
-                                <th>{{ 'IsOnline'|trans }}</th>
+                                <th>{{ 'Status'|trans }}</th>
                                 <th>{{ 'Views'|trans }}</th>
                                 <th>{{ 'Update'|trans }}</th>
                                 <th></th>
@@ -70,13 +70,18 @@
                                         </div>
                                     </a>
                                 </td>
+                                {#
                                 <td>
-                                    {# {{ post.isOnline ? 'Yes'|trans : 'No'|trans }} #}
+                                    {{ post.isOnline ? 'Yes'|trans : 'No'|trans }} 
                                     {% if post.isOnline == false %}
                                         <span class="badge bg-danger-soft">{{ 'No'|trans }}</span>
                                     {% else %}
                                         <span class="badge bg-success-soft">{{ 'Yes'|trans }}</span>
                                     {% endif %}
+                                </td>
+                                #}
+                                <td>
+                                    <span class="badge bg-success-soft {% if post.isOnline == false %}bg-danger-soft{% endif %}"></span>
                                 </td>
                                 <td>{{ post.views }}</td>
                                 <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>

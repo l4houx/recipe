@@ -1,0 +1,10 @@
+{% if user.premium %}
+    <span class="badge me-2 bg-success-soft uppercase">
+        <i class="bi bi-trophy me-2"></i> 
+        {{ 'premium'|trans }}
+    </span>
+{% else %}
+    <a class="badge me-2 bg-primary-soft" href="{{ path('pricing') }}">
+        {{ 'Regular account'|trans }}
+    </a>
+{% endif %}

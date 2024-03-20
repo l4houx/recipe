@@ -13,11 +13,10 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-categories', name: 'dashboard_admin_category_')]
 #[IsGranted(HasRoles::ADMIN)]
-class CategoryController extends AbstractController
+class CategoryController extends AdminBaseController
 {
     public function __construct(
         private readonly TranslatorInterface $translator,

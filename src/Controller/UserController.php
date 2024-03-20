@@ -8,9 +8,8 @@ use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class UserController extends AbstractController
+class UserController extends BaseController
 {
     #[Route(path: '/profile/@{slug}', name: 'user_profil', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
     public function userProfil(

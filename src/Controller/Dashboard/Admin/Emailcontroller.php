@@ -2,7 +2,6 @@
 
 namespace App\Controller\Dashboard\Admin;
 
-use App\Controller\Controller;
 use App\Entity\Traits\HasRoles;
 use App\Infrastructural\Mail\Mail;
 use App\Repository\RecipeRepository;
@@ -12,7 +11,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-emails', name: 'dashboard_admin_email_')]
 #[IsGranted(HasRoles::ADMIN)]
-class Emailcontroller extends Controller
+class Emailcontroller extends AdminBaseController
 {
     #[Route(path: '/email', name: 'preview')]
     public function index(): Response

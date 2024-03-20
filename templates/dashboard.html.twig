@@ -21,8 +21,11 @@
                                         {% include 'global/user-verified.html.twig' with { user: app.user } %}
                                     </div>
                                     <div class="lh-1">
-                                        <h2 class="mb-0">{{ user.username }}</h2>
-                                        <p class="mb-0 d-block">@{{ user.slug }}</p>
+                                        <div class="d-flex align-items-center">
+                                            <h2 class="mb-0 fw-bold me-2">{{ user.username }}</h2>
+                                            {% include "global/user-badge.html.twig" %}
+                                        </div>
+                                        <span class="mb-0 d-block fs-6">{{ 'Registered'|trans }} {{ user.createdAt | ago() }}</span>
                                     </div>
                                 </div>
                                 <div>

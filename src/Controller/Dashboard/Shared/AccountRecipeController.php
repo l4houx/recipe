@@ -2,23 +2,23 @@
 
 namespace App\Controller\Dashboard\Shared;
 
+use App\Controller\BaseController;
 use App\Entity\Recipe;
-use App\Controller\Controller;
 use App\Entity\Traits\HasRoles;
-use App\Security\Voter\RecipeVoter;
 use App\Repository\RecipeRepository;
+use App\Security\Voter\RecipeVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: '/%website_dashboard_path%/account/my-recipes', name: 'dashboard_account_recipe_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountRecipeController extends Controller
+class AccountRecipeController extends BaseController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -59,16 +59,16 @@ class AccountRecipeController extends Controller
     #[Route(path: '/{slug}', name: 'show', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     public function show(Recipe $recipe): Response
     {
-        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans("Recipes can only be shown to their authors."));
+        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans('Recipes can only be shown to their authors.'));
 
         return $this->render('dashboard/shared/recipe/show.html.twig', compact('recipe'));
     }
 
     #[Route(path: '/{slug}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    //#[IsGranted(RecipeVoter::MANAGE, subject: 'recipe', message: 'Recipes can only be edited by their authors.')]
+    // #[IsGranted(RecipeVoter::MANAGE, subject: 'recipe', message: 'Recipes can only be edited by their authors.')]
     public function edit(): Response
     {
-        $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans("Recipes can only be edited by their authors."));
+        $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans('Recipes can only be edited by their authors.'));
 
         return $this->render('dashboard/shared/recipe/edit.html.twig');
     }

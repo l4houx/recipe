@@ -74,6 +74,9 @@ class PostFormType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => true,
                 'empty_data' => '',
+                'attr' => [
+                    'data-limit' => 1,
+                ],
                 'help' => t('Make sure you select the correct keyword to allow users to find it quickly.'),
             ])
             ->add('readtime', TextType::class, [

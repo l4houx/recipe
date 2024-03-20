@@ -7,7 +7,6 @@ use App\Entity\Traits\HasRoles;
 use App\Form\LevelFormType;
 use App\Repository\LevelRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-levels', name: 'dashboard_admin_level_')]
 #[IsGranted(HasRoles::ADMIN)]
-class LevelController extends AbstractController
+class LevelController extends AdminBaseController
 {
     public function __construct(
         private readonly TranslatorInterface $translator,

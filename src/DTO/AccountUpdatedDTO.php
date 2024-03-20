@@ -24,6 +24,9 @@ class AccountUpdatedDTO
     #[Assert\Length(min: 4, max: 30)]
     public string $username = '';
 
+    #[Assert\Length(min: 4, max: 30)]
+    public string $slug = '';
+
     #[Assert\NotBlank]
     #[Assert\Length(min: 4, max: 20)]
     public string $firstname = '';
@@ -35,6 +38,10 @@ class AccountUpdatedDTO
     #[Assert\NotBlank]
     #[Assert\Country]
     public ?string $country = 'FR';
+
+    public ?string $about = null;
+
+    public ?string $designation = null;
 
     public User $user;
 
@@ -49,6 +56,7 @@ class AccountUpdatedDTO
         $this->firstname = $user->getFirstname();
         $this->lastname = $user->getLastname();
         $this->username = $user->getUsername();
+        $this->slug = $user->getSlug();
         // Pays
         $this->country = $user->getCountry();
         // User
@@ -57,6 +65,10 @@ class AccountUpdatedDTO
         $this->useSystemTheme = null === $user->getTheme();
         $this->useDarkTheme = 'dark' === $user->getTheme();
         // User Locale
+
+        // User Team
+        $this->about = $user->getAbout();
+        $this->designation = $user->getDesignation();
     }
 
     public function getId(): int

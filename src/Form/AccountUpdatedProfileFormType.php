@@ -6,17 +6,18 @@ use App\Entity\User;
 use App\DTO\AccountUpdatedDTO;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
+use function Symfony\Component\Translation\t;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-use function Symfony\Component\Translation\t;
-
 /**
- * //@method AccountUpdatedDTO getData()
+ * @method AccountUpdatedDTO getData()
  */
 class AccountUpdatedProfileFormType extends AbstractType
 {
@@ -56,6 +57,13 @@ class AccountUpdatedProfileFormType extends AbstractType
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('Last name')],
             ])
+            ->add('country', CountryType::class, [
+                'label' => t('Country :'),
+                'required' => true,
+                'autocomplete' => true,
+                'empty_data' => '',
+                'attr' => ['placeholder' => t('Eg : fr,en,de,eu')],
+            ])
             // Contact
             ->add('email', EmailType::class, [
                 'label' => t('Email address :'),
@@ -86,8 +94,8 @@ class AccountUpdatedProfileFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
-            //'data_class' => AccountUpdatedDTO::class,
+            //'data_class' => User::class,
+            'data_class' => AccountUpdatedDTO::class,
         ]);
     }
 }

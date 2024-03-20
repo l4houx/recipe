@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\API;
 
-use App\Controller\Controller;
+use App\Controller\BaseController;
 use App\Entity\Traits\HasRoles;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Intl\Countries;
@@ -12,9 +12,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted(HasRoles::DEFAULT)]
-class CountryController extends Controller
+class CountryController extends BaseController
 {
-    #[Route(path: '/api/country', name: 'country', methods: ["GET"])]
+    #[Route(path: '/api/country', name: 'country', methods: ['GET'])]
     public function index(): JsonResponse
     {
         $user = $this->getUserOrThrow();

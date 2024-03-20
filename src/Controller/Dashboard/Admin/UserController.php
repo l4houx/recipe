@@ -2,26 +2,26 @@
 
 namespace App\Controller\Dashboard\Admin;
 
-use App\Controller\Controller;
-use App\Entity\Traits\HasRoles;
 use App\Entity\User;
 use App\Form\UserFormType;
+use App\Entity\Traits\HasRoles;
 use App\Repository\UserRepository;
-use App\Security\Exception\PremiumNotBanException;
 use App\Service\AccountSuspendedService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Security\Exception\PremiumNotBanException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-users', name: 'dashboard_admin_user_')]
 #[IsGranted(HasRoles::ADMIN)]
-class UserController extends Controller
+class UserController extends AdminBaseController
 {
     public function __construct(
         private readonly TranslatorInterface $translator,
@@ -31,9 +31,9 @@ class UserController extends Controller
     }
 
     #[Route(path: '/', name: 'index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(): Response
     {
-        $users = $userRepository->findAll();
+        $users = $this->userRepository->findAll();
 
         return $this->render('dashboard/admin/user/index.html.twig', compact('users'));
     }
@@ -110,5 +110,33 @@ class UserController extends Controller
         $this->addFlash('success', $this->translator->trans('The account has been verified successfully.'));
 
         return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route(path: '/search', name: 'autocomplete')]
+    public function search(Request $request): JsonResponse
+    {
+        $this->userRepository = $this->em->getRepository(User::class);
+
+        $q = strtolower($request->query->get('q') ?: '');
+        if ('moi' === $q) {
+            return new JsonResponse([
+                [
+                    'id'       => $this->getUser()->getId(),
+                    'username' => $this->getUser()->getUsername(),
+                ]
+            ]);
+        }
+
+        $users = $this->userRepository
+            ->createQueryBuilder('u')
+            ->select('u.id', 'u.username')
+            ->where('LOWER(u.username) LIKE :username')
+            ->setParameter('username', "%$q%")
+            ->setMaxResults(25)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return new JsonResponse($users);
     }
 }

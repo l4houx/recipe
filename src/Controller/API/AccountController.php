@@ -2,7 +2,7 @@
 
 namespace App\Controller\API;
 
-use App\Controller\Controller;
+use App\Controller\BaseController;
 use App\Entity\Traits\HasRoles;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /** MyProfile */
 #[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_account_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountController extends Controller
+class AccountController extends BaseController
 {
     #[Route(path: '/profile/theme', name: 'profile_theme', methods: ['POST'])]
     public function theme(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): JsonResponse

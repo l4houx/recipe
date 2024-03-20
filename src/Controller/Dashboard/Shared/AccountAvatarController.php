@@ -2,24 +2,24 @@
 
 namespace App\Controller\Dashboard\Shared;
 
+use App\Controller\BaseController;
 use App\DTO\AccountUpdatedAvatarDTO;
-use App\Entity\User;
 use App\Entity\Traits\HasRoles;
+use App\Entity\User;
 use App\Service\AccountUpdatedService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Handles user avatar change.
  */
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountAvatarController extends AbstractController
+class AccountAvatarController extends BaseController
 {
     #[Route('/%website_dashboard_path%/account/avatar', name: 'dashboard_account_avatar', methods: ['POST'])]
     public function accountAvatar(

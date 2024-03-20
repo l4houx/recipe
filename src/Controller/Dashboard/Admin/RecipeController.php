@@ -5,7 +5,6 @@ namespace App\Controller\Dashboard\Admin;
 use App\Entity\User;
 use App\Entity\Recipe;
 use App\Form\RecipeFormType;
-use App\Controller\Controller;
 use App\Entity\Traits\HasRoles;
 use App\Security\Voter\RecipeVoter;
 use App\Repository\RecipeRepository;
@@ -20,11 +19,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use App\Infrastructural\Messenger\Message\RecipePDFMessage;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-recipes', name: 'dashboard_admin_recipe_')]
 #[IsGranted(HasRoles::TEAM)]
-class RecipeController extends Controller
+class RecipeController extends AdminBaseController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,

@@ -2,17 +2,15 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\Controller;
+use App\Controller\BaseController;
 use App\Entity\Traits\HasRoles;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /** MyProfile */
 #[IsGranted(HasRoles::DEFAULT)]
-class MainController extends Controller
+class MainController extends BaseController
 {
     #[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_main_account', methods: ['GET'])]
     public function mainDashboard(): Response

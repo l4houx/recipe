@@ -2,19 +2,19 @@
 
 namespace App\Controller\API;
 
-use App\DTO\ContactFormDTO;
-use App\Controller\Controller;
-use App\Service\ContactRequestService;
 use ApiPlatform\Validator\ValidatorInterface;
+use App\Controller\BaseController;
+use App\DTO\ContactFormDTO;
+use App\Security\Exception\ContactRequestException;
+use App\Service\ContactRequestService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Security\Exception\ContactRequestException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ContactRequestController extends Controller
+class ContactRequestController extends BaseController
 {
     #[Route(path: '/contact', name: 'api_contact', methods: ['POST'])]
     public function contact(
