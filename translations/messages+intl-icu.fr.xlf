@@ -1813,6 +1813,38 @@
         <source>%website_name% is here to help. We can provide you with the support you need. Just contact us and our team will reply quick to you.</source>
         <target>{website_name} est là pour vous aider. Nous pouvons vous fournir le soutien dont vous avez besoin. Contactez-nous et notre équipe vous répondra rapidement.</target>
       </trans-unit>
+      <trans-unit id="u9REkYq" resname=" | Updating your email address">
+        <source> | Updating your email address</source>
+        <target>__ | Updating your email address</target>
+      </trans-unit>
+      <trans-unit id="wBI9XyC" resname=" | Request for email change pending(">
+        <source> | Request for email change pending(</source>
+        <target>__ | Request for email change pending(</target>
+      </trans-unit>
+      <trans-unit id="_DJnJOt" resname=" | Confirming the account">
+        <source> | Confirming the account</source>
+        <target>__ | Confirming the account</target>
+      </trans-unit>
+      <trans-unit id="yllZBnu" resname=" | Delete your account">
+        <source> | Delete your account</source>
+        <target>__ | Delete your account</target>
+      </trans-unit>
+      <trans-unit id="zhJD_YQ" resname="This confirmation request has timed out">
+        <source>This confirmation request has timed out</source>
+        <target>__This confirmation request has timed out</target>
+      </trans-unit>
+      <trans-unit id="4cvvxok" resname="This email has already been used">
+        <source>This email has already been used</source>
+        <target>__This email has already been used</target>
+      </trans-unit>
+      <trans-unit id="mWJhp4c" resname="Your email has been changed successfully">
+        <source>Your email has been changed successfully</source>
+        <target>__Your email has been changed successfully</target>
+      </trans-unit>
+      <trans-unit id="ji0GZNu" resname="Choose your language">
+        <source>Choose your language</source>
+        <target>__Choose your language</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
