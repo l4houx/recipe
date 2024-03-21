@@ -1,0 +1,69 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Suggest a change'|trans %}
+{% block title pagetitle %}
+
+{% block pageheader %}
+	<section class="py-4 py-lg-6 bg-primary">
+		<div class="container">
+			<div class="row">
+				<div class="offset-lg-1 col-lg-10 col-md-12 col-12">
+					<div class="d-lg-flex align-items-center justify-content-between">
+						<div class="mb-4 mb-lg-0">
+							<h1 class="text-white mb-1">{{ pagetitle }}</h1>
+							<p class="mb-0 text-white lead"></p>
+						</div>
+						<div>
+							<a href="" class="btn btn-white">Back to revise</a>
+							<a href="" class="btn btn-dark">Save</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block content %}
+	<section class="pb-8">
+		<div class="container">
+			<div id="reviseForm" class="bs-stepper">
+				<div class="row">
+					<div class="offset-lg-1 col-lg-10 col-md-12 col-12">
+						<div class="bs-stepper-header shadow-sm" role="tablist">
+							<div class="step active" data-target="#test-l-1">
+								<button type="button" class="step-trigger" role="tab" id="reviseFormtrigger1" aria-controls="test-l-1" aria-selected="true">
+									<span class="bs-stepper-circle">1</span>
+									<span class="bs-stepper-label">{{ 'Basic Information'|trans }}</span>
+								</button>
+							</div>
+						</div>
+						<div class="bs-stepper-content mt-5">
+                            {{ form_start(form) }}
+								<div id="test-l-1" role="tabpanel" class="bs-stepper-pane fade dstepper-block active" aria-labelledby="reviseFormtrigger1">
+									<div class="card mb-3">
+										<div class="card-header border-bottom px-4 py-3">
+											<h4 class="mb-0">{{ 'Basic Information'|trans }}</h4>
+                                            <p>
+                                                {{ "Here you can suggest your changes to the article"|trans }}
+                                                "<a href="{{ path(revise.target) }}">{{ revise.target.title }}</a>"
+                                                {{ "to correct a spelling error or add additional clarification."|trans }}
+                                                {{ 'Your changes will then be validated by an administrator.'|trans }}
+                                            </p>
+										</div>
+										<div class="card-body">
+											<div class="mb-3" id="page-editor">
+												{{ form_row(form.content, {label: false}) }}
+											</div>
+										</div>
+									</div>
+									<button class="btn btn-primary" type="submit">{{ 'Apply changes'|trans }}</button>
+								</div>
+							{{ form_end(form) }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

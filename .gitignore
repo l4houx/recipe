@@ -37,3 +37,7 @@ public/images/*
 public/images/recipe/*
 !public/images/recipe/.gitignore
 !/var/images/recipes
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

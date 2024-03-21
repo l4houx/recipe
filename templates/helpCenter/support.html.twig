@@ -1,5 +1,7 @@
 {% extends 'help.html.twig' %}
 
+{% form_theme form '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %}
+
 {% set bodyClass = 'bg-white' %}
 {% set pagetitle = 'Help Center Support'|trans %}
 {% block title pagetitle %}
@@ -54,6 +56,10 @@
                                     </div>
                                     <div class="mb-3">
                                         {{ form_row(form.message) }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form_widget(form.recaptcha) }}
+                                        {{ form_errors(form.recaptcha) }}
                                     </div>
                                     <button class="btn btn-primary" type="submit">{{ 'Submit'|trans }}</button>
                                 {{ form_end(form) }}

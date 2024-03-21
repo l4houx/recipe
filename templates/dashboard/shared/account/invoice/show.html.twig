@@ -304,25 +304,25 @@
 	</head>
 	<body>
 		<h1>
-			Facture
+			{{ 'Invoice'|trans }}
 		</h1>
 		<div class="adress from">
 			<div class="address_label">
-				De
+				{{ 'Of'|trans }}
 			</div>
 			<div class="address_content">
 				{{ company }}
 				<br>
-				SIRET : {{ siret }}
+				{{ 'SIRET :'|trans }} {{ siret }}
 				<br>
-				N° TVA intracommunautaire :
+				{{ 'VAT N° :'|trans }}
 				<br>
 				{{ vat }}
 			</div>
 		</div>
 		<div class="adress to">
 			<div class="address_label tleft">
-				Pour
+				{{ 'For'|trans }}
 			</div>
 			<div class="address_content">
 				{% if app.user.invoiceInfo %}
@@ -337,7 +337,7 @@
 			</div>
 			<div class="cb"></div>
 			<div class="address_label tleft">
-				Sujet
+				{{ 'Subject'|trans }}
 			</div>
 			<div class="address_content">
 				{{ transaction.description }}
@@ -348,7 +348,7 @@
 				<tbody>
 					<tr>
 						<td class="label">
-							Facture n°
+							{{ 'Invoice n°'|trans }}
 						</td>
 						<td class="def">
 							<strong>{{ website_name }}{{ transaction.createdAt.format('Y') }}-{{ transaction.id }}</strong>
@@ -356,7 +356,7 @@
 					</tr>
 					<tr>
 						<td class="label">
-							Emise le
+							{{ 'Issued on'|trans }}
 						</td>
 						<td class="def">
 							{{ transaction.createdAt.format('d/m/Y') }}
@@ -370,13 +370,13 @@
 			<thead>
 				<tr>
 					<th>
-						Description
+						{{ 'Description'|trans }}
 					</th>
 					<th class="tright" width="108">
 						{% if transaction.tax %}
-							Prix HT
+							{{ 'Price excluding tax'|trans }}
 						{% else %}
-							Prix TTC
+							{{ 'Price incl. VAT'|trans }}
 						{% endif %}
 					</th>
 				</tr>
@@ -392,7 +392,7 @@
 				{% if transaction.tax %}
 					<tr class="total">
 						<td class="label">
-							Taxe (20.00%)</td>
+							{{ 'Tax (20.00%)'|trans }}</td>
 						<td class="tright">
 							<strong>
 								{{ transaction.tax | format_currency('EUR') }}
@@ -402,7 +402,7 @@
 				{% endif %}
 
 				<tr class="total total-big">
-					<td class="label">Total</td>
+					<td class="label">{{ 'Total'|trans }}</td>
 					<td class="tright">
 						<strong>{{ transaction.price | format_currency('EUR') }}</strong>
 					</td>
@@ -413,9 +413,9 @@
 		<div class="footer">
 			{{ law }}
 			<br>
-			Adhérent d’un centre de gestion agrée, acceptant à ce titre les règlements par chèque<br>
-			Loi 83-629 du 12/07/83, art. 8 : « L'autorisation administrative ne confère aucun caractère officiel à l'entreprise ou
-			aux personnes qui en bénéficient. Elle n'engage en aucune manière la responsabilité des pouvoirs publics.»<br>
+			{{ 'Member of an approved management center, accepting payment by check as such'|trans }}<br>
+			{{ "Law 83-629 of 07/12/83, art. 8: « Administrative authorization does not confer any official character on the company or"|trans }}
+			{{ "to the people who benefit from it. It does not in any way engage the responsibility of public authorities.»"|trans }}<br>
 		</div>
 	</body>
 </html>

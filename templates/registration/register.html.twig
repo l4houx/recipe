@@ -2,6 +2,8 @@
 
 {% block layout %}{{ parent() }} register{% endblock %}
 
+{% form_theme registrationForm '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %}
+
 {% set pagetitle = 'Sign up'|trans %}
 {% block title pagetitle %}
 
@@ -55,6 +57,10 @@
             <a href="{{ path('rgpd')}}">
                 {{ 'General data protection regulations.'|trans }}
             </a>
+        </div>
+        <div class="mb-3">
+            {{ form_widget(registrationForm.recaptcha) }}
+            {{ form_errors(registrationForm.recaptcha) }}
         </div>
         <div>
             <div class="d-grid">

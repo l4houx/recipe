@@ -54,13 +54,14 @@ parameters:
     container.dumper.inline_class_loader: true
 
     # Google Map & Google Recaptcha
-    #google_maps_api_key: '%env(GOOGLE_MAPS_API_KEY)%'
-    #google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    google_maps_api_key: '%env(GOOGLE_MAPS_API_KEY)%'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
 
     # Resize Picture
-    # resize_picture_key: '%env(RESIZE_PICTURE_KEY)%'
+    resize_picture_key: '%env(RESIZE_PICTURE_KEY)%'
 
     # Vich
+    attachments:                      /images/attachments
     homepage_hero_custom_background:  /images/home
     app_layout:                       /images/layout
     post_image:                       /images/post
@@ -71,7 +72,7 @@ parameters:
     #photo_testimonial:               /images/testimonial
 
 imports:
-    - { resource: entities/ }
+    - { resource: data/ }
 
 services:
     # default configuration for services in *this* file
@@ -96,7 +97,7 @@ services:
             string $appEnvironment: '%kernel.environment%'
 
             # ResizerPictureController
-            #$projectDir: '%kernel.project_dir%'
+            $projectDir: '%kernel.project_dir%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -147,3 +148,13 @@ services:
     App\Infrastructural\Mail\Mail:
         arguments:
             $dkimKey: '%website_dkim_key%'
+
+    # Paginator
+    Knp\Bundle\PaginatorBundle\Helper\Processor: ~
+
+    App\Infrastructural\Paginator\PaginatorInterface:
+        class: App\Infrastructural\Paginator\Paginator
+
+    # Sign key Resize Picture
+    App\Infrastructural\Uploads\Picture\ResizerPicture:
+        arguments: ['%resize_picture_key%']

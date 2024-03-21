@@ -1,8 +1,9 @@
 Installation en cours:
-    ☐ composer require excelwebzone/recaptcha-bundle
+    ✔ composer require excelwebzone/recaptcha-bundle @done(24-03-21 14:14)
     ☐ composer require lexik/jwt-authentication-bundle
     ☐ composer require exercise/htmlpurifier-bundle
-    ☐ composer require illuminate/collections intervention/image liip/imagine-bundle
+    ✔ composer require league/glide @done(24-03-21 14:55)
+    ✔ composer require illuminate/collections intervention/image liip/imagine-bundle @done(24-03-21 14:13)
 
     ✔ composer require geoip2/geoip2 geertw/ip-anonymizer @done(24-03-18 22:36)
 
@@ -57,3 +58,6 @@ Entity:
     ✔ Status @done(24-03-15 18:08)
     ✔ Ticket @done(24-03-15 18:00)
     ✔ ContactRequest @done(24-03-18 22:32)
+    ✔ Content @done(24-03-21 18:13)
+    ✔ Attachment @done(24-03-21 18:13)
+    ✔ Revise @done(24-03-21 19:00)

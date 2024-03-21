@@ -17,6 +17,12 @@ trait HasProfileDetailsTrait
     use HasSocialMediaTrait;
     // use HasKnpUOAuthLoggableTrait;
     use HasRegistrationDetailsTrait;
+    //use HasTimestampTrait;
+    //use HasGedmoTimestampTrait;
+
+    //#[ORM\Column(type: Types::STRING, length: 255)]
+    //#[Assert\NotBlank()]
+    //private string $avatar = '';
 
     #[ORM\Column(type: Types::STRING, length: 2, nullable: true, options: ['default' => 'FR'])]
     private ?string $country = null;
@@ -61,10 +67,39 @@ trait HasProfileDetailsTrait
     #[Groups(['user:read', 'user:create', 'user:update'])]
     private string $email = '';
 
+    /*
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->avatar = 'https://api.dicebear.com/8.x/initials/svg?seed=' . $this->username;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->avatar = 'https://api.dicebear.com/8.x/initials/svg?seed=' . $this->username;
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+    */
+
     public function __toString(): string
     {
         return (string) $this->getFullName();
     }
+
+    /*
+    public function getAvatar(): string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): static
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+    */
 
     public function getCountry(): string
     {

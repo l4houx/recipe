@@ -3,8 +3,8 @@
 namespace App\Form;
 
 use App\Entity\User;
-//use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
-//use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
+use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -108,7 +108,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            /*
             ->add('recaptcha', EWZRecaptchaType::class, [
                 'attr' => [
                     'options' => [
@@ -122,7 +121,6 @@ class RegistrationFormType extends AbstractType
                     new RecaptchaTrue(['groups' => 'Registration']),
                 ],
             ])
-            */
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('username'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;

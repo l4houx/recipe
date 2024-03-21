@@ -12,6 +12,14 @@
                     {{ 'My dashboard'|trans }}
                 </a>
             </li>
+            {% if is_granted("ROLE_TEAM") %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('dashboard_main') }}">
+                        <i class="bi bi-speedometer nav-icon"></i>
+                        {{ 'Dashboard'|trans }}
+                    </a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="">
                     <i class="bi bi-book nav-icon"></i>
@@ -62,7 +70,7 @@
                     <i class="bi bi-lock nav-icon"></i>
                     {{ 'Profile privacy'|trans }}
                 </a>
-            </li>
+            </li
             {% if is_granted('IS_IMPERSONATOR') %}
                 <li class="nav-item">
                     <a href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();" class="nav-link">

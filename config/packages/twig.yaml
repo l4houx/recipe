@@ -11,7 +11,7 @@ twig:
         locales: "%app_locales%"
 
         # Google
-        #google_maps_api_key: "%google_maps_api_key%"
+        google_maps_api_key: "%google_maps_api_key%"
 
         # Date and time
         date_format: "%date_format%"

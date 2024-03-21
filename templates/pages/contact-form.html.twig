@@ -1,6 +1,6 @@
 {% extends 'page.html.twig' %}
 
-{# {% form_theme form '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %} #}
+{% form_theme form '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %}
 
 {% set bodyClass = 'bg-white' %}
 {% set pagetitle = 'Contact us'|trans %}
@@ -71,6 +71,10 @@
                             </div>
                             <div class="mb-3 col-12">
                                 {{ form_row(form.message) }}
+                            </div>
+                            <div class="mb-3 col-12">
+                                {{ form_widget(form.recaptcha) }}
+                                {{ form_errors(form.recaptcha) }}
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">{{ 'Send'|trans }}</button>

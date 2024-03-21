@@ -2,16 +2,18 @@
 
 namespace App\Service;
 
-use App\DTO\AccountUpdatedAvatarDTO;
 use App\DTO\AccountUpdatedDTO;
+use App\DTO\AccountUpdatedAvatarDTO;
 use App\DTO\AccountUpdatedSocialDTO;
+use Intervention\Image\ImageManager;
 use App\Entity\UserEmailVerification;
+use Doctrine\ORM\EntityManagerInterface;
+use Intervention\Image\Drivers\Imagick\Driver;
 use App\Event\Email\UserEmailVerificationEvent;
 use App\Repository\UserEmailVerificationRepository;
 use App\Security\Exception\UserEmailChangeException;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AccountUpdatedService
 {
@@ -77,8 +79,8 @@ class AccountUpdatedService
         }
 
         // We resize the image
-        // $image = new ImageManager(['driver' => 'imagick']);
-        // $image->make($data->file)->fit(110, 110)->save($data->file->getRealPath());
+        $image = new ImageManager(new Driver());
+        $image->read($data->file)->resize(110, 110)->save($data->file->getRealPath());
 
         // We move it to the user profile
         // $data->user->setAvatarFile($data->file);

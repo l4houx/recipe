@@ -1,0 +1,36 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'My revises'|trans %}
+{% block title pagetitle %}
+
+{% block content %}
+    <div class="card mb-4">
+        {% if revises is empty %}
+            <div class="card-header">
+                {% include "global/message.html.twig" with { type: "info", message: ("You haven't proposed any changes ye"|trans), icon: "bi bi-exclamation-circle" } %}
+            </div>
+        {% else %}
+            <div class="card-header">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span></span>
+            </div>
+            <div class="card-body">
+                <form class="row gx-3">
+                    <div class="col-lg-9 col-md-7 col-12 mb-lg-0 mb-2">
+                        <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
+                    </div>
+                    <div class="col-lg-3 col-md-5 col-12">
+                        <select class="form-select">
+                            <option value="">Date Created</option>
+                            <option value="Newest">Newest</option>
+                            <option value="High Rated">High Rated</option>
+                            <option value="Law Rated">Law Rated</option>
+                            <option value="High Earned">High Earned</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            {% include 'global/revise-card.html.twig' %}
+        {% endif %}
+    </div>
+{% endblock %}

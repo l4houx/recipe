@@ -144,4 +144,22 @@ class RecipeRepository extends ServiceEntityRepository
             ->setParameter('premium', true)
         ;
     }
+
+    /**
+     * Retrieves the latest recipes created by the user.
+     *
+     * @return Recipe[]
+     */
+    public function findLastByUser(User $user, int $maxResults): array // MainController
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.author = :user')
+            ->andWhere('r.isOnline = true')
+            ->orderBy('r.updatedAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -24,7 +24,7 @@ class AccountUpdatedSocialDTO
     #[Assert\Regex(
         pattern: '^(http|https):\/\/(www\.youtube\.com|www\.dailymotion\.com)\/?',
         match: true,
-        message: "L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion",
+        message: "The URL must match the URL of a Youtube or DailyMotion video",
     )]
     public ?string $youtubeurl = null;
 

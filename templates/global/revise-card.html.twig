@@ -1,0 +1,109 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered text-nowrap">
+		{% if header is not defined or header != false %}
+			<thead class="table-light">
+				<tr>
+					<th>{{ 'Article'|trans }}</th>
+					<th>{{ 'Date'|trans }}</th>
+					<th>{{ 'Status'|trans }}</th>
+					<th>{{ 'Comment'|trans }}</th>
+					<th></th>
+				</tr>
+			</thead>
+		{% endif %}
+		<tbody>
+			{% for revise in revises %}
+				<tr>
+					<td>
+						{% if revise.status == 1 %}
+							{% set link = path(revise.target) %}
+							<div class="d-flex align-items-center">
+								<div>
+									<a href="{{ link }}">
+										<img src="" alt="{{ revise.target.title }}" class="rounded img-4by3-lg">
+									</a>
+								</div>
+								<div class="ms-3">
+									<h4 class="mb-1 h5">
+										<a href="{{ link }}" class="text-inherit">{{ revise.target.title }}</a>
+									</h4>
+									<ul class="list-inline fs-6 mb-0">
+										<li class="list-inline-item">
+											<span class="align-text-bottom">
+												<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-clock" viewbox="0 0 16 16">
+													<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
+													<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
+												</svg>
+											</span>
+											<span>{{ revise.createdAt | format_date('long') }}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						{% else %}
+							{% set link = path('revise', {id: revise.target.id}) %}
+							<div class="d-flex align-items-center">
+								<div>
+									<a href="{{ link }}">
+										<img src="" alt="{{ revise.target.title }}" class="rounded img-4by3-lg">
+									</a>
+								</div>
+								<div class="ms-3">
+									<h4 class="mb-1 h5">
+										<a href="{{ link }}" class="text-inherit">{{ revise.target.title }}</a>
+									</h4>
+									<ul class="list-inline fs-6 mb-0">
+										<li class="list-inline-item">
+											<span class="align-text-bottom">
+												<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-clock" viewbox="0 0 16 16">
+													<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
+													<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
+												</svg>
+											</span>
+											<span>{{ revise.createdAt | format_date('long') }}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						{% endif %}
+					</td>
+					<td>
+						{% if revise.status == -1 %}
+							<span class="badge bg-danger">{{ 'Rejected'|trans }}</span>
+						{% elseif revise.status == 0%}
+							<span class="badge bg-danger">{{ 'Pending'|trans }}</span>
+						{% else %}
+							<span class="badge bg-success">{{ 'Accepted'|trans }}</span>
+						{% endif %}
+					</td>
+					<td>
+						{% if revise.comment %}
+							<p class="mb-0 fs-6">{{ revise.comment }}</p>
+						{% endif %}
+					</td>
+					<td>
+						{% if revise.status != 1 %}
+							{% set link = path('revise', {id: revise.target.id}) %}
+							<span class="dropdown dropstart">
+								<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="false">
+									<i class="bi bi-three-dots-vertical"></i>
+								</a>
+								<span class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+									<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+									<a class="dropdown-item" href="{{ link }}">
+										<i class="bi bi-pencil dropdown-item-icon"></i>
+										{{ 'Edit'|trans }}
+									</a>
+									{{ include('dashboard/shared/account/post/_delete_form.html.twig', {revise: revise}) }}
+								</span>
+							</span>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<div class="card-footer">
+    {{ knp_pagination_render(revises, null, {}, {'align': 'center'}) }}
+</div>
