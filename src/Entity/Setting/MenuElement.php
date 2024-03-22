@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Setting;
 
 use App\Entity\Traits\HasIconTrait;
-use App\Entity\Traits\HasIdLabelSlugAssertTrait;
+use App\Entity\Traits\HasIdGedmoLabelSlugAssertTrait;
 use App\Repository\Setting\MenuElementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: MenuElementRepository::class)]
 class MenuElement
 {
-    use HasIdLabelSlugAssertTrait;
+    use HasIdGedmoLabelSlugAssertTrait;
     use HasIconTrait;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]

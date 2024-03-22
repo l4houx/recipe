@@ -42,8 +42,8 @@
                     <table class="table mb-0 text-nowrap table-hover table-centered">
                         <thead class="">
                             <tr>
-                                <th>{{ knp_pagination_sortable(statuses, '#', 's.id') }}</th>
-                                <th>{{ knp_pagination_sortable(statuses, 'Name'|trans, 's.name') }}</th>
+                                <th>{{ knp_pagination_sortable(rows, '#', 's.id') }}</th>
+                                <th>{{ knp_pagination_sortable(rows, 'Name'|trans, 's.name') }}</th>
                                 <tr>{{ 'Closed'|trans }}</th>
                                 <th>{{ 'Color'|trans }}</th>
                                 <th>{{ 'Update'|trans }}</th>
@@ -51,7 +51,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for status in statuses %}
+                            {% for status in rows %}
                                 {% set link = path('dashboard_admin_status_edit', { id : status.id }) %}
                                 <tr>
                                     <td>{{ status.id }}</td>
@@ -104,7 +104,7 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    {# {{ knp_pagination_render(statuses, null, {}, {'align': 'center'}) }} #}
+                    {# {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }} #}
                 </div>
             </div>
         </div>

@@ -2,23 +2,25 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\DTO\AccountUpdatedDTO;
-use App\Entity\Traits\HasRoles;
 use App\Controller\BaseController;
+use App\DTO\AccountUpdatedDTO;
 use App\DTO\AccountUpdatedSocialDTO;
+use App\Entity\Traits\HasRoles;
+use App\Form\AccountUpdatedPasswordFormType;
+use App\Form\AccountUpdatedProfileFormType;
+use App\Form\AccountUpdatedSocialFormType;
+use App\Repository\RecipeRepository;
+use App\Repository\ReviseRepository;
+use App\Security\Exception\UserEmailChangeException;
 use App\Service\AccountUpdatedService;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\AccountUpdatedSocialFormType;
-use App\Form\AccountUpdatedProfileFormType;
-use App\Form\AccountUpdatedPasswordFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Security\Exception\UserEmailChangeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /** MyProfile */
 #[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_account_')]
@@ -35,11 +37,18 @@ class AccountController extends BaseController
     }
 
     #[Route(path: '/profile', name: 'profile', methods: ['GET'])]
-    public function profile(): Response
-    {
+    public function profile(
+        RecipeRepository $recipeRepository,
+        ReviseRepository $reviseRepository
+    ): Response {
         $user = $this->getUserOrThrow();
 
-        return $this->render('dashboard/shared/account/profile.html.twig', compact('user'));
+        $revises = $reviseRepository->findPendingFor($user);
+        $lastRecipes = $recipeRepository->findLastByUser($user, 6);
+
+        $hasActivity = !empty($lastRecipes) || !empty($revises);
+
+        return $this->render('dashboard/shared/account/profile.html.twig', compact('user', 'hasActivity', 'revises', 'lastRecipes'));
     }
 
     #[Route(path: '/edit', name: 'edit', methods: ['GET', 'POST'])]
@@ -100,9 +109,9 @@ class AccountController extends BaseController
                 }
 
                 return [$form, $this->redirectToRoute('dashboard_account_edit')];
-            }            
+            }
         } catch (UserEmailChangeException) {
-            $this->addFlash('danger', $this->translator->trans("You already have an email change in progress."));
+            $this->addFlash('danger', $this->translator->trans('You already have an email change in progress.'));
         }
 
         return [$form, null];

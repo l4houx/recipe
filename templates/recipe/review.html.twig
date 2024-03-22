@@ -1,0 +1,25 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Reviews for %recipetitle%'|trans({'%recipetitle%': recipe.title}) %}
+{% block title pagetitle %}
+
+{% block pageheader %}
+    {% include "global/pageheader.html.twig" %}
+{% endblock %}
+
+{% block content %}
+    <section class="py-7">
+        <div class="container">
+            {% if rows.getTotalItemCount > 0 %}
+                <div class="row">
+                    {% for review in rows %}
+                        {% include "global/user-review.html.twig" with {review: review, showuser: 1} %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                {% include "global/message.html.twig" with { type: "info", message: ('No review found'|trans), icon: "bi bi-exclamation-circle" } %}
+            {% endif %}
+            {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+        </div>
+    </section>
+{% endblock %}

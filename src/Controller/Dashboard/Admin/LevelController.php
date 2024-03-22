@@ -28,9 +28,9 @@ class LevelController extends AdminBaseController
     #[Route(path: '/', name: 'index', methods: ['GET'])]
     public function index(LevelRepository $levelRepository): Response
     {
-        $levels = $levelRepository->findAll();
+        $rows = $levelRepository->findAll();
 
-        return $this->render('dashboard/admin/level/index.html.twig', compact('levels'));
+        return $this->render('dashboard/admin/level/index.html.twig', compact('rows'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

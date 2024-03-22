@@ -33,9 +33,9 @@ class UserController extends AdminBaseController
     #[Route(path: '/', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
-        $users = $this->userRepository->findAll();
+        $rows = $this->userRepository->findAll();
 
-        return $this->render('dashboard/admin/user/index.html.twig', compact('users'));
+        return $this->render('dashboard/admin/user/index.html.twig', compact('rows'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

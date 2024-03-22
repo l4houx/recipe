@@ -36,9 +36,9 @@ class BlogController extends AdminBaseController
         $page = $request->query->getInt('page', 1);
         $userId = $this->getUser()->getId();
         $canListAll = $security->isGranted(PostVoter::LIST_ALL);
-        $posts = $this->postRepository->findForPagination($page, $canListAll ? null : $userId);
+        $rows = $this->postRepository->findForPagination($page, $canListAll ? null : $userId);
 
-        return $this->render('dashboard/admin/blog/index.html.twig', compact('posts'));
+        return $this->render('dashboard/admin/blog/index.html.twig', compact('rows'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

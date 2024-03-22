@@ -42,15 +42,15 @@
                     <table class="table mb-0 text-nowrap table-hover table-centered">
                         <thead class="">
                             <tr>
-                                <th># {# {{ knp_pagination_sortable(levels, '#', 'l.id') }} #}</th>
-                                <th>{{ 'Name'|trans }} {# {{ knp_pagination_sortable(levels, 'Name'|trans, 'l.name') }} #}</th>
+                                <th># {# {{ knp_pagination_sortable(rows, '#', 'l.id') }} #}</th>
+                                <th>{{ 'Name'|trans }} {# {{ knp_pagination_sortable(rows, 'Name'|trans, 'l.name') }} #}</th>
                                 <th>{{ 'Color'|trans }}</th>
                                 <th>{{ 'Update'|trans }}</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for level in levels %}
+                            {% for level in rows %}
                                 {% set link = path('dashboard_admin_level_edit', { id : level.id }) %}
                                 <tr>
                                     <td>{{ level.id }}</td>
@@ -97,7 +97,7 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    {# {{ knp_pagination_render(levels, null, {}, {'align': 'center'}) }} #}
+                    {# {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }} #}
                 </div>
             </div>
         </div>

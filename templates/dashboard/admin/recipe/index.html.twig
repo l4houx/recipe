@@ -42,9 +42,9 @@
                     <table class="table mb-0 text-nowrap table-hover table-centered">
                         <thead class="">
                             <tr>
-                                <th>{{ knp_pagination_sortable(recipes, '#', 'r.id') }}</th>
-                                <th>{{ knp_pagination_sortable(recipes, 'Title'|trans, 'r.title') }}</th>
-                                <th>{{ knp_pagination_sortable(recipes, 'Category'|trans, 'r.category') }}</th>
+                                <th>{{ knp_pagination_sortable(rows, '#', 'r.id') }}</th>
+                                <th>{{ knp_pagination_sortable(rows, 'Title'|trans, 'r.title') }}</th>
+                                <th>{{ knp_pagination_sortable(rows, 'Category'|trans, 'r.category') }}</th>
                                 <th>{{ 'Duration'|trans }}</th>
                                 <th>{{ 'Views'|trans }}</th>
                                 <th>{{ 'Update'|trans }}</th>
@@ -52,7 +52,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for recipe in recipes %}
+                            {% for recipe in rows %}
                                 {% set link = path('dashboard_admin_recipe_edit', { id : recipe.id }) %}
                                 <tr>
                                     <td>{{ recipe.id }}</td>
@@ -116,7 +116,7 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    {{ knp_pagination_render(recipes, null, {}, {'align': 'center'}) }}
+                    {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
                 </div>
             </div>
         </div>

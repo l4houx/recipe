@@ -234,7 +234,7 @@
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum adipisci sunt asperiores. Sunt autem vel et quia quis. Esse commodi iusto ad distinctio cumque tempore ab eos et, tempora dolores?
                             </p>
                             <ul>
-                                {% for recipe in pagination %}
+                                {% for recipe in rows %}
                                     <li>
                                         <a href="{{ path('recipe_show', {id: recipe.id, slug: recipe.slug}) }}">
                                             {{ recipe.title }}
@@ -242,7 +242,7 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                            {{ knp_pagination_render(pagination, null, {}, {'align': 'center'}) }}
+                            {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
                         </div>
                     </div>
                 </div>

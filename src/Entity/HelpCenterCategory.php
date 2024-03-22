@@ -4,10 +4,10 @@ namespace App\Entity;
 
 use App\Entity\Traits\HasBackgroundColorTrait;
 use App\Entity\Traits\HasDeletedAtTrait;
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use App\Entity\Traits\HasIconTrait;
-use App\Entity\Traits\HasIdNameSlugAssertTrait;
+use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
 use App\Entity\Traits\HasIsOnlineTrait;
-use App\Entity\Traits\HasTimestampTrait;
 use App\Repository\HelpCenterCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,11 +19,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('slug')]
 class HelpCenterCategory implements \Stringable
 {
-    use HasIdNameSlugAssertTrait;
+    use HasIdGedmoNameSlugAssertTrait;
     use HasBackgroundColorTrait;
     use HasIconTrait;
     use HasIsOnlineTrait;
-    use HasTimestampTrait;
+    use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subcategories')]

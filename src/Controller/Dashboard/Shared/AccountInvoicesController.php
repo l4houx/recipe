@@ -20,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @method User getUser()
  */
-#[Route(path: '/%website_dashboard_path%/account/my-invoices', name: 'dashboard_account_invoice_')]
+#[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_account_invoice_')]
 #[IsGranted(HasRoles::DEFAULT)]
 class AccountInvoicesController extends BaseController
 {
@@ -30,7 +30,7 @@ class AccountInvoicesController extends BaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '/my-invoices', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
         $user = $this->getUserOrThrow();
@@ -39,7 +39,7 @@ class AccountInvoicesController extends BaseController
         return $this->render('dashboard/shared/account/invoice/index.html.twig', compact('transactions', 'user'));
     }
 
-    #[Route(path: '/', methods: ['POST'])]
+    #[Route(path: '/my-invoices', methods: ['POST'])]
     public function edit(Request $request, EntityManagerInterface $em): RedirectResponse
     {
         $content = (string) $request->request->get('invoiceInfo');
@@ -54,7 +54,7 @@ class AccountInvoicesController extends BaseController
         return $this->redirectToRoute('dashboard_account_invoice_index');
     }
 
-    #[Route(path: '/{id<\d+>}', name: 'show', methods: ['GET'])]
+    #[Route(path: '/my-invoices/{id<\d+>}', name: 'show', methods: ['GET'])]
     public function show(int $id): Response
     {
         $transaction = $this->transactionRepository->findOneBy([

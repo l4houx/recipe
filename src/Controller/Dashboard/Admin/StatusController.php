@@ -28,9 +28,9 @@ class StatusController extends AdminBaseController
     #[Route(path: '/', name: 'index', methods: ['GET'])]
     public function index(StatusRepository $statusRepository): Response
     {
-        $statuses = $statusRepository->findAll();
+        $rows = $statusRepository->findAll();
 
-        return $this->render('dashboard/admin/status/index.html.twig', compact('statuses'));
+        return $this->render('dashboard/admin/status/index.html.twig', compact('rows'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

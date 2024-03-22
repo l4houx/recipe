@@ -1,0 +1,39 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Create your review for %recipetitle%'|trans({'%recipetitle%': recipe.title}) %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "recipe_index": ('Recipes'|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">{{ pagetitle }}</h3>
+            <p class="mb-0">{{ ''|trans }}</p>
+        </div>
+        <div class="card-body">
+            <div>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                    {{ form_errors(form) }}
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.headline) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.rating) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-2">
+                        {{ form_row(form.content) }}
+                    </div>
+                    <div class="row">
+                        <div class="offset-lg-3 col-lg-6 col-12">
+                            <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                        </div>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

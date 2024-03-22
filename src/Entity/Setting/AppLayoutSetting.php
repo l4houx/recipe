@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Setting;
 
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use App\Entity\Traits\HasIdTrait;
-use App\Entity\Traits\HasTimestampTrait;
 use App\Repository\Setting\AppLayoutSettingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,7 +22,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class AppLayoutSetting
 {
     use HasIdTrait;
-    use HasTimestampTrait;
+    use HasGedmoTimestampTrait;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
     #[Vich\UploadableField(mapping: 'app_layout', fileNameProperty: 'logoName')]
@@ -76,7 +76,7 @@ class AppLayoutSetting
         $this->logoFile = $logoFile;
 
         if (null !== $logoFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;
@@ -116,7 +116,7 @@ class AppLayoutSetting
         $this->faviconFile = $faviconFile;
 
         if (null !== $faviconFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;
@@ -156,7 +156,7 @@ class AppLayoutSetting
         $this->ogImageFile = $ogImageFile;
 
         if (null !== $ogImageFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;

@@ -26,13 +26,13 @@ class BlogCategoryController extends AbstractController
         $form = $this->createForm(SearchDataType::class, $searchDataDTO)->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $searchDataDTO->page = $request->query->getInt('page', 1);
-            $pagination = $post->findBySearch($searchDataDTO);
+            $rows = $post->findBySearch($searchDataDTO);
 
-            return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'pagination', 'category'));
+            return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'rows', 'category'));
         }
 
-        $pagination = $post->findPublished($request->query->getInt('page', 1), $category);
+        $rows = $post->findPublished($request->query->getInt('page', 1), $category);
 
-        return $this->render('blog/blog-category.html.twig', compact('form', 'pagination', 'category'));
+        return $this->render('blog/blog-category.html.twig', compact('form', 'rows', 'category'));
     }
 }

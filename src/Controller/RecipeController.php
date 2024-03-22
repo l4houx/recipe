@@ -28,13 +28,13 @@ class RecipeController extends AbstractController
         $query = $this->recipeRepository->findBy(['isOnline' => true], ['createdAt' => 'DESC']);
         $page = $request->query->getInt('page', 1);
 
-        $pagination = $paginator->paginate(
+        $rows = $paginator->paginate(
             $query,
             $page,
             HasLimit::RECIPE_LIMIT
         );
 
-        return $this->render('recipe/index.html.twig', compact('pagination'));
+        return $this->render('recipe/index.html.twig', compact('rows'));
     }
 
     #[Route(path: '/recipes/{slug}-{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]

@@ -20,14 +20,14 @@
                     </a>
                 </li>
             {% endif %}
-            <li class="nav-item">
-                <a class="nav-link" href="">
+            <li class="nav-item {{ app.current_route starts with 'dashboard_account_recipe_' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_recipe_index') }}">
                     <i class="bi bi-book nav-icon"></i>
                     {{ 'My recipes'|trans }}
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">
+            <li class="nav-item {{ app.current_route starts with 'dashboard_account_reviews_' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_reviews_index') }}">
                     <i class="bi bi-star nav-icon"></i>
                     {{ 'My reviews'|trans }}
                 </a>

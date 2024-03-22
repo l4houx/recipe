@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Setting;
 
-use App\Entity\Traits\HasIdNameSlugAssertTrait;
+use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
 use App\Repository\Setting\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,14 +15,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
 class Menu
 {
-    use HasIdNameSlugAssertTrait;
+    use HasIdGedmoNameSlugAssertTrait;
 
     #[ORM\Column(type: Types::STRING, length: 128, nullable: true)]
     #[Assert\Length(min: 1, max: 128)]
     private ?string $header = null;
 
     #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuElement::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
-    #[Orm\OrderBy(['position' => 'ASC'])]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     #[Assert\Valid]
     private Collection $menuElements;
 

@@ -11,7 +11,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 trait HasAvatarVichTrait
 {
-    use HasTimestampTrait;
+    use HasGedmoTimestampTrait;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
     #[Vich\UploadableField(mapping: 'user_avatar', fileNameProperty: 'avatarName')]
@@ -37,7 +37,7 @@ trait HasAvatarVichTrait
         $this->avatarFile = $avatarFile;
 
         if (null !== $avatarFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;

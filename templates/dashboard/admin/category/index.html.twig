@@ -42,8 +42,8 @@
                     <table class="table mb-0 text-nowrap table-hover table-centered">
                         <thead class="">
                             <tr>
-                                <th>{{ knp_pagination_sortable(categories, '#', 'c.id') }}</th>
-                                <th>{{ knp_pagination_sortable(categories, 'Name'|trans, 'c.name') }}</th>
+                                <th>{{ knp_pagination_sortable(rows, '#', 'c.id') }}</th>
+                                <th>{{ knp_pagination_sortable(rows, 'Name'|trans, 'c.name') }}</th>
                                 {# <th>Recettes</th> #}
                                 <th>{{ 'Color'|trans }}</th>
                                 <th>{{ 'Update'|trans }}</th>
@@ -51,7 +51,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for category in categories %}
+                            {% for category in rows %}
                                 {% set link = path('dashboard_admin_category_edit', { id : category.id }) %}
                                 <tr>
                                     <td>{{ category.id }}</td>
@@ -111,7 +111,7 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    {{ knp_pagination_render(categories, null, {}, {'align': 'center'}) }}
+                    {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
                 </div>
             </div>
         </div>

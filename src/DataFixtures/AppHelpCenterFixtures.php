@@ -48,8 +48,8 @@ class AppHelpCenterFixtures extends Fixture
                 ->setViews(rand(10, 160))
                 ->setIsOnline($this->faker()->randomElement([true, false]))
                 ->setIsFeatured($this->faker()->randomElement([true, false]))
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                ->setCreatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
+                ->setUpdatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
                 ->setCategory($this->subcategories[$article % \count($this->subcategories)])
             ;
 
@@ -91,8 +91,8 @@ class AppHelpCenterFixtures extends Fixture
             ->setIsOnline($isOnline)
             ->setColor($color)
             ->setIcon($icon)
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setCreatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
+            ->setUpdatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
         ;
         $manager->persist($helpcentercategory);
 

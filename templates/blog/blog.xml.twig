@@ -4,11 +4,11 @@
         <title>{{ website_name }} {{ 'blog'|trans }}</title>
         <description>{{ 'Most recent articles published on the '|trans }} {{ website_name }}</description>
         <pubDate>{{ 'now' | date('r', timezone='GMT') }}</pubDate>
-        <lastBuildDate>{{ (pagination | last).createdAt | default('now') | date('r', timezone='GMT') }}</lastBuildDate>
+        <lastBuildDate>{{ (rows | last).createdAt | default('now') | date('r', timezone='GMT') }}</lastBuildDate>
         <link>{{ url('blog_list') }}</link>
         <language>{{ app.request.locale }}</language>
 
-        {% for post in pagination %}
+        {% for post in rows %}
             <item>
                 <title>{{ post.title }}</title>
                 <description>{{ post.content | html_markdown_excerpt(130) }}</description>

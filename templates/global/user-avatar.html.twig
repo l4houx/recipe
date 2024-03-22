@@ -1,4 +1,4 @@
-<img src="{{ asset('images/avatar/avatar-1.jpg') }}" class="avatar-{{ type }} rounded-circle border border-4 {{ class is defined ? class : '' }}" alt="avatar">
+<img src="{{ asset('images/avatar/avatar-1.jpg') }}" class="avatar-{{ type }} rounded-circle {{ class is defined ? class : '' }}" alt="avatar">
 
 {#  
 <span class="avatar avatar-{{ type }} rounded-circle"{% if user.avatarName %}  style="background: url('{{ asset(user.getAvatarPath) }}');"{% elseif user.facebookProfilePicture %} style="background: url('{{ user.facebookProfilePicture }}');"{% endif %} {% if showusernametooltip is defined %}data-toggle="tooltip" title="{{ user.username }}" data-container="body"{% endif %} >

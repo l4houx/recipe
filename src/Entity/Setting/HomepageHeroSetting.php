@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace App\Entity\Setting;
 
-use App\Entity\User;
 use App\Entity\Recipe;
+use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasIdTrait;
+use App\Entity\User;
+use App\Repository\Setting\HomepageHeroSettingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Traits\HasIdTrait;
-use App\Entity\Traits\HasTimestampTrait;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Repository\Setting\HomepageHeroSettingRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: HomepageHeroSettingRepository::class)]
 #[Vich\Uploadable]
 class HomepageHeroSetting
 {
     use HasIdTrait;
-    use HasTimestampTrait;
+    use HasGedmoTimestampTrait;
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     private ?string $title = null;
@@ -120,7 +120,7 @@ class HomepageHeroSetting
         $this->customBackgroundFile = $customBackgroundFile;
 
         if (null !== $customBackgroundFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;

@@ -27,16 +27,18 @@ class AccountRecipeController extends BaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     #[IsGranted(RecipeVoter::LIST)]
     public function index(Request $request, Security $security): Response
     {
+        $user = $this->getUserOrThrow();
+
         $page = $request->query->getInt('page', 1);
         $userId = $this->getUser()->getId();
         $canListAll = $security->isGranted(RecipeVoter::LIST_ALL);
-        $recipes = $this->recipeRepository->findForPagination($page, $canListAll ? null : $userId);
+        $rows = $this->recipeRepository->findForPagination($page, $canListAll ? null : $userId);
 
-        return $this->render('dashboard/shared/recipe/index.html.twig', compact('recipes'));
+        return $this->render('dashboard/shared/recipe/index.html.twig', compact('rows', 'user'));
     }
 
     #[Route(path: '/add', name: 'add', methods: ['GET', 'POST'])]
@@ -59,16 +61,15 @@ class AccountRecipeController extends BaseController
     #[Route(path: '/{slug}', name: 'show', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     public function show(Recipe $recipe): Response
     {
-        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans('Recipes can only be shown to their authors.'));
+        $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans('Content can only be shown to their authors.'));
 
         return $this->render('dashboard/shared/recipe/show.html.twig', compact('recipe'));
     }
 
     #[Route(path: '/{slug}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    // #[IsGranted(RecipeVoter::MANAGE, subject: 'recipe', message: 'Recipes can only be edited by their authors.')]
     public function edit(): Response
     {
-        $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans('Recipes can only be edited by their authors.'));
+        $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans('Content can only be edited by their authors.'));
 
         return $this->render('dashboard/shared/recipe/edit.html.twig');
     }
@@ -81,7 +82,7 @@ class AccountRecipeController extends BaseController
             $this->em->remove($recipe);
             $this->em->flush();
 
-            $this->addFlash('danger', $this->translator->trans('Recipe was deleted successfully.'));
+            $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
         }
 
         return $this->redirectToRoute('dashboard_account_recipe_index', [], Response::HTTP_SEE_OTHER);

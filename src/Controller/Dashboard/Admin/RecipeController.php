@@ -38,9 +38,9 @@ class RecipeController extends AdminBaseController
         $page = $request->query->getInt('page', 1);
         $userId = $this->getUser()->getId();
         $canListAll = $security->isGranted(RecipeVoter::LIST_ALL);
-        $recipes = $this->recipeRepository->findForPagination($page, $canListAll ? null : $userId);
+        $rows = $this->recipeRepository->findForPagination($page, $canListAll ? null : $userId);
 
-        return $this->render('dashboard/admin/recipe/index.html.twig', compact('recipes'));
+        return $this->render('dashboard/admin/recipe/index.html.twig', compact('rows'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

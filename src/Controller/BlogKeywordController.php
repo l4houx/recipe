@@ -27,13 +27,13 @@ class BlogKeywordController extends AbstractController
         $form = $this->createForm(SearchDataType::class, $searchDataDTO)->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $searchDataDTO->page = $request->query->getInt('page', 1);
-            $pagination = $post->findBySearch($searchDataDTO);
+            $rows = $post->findBySearch($searchDataDTO);
 
-            return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'pagination', 'keyword'));
+            return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'rows', 'keyword'));
         }
 
-        $pagination = $post->findPublished($request->query->getInt('page', 1), null, $keyword);
+        $rows = $post->findPublished($request->query->getInt('page', 1), null, $keyword);
 
-        return $this->render('blog/blog-keyword.html.twig', compact('form', 'pagination', 'keyword'));
+        return $this->render('blog/blog-keyword.html.twig', compact('form', 'rows', 'keyword'));
     }
 }

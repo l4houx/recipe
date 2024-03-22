@@ -205,7 +205,6 @@ class SettingService
     }
     */
 
-    /*
     // Returns the reviews after applying the specified search criterias
     public function getReviews($criterias)
     {
@@ -226,6 +225,7 @@ class SettingService
         return $this->em->getRepository("App\Entity\Review")->getReviews($keyword, $slug, $user, $recipe, $visible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
     }
 
+    /*
     // Returns the recips after applying the specified search criterias
     public function getRecipes($criterias)
     {

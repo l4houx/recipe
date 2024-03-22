@@ -30,14 +30,14 @@ class BlogController extends AbstractController
         $form = $this->createForm(SearchDataType::class, $searchDataDTO)->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $searchDataDTO->page = $request->query->getInt('page', 1);
-            $pagination = $post->findBySearch($searchDataDTO);
+            $rows = $post->findBySearch($searchDataDTO);
 
-            return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'pagination'));
+            return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'rows'));
         }
 
-        $pagination = $post->findPublished($request->query->getInt('page', 1));
+        $rows = $post->findPublished($request->query->getInt('page', 1));
 
-        return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'pagination'));
+        return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'rows'));
     }
 
     #[Route(path: '/{slug}', name: 'blog_article', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
