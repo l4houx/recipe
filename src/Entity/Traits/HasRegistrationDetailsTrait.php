@@ -2,7 +2,6 @@
 
 namespace App\Entity\Traits;
 
-use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +24,9 @@ trait HasRegistrationDetailsTrait
 
     #[ORM\Column(type: Types::STRING, nullable: true, options: ['default' => null])]
     private ?string $lastLoginIp = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: false, options: ['default' => 0])]
+    private int $registerDuration = 0;
 
     public function isSuspended(): bool
     {
@@ -104,6 +106,18 @@ trait HasRegistrationDetailsTrait
     public function setLastLoginIp(?string $lastLoginIp): static
     {
         $this->lastLoginIp = $lastLoginIp;
+
+        return $this;
+    }
+
+    public function getRegisterDuration(): int
+    {
+        return $this->registerDuration;
+    }
+
+    public function setRegisterDuration(int $registerDuration): static
+    {
+        $this->registerDuration = $registerDuration;
 
         return $this;
     }

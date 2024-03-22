@@ -53,7 +53,7 @@ class UserEmailVerification
         return $this->author;
     }
 
-    public function setAuthor(User $author): self
+    public function setAuthor(User $author): static
     {
         $this->author = $author;
 
