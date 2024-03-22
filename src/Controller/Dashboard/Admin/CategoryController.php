@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-categories', name: 'dashboard_admin_category_')]
-#[IsGranted(HasRoles::ADMIN)]
+#[IsGranted(HasRoles::ADMINAPPLICATION)]
 class CategoryController extends AdminBaseController
 {
     public function __construct(

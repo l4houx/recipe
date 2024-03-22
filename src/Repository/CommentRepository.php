@@ -6,6 +6,8 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Recipe;
 use App\Entity\Comment;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use App\Entity\Traits\HasLimit;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
@@ -96,5 +98,25 @@ class CommentRepository extends ServiceEntityRepository
         return Criteria::create()
             ->andWhere(Criteria::expr()->eq('isApproved', true))
             ->orderBy(['publishedAt' => 'ASC']);
+    }
+
+    public function queryLatest(): Query
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.createdAt', 'DESC')
+            ->join('c.target', 't')
+            ->leftJoin('c.author', 'a')
+            ->addSelect('t', 'a')
+            ->setMaxResults(7)
+            ->getQuery()
+        ;
+    }
+
+    public function queryByIp(string $ip): QueryBuilder
+    {
+        return $this->createQueryBuilder('row')
+            ->where('row.ip LIKE :ip')
+            ->setParameter('ip', $ip)
+        ;
     }
 }

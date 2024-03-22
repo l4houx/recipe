@@ -2,20 +2,21 @@
 
 namespace App\Controller\Dashboard\Shared\Application;
 
+use App\Entity\User;
 use App\Entity\Application;
 use App\Entity\Traits\HasRoles;
-use App\Entity\User;
 use App\Form\ApplicationFormType;
-use App\Repository\ApplicationRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ApplicationRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route(path: '/%website_dashboard_path%/application', name: 'dashboard_application_')]
 #[IsGranted(HasRoles::DEFAULT)]
@@ -68,7 +69,7 @@ class ApplicationController extends AbstractController
         return $this->render('dashboard/shared/application/new.html.twig', compact('application', 'form'));
     }
 
-    #[Route(path: '/token/{id}', name: 'token', methods: ['GET'])]
+    #[Route(path: '/token/{id}', name: 'token', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function token(
         Application $application,
         #[CurrentUser] ?User $user,
@@ -76,7 +77,7 @@ class ApplicationController extends AbstractController
         EntityManagerInterface $em
     ): Response {
         if ($application->getUser() !== $user && !$this->security->isGranted(HasRoles::ADMIN)) {
-            $this->addFlash('secondary', $translator->trans('Application  in you does not belong.'));
+            $this->addFlash('secondary', $translator->trans('Application in you does not belong.'));
 
             return $this->redirectToRoute('dashboard_application_index', [], Response::HTTP_SEE_OTHER);
         }

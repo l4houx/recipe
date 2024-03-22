@@ -22,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountDeletedController extends BaseController
 {
     #[Route(path: '/', methods: ['DELETE'])]
-    public function deleted(
+    public function accountDeleted(
         Request $request,
         AccountDeletedService $accountDeletedService,
         UserPasswordHasherInterface $hasher,
@@ -53,7 +53,7 @@ class AccountDeletedController extends BaseController
     }
 
     #[Route(path: '/deleted-cancel', name: 'dashboard_account_deleted_cancel', methods: ['POST'])]
-    public function deletedCancel(EntityManagerInterface $em, TranslatorInterface $translator): RedirectResponse
+    public function accountDeletedCancel(EntityManagerInterface $em, TranslatorInterface $translator): RedirectResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -62,6 +62,6 @@ class AccountDeletedController extends BaseController
 
         $this->addFlash('success', $translator->trans('The deletion of your account has been successfully canceled.'));
 
-        return $this->redirectToRoute('dashboard_account_edit');
+        return $this->redirectToRoute('dashboard_account_edit', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -51,7 +51,7 @@ class AccountInvoicesController extends BaseController
 
         $this->addFlash('success', $this->translator->trans('Your information has been saved successfully.'));
 
-        return $this->redirectToRoute('dashboard_account_invoice_index');
+        return $this->redirectToRoute('dashboard_account_invoice_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route(path: '/my-invoices/{id<\d+>}', name: 'show', methods: ['GET'])]

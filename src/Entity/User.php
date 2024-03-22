@@ -13,6 +13,7 @@ use App\Entity\Traits\HasPremiumTrait;
 use App\Entity\Traits\HasDeletedAtTrait;
 use App\Entity\Traits\HasTimestampTrait;
 use App\Entity\Setting\HomepageHeroSetting;
+use App\Entity\Traits\HasNotifiableTrait;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\HasProfileDetailsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -44,6 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 {
     use HasProfileDetailsTrait;
     use HasPremiumTrait;
+    use HasNotifiableTrait;
     use HasTimestampTrait;
     //use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;

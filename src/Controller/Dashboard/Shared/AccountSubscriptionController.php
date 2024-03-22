@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\BaseController;
-use App\Entity\Traits\HasRoles;
 use App\Entity\User;
+use App\Entity\Traits\HasRoles;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Infrastructural\Payment\Stripe\StripeApi;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @method User getUser()
@@ -21,7 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountSubscriptionController extends BaseController
 {
     public function __construct(
-        /* private readonly StripeApi $api */
+        private readonly StripeApi $api,
         private readonly TranslatorInterface $translator
     ) {
     }
@@ -39,7 +40,6 @@ class AccountSubscriptionController extends BaseController
             return $this->redirect($redirectUrl);
         }
 
-        // return $this->redirect($this->api->getBillingUrl($user, $redirectUrl));
-        return $this->redirect($redirectUrl);
+        return $this->redirect($this->api->getBillingUrl($user, $redirectUrl));
     }
 }

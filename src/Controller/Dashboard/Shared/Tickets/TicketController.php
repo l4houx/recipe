@@ -2,25 +2,26 @@
 
 namespace App\Controller\Dashboard\Shared\Tickets;
 
+use App\Entity\User;
 use App\Entity\Level;
 use App\Entity\Status;
 use App\Entity\Ticket;
-use App\Entity\Traits\HasRoles;
-use App\Entity\User;
 use App\Form\TicketFormType;
-use App\Repository\ApplicationRepository;
+use App\Entity\Traits\HasRoles;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ApplicationRepository;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route(path: '/%website_dashboard_path%/ticket', name: 'dashboard_ticket_')]
 #[IsGranted(HasRoles::DEFAULT)]
@@ -79,7 +80,7 @@ class TicketController extends AbstractController
         return $this->render('dashboard/shared/tickets/new.html.twig', compact('ticket', 'form'));
     }
 
-    #[Route(path: '/status/{id}', name: 'status', methods: ['GET'])]
+    #[Route(path: '/status/{id}', name: 'status', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function status(
         Status $status,
         #[CurrentUser] ?User $user,
@@ -102,7 +103,7 @@ class TicketController extends AbstractController
         return $this->render('dashboard/shared/tickets/index.html.twig', compact('tickets'));
     }
 
-    #[Route(path: '/level/{id}', name: 'level', methods: ['GET'])]
+    #[Route(path: '/level/{id}', name: 'level', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function level(
         Level $level,
         #[CurrentUser] ?User $user,
@@ -136,7 +137,7 @@ class TicketController extends AbstractController
         return $this->render('dashboard/shared/tickets/index.html.twig', compact('tickets'));
     }
 
-    #[Route(path: '/close/{id}', name: 'close', methods: ['GET'])]
+    #[Route(path: '/close/{id}', name: 'close', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function close(
         Ticket $ticket,
         EntityManagerInterface $em,
@@ -148,6 +149,6 @@ class TicketController extends AbstractController
 
         $em->flush();
 
-        return $this->redirectToRoute('dashboard_main_account');
+        return $this->redirectToRoute('dashboard_main_account', [], Response::HTTP_SEE_OTHER);
     }
 }

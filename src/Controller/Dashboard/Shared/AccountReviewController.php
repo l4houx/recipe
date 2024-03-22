@@ -68,7 +68,7 @@ class AccountReviewController extends BaseController
         if (!$recipe) {
             $this->addFlash('danger', $translator->trans('The recipe not be found'));
 
-            return $this->redirectToRoute('recipe_index');
+            return $this->redirectToRoute('recipe_index', [], Response::HTTP_SEE_OTHER);
         }
 
         $review = new Review();

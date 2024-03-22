@@ -36,13 +36,13 @@ class AccountAvatarController extends BaseController
         $errors = $validator->validate($data);
 
         if ($errors->count() > 0) {
-            $this->addFlash('error', (string) $errors->get(0)->getMessage());
+            $this->addFlash('danger', (string) $errors->get(0)->getMessage());
         } else {
             $accountUpdatedService->updatedAvatar($data);
             $em->flush();
             $this->addFlash('success', $translator->trans('Avatar updated successfully.'));
         }
 
-        return $this->redirectToRoute('dashboard_account_edit');
+        return $this->redirectToRoute('dashboard_account_edit', [], Response::HTTP_SEE_OTHER);
     }
 }

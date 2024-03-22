@@ -1,0 +1,27 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'My notifications'|trans %}
+{% block title pagetitle %}
+
+
+
+{% block content %}
+  <div class="page-header container">
+    <h1 class="h1">
+      Mes notifications
+    </h1>
+  </div>
+
+  <div class="container py5">
+      <div class="stack-separated">
+        {% for notification in notifications %}
+          <div>
+            <p>
+              <a class="formatted ignore-br" href="{{ notification.url }}">{{ notification.message | raw }}</a>
+            </p>
+            <div class="text-muted text-small">{{ notification.createdAt | ago }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+{% endblock %}

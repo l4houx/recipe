@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-emails', name: 'dashboard_admin_email_')]
-#[IsGranted(HasRoles::ADMIN)]
+#[IsGranted(HasRoles::ADMINAPPLICATION)]
 class Emailcontroller extends AdminBaseController
 {
     #[Route(path: '/email', name: 'preview')]

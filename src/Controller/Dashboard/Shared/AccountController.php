@@ -37,7 +37,7 @@ class AccountController extends BaseController
     }
 
     #[Route(path: '/profile', name: 'profile', methods: ['GET'])]
-    public function profile(
+    public function accountProfile(
         RecipeRepository $recipeRepository,
         ReviseRepository $reviseRepository
     ): Response {

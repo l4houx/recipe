@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountEmailChangeController extends BaseController
 {
     #[Route(path: '/email-confirm/{token}', name: 'dashboard_account_user_email_confirm')]
-    public function confirm(
+    public function accountEmailConfirm(
         UserEmailVerification $userEmailVerification,
         TranslatorInterface $translator,
         AccountUpdatedService $accountUpdatedService,

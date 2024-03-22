@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use App\Infrastructural\Messenger\Message\RecipePDFMessage;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-recipes', name: 'dashboard_admin_recipe_')]
-#[IsGranted(HasRoles::TEAM)]
+#[IsGranted(HasRoles::ADMINAPPLICATION)]
 class RecipeController extends AdminBaseController
 {
     public function __construct(

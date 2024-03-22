@@ -20,7 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-users', name: 'dashboard_admin_user_')]
-#[IsGranted(HasRoles::ADMIN)]
+#[IsGranted(HasRoles::ADMINAPPLICATION)]
 class UserController extends AdminBaseController
 {
     public function __construct(

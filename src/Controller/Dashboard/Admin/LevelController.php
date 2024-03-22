@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-levels', name: 'dashboard_admin_level_')]
-#[IsGranted(HasRoles::ADMIN)]
+#[IsGranted(HasRoles::ADMINAPPLICATION)]
 class LevelController extends AdminBaseController
 {
     public function __construct(
