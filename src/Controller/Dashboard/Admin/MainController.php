@@ -23,13 +23,13 @@ class MainController extends AdminBaseController
     public function mainDashboard(
         PaginatorInterface $paginator,
         ReviseRepository $reviseRepository,
-        CommentRepository $commentRepository,
+        //CommentRepository $commentRepository,
         ReportRepository $reportRepository,
         TransactionRepository $transactionRepository
     ): Response {
         return $this->render('dashboard/admin/main.html.twig', [
             'revises' => $reviseRepository->findLatest(),
-            'comments' => $paginator->paginate($commentRepository->queryLatest()),
+            //'comments' => $paginator->paginate($commentRepository->queryLatest()),
             'reports' => $reportRepository->findAll(),
             'months' => $transactionRepository->getMonthlyRevenues(),
             'days' => $transactionRepository->getDailyRevenues(),

@@ -38,7 +38,7 @@ class RecipeFormType extends AbstractType
                 'empty_data' => '',
                 'required' => false,
             ])
-            ->add('category', CategoryAutocompleteField::class)
+            ->add('category', CategoryAutocompleteField::class, ['label' => t('Categorie :')])
             /*
             ->add('category', EntityType::class, [
                 'label' => t('Categorie :'),

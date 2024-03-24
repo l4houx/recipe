@@ -3,11 +3,16 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use App\Entity\Traits\HasLimit;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -21,8 +26,10 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry, 
+        private readonly PaginatorInterface $paginator
+    ) {
         parent::__construct($registry, User::class);
     }
 
@@ -87,5 +94,27 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function findForPagination(int $page): PaginationInterface // UserController
+    {
+        $builder = $this->createQueryBuilder('u')
+            ->orderBy('u.createdAt', 'DESC')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->where('u.createdAt <= :now')
+        ;
+
+        return $this->paginator->paginate(
+            $builder->getQuery()->setHint(
+                Query::HINT_CUSTOM_OUTPUT_WALKER,
+                TranslationWalker::class
+            ),
+            $page,
+            HasLimit::USER_LIMIT,
+            [
+                'distinct' => false,
+                'sortFieldAllowList' => ['u.id']
+            ]
+        );
     }
 }

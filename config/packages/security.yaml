@@ -38,22 +38,20 @@ security:
                 lifetime: 604800
                 path: /
                 always_remember_me: true
-            switch_user: { role: ROLE_APPLICATION }
+            switch_user: { role: ROLE_ADMIN_APPLICATION }
             access_denied_handler: App\Security\AccessDeniedHandler
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/%website_dashboard_path%/main-panel, roles: ROLE_ADMIN }
+        - { path: ^/%website_dashboard_path%/main-panel, roles: ROLE_TEAM }
         - { path: ^/%website_dashboard_path%/account, roles: ROLE_USER }
         - { path: ^/api/, roles: ROLE_APPLICATION}
 
     role_hierarchy:
-        ROLE_ADMIN_APPLICATION: [ROLE_CUSTOMER_TRAINING, ROLE_CUSTOMER, ROLE_TEAM, ROLE_USER, ROLE_ADMIN, ROLE_MODERATOR, ROLE_APPLICATION,ROLE_ALLOWED_TO_SWITCH]
-        ROLE_ADMIN: [ROLE_CUSTOMER, ROLE_CUSTOMER_TRAINING, ROLE_TEAM, ROLE_USER, ROLE_MODERATOR, ROLE_APPLICATION]
-        ROLE_MODERATOR: [ROLE_CUSTOMER, ROLE_TEAM, ROLE_USER]
-        ROLE_CUSTOMER_TRAINING: [ROLE_TEAM, ROLE_USER]
-        ROLE_CUSTOMER: [ROLE_USER]
+        ROLE_MODERATOR: [ROLE_TEAM, ROLE_USER]
+        ROLE_ADMIN: [ROLE_MODERATOR, ROLE_APPLICATION]
+        ROLE_ADMIN_APPLICATION: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
 when@test:
     security:

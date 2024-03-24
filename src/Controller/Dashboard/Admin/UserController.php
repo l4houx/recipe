@@ -31,9 +31,10 @@ class UserController extends AdminBaseController
     }
 
     #[Route(path: '/', name: 'index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request, ): Response
     {
-        $rows = $this->userRepository->findAll();
+        $page = $request->query->getInt('page', 1);
+        $rows = $this->userRepository->findForPagination($page);
 
         return $this->render('dashboard/admin/user/index.html.twig', compact('rows'));
     }

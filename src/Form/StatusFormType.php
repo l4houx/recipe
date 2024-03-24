@@ -3,15 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Status;
+use App\Form\Type\SwitchType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use function Symfony\Component\Translation\t;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-use function Symfony\Component\Translation\t;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class StatusFormType extends AbstractType
 {
@@ -28,10 +28,7 @@ class StatusFormType extends AbstractType
                 'empty_data' => '',
                 'required' => true,
             ])
-            ->add('close', CheckboxType::class, [
-                'required' => false,
-            ])
-            ->add(t('Save'), SubmitType::class)
+            ->add('isClose', SwitchType::class, ['label' => t('Close')])
         ;
     }
 

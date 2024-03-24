@@ -58,7 +58,7 @@ class TicketFormType extends AbstractType
                 ],
                 'required' => true,
             ])
-            ->add(t('Send'), SubmitType::class);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

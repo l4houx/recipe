@@ -1,0 +1,42 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Add a new tickets'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "dashboard_ticket_new": ('Tickets'|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">{{ pagetitle }}</h3>
+            <p class="mb-0">{{ ''|trans }}</p>
+        </div>
+        <div class="card-body">
+            <div>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                    {{ form_errors(form) }}
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.application) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.level) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-2">
+                        {{ form_row(form.subject) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-2">
+                        {{ form_row(form.content) }}
+                    </div>
+                    <div class="row">
+                        <div class="offset-lg-3 col-lg-6 col-12">
+                            <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                        </div>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

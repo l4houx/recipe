@@ -4,42 +4,46 @@
 {% block title pagetitle %}
 
 {% block content %}
-    <div class="card mb-4">
-        <div class="card-header">
-            <h3 class="mb-0">{{ pagetitle }}</h3>
-            <span>{{ ''|trans }}</span>
-        </div>
-        <div class="card-body">
-            <form class="row gx-3">
-                <div class="col-lg-9 col-md-7 col-12 mb-lg-0 mb-2">
-                    <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
-                </div>
-                <div class="col-lg-3 col-md-5 col-12">
-                    <select class="form-select">
-                        <option value="">Date Created</option>
-                        <option value="Newest">Newest</option>
-                        <option value="High Rated">High Rated</option>
-                        <option value="Law Rated">Law Rated</option>
-                        <option value="High Earned">High Earned</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-        <div class="table-responsive overflow-y-hidden">
-            <table class="table mb-0 text-nowrap table-hover table-centered text-nowrap">
-                <thead class="table-light">
-                    <tr>
-                        <th>{{ ''|trans }}</th>
-                        <th>{{ ''|trans }}</th>
-                        <th>{{ ''|trans }}</th>
-                        <th>{{ 'Status'|trans }}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
+	<div class="row">
+		{% for status in statuses | sort %}
+			<div class="col-lg-4 col-md-12 col-12">
+				<div class="card mb-4">
+					<div class="p-4">
+						<span class="fs-6 text-uppercase fw-semibold">{{ 'Status'|trans }}</span>
+						<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">{{ status.name }}</h2>
+						<span class="d-flex justify-content-between align-items-center">
+							<span>{{ tickets | filter(t => t.status == status) | length }}</span>
+							<span class="badge bg-success ms-2">{{ status.name }}</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		{% for level in levels | sort %}
+			<div class="col-lg-4 col-md-12 col-12">
+				<div class="card mb-4">
+					<div class="p-4">
+						<span class="fs-6 text-uppercase fw-semibold">{{ 'Level'|trans }}</span>
+						<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">{{ level.name }}</h2>
+						<span class="d-flex justify-content-between align-items-center">
+							<span>{{ tickets | filter(t => t.level == level and t.status.id != 3) | length }}</span>
+							<span class="badge bg-info ms-2">{{ level.name }}</span>
+						</span>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		<div class="col-lg-4 col-md-12 col-12">
+			<div class="card mb-4">
+				<div class="p-4">
+					<span class="fs-6 text-uppercase fw-semibold">Courses Rating</span>
+					<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">4.80</h2>
+					<span class="d-flex justify-content-between align-items-center">
+						<span>Rating this month</span>
+						<span class="badge bg-warning ms-2">10+</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

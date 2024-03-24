@@ -18,8 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-//use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
-//use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
+use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -103,10 +103,10 @@ class UserFormType extends AbstractType
                 'label' => t('Roles :'),
                 'required' => false,
                 'choices' => [
-                    t('Admin') => HasRoles::ADMIN,
-                    t('Moderator') => HasRoles::MODERATOR,
-                    t('Team') => HasRoles::TEAM,
-                    t('User') => HasRoles::DEFAULT,
+                    'Admin' => HasRoles::ADMIN,
+                    'Moderator' => HasRoles::MODERATOR,
+                    'Team' => HasRoles::TEAM,
+                    'User' => HasRoles::DEFAULT,
                 ],
                 'multiple' => true,
             ])
@@ -138,7 +138,6 @@ class UserFormType extends AbstractType
             ->add('isVerified', CheckboxType::class, [
                 'required' => false,
             ])
-            /*
             ->add('recaptcha', EWZRecaptchaType::class, [
                 'attr' => [
                     'options' => [
@@ -152,7 +151,6 @@ class UserFormType extends AbstractType
                     new RecaptchaTrue(['groups' => 'User']),
                 ],
             ])
-            */
             ->add(t('Save'), SubmitType::class)
         ;
     }

@@ -18,9 +18,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route(path: '/%website_dashboard_path%/application', name: 'dashboard_application_')]
+#[Route(path: '/%website_dashboard_path%/account/my-applications', name: 'dashboard_account_application_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class ApplicationController extends AbstractController
+class AccountApplicationController extends AbstractController
 {
     public function __construct(
         private readonly Security $security
@@ -33,7 +33,7 @@ class ApplicationController extends AbstractController
         ApplicationRepository $applicationRepository
     ): Response {
         if (null === $user) {
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
@@ -63,7 +63,7 @@ class ApplicationController extends AbstractController
 
             $this->addFlash('success', $translator->trans('Content was created successfully.'));
 
-            return $this->redirectToRoute('dashboard_application_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('dashboard_account_application_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('dashboard/shared/application/new.html.twig', compact('application', 'form'));
@@ -79,7 +79,7 @@ class ApplicationController extends AbstractController
         if ($application->getUser() !== $user && !$this->security->isGranted(HasRoles::ADMIN)) {
             $this->addFlash('secondary', $translator->trans('Application in you does not belong.'));
 
-            return $this->redirectToRoute('dashboard_application_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('dashboard_account_application_index', [], Response::HTTP_SEE_OTHER);
         }
 
         $length = 64;
@@ -99,6 +99,6 @@ class ApplicationController extends AbstractController
 
         $this->addFlash('success', $translator->trans('Please note the following token : '.$tokenPlain."\n It will no longer be searchable."));
 
-        return $this->redirectToRoute('dashboard_application_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('dashboard_account_application_index', [], Response::HTTP_SEE_OTHER);
     }
 }

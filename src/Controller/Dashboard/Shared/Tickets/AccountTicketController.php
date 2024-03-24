@@ -23,9 +23,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route(path: '/%website_dashboard_path%/ticket', name: 'dashboard_ticket_')]
+#[Route(path: '/%website_dashboard_path%/account/my-tickets', name: 'dashboard_account_ticket_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class TicketController extends AbstractController
+class AccountTicketController extends AbstractController
 {
     public function __construct(
         private readonly Security $security
@@ -39,7 +39,7 @@ class TicketController extends AbstractController
         ApplicationRepository $applicationRepository
     ): Response {
         if (null === $user) {
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
@@ -74,7 +74,7 @@ class TicketController extends AbstractController
             $em->persist($ticket);
             $em->flush();
 
-            return $this->redirectToRoute('dashboard_response_index', ['id' => $ticket->getId()]);
+            return $this->redirectToRoute('dashboard_account_response_index', ['id' => $ticket->getId()]);
         }
 
         return $this->render('dashboard/shared/tickets/new.html.twig', compact('ticket', 'form'));
@@ -88,7 +88,7 @@ class TicketController extends AbstractController
         ApplicationRepository $applicationRepository
     ): Response {
         if (null === $user) {
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
@@ -112,7 +112,7 @@ class TicketController extends AbstractController
         ApplicationRepository $applicationRepository
     ): Response {
         if (null === $user) {
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
         $status = $statusRepository->findBy(['close' => true]);

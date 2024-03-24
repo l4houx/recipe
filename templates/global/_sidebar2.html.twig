@@ -76,12 +76,85 @@
 									</div>
 								</li>
 								<li class="nav-item">
-									<div class="navbar-heading">Autre</div>
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navProfile" aria-expanded="false" aria-controls="navProfile">
+										<i class="nav-icon bi bi-person me-2"></i>
+										User
+									</a>
+									<div id="navProfile" class="collapse" data-bs-parent="#sideNavbar" style="">
+										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link active" href="">Instructor</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link " href="">Students</a>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li class="nav-item">
+									<div class="navbar-heading">{{ 'Contents'|trans }}</div>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="#!">
 										<i class="nav-icon bi bi-app me-2"></i>
-										Autre
+										{{ 'Users'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#!">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Transactions'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#!">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Formulas'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<div class="navbar-heading">{{ 'Premium'|trans }}</div>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_user_' ? 'active' : '' }}" href="{{ path('dashboard_admin_user_index') }}">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Users'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#!">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Transactions'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_pricing_' ? 'active' : '' }}" href="{{ path('dashboard_admin_pricing_index') }}">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Formulas'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<div class="navbar-heading">{{ 'Ticketing'|trans }}</div>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_level_' ? 'active' : '' }}" href="{{ path('dashboard_admin_level_index') }}">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Levels'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_status_' ? 'active' : '' }}" href="{{ path('dashboard_admin_status_index') }}">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Status'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<div class="navbar-heading">{{ 'Others'|trans }}</div>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#!">
+										<i class="nav-icon bi bi-app me-2"></i>
+										{{ 'Stats'|trans }}
 									</a>
 								</li>
 							</ul>

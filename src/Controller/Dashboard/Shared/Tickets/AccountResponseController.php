@@ -17,9 +17,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route(path: '/%website_dashboard_path%/response', name: 'dashboard_response_')]
+#[Route(path: '/%website_dashboard_path%/account/my-responses', name: 'dashboard_account_response_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class ResponseController extends AbstractController
+class AccountResponseController extends AbstractController
 {
     #[Route(path: '/{id}', name: 'index', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function index(
@@ -39,7 +39,7 @@ class ResponseController extends AbstractController
             $em->persist($response);
             $em->flush();
 
-            return $this->redirectToRoute('dashboard_response_index', ['id' => $ticket->getId()]);
+            return $this->redirectToRoute('dashboard_account_response_index', ['id' => $ticket->getId()]);
         }
 
         $responses = $responseRepository->findBy(['ticket' => $ticket]);

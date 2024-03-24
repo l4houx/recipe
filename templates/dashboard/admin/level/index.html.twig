@@ -42,10 +42,9 @@
                     <table class="table mb-0 text-nowrap table-hover table-centered">
                         <thead class="">
                             <tr>
-                                <th># {# {{ knp_pagination_sortable(rows, '#', 'l.id') }} #}</th>
-                                <th>{{ 'Name'|trans }} {# {{ knp_pagination_sortable(rows, 'Name'|trans, 'l.name') }} #}</th>
+                                <th>#</th>
+                                <th>{{ 'Name'|trans }}</th>
                                 <th>{{ 'Color'|trans }}</th>
-                                <th>{{ 'Update'|trans }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -59,9 +58,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="ms-3">
                                                     <h4 class="mb-1 text-primary-hover">{{ level.name }}</h4>
-                                                    <span>
-                                                        {{ 'Published'|trans }} {{ level.createdAt ? level.createdAt | ago()}}
-                                                    </span>
+                                                    <span></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -69,7 +66,6 @@
                                     <td>
                                         <span class="text-decoration-none" style="color: {{ level.color }};">{{ level.color }}</span>
                                     </td>
-                                    <td>{{ level.updatedAt ? level.updatedAt | date('Y-m-d H:i:s') : '' }}</td>
                                     <td>
                                         <div class="dropdown dropstart">
                                             <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -88,8 +84,8 @@
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="6">
-                                    {% include "global/message.html.twig" with { type: "info", message: ('No levels found'|trans), icon: "bi bi-exclamation-circle" } %}
+                                    <td colspan="8">
+                                    {% include "global/message.html.twig" with { type: "info", message: ('No levels found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -97,7 +93,6 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    {# {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }} #}
                 </div>
             </div>
         </div>

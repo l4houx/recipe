@@ -50,8 +50,8 @@ class TransactionRepository extends ServiceEntityRepository
     {
         return array_reverse($this->createQueryBuilder('t')
             ->select(
-                "TO_CHAR(t.createdAt, '$label') as date",
-                "TO_CHAR(t.createdAt, '$group') as fulldate",
+                "date_format(t.createdAt, '$label') as date",
+                "date_format(t.createdAt, '$group') as fulldate",
                 'ROUND(SUM(t.price - t.tax - t.fee)) as amount'
             )
             ->groupBy('fulldate', 'date')

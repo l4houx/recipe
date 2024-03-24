@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-// use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
-// use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
+use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -58,7 +58,6 @@ class PostSharedFormType extends AbstractType
                 'attr' => ['rows' => 6],
                 'help' => t('Leave it blank if you want (optional).'),
             ])
-            /*
             ->add('recaptcha', EWZRecaptchaType::class, [
                 'attr' => [
                     'options' => [
@@ -72,7 +71,6 @@ class PostSharedFormType extends AbstractType
                     new RecaptchaTrue(['groups' => 'PostShared']),
                 ],
             ])
-            */
         ;
     }
 

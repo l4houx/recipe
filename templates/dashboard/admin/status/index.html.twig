@@ -42,11 +42,10 @@
                     <table class="table mb-0 text-nowrap table-hover table-centered">
                         <thead class="">
                             <tr>
-                                <th>{{ knp_pagination_sortable(rows, '#', 's.id') }}</th>
-                                <th>{{ knp_pagination_sortable(rows, 'Name'|trans, 's.name') }}</th>
-                                <tr>{{ 'Closed'|trans }}</th>
+                                <th>#</th>
+                                <th>{{ 'Name'|trans }}</th>
                                 <th>{{ 'Color'|trans }}</th>
-                                <th>{{ 'Update'|trans }}</th>
+                                <th>{{ 'Status'|trans }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -60,23 +59,23 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="ms-3">
                                                     <h4 class="mb-1 text-primary-hover">{{ status.name }}</h4>
-                                                    <span>
-                                                        {{ 'Published'|trans }} {{ status.createdAt ? status.createdAt | ago()}}
-                                                    </span>
+                                                    <span></span>
                                                 </div>
                                             </div>
                                         </a>
                                     </td>
-                                    <td>{% if status.close %}
-                                            <span class="badge-dot bg-warning me-1 d-inline-block align-middle"></span>
-                                        {% else %}
-                                            <span class="badge-dot bg-success me-1 d-inline-block align-middle"></span>
-                                        {% endif %}
+                                    <td>
+                                        <span class="text-decoration-none" style="color: {{ status.color }};">{{ status.color }}</span>
                                     </td>
                                     <td>
-                                        <span class="text-decoration-none" style="color: {{ status.color }};">{{ status.name }}</span>
+                                        {% if status.isClose %}
+                                            <span class="badge-dot bg-danger me-1 d-inline-block align-middle"></span>
+                                            {{ 'Close'|trans }}
+                                        {% else %}
+                                            <span class="badge-dot bg-success me-1 d-inline-block align-middle"></span>
+                                            {{ 'Opem'|trans }}
+                                        {% endif %}
                                     </td>
-                                    <td>{{ status.updatedAt ? status.updatedAt | date('Y-m-d H:i:s') : '' }}</td>
                                     <td>
                                         <div class="dropdown dropstart">
                                             <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -95,8 +94,8 @@
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="6">
-                                    {% include "global/message.html.twig" with { type: "info", message: ('No status found'|trans), icon: "bi bi-exclamation-circle" } %}
+                                    <td colspan="8">
+                                    {% include "global/message.html.twig" with { type: "info", message: ('No status found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -104,7 +103,6 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    {# {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }} #}
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'All users'|trans %}
+{% set pagetitle = 'All pricings'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_user_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                    <a href="{{ path('dashboard_admin_pricing_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -42,52 +42,30 @@
                     <table class="table mb-0 text-nowrap table-hover table-centered">
                         <thead class="">
                             <tr>
-                                <th>{{ knp_pagination_sortable(rows, '#', 'u.id') }}</th>
-                                <th>{{ 'User name / Email'|trans }}</th>
-                                <th>{{ 'Full name / Premium'|trans }}</th>
-                                <th>{{ 'Last login / IP'|trans}}</th>
-                                <th>{{ 'Roles'|trans }}</th>
-                                <th>{{ 'Register duration'|trans }}</th>
+                                <th>#</th>
+                                <th>{{ 'Formula'|trans }}</th>
+                                <th>{{ 'Price'|trans }}</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for user in rows %}
-                                {% set link = path('user_profil', { slug : user.slug }) %}
+                            {% for pricing in rows %}
+                                {% set link = path('dashboard_admin_pricing_edit', { id : pricing.id }) %}
                                 <tr>
-                                    <td>{{ user.id }}</td>
+                                    <td>{{ pricing.id }}</td>
                                     <td>
                                         <a href="{{ link }}" class="text-inherit">
                                             <div class="d-flex align-items-center">
                                                 <div class="ms-3">
-                                                    <h4 class="mb-1 text-primary-hover">{{ user.username }} {{ user.email }}</h4>
+                                                    <h4 class="mb-1 text-primary-hover">{{ pricing.title }}</h4>
                                                     <span>
-                                                        {{ 'Joined'|trans }} {{ user.createdAt ? user.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+                                                        {{ 'Create the'|trans }} {{ pricing.createdAt ? pricing.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
                                                     </span>
                                                 </div>
                                             </div>
                                         </a>
                                     </td>
-                                    <td>
-                                        {{ user.getFullName() }}
-                                        {{ user.premium ? user.premiumEnd | ago('for') : '' }}
-                                    </td>
-                                    <td>
-                                        {% if user.lastLogin %}
-                                            {{ user.lastLogin|ago}}
-                                        {% else %}
-                                            {{ "N/A"|trans }}
-                                        {% endif %}
-                                        <br>
-                                        <a href="https://ipinfo.io/{{ user.lastLoginIp }}" target="_blank">{{ user.lastLoginIp }}</a>
-                                        {% if user.lastLoginIp %}
-                                            {{ ipService.getLocation(user.lastLoginIp).emoji ?? '' }}
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% include "global/user-roles.html.twig" %}
-                                    </td>
-                                    <td>{{ user.registerDuration }}s</td>
+                                    <td>{{ pricing.price }}</td>
                                     <td>
                                         <div class="dropdown dropstart">
                                             <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -95,8 +73,11 @@
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
                                                 <span class="dropdown-header">{{ 'Settings'|trans }}</span>
-                                                {{ include('dashboard/admin/user/_user_isverified_form.html.twig') }}
-                                                {{ include('dashboard/admin/user/_delete_form.html.twig') }}
+                                                <a class="dropdown-item" href="{{ link }}">
+                                                    <i class="bi bi-pencil dropdown-item-icon"></i>
+                                                    {{ 'Edit'|trans }}
+                                                </a>
+                                                {{ include('dashboard/admin/pricing/_delete_form.html.twig') }}
                                             </div>
                                         </div>
                                     </td>
@@ -112,7 +93,7 @@
                     </table>
                 </div>
                 <div class="card-footer">
-                    {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+                    {# {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }} #}
                 </div>
             </div>
         </div>

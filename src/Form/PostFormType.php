@@ -6,19 +6,20 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Keyword;
 use App\Entity\PostCategory;
+use App\Form\Type\SwitchType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\PostCategoryRepository;
+use function Symfony\Component\Translation\t;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-
-use function Symfony\Component\Translation\t;
 
 class PostFormType extends AbstractType
 {
@@ -51,12 +52,16 @@ class PostFormType extends AbstractType
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
             ])
+            ->add('author', UserAutocompleteField::class, ['label' => t('Author :')])
+            /*
             ->add('author', EntityType::class, [
                 'label' => t('Author :'),
                 'class' => User::class,
                 'choice_label' => 'username',
+                'autocomplete' => true,
                 'empty_data' => '',
             ])
+            */
             ->add('postcategories', EntityType::class, [
                 'label' => t('Categorie :'),
                 'class' => PostCategory::class,
@@ -85,7 +90,7 @@ class PostFormType extends AbstractType
                 //'purify_html' => true,
                 'attr' => ['class' => 'touchspin-integer', 'data-min' => 1, 'data-max' => 1000000],
             ])
-            ->add('isOnline', CheckboxType::class, ['label' => t('Online')])
+            ->add('isOnline', SwitchType::class, ['label' => t('Online')])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('title'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;

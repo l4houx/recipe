@@ -37,8 +37,8 @@ class UserStatsRepository extends ServiceEntityRepository
     {
         return array_reverse($this->createQueryBuilder('u')
             ->select(
-                "TO_CHAR(u.createdAt, '$label') as date",
-                "TO_CHAR(u.createdAt, '$group') as fulldate",
+                "date_format(u.createdAt, '$label') as date",
+                "date_format(u.createdAt, '$group') as fulldate",
                 'COUNT(u.id) as amount'
             )
             ->groupBy('fulldate', 'date')

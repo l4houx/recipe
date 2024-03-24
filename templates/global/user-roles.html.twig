@@ -4,15 +4,18 @@
         {% set color = "danger" %}
     {% elseif role == "ROLE_ADMIN" %}
         {% set name = "Admin"|trans %}
-        {% set color = "dark" %}
+        {% set color = "info" %}
     {% elseif role == "ROLE_MODERATOR" %}
         {% set name = "Moderator"|trans %}
         {% set color = "secondary" %}
     {% elseif role == "ROLE_TEAM" %}
         {% set name = "Team"|trans %}
         {% set color = "primary" %}
+    {% elseif role == "ROLE_VERIFIED" %}
+        {% set name = "Verified"|trans %}
+        {% set color = "warning" %}
     {% else %}
-        {% set name = "User"|trans %}
+        {% set name = "Member"|trans %}
         {% set color = "success" %}
     {% endif %}
     <span class="badge me-2 bg-{{ color }}">{{ name }}</span>

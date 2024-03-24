@@ -93,7 +93,7 @@ services:
             # Website patch
             string $websiteDashboardPath: '%website_dashboard_path%'
 
-            # AdministratorVoter
+            # ApplicationVoter (Administrator)
             string $appEnvironment: '%kernel.environment%'
 
             # ResizerPictureController

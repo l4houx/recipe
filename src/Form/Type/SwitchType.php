@@ -16,7 +16,7 @@ class SwitchType extends CheckboxType
                 'is' => 'input-switch',
             ],
             'row_attr' => [
-                'class' => 'form-switch',
+                'class' => 'form-check form-switch mb-4 ps-2'
             ],
         ]);
     }
