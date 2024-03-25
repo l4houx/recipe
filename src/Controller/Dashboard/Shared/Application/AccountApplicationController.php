@@ -2,32 +2,32 @@
 
 namespace App\Controller\Dashboard\Shared\Application;
 
-use App\Entity\User;
+use App\Controller\BaseController;
 use App\Entity\Application;
 use App\Entity\Traits\HasRoles;
+use App\Entity\User;
 use App\Form\ApplicationFormType;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ApplicationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: '/%website_dashboard_path%/account/my-applications', name: 'dashboard_account_application_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountApplicationController extends AbstractController
+class AccountApplicationController extends BaseController
 {
     public function __construct(
         private readonly Security $security
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(
         #[CurrentUser] ?User $user,
         ApplicationRepository $applicationRepository
@@ -42,7 +42,7 @@ class AccountApplicationController extends AbstractController
             $applications = $applicationRepository->findBy(['user' => $user->getId()]);
         }
 
-        return $this->render('dashboard/shared/application/index.html.twig', compact('applications'));
+        return $this->render('dashboard/shared/application/index.html.twig', compact('user', 'applications'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

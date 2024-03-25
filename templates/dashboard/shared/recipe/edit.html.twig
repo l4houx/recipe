@@ -1,0 +1,15 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Edit recipe'|trans %}
+{% block title pagetitle %}
+
+{% block content %}
+    {{ include('dashboard/shared/recipe/_form.html.twig', {
+        pagetitle: pagetitle,
+        recipe: recipe,
+        form: form,
+        button_css: 'btn btn-warning',
+        button_label: 'Update'|trans,
+        include_back_to_home_link: true,
+    }, with_context = false) }}
+{% endblock %}

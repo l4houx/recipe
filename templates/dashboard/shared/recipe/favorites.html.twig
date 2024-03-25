@@ -1,6 +1,6 @@
 {% extends 'dashboard.html.twig' %}
 
-{% set pagetitle = 'My recipes'|trans %}
+{% set pagetitle = 'My favorites'|trans %}
 {% block title pagetitle %}
 
 {% block content %}
@@ -49,7 +49,7 @@
             </div>
         {% else %}
             <div class="card-footer">
-                {% include "global/message.html.twig" with { type: "info", message: ('No recipe found'|trans), icon: "bi bi-exclamation-circle" } %}
+                {% include "global/message.html.twig" with { type: "info", message: ('Add recipes to your favorites by clicking the heart button'|trans), icon: "bi bi-exclamation-circle" } %}
             </div>
         {% endif %}
     </div>

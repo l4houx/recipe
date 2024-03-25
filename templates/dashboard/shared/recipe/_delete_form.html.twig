@@ -1,9 +1,9 @@
-<a href="#" onclick="event.preventDefault(); confirm({{ 'Are you sure you want to delete this item?'|trans }}) && document.getElementById('js-revise-delete-form').submit();" class="dropdown-item">
+<a href="#" onclick="event.preventDefault(); confirm({{ 'Are you sure you want to delete this item?'|trans }}) && document.getElementById('js-recipe-delete-form').submit();" class="dropdown-item">
     <i class="bi bi-trash dropdown-item-icon"></i>
     {{ 'Delete'|trans }}
 </a>
 
-<form id="js-revise-delete-form" action="{{ path('revise', {id: revise.id}) }}" method="post" class="">
-    <input type="hidden" name="_token" value="{{ csrf_token('revise_deletion_' ~ revise.id) }}">
+<form id="js-recipe-delete-form" action="{{ path('dashboard_account_recipe_delete', {slug : recipe.slug, id : recipe.id}) }}" method="post" class="">
+    <input type="hidden" name="_token" value="{{ csrf_token('recipe_deletion_' ~ recipe.id) }}">
     <input type="hidden" name="_method" value="DELETE">
 </form>

@@ -23,4 +23,8 @@ final class HasLimit
     public const CONTACT_LIMIT = 10;
 
     public const FAQ_LIMIT = 10;
+
+    public const HELPCENTERARTICLE_LIMIT = 10;
+
+    public const HELPCENTERCATEGORY_LIMIT = 10;
 }

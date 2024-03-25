@@ -10,57 +10,57 @@
 
 {% block content %}
 	<div class="card mb-4">
-		<div class="card-header d-lg-flex align-items-center justify-content-between">
-			<div class="mb-3 mb-lg-0">
-				<h3 class="mb-0">{{ pagetitle }}</h3>
-				<span>{{ 'You have full control to manage your own account setting.'|trans }}</span>
+		{% if rows | length > 0 %}
+			<div class="card-header d-lg-flex align-items-center justify-content-between">
+				<div class="mb-3 mb-lg-0">
+					<h3 class="mb-0">{{ pagetitle }}</h3>
+					<span>{{ 'You have full control to manage your own account setting.'|trans }}</span>
+				</div>
+				<div>
+					<a href="#" class="btn btn-outline-primary btn-sm">{{ 'Export To CSV...'|trans }}</a>
+				</div>
 			</div>
-			<div>
-				<a href="#" class="btn btn-outline-primary btn-sm">{{ 'Export To CSV...'|trans }}</a>
+			<div class="card-body">
+				<form class="row mb-4 gx-2">
+					<div class="col-xl-7 col-lg-6 col-md-4 col-12 mb-2 mb-lg-0">
+						<select class="form-select">
+							<option value="">ALL</option>
+							<option value="How to easily create a website">How to easily create a website</option>
+							<option value="Grunt: The JavaScript Task...">Grunt: The JavaScript Task...</option>
+							<option value="Vue js: The JavaScript Task...">Vue js: The JavaScript Task...</option>
+						</select>
+					</div>
+					<div class="col-xl-2 col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
+						<select class="form-select">
+							<option value="">Rating</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+					</div>
+					<div class="col-xl-3 col-lg-3 col-md-4 col-12 mb-2 mb-lg-0">
+						<select class="form-select">
+							<option value="">Sort by</option>
+							<option value="Newest">Newest</option>
+							<option value="Oldest">Oldest</option>
+						</select>
+					</div>
+				</form>
+				<ul class="list-group list-group-flush border-top">
+					{% for review in rows %}
+						{% include "global/user-review.html.twig" with {review: review, showuser: 1} %}
+					{% endfor %}
+				</ul>
+				<div class="card-footer">
+					{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+				</div>
 			</div>
-		</div>
-		<div class="card-body">
-			<form class="row mb-4 gx-2">
-				<div class="col-xl-7 col-lg-6 col-md-4 col-12 mb-2 mb-lg-0">
-					<select class="form-select">
-						<option value="">ALL</option>
-						<option value="How to easily create a website">How to easily create a website</option>
-						<option value="Grunt: The JavaScript Task...">Grunt: The JavaScript Task...</option>
-						<option value="Vue js: The JavaScript Task...">Vue js: The JavaScript Task...</option>
-					</select>
-				</div>
-				<div
-					class="col-xl-2 col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
-					<!-- Custom select -->
-					<select class="form-select">
-						<option value="">Rating</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-					</select>
-				</div>
-				<div
-					class="col-xl-3 col-lg-3 col-md-4 col-12 mb-2 mb-lg-0">
-					<!-- Custom select -->
-					<select class="form-select">
-						<option value="">Sort by</option>
-						<option value="Newest">Newest</option>
-						<option value="Oldest">Oldest</option>
-					</select>
-				</div>
-			</form>
-            {% if rows | length > 0 %}
-                <ul class="list-group list-group-flush border-top">
-                    {% for review in rows %}
-                        {% include "global/user-review.html.twig" with {review: review, showuser: 1} %}
-                    {% endfor %}
-                </ul>
-                {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-            {% else %}
+        {% else %}
+			<div class="card-footer">
                 {% include "global/message.html.twig" with { type: "info", message: ('No review found'|trans), icon: "bi bi-exclamation-circle" } %}
-            {% endif %}
-		</div>
+			</div>
+        {% endif %}
 	</div>
 {% endblock %}

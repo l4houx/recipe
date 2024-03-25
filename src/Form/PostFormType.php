@@ -39,6 +39,7 @@ class PostFormType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
                 'empty_data' => '',
+                'required' => true,
                 //'purify_html' => true,
             ])
             ->add('slug', HiddenType::class, [

@@ -2,16 +2,17 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasBackgroundColorTrait;
-use App\Entity\Traits\HasDeletedAtTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasLimit;
+use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\HasIconTrait;
-use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
 use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasBackgroundColorTrait;
 use App\Repository\HelpCenterCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: HelpCenterCategoryRepository::class)]
@@ -25,6 +26,8 @@ class HelpCenterCategory implements \Stringable
     use HasIsOnlineTrait;
     use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
+
+    public const HELPCENTERCATEGORY_LIMIT = HasLimit::HELPCENTERCATEGORY_LIMIT;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subcategories')]
     #[ORM\JoinColumn(nullable: true)]

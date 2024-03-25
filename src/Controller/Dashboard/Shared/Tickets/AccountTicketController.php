@@ -2,37 +2,37 @@
 
 namespace App\Controller\Dashboard\Shared\Tickets;
 
-use App\Entity\User;
+use App\Controller\BaseController;
 use App\Entity\Level;
 use App\Entity\Status;
 use App\Entity\Ticket;
-use App\Form\TicketFormType;
 use App\Entity\Traits\HasRoles;
+use App\Entity\User;
+use App\Form\TicketFormType;
+use App\Repository\ApplicationRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ApplicationRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: '/%website_dashboard_path%/account/my-tickets', name: 'dashboard_account_ticket_')]
 #[IsGranted(HasRoles::DEFAULT)]
-class AccountTicketController extends AbstractController
+class AccountTicketController extends BaseController
 {
     public function __construct(
         private readonly Security $security
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(
         #[CurrentUser] ?User $user,
         TicketRepository $ticketRepository,
@@ -52,7 +52,7 @@ class AccountTicketController extends AbstractController
             $tickets = array_merge($ticketsApp, $ticketsUser);
         }
 
-        return $this->render('dashboard/shared/tickets/index.html.twig', compact('tickets'));
+        return $this->render('dashboard/shared/tickets/index.html.twig', compact('user', 'tickets'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

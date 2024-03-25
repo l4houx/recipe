@@ -29,7 +29,7 @@ class BlogController extends AdminBaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     #[IsGranted(PostVoter::LIST)]
     public function index(Request $request, Security $security): Response
     {

@@ -7,7 +7,6 @@
         {% include "global/_header.html.twig" %}
     {% endblock %}
     <main>
-        {% block breadcrumb '' %}
         <section class="pt-5 pb-5">
             <div class="container">
                 <div class="row align-items-center">
@@ -40,6 +39,14 @@
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_account_avatar' %}
                                         <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'My dashboard'|trans }}
+                                        </a>
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_recipe_index' %}
+                                        <a href="{{ path('dashboard_account_recipe_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                            {{ 'New recipe'|trans }}
+                                        </a>
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_ticket_index' %}
+                                        <a href="{{ path('dashboard_account_ticket_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                            {{ 'New ticket'|trans }}
                                         </a>
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_main_account' %}
                                         <a href="{{ path('dashboard_account_edit') }}" class="btn btn-primary btn-sm d-none d-md-block">

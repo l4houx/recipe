@@ -194,19 +194,17 @@ class SettingService
         }
     }
 
-    /*
     // Returns the pages after applying the specified search criterias
-    public function getPages($criterias)
+    public function getPages($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
 
         return $this->em->getRepository("App\Entity\Page")->getPages($slug);
     }
-    */
 
     // Returns the reviews after applying the specified search criterias
-    public function getReviews($criterias)
+    public function getReviews($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
@@ -225,33 +223,60 @@ class SettingService
         return $this->em->getRepository("App\Entity\Review")->getReviews($keyword, $slug, $user, $recipe, $visible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
     }
 
-    /*
     // Returns the recips after applying the specified search criterias
-    public function getRecipes($criterias)
+    public function getRecipes($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
 
-        $isDraft = array_key_exists('isDraft', $criterias) ? $criterias['isDraft'] : true;
+        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $user = array_key_exists('user', $criterias) ? $criterias['user'] : 'all';
         $userEnabled = array_key_exists('userEnabled', $criterias) ? $criterias['userEnabled'] : true;
         $addedtofavoritesby = array_key_exists('addedtofavoritesby', $criterias) ? $criterias['addedtofavoritesby'] : 'all';
         $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
         $otherthan = array_key_exists('otherthan', $criterias) ? $criterias['otherthan'] : 'all';
 
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'r.name';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'r.title';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
-        return $this->em->getRepository("App\Entity\Recipe")->getRecipes($keyword, $slug, $isDraft, $user, $userEnabled, $addedtofavoritesby, $isOnHomepageSlider, $otherthan, $sort, $order, $limit, $count);
+        return $this->em->getRepository("App\Entity\Recipe")->getRecipes($keyword, $slug, $isOnline, $user, $userEnabled, $addedtofavoritesby, $isOnHomepageSlider, $otherthan, $sort, $order, $limit, $count);
     }
-    */
+
+    // Returns the users after applying the specified search criterias
+    public function getUsers($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        $roles = array_key_exists('roles', $criterias) ? $criterias['roles'] : "all";
+        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : "all";
+        $createdbyorganizerslug = array_key_exists('createdbyorganizerslug', $criterias) ? $criterias['createdbyorganizerslug'] : "all";
+        $organizername = array_key_exists('organizername', $criterias) ? $criterias['organizername'] : "all";
+        $organizerslug = array_key_exists('organizerslug', $criterias) ? $criterias['organizerslug'] : "all";
+        $username = array_key_exists('username', $criterias) ? $criterias['username'] : "all";
+        $email = array_key_exists('email', $criterias) ? $criterias['email'] : "all";
+        $firstname = array_key_exists('firstname', $criterias) ? $criterias['firstname'] : "all";
+        $lastname = array_key_exists('lastname', $criterias) ? $criterias['lastname'] : "all";
+        $enabled = array_key_exists('enabled', $criterias) ? $criterias['enabled'] : true;
+        $countryslug = array_key_exists('countryslug', $criterias) ? $criterias['countryslug'] : "all";
+        $followedby = array_key_exists('followedby', $criterias) ? $criterias['followedby'] : "all";
+        $hasboughtticketforEvent = array_key_exists('hasboughtticketfor', $criterias) ? $criterias['hasboughtticketfor'] : "all";
+        $hasboughtticketforOrganizer = array_key_exists('hasboughtticketfororganizer', $criterias) ? $criterias['hasboughtticketfororganizer'] : "all";
+        $apiKey = array_key_exists('apikey', $criterias) ? $criterias['apikey'] : "all";
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : "all";
+        $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : "all";
+        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : "all";
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : "u.createdAt";
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : "DESC";
+        $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
+
+        return $this->em->getRepository("App\Entity\User")->getUsers($roles, $keyword, $createdbyorganizerslug, $organizername, $organizerslug, $username, $email, $firstname, $lastname, $enabled, $countryslug, $slug, $followedby, $hasboughtticketforEvent, $hasboughtticketforOrganizer, $apiKey, $isOnHomepageSlider, $limit, $sort, $order, $count);
+    }
 
     /*
     // Returns the testimonials after applying the specified search criterias
-    public function getTestimonials($criterias)
+    public function getTestimonials($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';

@@ -6,12 +6,6 @@
     <div class="navbar-nav flex-column">
         <span class="navbar-header">{{ 'Dashboard'|trans }}</span>
         <ul class="list-unstyled ms-n2 mb-4">
-            <li class="nav-item {{ app.current_route == 'dashboard_main_account' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_main_account') }}">
-                    <i class="bi bi-house nav-icon"></i>
-                    {{ 'My dashboard'|trans }}
-                </a>
-            </li>
             {% if is_granted("ROLE_TEAM") %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('dashboard_main') }}">
@@ -20,10 +14,28 @@
                     </a>
                 </li>
             {% endif %}
+            <li class="nav-item {{ app.current_route == 'dashboard_main_account' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_main_account') }}">
+                    <i class="bi bi-person nav-icon"></i>
+                    {{ 'My account'|trans }}
+                </a>
+            </li>
             <li class="nav-item {{ app.current_route starts with 'dashboard_account_recipe_' ? 'active' : '' }}">
                 <a class="nav-link" href="{{ path('dashboard_account_recipe_index') }}">
                     <i class="bi bi-book nav-icon"></i>
                     {{ 'My recipes'|trans }}
+                </a>
+            </li>
+            <li class="nav-item {{ app.current_route starts with 'dashboard_account_favorites_' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_favorites_index') }}">
+                    <i class="bi bi-heart nav-icon"></i>
+                    {{ 'My favorites'|trans }}
+                </a>
+            </li>
+            <li class="nav-item {{ app.current_route starts with 'dashboard_account_ticket_' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_ticket_index') }}">
+                    <i class="bi bi-ticket nav-icon"></i>
+                    {{ 'My tickets'|trans }}
                 </a>
             </li>
             <li class="nav-item {{ app.current_route starts with 'dashboard_account_reviews_' ? 'active' : '' }}">

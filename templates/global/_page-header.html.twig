@@ -223,12 +223,14 @@
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{{ path('dashboard_main') }}">
+                                    <i class="bi bi-speedometer me-2"></i>
+                                    {{ 'Dashboard'|trans }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ path('dashboard_main_account') }}">
                                     <i class="bi bi-person me-2"></i>
-                                    {% if is_granted("ROLE_TEAM") %}
-                                        {{ 'Dashboard'|trans }}
-                                    {% else %}
-                                        {{ 'My dashboard'|trans }}
-                                    {% endif %}
+                                    {{ 'My account'|trans }}
                                 </a>
                             </li>
                             <li>
