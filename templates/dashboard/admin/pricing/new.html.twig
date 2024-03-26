@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
-                {% set breadcrumb = [{ "dashboard_admin_pricing_index": 'Pricings'|trans, "current":(pagetitle) }] %}
+                {% set breadcrumb = [{ "dashboard_admin_pricing_index": 'Manage pricings'|trans, "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
                     <a href="{{ path('dashboard_admin_pricing_index') }}" class="btn btn-outline-secondary me-2">

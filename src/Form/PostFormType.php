@@ -38,20 +38,23 @@ class PostFormType extends AbstractType
             ])
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
-                'empty_data' => '',
                 'required' => true,
-                //'purify_html' => true,
+                // 'purify_html' => true,
+                'empty_data' => '',
+                'help' => t('Keep your post titles under 10 characters. Write heading that describe the topic content. Contextualize for Your Audience.'),
             ])
-            ->add('slug', HiddenType::class, [
+            ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
                 'empty_data' => '',
                 'required' => false,
-                //'purify_html' => true,
+                'help' => t('Field must contain an unique value.'),
             ])
             ->add('content', TextareaType::class, [
                 'label' => t('Content :'),
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
+                'help' => t(''),
             ])
             ->add('author', UserAutocompleteField::class, ['label' => t('Author :')])
             /*

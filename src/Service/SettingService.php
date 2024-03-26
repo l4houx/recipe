@@ -2,22 +2,22 @@
 
 namespace App\Service;
 
-use Twig\Environment;
-use Doctrine\ORM\QueryBuilder;
 use App\Entity\Setting\Setting;
 use App\Entity\Traits\HasRoles;
-use Psr\Cache\CacheItemPoolInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\Setting\SettingRepository;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class SettingService
 {
@@ -203,6 +203,19 @@ class SettingService
         return $this->em->getRepository("App\Entity\Page")->getPages($slug);
     }
 
+    // Returns the levels after applying the specified search criterias
+    public function getLevels($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        $keyword = \array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $id = array_key_exists('id', $criterias) ? $criterias['id'] : 'all';
+        $limit = \array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $order = \array_key_exists('order', $criterias) ? $criterias['order'] : 'l.name';
+        $sort = \array_key_exists('sort', $criterias) ? $criterias['sort'] : 'ASC';
+
+        return $this->em->getRepository("App\Entity\Level")->getLevels($keyword, $id, $limit, $order, $sort);
+    }
+
     // Returns the reviews after applying the specified search criterias
     public function getReviews($criterias): QueryBuilder
     {
@@ -249,26 +262,26 @@ class SettingService
     public function getUsers($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $roles = array_key_exists('roles', $criterias) ? $criterias['roles'] : "all";
-        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : "all";
-        $createdbyorganizerslug = array_key_exists('createdbyorganizerslug', $criterias) ? $criterias['createdbyorganizerslug'] : "all";
-        $organizername = array_key_exists('organizername', $criterias) ? $criterias['organizername'] : "all";
-        $organizerslug = array_key_exists('organizerslug', $criterias) ? $criterias['organizerslug'] : "all";
-        $username = array_key_exists('username', $criterias) ? $criterias['username'] : "all";
-        $email = array_key_exists('email', $criterias) ? $criterias['email'] : "all";
-        $firstname = array_key_exists('firstname', $criterias) ? $criterias['firstname'] : "all";
-        $lastname = array_key_exists('lastname', $criterias) ? $criterias['lastname'] : "all";
+        $roles = array_key_exists('roles', $criterias) ? $criterias['roles'] : 'all';
+        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $createdbyorganizerslug = array_key_exists('createdbyorganizerslug', $criterias) ? $criterias['createdbyorganizerslug'] : 'all';
+        $organizername = array_key_exists('organizername', $criterias) ? $criterias['organizername'] : 'all';
+        $organizerslug = array_key_exists('organizerslug', $criterias) ? $criterias['organizerslug'] : 'all';
+        $username = array_key_exists('username', $criterias) ? $criterias['username'] : 'all';
+        $email = array_key_exists('email', $criterias) ? $criterias['email'] : 'all';
+        $firstname = array_key_exists('firstname', $criterias) ? $criterias['firstname'] : 'all';
+        $lastname = array_key_exists('lastname', $criterias) ? $criterias['lastname'] : 'all';
         $enabled = array_key_exists('enabled', $criterias) ? $criterias['enabled'] : true;
-        $countryslug = array_key_exists('countryslug', $criterias) ? $criterias['countryslug'] : "all";
-        $followedby = array_key_exists('followedby', $criterias) ? $criterias['followedby'] : "all";
-        $hasboughtticketforEvent = array_key_exists('hasboughtticketfor', $criterias) ? $criterias['hasboughtticketfor'] : "all";
-        $hasboughtticketforOrganizer = array_key_exists('hasboughtticketfororganizer', $criterias) ? $criterias['hasboughtticketfororganizer'] : "all";
-        $apiKey = array_key_exists('apikey', $criterias) ? $criterias['apikey'] : "all";
-        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : "all";
-        $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : "all";
-        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : "all";
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : "u.createdAt";
-        $order = array_key_exists('order', $criterias) ? $criterias['order'] : "DESC";
+        $countryslug = array_key_exists('countryslug', $criterias) ? $criterias['countryslug'] : 'all';
+        $followedby = array_key_exists('followedby', $criterias) ? $criterias['followedby'] : 'all';
+        $hasboughtticketforEvent = array_key_exists('hasboughtticketfor', $criterias) ? $criterias['hasboughtticketfor'] : 'all';
+        $hasboughtticketforOrganizer = array_key_exists('hasboughtticketfororganizer', $criterias) ? $criterias['hasboughtticketfororganizer'] : 'all';
+        $apiKey = array_key_exists('apikey', $criterias) ? $criterias['apikey'] : 'all';
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
+        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'u.createdAt';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
         return $this->em->getRepository("App\Entity\User")->getUsers($roles, $keyword, $createdbyorganizerslug, $organizername, $organizerslug, $username, $email, $firstname, $lastname, $enabled, $countryslug, $slug, $followedby, $hasboughtticketforEvent, $hasboughtticketforOrganizer, $apiKey, $isOnHomepageSlider, $limit, $sort, $order, $count);
@@ -327,6 +340,38 @@ class SettingService
         $order = \array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
 
         return $this->em->getRepository("App\Entity\HelpCenterArticle")->getHelpCenterArticles($selecttags, $isOnline, $isFeatured, $keyword, $slug, $category, $limit, $sort, $order, $otherthan);
+    }
+
+    // Returns the blog posts after applying the specified search criterias
+    public function getBlogPosts($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        $selecttags = array_key_exists('selecttags', $criterias) ? $criterias['selecttags'] : false;
+        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $category = array_key_exists('category', $criterias) ? $criterias['category'] : 'all';
+        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $otherthan = array_key_exists('otherthan', $criterias) ? $criterias['otherthan'] : 'all';
+        $sort = array_key_exists('order', $criterias) ? $criterias['order'] : 'createdAt';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
+
+        return $this->em->getRepository("App\Entity\Post")->getBlogPosts($selecttags, $isOnline, $keyword, $slug, $category, $limit, $sort, $order, $otherthan);
+    }
+
+    // Returns the blog posts categories after applying the specified search criterias
+    public function getBlogPostCategories($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        $parent = \array_key_exists('parent', $criterias) ? $criterias['parent'] : 'all';
+        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'c.name';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'ASC';
+
+        return $this->em->getRepository("App\Entity\PostCategory")->getBlogPostCategories($parent, $isOnline, $keyword, $slug, $limit, $order, $sort);
     }
 
     // Returns the currencies

@@ -66,9 +66,7 @@ class PagesController extends AdminBaseController
             }
         }
 
-        $form = $this->createForm(
-            PageFormType::class, $page,
-        )->add('saveAndCreateNew', SubmitType::class)->handleRequest($request);
+        $form = $this->createForm(PageFormType::class, $page)->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $this->em->persist($page);
@@ -77,12 +75,6 @@ class PagesController extends AdminBaseController
                     $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
                 } else {
                     $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
-                }
-
-                /** @var SubmitButton $submit */
-                $submit = $form->get('saveAndCreateNew');
-                if ($submit->isClicked()) {
-                    return $this->redirectToRoute('dashboard_admin_page_add', [], Response::HTTP_SEE_OTHER);
                 }
 
                 return $this->redirectToRoute('dashboard_admin_page_index', [], Response::HTTP_SEE_OTHER);

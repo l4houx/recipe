@@ -25,7 +25,7 @@ class StatusController extends AdminBaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(StatusRepository $statusRepository): Response
     {
         $rows = $statusRepository->findAll();

@@ -1,16 +1,17 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Add a new article'|trans %}
+{% set pagetitle = 'Add a new blog post category'|trans %}
+{% if postcategory.id %}{% set pagetitle = 'Edit the blog post category'|trans %}{% endif %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
     <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
-                {% set breadcrumb = [{ "dashboard_admin_blog_index": 'Articles'|trans, "current":(pagetitle) }] %}
+                {% set breadcrumb = [{ "dashboard_admin_blog_category_index": 'Manage blog post categories'|trans, "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_blog_index') }}" class="btn btn-outline-secondary me-2">
+                    <a href="{{ path('dashboard_admin_blog_category_index') }}" class="btn btn-outline-secondary me-2">
                         {{ 'Return to list'|trans }}
                     </a>
                 </div>
@@ -21,7 +22,7 @@
 
 {% block content %}
     <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-        {{ include('dashboard/admin/blog/_form.html.twig') }}
+        {{ include('dashboard/admin/blog/category/_form.html.twig') }}
     </div>
     <div class="col-xl-3 col-lg-4 col-md-12 col-12"></div>
 {% endblock %}

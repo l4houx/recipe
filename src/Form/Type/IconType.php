@@ -13,6 +13,7 @@ class IconType extends \Symfony\Component\Form\Extension\Core\Type\TextType
         $resolver->setDefaults([
             'label' => t('Icon'),
             'html5' => false,
+            'required' => false,
             'widget' => 'single_text',
             'attr' => ['class' => 'icon-picker', 'autocomplete' => 'disabled'],
             'help' => '',

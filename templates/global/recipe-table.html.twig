@@ -59,9 +59,13 @@
 	</td>
 	<td>
 		{% if recipe.isOnline == false %}
-			<span class="badge bg-danger">{{ 'Pending'|trans }}</span>
+			<span class="badge bg-danger-soft">
+				<i class="bi bi-eye-slash"></i> {{ "Offline"|trans }}
+			</span>
 		{% else %}
-			<span class="badge bg-success">{{ 'Online'|trans }}</span>
+			<span class="badge bg-success-soft">
+				<i class="bi bi-eye"></i> {{ "Online"|trans }}
+			</span>
 		{% endif %}
 	</td>
 	<td>

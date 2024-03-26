@@ -29,7 +29,7 @@ class BlogController extends AdminBaseController
     ) {
     }
 
-    #[Route(path: '', name: 'index', methods: ['GET'])]
+    #[Route(path: '/articles', name: 'index', methods: ['GET'])]
     #[IsGranted(PostVoter::LIST)]
     public function index(Request $request, Security $security): Response
     {
@@ -38,10 +38,10 @@ class BlogController extends AdminBaseController
         $canListAll = $security->isGranted(PostVoter::LIST_ALL);
         $rows = $this->postRepository->findForPagination($page, $canListAll ? null : $userId);
 
-        return $this->render('dashboard/admin/blog/index.html.twig', compact('rows'));
+        return $this->render('dashboard/admin/blog/articles/index.html.twig', compact('rows'));
     }
 
-    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
+    #[Route(path: '/articles/new', name: 'new', methods: ['GET', 'POST'])]
     #[IsGranted(PostVoter::CREATE)]
     public function new(Request $request, #[CurrentUser] User $user): Response
     {
@@ -59,18 +59,18 @@ class BlogController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/blog/new.html.twig', compact('post', 'form'));
+        return $this->render('dashboard/admin/blog/articles/new.html.twig', compact('post', 'form'));
     }
 
-    #[Route(path: '/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/articles/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function show(Post $post): Response
     {
         $this->denyAccessUnlessGranted(PostVoter::SHOW, $post, $this->translator->trans("Content can only be shown to their authors."));
     
-        return $this->render('dashboard/admin/blog/show.html.twig', compact('post'));
+        return $this->render('dashboard/admin/blog/articles/show.html.twig', compact('post'));
     }
 
-    #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/articles/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     //#[IsGranted(PostVoter::MANAGE, subject: 'post', message: 'Content can only be edited by their authors.')]
     public function edit(Request $request, Post $post): Response
     {
@@ -86,10 +86,10 @@ class BlogController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_blog_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/blog/edit.html.twig', compact('post', 'form'));
+        return $this->render('dashboard/admin/blog/articles/edit.html.twig', compact('post', 'form'));
     }
 
-    #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/articles/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     #[IsGranted(PostVoter::MANAGE, subject: 'post')]
     public function delete(Request $request, Post $post): Response
     {

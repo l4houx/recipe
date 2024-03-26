@@ -1,0 +1,66 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th>{{ knp_pagination_sortable(rows, '#', 'c.id') }}</th>
+				<th>{{ 'Name'|trans }}</th>
+				{# <th>Recettes</th> #}
+				<th>{{ 'Color'|trans }}</th>
+				<th>{{ 'Last updated'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for category in rows %}
+				{% set link = path('dashboard_admin_category_edit', { id : category.id }) %}
+				<tr>
+					<td>{{ category.id }}</td>
+					<td>
+						<a href="{{ link }}" class="text-inherit">
+							<div class="d-flex align-items-center">
+								<div class="ms-3">
+									<h4 class="mb-1 text-primary-hover">{{ category.name }}</h4>
+									<span>
+										{{ 'Published the'|trans }}
+										{{ category.createdAt ? category.createdAt | format_date('long') : '' }}
+									</span>
+								</div>
+							</div>
+						</a>
+					</td>
+					{#  
+                    <td>
+                        {{ category.count }}
+                    </td>
+                    #}
+					<td>
+						<span class="text-decoration-none" style="color: {{ category.color }}">{{ category.name }}</span>
+					</td>
+					<td>{{ category.updatedAt ? category.updatedAt | ago() : '' }}</td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+								<a class="dropdown-item" href="{{ link }}">
+									<i class="bi bi-pencil dropdown-item-icon"></i>
+									{{ 'Edit'|trans }}
+								</a>
+								<a href="#" onclick="event.preventDefault(); confirm("{{ 'Are you sure you want to delete this item?'|trans }}") && document.getElementById('js-category-delete-form').submit();" class="dropdown-item">
+									<i class="bi bi-trash dropdown-item-icon"></i>
+									{{ 'Delete'|trans }}
+								</a>
+								<form id="js-category-delete-form" action="{{ path('dashboard_admin_category_delete', {id: category.id}) }}" method="post" class="">
+									<input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.id) }}">
+									<input type="hidden" name="_method" value="DELETE">
+								</form> 
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

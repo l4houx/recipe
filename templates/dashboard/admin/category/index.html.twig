@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'All categories'|trans %}
+{% set pagetitle = 'Manage recipe categories'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -18,101 +18,45 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-12">
-            <div class="mb-lg-4 mb-2">
-                <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
-            </div>
+    <div class="p-4 row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+            <form class="d-flex align-items-center">
+                <span class="position-absolute ps-3 search-icon">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
+            </form>
         </div>
-        <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
-            <select class="form-select" data-ddg-inputtype="unknown">
-                <option value="">Filter</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Pending">Pending</option>
-                <option value="Modified">Modified</option>
-                <option value="Finished">Finished</option>
-                <option value="Cancel">Cancel</option>
+        <div class="col-6 col-lg-3">
+            <select class="form-select">
+                <option selected="">{{ "Select an option"|trans }}</option>
+                <option value="1">Shipped</option>
+                <option value="2">Cancelled</option>
+                <option value="3">Return</option>
+            </select>
+        </div>
+        <div class="col-6 col-lg-3">
+            <select class="form-select">
+                <option selected="">{{ "Select an option"|trans }}</option>
+                <option value="1">Shipped</option>
+                <option value="2">Cancelled</option>
+                <option value="3">Processing</option>
             </select>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="table-responsive overflow-y-hidden">
-                    <table class="table mb-0 text-nowrap table-hover table-centered">
-                        <thead class="">
-                            <tr>
-                                <th>{{ knp_pagination_sortable(rows, '#', 'c.id') }}</th>
-                                <th>{{ knp_pagination_sortable(rows, 'Name'|trans, 'c.name') }}</th>
-                                {# <th>Recettes</th> #}
-                                <th>{{ 'Color'|trans }}</th>
-                                <th>{{ 'Update'|trans }}</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for category in rows %}
-                                {% set link = path('dashboard_admin_category_edit', { id : category.id }) %}
-                                <tr>
-                                    <td>{{ category.id }}</td>
-                                    <td>
-                                        <a href="{{ link }}" class="text-inherit">
-                                            <div class="d-flex align-items-center">
-                                                <div class="ms-3">
-                                                    <h4 class="mb-1 text-primary-hover">{{ category.name }}</h4>
-                                                    <span>
-                                                        {{ 'Published'|trans }} {{ category.createdAt ? category.createdAt | ago()}}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </td>
-                                    {#  
-                                    <td>
-                                        {{ category.count }}
-                                    </td>
-                                    #}
-                                    <td>
-                                        <span class="text-decoration-none" style="color: {{ category.color }}">{{ category.name }}</span>
-                                    </td>
-                                    <td>{{ category.updatedAt ? category.updatedAt | date('Y-m-d H:i:s') : '' }}</td>
-                                    {#  
-                                    <td>
-                                        <a class="btn btn-outline-warning btn-sm" href="{{ link }}">
-                                            {{ 'Edit'|trans }}
-                                        </a>
-                                        {{ include('dashboard/admin/category/_delete_form.html.twig') }}
-                                    </td>
-                                    #}
-                                    <td>
-                                        <div class="dropdown dropstart">
-                                            <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bi bi-three-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
-                                                <span class="dropdown-header">{{ 'Settings'|trans }}</span>
-                                                <a class="dropdown-item" href="{{ link }}">
-                                                    <i class="bi bi-pencil dropdown-item-icon"></i>
-                                                    {{ 'Edit'|trans }}
-                                                </a>
-                                                {{ include('dashboard/admin/category/_delete_form.html.twig') }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="6">
-                                    {% include "global/message.html.twig" with { type: "info", message: ('No records found'|trans), icon: "bi bi-exclamation-circle" } %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer">
-                    {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-                </div>
+                {% if rows.getTotalItemCount > 0 %}
+                    {% include "dashboard/admin/category/manage-categories-table.html.twig" with {rows: rows} %}
+                    <div class="card-footer">
+                        {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+                    </div>
+                {% else %}
+                    <div class="card-footer">
+                        {% include "global/message.html.twig" with { type: "info", message: ('No categories found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'All recipes'|trans %}
+{% set pagetitle = 'Manage recipes'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -18,106 +18,45 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-12">
-            <div class="mb-lg-4 mb-2">
-                <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
-            </div>
+    <div class="p-4 row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+            <form class="d-flex align-items-center">
+                <span class="position-absolute ps-3 search-icon">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
+            </form>
         </div>
-        <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
-            <select class="form-select" data-ddg-inputtype="unknown">
-                <option value="">Filter</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Pending">Pending</option>
-                <option value="Modified">Modified</option>
-                <option value="Finished">Finished</option>
-                <option value="Cancel">Cancel</option>
+        <div class="col-6 col-lg-3">
+            <select class="form-select">
+                <option selected="">{{ "Select an option"|trans }}</option>
+                <option value="1">Shipped</option>
+                <option value="2">Cancelled</option>
+                <option value="3">Return</option>
+            </select>
+        </div>
+        <div class="col-6 col-lg-3">
+            <select class="form-select">
+                <option selected="">{{ "Select an option"|trans }}</option>
+                <option value="1">Shipped</option>
+                <option value="2">Cancelled</option>
+                <option value="3">Processing</option>
             </select>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="table-responsive overflow-y-hidden">
-                    <table class="table mb-0 text-nowrap table-hover table-centered">
-                        <thead class="">
-                            <tr>
-                                <th>{{ knp_pagination_sortable(rows, '#', 'r.id') }}</th>
-                                <th>{{ knp_pagination_sortable(rows, 'Title'|trans, 'r.title') }}</th>
-                                <th>{{ knp_pagination_sortable(rows, 'Category'|trans, 'r.category') }}</th>
-                                <th>{{ 'Duration'|trans }}</th>
-                                <th>{{ 'Views'|trans }}</th>
-                                <th>{{ 'Update'|trans }}</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for recipe in rows %}
-                                {% set link = path('dashboard_admin_recipe_edit', { id : recipe.id }) %}
-                                <tr>
-                                    <td>{{ recipe.id }}</td>
-                                    <td>
-                                        <a href="{{ link }}" class="text-inherit">
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <img src="{{ recipe.thumbnail ? asset(recipe.getThumbnailPath) : recipe.getThumbnailPlaceholder }}" alt="{{ recipe.title }}" class="img-4by3-lg rounded">
-                                                </div>
-                                                <div class="ms-3">
-                                                    <h4 class="mb-1 text-primary-hover">{{ recipe.title }}</h4>
-                                                    <span>
-                                                        {{ 'Published'|trans }} {{ recipe.createdAt ? recipe.createdAt | ago() }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <span class="text-decoration-none" style="color: {{ recipe.category.color | default('') }}">
-                                            {{ recipe.category.name | default('') }}
-                                        </span>
-                                    </td>
-                                    <td>{{ recipe.duration }}</td>
-                                    <td>
-                                        {{ recipe.views }}
-                                    </td>
-                                    <td>{{ recipe.updatedAt ? recipe.updatedAt | date('Y-m-d H:i:s') : '' }}</td>
-                                    {#  
-                                    <td>
-                                        <a href="{{ link }}" class="btn btn-outline-warning btn-sm">
-                                            {{ 'Edit'|trans }}
-                                        </a>
-                                        {{ include('dashboard/admin/recipe/_delete_form.html.twig', {recipe: recipe}, with_context = false) }}
-                                    </td>
-                                    #}
-                                    <td>
-                                        <div class="dropdown dropstart">
-                                            <a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="bi bi-three-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
-                                                <span class="dropdown-header">{{ 'Settings'|trans }}</span>
-                                                <a class="dropdown-item" href="{{ link }}">
-                                                    <i class="bi bi-pencil dropdown-item-icon"></i>
-                                                    {{ 'Edit'|trans }}
-                                                </a>
-                                                {{ include('dashboard/admin/recipe/_delete_form.html.twig', {recipe: recipe}, with_context = false) }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="9">
-                                    {% include "global/message.html.twig" with { type: "info", message: ('No records found'|trans), icon: "bi bi-exclamation-circle" } %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer">
-                    {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-                </div>
+                {% if rows.getTotalItemCount > 0 %}
+                    {% include "dashboard/admin/recipe/manage-recipes-table.html.twig" with {rows: rows} %}
+                    <div class="card-footer">
+                        {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+                    </div>
+                {% else %}
+                    <div class="card-footer">
+                        {% include "global/message.html.twig" with { type: "info", message: ('No recipes found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

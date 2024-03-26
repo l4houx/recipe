@@ -27,20 +27,23 @@ class HelpCenterArticleType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
-                'empty_data' => '',
                 'required' => true,
                 // 'purify_html' => true,
+                'empty_data' => '',
+                'help' => t('Keep your article titles under 10 characters. Write a name that describes the content of the topic. Contextualize for your audience..'),
             ])
-            ->add('slug', HiddenType::class, [
+            ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
                 'empty_data' => '',
                 'required' => false,
-                // 'purify_html' => true,
+                'help' => t('Field must contain an unique value.'),
             ])
             ->add('content', TextareaType::class, [
                 'label' => t('Content :'),
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
+                'help' => t(''),
             ])
             ->add('tags', TextType::class, [
                 'label' => t('Keywords :'),
@@ -52,9 +55,9 @@ class HelpCenterArticleType extends AbstractType
                 'label' => t('Category'),
                 'required' => true,
                 'multiple' => false,
-                'attr' => ['class' => 'select2'],
                 'class' => HelpCenterCategory::class,
                 'choice_label' => 'name',
+                'autocomplete' => true,
                 'empty_data' => '',
                 'attr' => [
                     'data-limit' => 1,

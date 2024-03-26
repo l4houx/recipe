@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\PageRepository;
+use App\Service\SettingService;
 use App\Repository\UserRepository;
 use App\Repository\PricingRepository;
 use App\Repository\TestimonialRepository;
@@ -16,8 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route(path: '/page')]
 class PagesController extends AbstractController
 {
-    public function __construct(private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+        private readonly SettingService $settingService
+    ) {
     }
 
     #[Route(path: '/pricing', name: 'pricing', methods: ['GET'])]
@@ -28,7 +30,7 @@ class PagesController extends AbstractController
         if (!$pricings) {
             $this->addFlash('danger', $this->translator->trans('The plan can not be found'));
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('pages/pricing-detail.html.twig', compact('pricings'));
@@ -60,7 +62,7 @@ class PagesController extends AbstractController
         if (!$teams) {
             $this->addFlash('danger', $this->translator->trans('The team can not be found'));
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('pages/team-detail.html.twig', compact('teams'));
@@ -74,7 +76,7 @@ class PagesController extends AbstractController
         if (!$testimonials) {
             $this->addFlash('danger', $this->translator->trans('The testimonial can not be found'));
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('pages/testimonial-detail.html.twig', compact('testimonials'));
@@ -92,22 +94,15 @@ class PagesController extends AbstractController
         return $this->render('pages/pages.html.twig');
     }
 
-    #[Route(path: '/{slug}-{id}', name: 'page', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
-    public function page(Request $request, PageRepository $pageRepository, string $slug, int $id): Response
+    #[Route(path: '/{slug}', name: 'page', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function page(Request $request, string $slug): Response
     {
-        $page = $pageRepository->find($id);
-
-        if ($page->getSlug() !== $slug) {
-            return $this->redirectToRoute('page', [
-                'id' => $page->getId(),
-                'slug' => $page->getSlug(),
-            ], 301);
-        }
+        $page = $this->settingService->getPages(['slug' => $slug])->getQuery()->getOneOrNullResult();
 
         if (!$page) {
             $this->addFlash('danger', $this->translator->trans('The page can not be found'));
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('pages/page-detail.html.twig', compact('page'));

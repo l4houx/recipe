@@ -28,7 +28,7 @@ class PageRepository extends ServiceEntityRepository
         $qb->select('p');
 
         if ('all' !== $slug) {
-            $qb->andWhere('slug = :slug')->setParameter('slug', $slug);
+            $qb->andWhere('p.slug = :slug')->setParameter('slug', $slug);
         }
 
         return $qb;

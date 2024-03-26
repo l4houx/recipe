@@ -23,12 +23,17 @@ class CategoryFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => t('name :'),
+                'label' => t('Name'),
+                'required' => true,
+                // 'purify_html' => true,
                 'empty_data' => '',
+                'help' => t('Keep your category names under 10 characters. Write a name that describes the content of the topic. Contextualize for your audience..'),
             ])
             ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
                 'empty_data' => '',
                 'required' => false,
+                'help' => t('Field must contain an unique value.'),
             ])
             /*
             ->add('recipes', EntityType::class, [
@@ -42,6 +47,7 @@ class CategoryFormType extends AbstractType
             */
             ->add('color', ColorType::class, [
                 'label' => t('Color :'),
+                'empty_data' => '',
                 'required' => false,
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('name'))

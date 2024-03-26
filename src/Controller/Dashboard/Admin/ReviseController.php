@@ -41,6 +41,6 @@ class ReviseController extends AdminBaseController
             return $this->redirectToRoute('dashboard_main_panel', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/blog/revise.html.twig', compact('revise'));
+        return $this->render('dashboard/admin/blog/articles/revise.html.twig', compact('revise'));
     }
 }

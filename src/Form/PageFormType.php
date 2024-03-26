@@ -29,17 +29,23 @@ class PageFormType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
+                'required' => true,
+                // 'purify_html' => true,
                 'empty_data' => '',
+                'help' => t('Keep your page titles under 10 characters. Write heading that describe the topic content. Contextualize for Your Audience.'),
             ])
             ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
                 'empty_data' => '',
                 'required' => false,
+                'help' => t('Field must contain an unique value.'),
             ])
             ->add('content', TextareaType::class, [
                 'label' => t('Content :'),
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
+                'help' => t(''),
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('title'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())

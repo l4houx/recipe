@@ -39,9 +39,11 @@ class UserFormType extends AbstractType
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('User name')],
             ])
-            ->add('slug', HiddenType::class, [
+            ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
                 'empty_data' => '',
                 'required' => false,
+                'help' => t('Field must contain an unique value.'),
             ])
             ->add('firstname', TextType::class, [
                 'label' => t('First name :'),
