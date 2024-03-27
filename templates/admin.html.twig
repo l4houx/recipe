@@ -2,26 +2,16 @@
 
 {% block body %}
     <div id="db-wrapper">
-        {% include "global/_sidebar2.html.twig" %}
+        {% include "global/_sidebar.html.twig" %}
         <main id="page-content">
             {% include "global/_page-header.html.twig" %}
             <section class="container-fluid p-4">
                 {% block breadcrumb '' %}
                 {% block actions '' %}
                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                    {#
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-12">
-                            <div class="pb-1 mb-1 d-md-flex align-items-center justify-content-between">
-                                {% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('You are connected as "%username%'|trans({'%username%' : app.user.username})~ '", <a href="'~ path('dashboard_main', {'_switch_user': '_exit'}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to return to your dashboard'|trans) } %}
-                            </div>
-                        </div>
-                    </div>
-                    #}
-
                     <div class="row">
                         <div class="col-12 mb-2">
-                            {% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('You are connected as "%username%'|trans({'%username%' : app.user.username})~ '", <a href="'~ path('dashboard_main', {'_switch_user': '_exit'}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to return to your dashboard'|trans) } %}
+                            {% include "global/message.html.twig" with { type: 'warning', icon: 'bi bi-exclamation-circle', message: ('You are connected as "%username%'|trans({'%username%' : app.user.username})~ '", <a href="'~ path('dashboard_main', {'_switch_user': '_exit'}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to return to your dashboard'|trans) } %}
                         </div>
                     </div>
                 {% endif %}
