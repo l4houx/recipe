@@ -15,6 +15,8 @@ document.body.addEventListener('click', () => {
     canvasConfetti()
 })
 */
+import './vendor/simplebar/dist/simplebar.min.css';
+import './vendor/simplebar/simplebar.index.js';
 
 // start the Stimulus application
 import './bootstrap.js';

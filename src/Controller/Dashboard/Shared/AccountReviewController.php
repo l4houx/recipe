@@ -19,8 +19,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_account_reviews_')]
-//#[Route(path: '/%website_dashboard_path%/main-panel', name: 'dashboard_admin_reviews_')]
 #[IsGranted(HasRoles::DEFAULT)]
 class AccountReviewController extends BaseController
 {
@@ -30,8 +28,8 @@ class AccountReviewController extends BaseController
     ) {
     }
 
-    #[Route(path: '/my-reviews', name: 'index', methods: ['GET'])]
-    //#[Route(path: '/manage-reviews', name: 'index', methods: ['GET'])]
+    #[Route(path: '/%website_dashboard_path%/account/my-reviews', name: 'dashboard_account_reviews_index', methods: ['GET'])]
+    #[Route(path: '/%website_dashboard_path%/main-panel/manage-reviews', name: 'dashboard_admin_reviews_index', methods: ['GET'])]
     public function index(Request $request, AuthorizationCheckerInterface $authChecker, PaginatorInterface $paginator): Response
     {
         $keyword = '' == $request->query->get('keyword') ? 'all' : $request->query->get('keyword');
@@ -57,7 +55,7 @@ class AccountReviewController extends BaseController
         return $this->render('dashboard/shared/review/index.html.twig', compact('rows', 'user'));
     }
 
-    #[Route(path: '/my-reviews/{slug}/new', name: 'new', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/%website_dashboard_path%/account/my-reviews/{slug}/new', name: 'dashboard_account_reviews_new', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     public function new(
         Request $request,
         EntityManagerInterface $em,

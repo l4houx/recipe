@@ -1,3 +1,6 @@
+{% set routename = app.request.get('_route') %}
+{% set random = setting.generateReference(5) %}
+
 <nav class="navbar-vertical navbar">
 	<div class="vh-100 simplebar-scrollable-y" data-simplebar="init">
 		<div class="simplebar-wrapper">
@@ -20,7 +23,7 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{ app.current_route starts with 'dashboard_main_panel' ? 'active' : '' }}" href="{{ path('dashboard_main_panel') }}">
+									<a class="nav-link {% if routename == "dashboard_main_panel" %}active{% endif %}" href="{{ path('dashboard_main_panel') }}">
 										<i class="nav-icon bi bi-speedometer2 me-2"></i>
 										{{ 'Dashboard'|trans }}
 									</a>
@@ -29,19 +32,19 @@
 									<div class="nav-divider"></div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navRecipe" aria-expanded="false" aria-controls="navRecipe">
-										<i class="nav-icon bi bi-file me-2"></i>
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#recipe-submenu-{{random}}" aria-expanded="false" aria-controls="recipe-submenu-{{random}}">
+										<i class="nav-icon bi bi-book me-2"></i>
 										{{ 'Recipe'|trans }}
 									</a>
-									<div id="navRecipe" class="collapse" data-bs-parent="#sideNavbar">
+									<div id="recipe-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_category_index" or routename == "dashboard_admin_category_new" or routename == "dashboard_admin_category_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_recipe_' ? 'active' : '' }}" href="{{ path('dashboard_admin_recipe_index') }}">
+												<a class="nav-link {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" %}active{% endif %}" href="{{ path('dashboard_admin_recipe_index') }}">
 													{{ 'Recipe'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_category_index') }}">
+												<a class="nav-link {% if routename == "dashboard_admin_category_index" or routename == "dashboard_admin_category_new" or routename == "dashboard_admin_category_edit" %}active{% endif %}" href="{{ path('dashboard_admin_category_index') }}">
 													{{ 'Category'|trans }}
 												</a>
 											</li>
@@ -49,26 +52,26 @@
 									</div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navBlog" aria-expanded="false" aria-controls="navBlog">
-										<i class="nav-icon bi bi-file me-2"></i>
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#blog-submenu-{{random}}" aria-expanded="false" aria-controls="blog-submenu-{{random}}">
+										<i class="nav-icon bi bi-newspaper me-2"></i>
 										{{ 'Blog'|trans }}
 									</a>
-									<div id="navBlog" class="collapse " data-bs-parent="#sideNavbar">
+									<div id="blog-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_blog_index" or routename == "dashboard_admin_blog_index_new" or routename == "dashboard_admin_blog_index_edit" or routename == "dashboard_admin_blog_category_index" or routename == "dashboard_admin_blog_category_new" or routename == "dashboard_admin_blog_category_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_index') }}">
-													{{ 'Blog'|trans }}
+												<a class="nav-link {% if routename == "dashboard_admin_blog_index" or routename == "dashboard_admin_blog_index_new" or routename == "dashboard_admin_blog_index_edit" %}active{% endif %}" href="{{ path('dashboard_admin_blog_index') }}">
+													{{ 'Articles'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_category_index') }}">
-													{{ 'Blog Category'|trans }}
+												<a class="nav-link {% if routename == "dashboard_admin_blog_category_index" or routename == "dashboard_admin_blog_category_new" or routename == "dashboard_admin_blog_category_edit" %}active{% endif %}" href="{{ path('dashboard_admin_blog_category_index') }}">
+													{{ 'Categories'|trans }}
 												</a>
 											</li>
 											{#
 											<li class="nav-item">
 												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_keyword_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_keyword_index') }}">
-													{{ 'Blog Keyword'|trans }}
+													{{ 'Keyword'|trans }}
 												</a>
 											</li>
 											#}
@@ -76,19 +79,19 @@
 									</div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navHelp" aria-expanded="false" aria-controls="navHelp">
-										<i class="nav-icon bi bi-file me-2"></i>
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#helpcenter-submenu-{{random}}" aria-expanded="false" aria-controls="helpcenter-submenu-{{random}}">
+										<i class="nav-icon bi bi-question-circle me-2"></i>
 										{{'Help center' | trans}}
 									</a>
-									<div id="navHelp" class="collapse" data-bs-parent="#sideNavbar" style="">
+									<div id="helpcenter-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_help_center_category_index" or routename == "dashboard_admin_help_center_category_add" or routename == "dashboard_admin_help_center_category_edit" or routename == "dashboard_admin_help_center_article_index" or routename == "dashboard_admin_help_center_article_add" or routename == "dashboard_admin_help_center_article_edit" %}show{% endif %}" data-bs-parent="#sideNavbar" style="">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_help_center_article_' ? 'active' : '' }}" href="{{ path('dashboard_admin_help_center_article_index') }}">
+												<a class="nav-link {% if routename == "dashboard_admin_help_center_article_index" or routename == "dashboard_admin_help_center_article_add" or routename == "dashboard_admin_help_center_article_edit" %}active{% endif %}" href="{{ path('dashboard_admin_help_center_article_index') }}">
 													{{ 'Articles'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_help_center_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_help_center_category_index') }}">
+												<a class="nav-link {% if routename == "dashboard_admin_help_center_category_index" or routename == "dashboard_admin_help_center_category_add" or routename == "dashboard_admin_help_center_category_edit" %}active{% endif %}" href="{{ path('dashboard_admin_help_center_category_index') }}">
 													{{ 'Categories'|trans }}
 												</a>
 											</li>
@@ -97,19 +100,69 @@
 								</li>
 								<li class="nav-item">
 									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navSetting" aria-expanded="false" aria-controls="navSetting">
-										<i class="nav-icon bi bi-file me-2"></i>
+										<i class="nav-icon bi bi-gear me-2"></i>
 										{{'Setting' | trans}}
 									</a>
 									<div id="navSetting" class="collapse" data-bs-parent="#sideNavbar" style="">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_help_center_article_' ? 'active' : '' }}" href="{{ path('dashboard_admin_help_center_article_index') }}">
-													{{ 'Pages'|trans }}
+												<a class="nav-link" href="">
+													{{ 'Layout, parameters and SEO'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link {{ app.current_route starts with 'dashboard_admin_help_center_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_help_center_category_index') }}">
-													{{ 'Reviews'|trans }}
+												<a class="nav-link" href="">
+													{{ 'Menus'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Homepage'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Payments and Fees'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Checkout'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Mail server'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Google Recaptcha'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Google Maps'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Social Login'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Blog settings'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Newsletter'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Sitemap'|trans }}
 												</a>
 											</li>
 										</ul>
@@ -140,20 +193,20 @@
 									<div class="navbar-heading">{{ 'Premium'|trans }}</div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_user_' ? 'active' : '' }}" href="{{ path('dashboard_admin_user_index') }}">
-										<i class="nav-icon bi bi-app me-2"></i>
+									<a class="nav-link {% if routename == "dashboard_admin_user_index" %}active{% endif %}" href="{{ path('dashboard_admin_user_index') }}">
+										<i class="nav-icon bi bi-person me-2"></i>
 										{{ 'Users'|trans }}
 									</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="#!">
-										<i class="nav-icon bi bi-app me-2"></i>
+										<i class="nav-icon bi bi-arrows-angle-contract me-2"></i>
 										{{ 'Transactions'|trans }}
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_pricing_' ? 'active' : '' }}" href="{{ path('dashboard_admin_pricing_index') }}">
-										<i class="nav-icon bi bi-app me-2"></i>
+									<a class="nav-link {% if routename == "dashboard_admin_pricing_index" %}active{% endif %}" href="{{ path('dashboard_admin_pricing_index') }}">
+										<i class="nav-icon bi bi-award me-2"></i>
 										{{ 'Formulas'|trans }}
 									</a>
 								</li>
@@ -161,13 +214,13 @@
 									<div class="navbar-heading">{{ 'Ticketing'|trans }}</div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_level_' ? 'active' : '' }}" href="{{ path('dashboard_admin_level_index') }}">
-										<i class="nav-icon bi bi-app me-2"></i>
+									<a class="nav-link {% if routename == "dashboard_admin_level_index" %}active{% endif %}" href="{{ path('dashboard_admin_level_index') }}">
+										<i class="nav-icon bi bi-reception-4 me-2"></i>
 										{{ 'Levels'|trans }}
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_status_' ? 'active' : '' }}" href="{{ path('dashboard_admin_status_index') }}">
+									<a class="nav-link {% if routename == "dashboard_admin_status_index" %}active{% endif %}" href="{{ path('dashboard_admin_status_index') }}">
 										<i class="nav-icon bi bi-app me-2"></i>
 										{{ 'Status'|trans }}
 									</a>
@@ -176,20 +229,20 @@
 									<div class="navbar-heading">{{ 'Others'|trans }}</div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_page_' ? 'active' : '' }}" href="{{ path('dashboard_admin_page_index') }}">
-										<i class="nav-icon bi bi-app me-2"></i>
+									<a class="nav-link {% if routename == "dashboard_admin_page_index" %}active{% endif %}" href="{{ path('dashboard_admin_page_index') }}">
+										<i class="nav-icon bi bi-filetype-php me-2"></i>
 										{{ 'Pages'|trans }}
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{ app.current_route starts with 'dashboard_admin_status_' ? 'active' : '' }}" href="{{ path('dashboard_admin_status_index') }}">
-										<i class="nav-icon bi bi-app me-2"></i>
+									<a class="nav-link {% if routename == "dashboard_admin_reviews_index" %}active{% endif %}" href="{{ path('dashboard_admin_reviews_index') }}">
+										<i class="nav-icon bi bi-star me-2"></i>
 										{{ 'Reviews'|trans }}
 									</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="#!">
-										<i class="nav-icon bi bi-app me-2"></i>
+										<i class="nav-icon bi bi-bar-chart me-2"></i>
 										{{ 'Stats'|trans }}
 									</a>
 								</li>

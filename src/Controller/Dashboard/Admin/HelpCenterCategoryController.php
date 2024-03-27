@@ -52,9 +52,9 @@ class HelpCenterCategoryController extends AbstractController
         return $this->render('dashboard/admin/helpCenter/category/index.html.twig', compact('rows'));
     }
 
-    #[Route(path: '/categories/add', name: 'add', methods: ['GET', 'POST'])]
+    #[Route(path: '/categories/new', name: 'new', methods: ['GET', 'POST'])]
     #[Route(path: '/categories/{slug}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function addedit(Request $request, ?string $slug = null): Response
+    public function newedit(Request $request, ?string $slug = null): Response
     {
         if (!$slug) {
             $category = new HelpCenterCategory();
@@ -85,7 +85,7 @@ class HelpCenterCategoryController extends AbstractController
             $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
-        return $this->render('dashboard/admin/helpCenter/category/add-edit.html.twig', compact('form', 'category'));
+        return $this->render('dashboard/admin/helpCenter/category/new-edit.html.twig', compact('form', 'category'));
     }
 
     #[Route(path: '/categories/{slug}/disable', name: 'disable', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
@@ -112,7 +112,7 @@ class HelpCenterCategoryController extends AbstractController
             $this->addFlash('danger', $this->translator->trans('Content was disabled successfully.'));
         }
 
-        $category->setisOnline(true);
+        $category->setIsOnline(true);
         $this->em->persist($category);
         $this->em->flush();
         $this->em->remove($category);
@@ -154,11 +154,11 @@ class HelpCenterCategoryController extends AbstractController
         }
 
         if (true === $category->getisOnline()) {
-            $category->setisOnline(false);
-            $this->addFlash('success', $this->translator->trans('Content is visible'));
+            $category->setIsOnline(false);
+            $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $category->setisOnline(true);
-            $this->addFlash('danger', $this->translator->trans('Content is hidden'));
+            $category->setIsOnline(true);
+            $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 
         $this->em->persist($category);

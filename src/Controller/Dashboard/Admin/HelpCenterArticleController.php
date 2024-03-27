@@ -51,9 +51,9 @@ class HelpCenterArticleController extends AbstractController
         return $this->render('dashboard/admin/helpCenter/articles/index.html.twig', compact('rows'));
     }
 
-    #[Route(path: '/articles/add', name: 'add', methods: ['GET', 'POST'])]
+    #[Route(path: '/articles/new', name: 'new', methods: ['GET', 'POST'])]
     #[Route(path: '/articles/{slug}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function addedit(Request $request, ?string $slug = null): Response
+    public function newedit(Request $request, ?string $slug = null): Response
     {
         if (!$slug) {
             $article = new HelpCenterArticle();
@@ -84,7 +84,7 @@ class HelpCenterArticleController extends AbstractController
             $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
-        return $this->render('dashboard/admin/helpCenter/articles/add-edit.html.twig', compact('form', 'article'));
+        return $this->render('dashboard/admin/helpCenter/articles/new-edit.html.twig', compact('form', 'article'));
     }
 
     #[Route(path: '/articles/{slug}/featured', name: 'featured', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
@@ -173,10 +173,10 @@ class HelpCenterArticleController extends AbstractController
 
         if (true === $article->getIsOnline()) {
             $article->setIsOnline(false);
-            $this->addFlash('success', $this->translator->trans('Content is visible'));
+            $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
             $article->setIsOnline(true);
-            $this->addFlash('danger', $this->translator->trans('Content is hidden'));
+            $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 
         $this->em->persist($article);

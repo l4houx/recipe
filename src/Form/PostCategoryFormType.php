@@ -46,6 +46,7 @@ class PostCategoryFormType extends AbstractType
                 'empty_data' => '',
                 'required' => false,
             ])
+            /*
             ->add('parent', EntityType::class, [
                 'required' => false,
                 'multiple' => false,
@@ -62,6 +63,7 @@ class PostCategoryFormType extends AbstractType
                 'choice_label' => 'id',
                 'multiple' => true,
             ])
+            */
             ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('name'))
             ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;

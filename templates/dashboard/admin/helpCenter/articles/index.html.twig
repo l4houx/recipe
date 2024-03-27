@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_help_center_article_add') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                    <a href="{{ path('dashboard_admin_help_center_article_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
                 </div>
             </div>
         </div>

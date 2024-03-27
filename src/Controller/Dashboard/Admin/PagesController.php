@@ -49,9 +49,9 @@ class PagesController extends AdminBaseController
         return $this->render('dashboard/admin/pages/index.html.twig', compact('rows'));
     }
 
-    #[Route(path: '/add', name: 'add', methods: ['GET', 'POST'])]
+    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
     #[Route(path: '/{slug}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function addedit(Request $request, #[CurrentUser] User $user, ?string $slug = null): Response
+    public function newedit(Request $request, #[CurrentUser] User $user, ?string $slug = null): Response
     {
         if (!$slug) {
             $page = new Page();
@@ -82,14 +82,14 @@ class PagesController extends AdminBaseController
             $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
-        return $this->render('dashboard/admin/pages/add-edit.html.twig', compact('page', 'form'));
+        return $this->render('dashboard/admin/pages/new-edit.html.twig', compact('page', 'form'));
     }
 
-    #[Route(path: '/{slug}/disable', name: 'disable', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     #[Route(path: '/{slug}/delete', name: 'delete', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    /*
     public function delete(Request $request, Page $page): Response
     {
-        /** @var string|null $token */
+        /** @var string|null $token /
         $token = $request->request->get('token');
 
         if (!$this->isCsrfTokenValid('delete', $token)) {
@@ -106,6 +106,25 @@ class PagesController extends AdminBaseController
         $this->em->flush();
 
         $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
+
+        return $this->redirectToRoute('dashboard_admin_page_index', [], Response::HTTP_SEE_OTHER);
+    }
+    */
+
+    public function delete(Request $request, Page $page): Response
+    {
+        if (!$page) {
+            $this->addFlash('danger', $this->translator->trans('The page can not be found'));
+
+            return $this->redirectToRoute('dashboard_admin_page_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        if ($this->isCsrfTokenValid('page_deletion_'.$page->getSlug(), $request->request->get('_token'))) {
+            $this->em->remove($page);
+            $this->em->flush();
+
+            $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
+        }
 
         return $this->redirectToRoute('dashboard_admin_page_index', [], Response::HTTP_SEE_OTHER);
     }

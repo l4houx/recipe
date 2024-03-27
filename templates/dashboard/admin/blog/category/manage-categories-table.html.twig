@@ -13,7 +13,7 @@
 		</thead>
 		<tbody>
 			{% for postcategory in rows %}
-				{% set link = path('dashboard_admin_blog_category_edit', { id : postcategory.id }) %}
+				{% set link = path('dashboard_admin_blog_category_edit', { slug : postcategory.slug }) %}
 				<tr>
 					<td>{{ postcategory.id }}</td>
 					<td>
@@ -63,8 +63,8 @@
                                     <i class="bi bi-trash dropdown-item-icon"></i>
                                     {{ 'Delete'|trans }}
                                 </a>
-                                <form id="js-post-category-delete-form" action="{{ path('dashboard_admin_blog_category_delete', {id: postcategory.id}) }}" method="post" class="">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('post_category_deletion_' ~ postcategory.id) }}">
+                                <form id="js-post-category-delete-form" action="{{ path('dashboard_admin_blog_category_delete', {slug: postcategory.slug}) }}" method="post" class="">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('post_category_deletion_' ~ postcategory.slug) }}">
                                     <input type="hidden" name="_method" value="DELETE">
                                 </form>
 							</div>

@@ -58,8 +58,8 @@
 									<i class="bi bi-trash dropdown-item-icon"></i>
 									{{ 'Delete'|trans }}
 								</a>
-								<form id="js-page-delete-form" action="{# {{ path('dashboard_admin_page_delete', {id: page.id}) }} #}" method="post" class="">
-									<input type="hidden" name="_token" value="{{ csrf_token('page_deletion_' ~ page.id) }}">
+								<form id="js-page-delete-form" action="{{ path('dashboard_admin_page_delete', {slug: page.slug}) }}" method="post" class="">
+									<input type="hidden" name="_token" value="{{ csrf_token('page_deletion_' ~ page.slug) }}">
 									<input type="hidden" name="_method" value="DELETE">
 								</form>
 							</div>

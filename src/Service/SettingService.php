@@ -368,8 +368,8 @@ class SettingService
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'c.name';
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'ASC';
+        $order = \array_key_exists('order', $criterias) ? $criterias['order'] : 'c.name';
+        $sort = \array_key_exists('sort', $criterias) ? $criterias['sort'] : 'ASC';
 
         return $this->em->getRepository("App\Entity\PostCategory")->getBlogPostCategories($parent, $isOnline, $keyword, $slug, $limit, $order, $sort);
     }
