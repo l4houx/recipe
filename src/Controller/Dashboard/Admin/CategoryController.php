@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-categories', name: 'dashboard_admin_category_')]
+#[Route('/%website_dashboard_path%/main-panel/manage-recipes', name: 'dashboard_admin_recipe_category_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class CategoryController extends AdminBaseController
 {
@@ -25,16 +25,16 @@ class CategoryController extends AdminBaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '/categories', name: 'index', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
         $rows = $this->categoryRepository->findForPagination($page);
 
-        return $this->render('dashboard/admin/category/index.html.twig', compact('rows'));
+        return $this->render('dashboard/admin/recipes/category/index.html.twig', compact('rows'));
     }
 
-    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
+    #[Route(path: '/categories/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $category = new Category();
@@ -46,13 +46,13 @@ class CategoryController extends AdminBaseController
 
             $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
 
-            return $this->redirectToRoute('dashboard_admin_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('dashboard_admin_recipe_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/category/new.html.twig', compact('category', 'form'));
+        return $this->render('dashboard/admin/recipes/category/new.html.twig', compact('category', 'form'));
     }
 
-    #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/categories/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Category $category): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category)->handleRequest($request);
@@ -62,13 +62,13 @@ class CategoryController extends AdminBaseController
 
             $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
 
-            return $this->redirectToRoute('dashboard_admin_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('dashboard_admin_recipe_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/category/edit.html.twig', compact('category', 'form'));
+        return $this->render('dashboard/admin/recipes/category/edit.html.twig', compact('category', 'form'));
     }
 
-    #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/categories/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Category $category): Response
     {
         if ($this->isCsrfTokenValid('category_deletion_'.$category->getId(), $request->request->get('_token'))) {
@@ -78,6 +78,6 @@ class CategoryController extends AdminBaseController
             $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
         }
 
-        return $this->redirectToRoute('dashboard_admin_category_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('dashboard_admin_recipe_category_index', [], Response::HTTP_SEE_OTHER);
     }
 }

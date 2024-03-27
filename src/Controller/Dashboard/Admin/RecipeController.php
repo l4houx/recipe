@@ -31,7 +31,7 @@ class RecipeController extends AdminBaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '/recipes', name: 'index', methods: ['GET'])]
     #[IsGranted(RecipeVoter::LIST)]
     public function index(Request $request, Security $security): Response
     {
@@ -40,10 +40,10 @@ class RecipeController extends AdminBaseController
         $canListAll = $security->isGranted(RecipeVoter::LIST_ALL);
         $rows = $this->recipeRepository->findForPagination($page, $canListAll ? null : $userId);
 
-        return $this->render('dashboard/admin/recipe/index.html.twig', compact('rows'));
+        return $this->render('dashboard/admin/recipes/recipe/index.html.twig', compact('rows'));
     }
 
-    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
+    #[Route(path: '/recipes/new', name: 'new', methods: ['GET', 'POST'])]
     #[IsGranted(RecipeVoter::CREATE)]
     public function new(Request $request, #[CurrentUser] User $user): Response
     {
@@ -61,18 +61,18 @@ class RecipeController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/recipe/new.html.twig', compact('recipe', 'form'));
+        return $this->render('dashboard/admin/recipes/recipe/new.html.twig', compact('recipe', 'form'));
     }
 
-    #[Route(path: '/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/recipes/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function show(Recipe $recipe): Response
     {
         $this->denyAccessUnlessGranted(RecipeVoter::SHOW, $recipe, $this->translator->trans("Content can only be shown to their authors."));
     
-        return $this->render('dashboard/admin/recipe/show.html.twig', compact('recipe'));
+        return $this->render('dashboard/admin/recipes/recipe/show.html.twig', compact('recipe'));
     }
 
-    #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/recipes/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     public function edit(Request $request, Recipe $recipe, MessageBusInterface $messageBusInterface): Response
     {
         $this->denyAccessUnlessGranted(RecipeVoter::MANAGE, $this->translator->trans("Content can only be edited by their authors."));
@@ -89,10 +89,10 @@ class RecipeController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/recipe/edit.html.twig', compact('recipe', 'form'));
+        return $this->render('dashboard/admin/recipes/recipe/edit.html.twig', compact('recipe', 'form'));
     }
 
-    #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/recipes/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::POSITIVE_INT])]
     #[IsGranted(RecipeVoter::MANAGE, subject: 'recipe')]
     public function delete(Request $request, Recipe $recipe): Response
     {

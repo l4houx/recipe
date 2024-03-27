@@ -12,7 +12,7 @@
 		</thead>
 		<tbody>
 			{% for category in rows %}
-				{% set link = path('dashboard_admin_category_edit', { id : category.id }) %}
+				{% set link = path('dashboard_admin_recipe_category_edit', { id : category.id }) %}
 				<tr>
 					<td>{{ category.id }}</td>
 					<td>
@@ -48,11 +48,11 @@
 									<i class="bi bi-pencil dropdown-item-icon"></i>
 									{{ 'Edit'|trans }}
 								</a>
-								<a href="#" onclick="event.preventDefault(); confirm("{{ 'Are you sure you want to delete this item?'|trans }}") && document.getElementById('js-category-delete-form').submit();" class="dropdown-item">
+								<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-category-delete-form').submit();" class="dropdown-item">
 									<i class="bi bi-trash dropdown-item-icon"></i>
 									{{ 'Delete'|trans }}
 								</a>
-								<form id="js-category-delete-form" action="{{ path('dashboard_admin_category_delete', {id: category.id}) }}" method="post" class="">
+								<form id="js-category-delete-form" action="{{ path('dashboard_admin_recipe_category_delete', {id: category.id}) }}" method="post" class="">
 									<input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.id) }}">
 									<input type="hidden" name="_method" value="DELETE">
 								</form> 

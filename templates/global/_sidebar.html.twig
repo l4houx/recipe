@@ -13,7 +13,7 @@
 					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_recipe_' ? 'active' : '' }}" href="{{ path('dashboard_admin_recipe_index') }}">{{ 'Recipes'|trans }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_category_index') }}">{{ 'Categories'|trans }}</a>
+					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_category_' ? 'active' : '' }}" href="{{ path('dashboard_admin_recipe_category_index') }}">{{ 'Categories'|trans }}</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link {{ app.current_route starts with 'dashboard_admin_blog_' ? 'active' : '' }}" href="{{ path('dashboard_admin_blog_index') }}">{{ 'Blog'|trans }}</a>

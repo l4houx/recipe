@@ -2,7 +2,7 @@
     <div class="card-header">
         <h4 class="mb-0">
             {{ pagetitle }} 
-            {% if app.request.attributes.get('_route') == 'dashboard_admin_category_edit' %}
+            {% if app.request.attributes.get('_route') == 'dashboard_admin_recipe_category_edit' %}
                 "{{ category.name }}"
             {% endif %}
         </h4>
@@ -15,7 +15,7 @@
                     {{ button_label|default('Save'|trans) }}
                 </button>
                 {% if include_back_to_home_link|default(false) %}
-                    <a href="{{ path('dashboard_admin_category_index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ path('dashboard_admin_recipe_category_index') }}" class="btn btn-outline-secondary">
                         {{ 'Return to list'|trans }}
                     </a>
                 {% endif %}

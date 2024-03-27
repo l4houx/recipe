@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Manage recipe categories'|trans %}
+{% set pagetitle = 'Manage recipes'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_category_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                    <a href="{{ path('dashboard_admin_recipe_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -48,13 +48,13 @@
         <div class="col-12">
             <div class="card">
                 {% if rows.getTotalItemCount > 0 %}
-                    {% include "dashboard/admin/category/manage-categories-table.html.twig" with {rows: rows} %}
+                    {% include "dashboard/admin/recipes/recipe/manage-recipes-table.html.twig" with {rows: rows} %}
                     <div class="card-footer">
                         {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
                     </div>
                 {% else %}
                     <div class="card-footer">
-                        {% include "global/message.html.twig" with { type: "info", message: ('No categories found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                        {% include "global/message.html.twig" with { type: "info", message: ('No recipes found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
                     </div>
                 {% endif %}
             </div>

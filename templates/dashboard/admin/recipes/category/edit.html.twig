@@ -1,16 +1,16 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Edit recipe'|trans %}
+{% set pagetitle = 'Edit category'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
     <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
-                {% set breadcrumb = [{ "dashboard_admin_recipe_index": 'Manage recipes'|trans, "current":(pagetitle) }] %}
+                {% set breadcrumb = [{ "dashboard_admin_recipe_category_index": 'Manage recipe categories'|trans, "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary me-2">
+                    <a href="{{ path('dashboard_admin_recipe_category_index') }}" class="btn btn-outline-secondary me-2">
                         {{ 'Return to list'|trans }}
                     </a>
                 </div>
@@ -21,9 +21,9 @@
 
 {% block content %}
     <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-        {{ include('dashboard/admin/recipe/_form.html.twig', {
+        {{ include('dashboard/admin/recipes/category/_form.html.twig', {
             pagetitle: pagetitle,
-            recipe: recipe,
+            category: category,
             form: form,
             button_css: 'btn btn-warning',
             button_label: 'Update'|trans,
