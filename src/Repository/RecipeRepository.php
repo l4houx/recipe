@@ -119,6 +119,17 @@ class RecipeRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findLatest(int $maxResults): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.isOnline = :isOnline')
+            ->setMaxResults($maxResults)
+            ->setParameter('isOnline', true)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function queryAll(bool $userPremium = true): QueryBuilder // RecipeController
     {
         $qb = $this->createQueryBuilder('r')

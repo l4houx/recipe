@@ -18,14 +18,19 @@ class Currency
     #[ORM\Column(type: Types::STRING, length: 3, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 3)]
-    private ?string $ccy = null;
+    private string $ccy = '';
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 50)]
     private ?string $symbol = null;
 
-    public function getCcy(): ?string
+    public function __toString(): string
+    {
+        return $this->ccy;
+    }
+
+    public function getCcy(): string
     {
         return $this->ccy;
     }

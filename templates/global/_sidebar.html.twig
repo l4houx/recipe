@@ -99,15 +99,15 @@
 									</div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#navSetting" aria-expanded="false" aria-controls="navSetting">
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#settings-submenu-{{random}}" aria-expanded="false" aria-controls="settings-submenu-{{random}}">
 										<i class="nav-icon bi bi-gear me-2"></i>
 										{{'Setting' | trans}}
 									</a>
-									<div id="navSetting" class="collapse" data-bs-parent="#sideNavbar" style="">
+									<div id="settings-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_setting_homepage" or routename == "dashboard_admin_setting_payment" or routename == "dashboard_admin_setting_newsletter" or routename == "dashboard_admin_setting_layout" or routename == "dashboard_admin_setting_payment_gateways_new" or routename == "dashboard_admin_setting_payment_gateways_edit" or routename == "dashboard_admin_setting_checkout" or routename == "dashboard_admin_setting_blog" or routename == "dashboard_admin_setting_mail_server" or routename == "dashboard_admin_setting_google_recaptcha" or routename == "dashboard_admin_setting_google_maps" or routename == "dashboard_admin_setting_social_login" or routename == "dashboard_admin_setting_menus" or routename == "dashboard_admin_setting_menus_edit" or routename == "dashboard_admin_setting_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" %}show{% endif %}" data-bs-parent="#sideNavbar" style="">
 										<ul class="nav flex-column">
 											<li class="nav-item">
 												<a class="nav-link" href="">
-													{{ 'Layout, parameters and SEO'|trans }}
+													{{ 'Layout'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
@@ -122,7 +122,12 @@
 											</li>
 											<li class="nav-item">
 												<a class="nav-link" href="">
-													{{ 'Payments and Fees'|trans }}
+													{{ 'Payments'|trans }}
+												</a>
+											</li>
+											<li class="nav-item {% if routename == "dashboard_admin_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" %}active{% endif %}">
+												<a class="nav-link" href="{{ path('dashboard_admin_setting_currency_index') }}">
+													{{ 'Currencies'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">

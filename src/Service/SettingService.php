@@ -262,29 +262,21 @@ class SettingService
     public function getUsers($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $roles = array_key_exists('roles', $criterias) ? $criterias['roles'] : 'all';
+        //$roles = array_key_exists('roles', $criterias) ? $criterias['roles'] : 'all';
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
-        $createdbyorganizerslug = array_key_exists('createdbyorganizerslug', $criterias) ? $criterias['createdbyorganizerslug'] : 'all';
-        $organizername = array_key_exists('organizername', $criterias) ? $criterias['organizername'] : 'all';
-        $organizerslug = array_key_exists('organizerslug', $criterias) ? $criterias['organizerslug'] : 'all';
         $username = array_key_exists('username', $criterias) ? $criterias['username'] : 'all';
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $email = array_key_exists('email', $criterias) ? $criterias['email'] : 'all';
         $firstname = array_key_exists('firstname', $criterias) ? $criterias['firstname'] : 'all';
         $lastname = array_key_exists('lastname', $criterias) ? $criterias['lastname'] : 'all';
-        $enabled = array_key_exists('enabled', $criterias) ? $criterias['enabled'] : true;
-        $countryslug = array_key_exists('countryslug', $criterias) ? $criterias['countryslug'] : 'all';
-        $followedby = array_key_exists('followedby', $criterias) ? $criterias['followedby'] : 'all';
-        $hasboughtticketforEvent = array_key_exists('hasboughtticketfor', $criterias) ? $criterias['hasboughtticketfor'] : 'all';
-        $hasboughtticketforOrganizer = array_key_exists('hasboughtticketfororganizer', $criterias) ? $criterias['hasboughtticketfororganizer'] : 'all';
-        $apiKey = array_key_exists('apikey', $criterias) ? $criterias['apikey'] : 'all';
-        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $isVerified = array_key_exists('isVerified', $criterias) ? $criterias['isVerified'] : true;
         $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
         $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'u.createdAt';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
-        return $this->em->getRepository("App\Entity\User")->getUsers($roles, $keyword, $createdbyorganizerslug, $organizername, $organizerslug, $username, $email, $firstname, $lastname, $enabled, $countryslug, $slug, $followedby, $hasboughtticketforEvent, $hasboughtticketforOrganizer, $apiKey, $isOnHomepageSlider, $limit, $sort, $order, $count);
+        return $this->em->getRepository("App\Entity\User")->getUsers($keyword, $username, $slug, $email, $firstname, $lastname, $isVerified, $isOnHomepageSlider, $limit, $sort, $order, $count);
     }
 
     /*

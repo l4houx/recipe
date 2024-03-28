@@ -100,14 +100,14 @@ class CommentRepository extends ServiceEntityRepository
             ->orderBy(['publishedAt' => 'ASC']);
     }
 
-    public function queryLatest(): Query
+    public function queryLatest(int $maxResults): Query
     {
         return $this->createQueryBuilder('c')
             ->orderBy('c.createdAt', 'DESC')
             ->join('c.target', 't')
             ->leftJoin('c.author', 'a')
             ->addSelect('t', 'a')
-            ->setMaxResults(7)
+            ->setMaxResults($maxResults)
             ->getQuery()
         ;
     }

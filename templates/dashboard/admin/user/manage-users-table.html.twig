@@ -2,12 +2,13 @@
 	<table class="table mb-0 text-nowrap table-hover table-centered">
 		<thead class="">
 			<tr>
-				<th>{{ knp_pagination_sortable(rows, '#', 'u.id') }}</th>
+				<th># {# {{ knp_pagination_sortable(rows, '#', 'u.id') }} #}/th>
 				<th>{{ 'User name / Email'|trans }}</th>
 				<th>{{ 'Full name / Premium'|trans }}</th>
 				<th>{{ 'Last login / IP'|trans}}</th>
 				<th>{{ 'Roles'|trans }}</th>
 				<th>{{ 'Register duration'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -51,6 +52,27 @@
 					</td>
 					<td>{{ user.registerDuration }}s</td>
 					<td>
+						{% if user.isVerified == false %}
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-person-slash"></i>
+								{{ "Disabled"|trans }}
+							</span>
+						{% else %}
+							<span class="badge bg-success-soft">
+								<i class="bi bi-person-check"></i>
+								{{ "Enabled"|trans }}
+							</span>
+						{% endif %}
+						{% if user.deletedAt %}
+							<br>
+							<br>
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-alarm"></i>
+								{{ "Deleted"|trans }}
+							</span>
+						{% endif %}
+					</td>
+					<td>
 						<div class="dropdown dropstart">
 							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="bi bi-three-dots-vertical"></i>
@@ -84,6 +106,10 @@
 									<input type="hidden" name="_token" value="{{ csrf_token('user_deletion_' ~ user.id) }}">
 									<input type="hidden" name="_method" value="DELETE">
 								</form>
+								<a href="{{ path('dashboard_admin_user_user_information', { slug : user.slug }) }}" class="dropdown-item">
+									<i class="bi bi-file dropdown-item-icon"></i>
+									{{ 'More information'|trans }}
+								</a>
 							</div>
 						</div>
 					</td>

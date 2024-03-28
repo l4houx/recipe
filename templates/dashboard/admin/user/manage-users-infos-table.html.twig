@@ -1,0 +1,186 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+                <th colspan="2">
+                    <i class="bi bi-file text-muted"></i>  {{ pagetitle }}
+                </th>
+			</tr>
+		</thead>
+        <tbody>
+            <tr>
+                <td width="30%">{{ "Role"|trans }}</td>
+                <td>
+                    {% include "global/user-roles.html.twig" %}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Status"|trans }}</td>
+                <td>
+                    {% if user.isVerified == false %}
+                        <span class="badge bg-danger-soft">
+                            <i class="bi bi-person-slash"></i>
+                            {{ "Disabled"|trans }}
+                        </span>
+                    {% else %}
+                        <span class="badge bg-success-soft">
+                            <i class="bi bi-person-check"></i>
+                            {{ "Enabled"|trans }}
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+            {#  
+            {% if user.gender %}
+                <tr>
+                    <td width="30%">{{ "Gender"|trans }}</td>
+                    <td>
+                        {{ user.gender }}
+                    </td>
+                </tr>
+            {% endif %}
+            #}
+            {% if user.firstname %}
+                <tr>
+                    <td width="30%">{{ "First name"|trans }}</td>
+                    <td>
+                        {{ user.firstname }}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.lastname %}
+                <tr>
+                    <td width="30%">{{ "Last name"|trans }}</td>
+                    <td>
+                        {{ user.lastname }}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.premium %}
+                <tr>
+                    <td width="30%">{{ "Premium"|trans }}</td>
+                    <td>
+                        {{ user.premium ? user.premiumEnd | ago('for') : '' }}
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td width="30%">{{ "Email"|trans }}</td>
+                <td>
+                    {{ user.email }}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Username"|trans }}</td>
+                <td>
+                    {{ user.username }}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Registration date"|trans }}</td>
+                <td>
+                    {{ user.createdAt ? user.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Register duration"|trans }}</td>
+                <td>
+                    {{ user.registerDuration }}s
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Update date"|trans }}</td>
+                <td>
+                    {{ user.updatedAt ? user.updatedAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Last login"|trans }}</td>
+                <td>
+                    {{ user.lastLogin | ago() }}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Last login ip"|trans }}</td>
+                <td>
+                    <a href="https://ipinfo.io/{{ user.lastLoginIp }}" target="_blank">{{ user.lastLoginIp }}</a>
+                    {% if user.lastLoginIp %}
+                        {{ ipService.getLocation(user.lastLoginIp).emoji ?? '' }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Reviews"|trans }}</td>
+                <td>
+                    {{ user.reviews | length }}
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">{{ "Favorites"|trans }}</td>
+                <td>
+                    {{ user.favorites | length }}
+                </td>
+            </tr>
+            {#
+            {% if user.phone %}
+                <tr>
+                    <td width="30%">{{ "Phone number"|trans }}</td>
+                    <td>
+                        {{ user.phone }}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.avatarName %}
+                <tr>
+                    <td width="30%">{{ "Avatar"|trans }}</td>
+                    <td>
+                        <img src="{{ asset(user.getAvatarPath) }}" class="img-thumbnail img-50-50" />
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.facebookId %}
+                <tr>
+                    <td width="30%">{{ "Registered using Facebook"|trans }} <i class="fab fa-facebook-f fa-sm btn-facebook ml-2 p-2"></i></td>
+                    <td>
+                        Facebook Id: {{ user.facebookId }}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.googleId %}
+                <tr>
+                    <td width="30%">{{ "Registered using Google"|trans }} <i class="fab fa-google fa-sm btn-youtube ml-2 p-2"></i></td>
+                    <td>
+                        Google Id: {{ user.googleId }}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.facebookProfilePicture %}
+                <tr>
+                    <td width="30%">{{ "Facebook profile picture"|trans }}</td>
+                    <td>
+                        <a class="fancybox" href="{{ user.facebookProfilePicture }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+                            <img src="{{ user.facebookProfilePicture }}" class="img-thumbnail img-50-50" />
+                        </a>
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.birthdate %}
+                <tr>
+                    <td width="30%">{{ "Birthdate"|trans }}</td>
+                    <td>
+                        {{ user.birthdate|date(date_format_date_only) }}
+                    </td>
+                </tr>
+            {% endif %}
+            {% if user.stringifyAddress %}
+                <tr>
+                    <td width="30%">{{ "Address"|trans }}</td>
+                    <td>
+                        {{ user.stringifyAddress }}
+                    </td>
+                </tr>
+            {% endif %}
+            #}
+        </tbody>
+	</table>
+</div>

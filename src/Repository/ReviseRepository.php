@@ -40,11 +40,11 @@ class ReviseRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findLatest(): array
+    public function findLatest(int $maxResults): array
     {
         return $this->createQueryBuilder('r')
             ->where('r.status = :status')
-            ->setMaxResults(10)
+            ->setMaxResults($maxResults)
             ->setParameter('status', Revise::PENDING)
             ->getQuery()
             ->getResult()

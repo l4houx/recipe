@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use App\Entity\Traits\HasLimit;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Setting\HomepageHeroSetting;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
@@ -27,7 +29,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(
-        ManagerRegistry $registry, 
+        ManagerRegistry $registry,
         private readonly PaginatorInterface $paginator
     ) {
         parent::__construct($registry, User::class);
@@ -86,8 +88,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         return $this->createQueryBuilder('u')
             ->where('LOWER(u.email) = :identifier')
-            //->where('LOWER(u.email) = :identifier OR LOWER(u.username) = :identifier')
-            //->andWhere('u.isVerified = true')
+            // ->where('LOWER(u.email) = :identifier OR LOWER(u.username) = :identifier')
+            // ->andWhere('u.isVerified = true')
             ->orWhere('LOWER(u.username) = :identifier')
             ->setParameter('identifier', mb_strtolower($usernameOrEmail))
             ->setMaxResults(1)
@@ -113,8 +115,77 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             HasLimit::USER_LIMIT,
             [
                 'distinct' => false,
-                'sortFieldAllowList' => ['u.id']
+                'sortFieldAllowList' => ['u.id'],
             ]
         );
+    }
+
+    /**
+     * Returns the users after applying the specified search criterias.
+     *
+     * @param string                   $keyword
+     * @param string                   $username
+     * @param string                   $slug
+     * @param string                   $email
+     * @param string                   $firstname
+     * @param string                   $lastname
+     * @param bool                     $isVerified
+     * @param HomepageHeroSetting|null $isOnHomepageSlider
+     * @param int                      $limit
+     * @param string                   $sort
+     * @param string                   $order
+     * @param int                      $count
+     */
+    public function getUsers($keyword, $username, $slug, $email, $firstname, $lastname, $isVerified, $isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if ($count) {
+            $qb->select('COUNT(u)');
+        } else {
+            $qb->select('u');
+        }
+
+        if ('all' !== $keyword) {
+            $qb->andWhere('u.username LIKE :keyword or :keyword LIKE u.username or u.email LIKE :keyword or :keyword LIKE u.email or u.firstname LIKE :keyword or :keyword LIKE u.firstname or u.lastname LIKE :keyword or :keyword LIKE u.lastname')->setParameter('keyword', '%'.$keyword.'%');
+        }
+
+        if ('all' !== $username) {
+            $qb->andWhere('u.username = :username')->setParameter('username', $username);
+        }
+
+        if ('all' !== $slug) {
+            $qb->andWhere('u.slug = :slug')->setParameter('slug', $slug);
+        }
+
+        if ('all' !== $email) {
+            $qb->andWhere('u.email = :email')->setParameter('email', $email);
+        }
+
+        if ('all' !== $firstname) {
+            $qb->andWhere('u.firstname LIKE :firstname or :firstname LIKE u.firstname')->setParameter('firstname', '%'.$firstname.'%');
+        }
+
+        if ('all' !== $lastname) {
+            $qb->andWhere('u.lastname LIKE :lastname or :lastname LIKE u.lastname')->setParameter('lastname', '%'.$lastname.'%');
+        }
+
+        if ('all' !== $isVerified) {
+            $qb->andWhere('u.isVerified = :isVerified')->setParameter('isVerified', $isVerified);
+        }
+
+        if (true === $isOnHomepageSlider) {
+            $qb->andWhere('u.isuseronhomepageslider IS NOT NULL');
+        }
+
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        $qb->orderBy($sort, $order);
+
+        $qb->andWhere('u.slug != :administrator')->setParameter('administrator', 'administrator');
+
+        return $qb;
     }
 }

@@ -1,0 +1,58 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Manage currencies'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="{{ path('dashboard_admin_setting_currency_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <form class="d-flex align-items-center mb-lg-4 mb-2">
+            <div class="col-12 col-lg-5 mb-3 mb-lg-0">
+                <label for="keyword">{{ "Ccy"|trans }}</label>
+                <input type="text" id="keyword" name="ccy" class="form-control" value="{{ app.request.get('ccy') }}">
+            </div>
+            <div class="col-12 col-lg-5 mb-3 mb-lg-0 ms-2">
+                <label for="keyword">{{ "Symbol"|trans }}</label>
+                <input type="text" id="keyword" name="symbol" class="form-control" value="{{ app.request.get('symbol') }}">
+            </div>
+            <div class="col-12 col-lg-2 mt-3 mb-lg-0 ms-2 text-start">
+                <button type="submit" class="btn btn-primary btn-md"><i class="bi bi-search"></i> {{'Search'|trans}}</button>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-1">
+                        {{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}
+                    </h4>
+                    <p class="mb-0"></p>
+                </div>
+                {% if rows.getTotalItemCount > 0 %}
+                    {% include "dashboard/admin/setting/currency/manage-currencies-table.html.twig" with {rows: rows} %}
+                    <div class="card-footer">
+                        {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+                    </div>
+                {% else %}
+                    <div class="card-footer">
+                        {% include "global/message.html.twig" with { type: "dark", message: ('No currencies found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

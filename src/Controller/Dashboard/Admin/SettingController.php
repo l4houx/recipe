@@ -46,7 +46,7 @@ class SettingController extends AdminBaseController
         if (!$appLayoutSetting) {
             $this->addFlash('danger', $this->translator->trans('The layout settings could not be loaded'));
 
-            return $this->redirectToRoute('dashboard_admin_setting_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('dashboard_admin_setting_layout', [], Response::HTTP_SEE_OTHER);
         }
 
         $form = $this->createForm(AppLayoutSettingFormType::class, $appLayoutSetting)->handleRequest($request);
@@ -193,7 +193,7 @@ class SettingController extends AdminBaseController
             $form->get('gdpr_compliance_page_slug')->setData($this->settingervice->getSettings('gdpr_compliance_page_slug'));
         }
 
-        return $this->render('dashboard/admin/setting/layout.html.twig', compact('form', 'services'));
+        return $this->render('dashboard/admin/setting/layout.html.twig', compact('form'));
     }
 
     #[Route(path: '/blog', name: 'blog', methods: ['GET', 'POST'])]
@@ -343,7 +343,7 @@ class SettingController extends AdminBaseController
             $form->get('google_maps_api_key')->setData($this->settingervice->getEnv('GOOGLE_MAPS_API_KEY'));
         }
 
-        return $this->render('dashboard/admin/setting/google-maps.html.twig', compact('form', 'services'));
+        return $this->render('dashboard/admin/setting/google-maps.html.twig', compact('form'));
     }
 
     #[Route(path: '/mail-server', name: 'mail_server', methods: ['GET', 'POST'])]
@@ -484,7 +484,7 @@ class SettingController extends AdminBaseController
             $form->get('website_no_reply_email')->setData($this->settingervice->getSettings('website_no_reply_email'));
         }
 
-        return $this->render('dashboard/admin/setting/mail-server.html.twig', compact('form', 'services'));
+        return $this->render('dashboard/admin/setting/mail-server.html.twig', compact('form'));
     }
 
     #[Route(path: '/mail-server/test', name: 'mail_server_test', methods: ['GET', 'POST'])]
@@ -570,7 +570,7 @@ class SettingController extends AdminBaseController
             $form->get('mailchimp_list_id')->setData($this->settingervice->getSettings('mailchimp_list_id'));
         }
 
-        return $this->render('dashboard/admin/setting/newsletter.html.twig', compact('form', 'services'));
+        return $this->render('dashboard/admin/setting/newsletter.html.twig', compact('form'));
     }
 
     /*

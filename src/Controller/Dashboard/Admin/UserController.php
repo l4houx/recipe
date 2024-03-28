@@ -2,22 +2,23 @@
 
 namespace App\Controller\Dashboard\Admin;
 
+use App\Entity\Traits\HasRoles;
 use App\Entity\User;
 use App\Form\UserFormType;
-use App\Entity\Traits\HasRoles;
 use App\Repository\UserRepository;
-use App\Service\AccountSuspendedService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Security\Exception\PremiumNotBanException;
+use App\Service\AccountSuspendedService;
+use App\Service\SettingService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/%website_dashboard_path%/main-panel/manage-users', name: 'dashboard_admin_user_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
@@ -26,12 +27,13 @@ class UserController extends AdminBaseController
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
+        private readonly SettingService $settingService,
         private readonly UserRepository $userRepository,
     ) {
     }
 
     #[Route(path: '/', name: 'index', methods: ['GET'])]
-    public function index(Request $request, ): Response
+    public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
         $rows = $this->userRepository->findForPagination($page);
@@ -113,6 +115,20 @@ class UserController extends AdminBaseController
         return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route(path: '/{slug}/more-information', name: 'user_information', methods: ['GET'], requirements: ['id' => Requirement::ASCII_SLUG])]
+    public function details(Request $request, string $slug): Response
+    {
+        /** @var User $user */
+        $user = $this->settingService->getUsers(['slug' => $slug, 'isVerified' => 'all'])->getQuery()->getOneOrNullResult();
+        if (!$user) {
+            $this->addFlash('danger', $this->translator->trans('The user can not be found'));
+
+            return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('dashboard/admin/user/information.html.twig', compact('user'));
+    }
+
     #[Route(path: '/search', name: 'autocomplete')]
     public function search(Request $request): JsonResponse
     {
@@ -122,9 +138,9 @@ class UserController extends AdminBaseController
         if ('moi' === $q) {
             return new JsonResponse([
                 [
-                    'id'       => $this->getUser()->getId(),
+                    'id' => $this->getUser()->getId(),
                     'username' => $this->getUser()->getUsername(),
-                ]
+                ],
             ]);
         }
 
