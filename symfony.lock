@@ -13,6 +13,19 @@
             "src/ApiResource/.gitignore"
         ]
     },
+    "debril/rss-atom-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "4.0",
+            "ref": "2c23ed747eda9f4c13f5e7eb55fffa1091fdd505"
+        },
+        "files": [
+            "config/packages/rss_atom.yaml",
+            "config/routes/rss_atom.yaml"
+        ]
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.11",
         "recipe": {
@@ -65,6 +78,18 @@
             "config/packages/ewz_recaptcha.yaml"
         ]
     },
+    "exercise/htmlpurifier-bundle": {
+        "version": "5.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "99590c5352b58fadacd5535337589aba7e44f5a7"
+        },
+        "files": [
+            "config/packages/exercise_html_purifier.yaml"
+        ]
+    },
     "google/recaptcha": {
         "version": "1.3",
         "recipe": {
@@ -82,6 +107,18 @@
     },
     "knplabs/knp-time-bundle": {
         "version": "v2.2.0"
+    },
+    "knpuniversity/oauth2-client-bundle": {
+        "version": "2.18",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.20",
+            "ref": "1ff300d8c030f55c99219cc55050b97a695af3f6"
+        },
+        "files": [
+            "config/packages/knpu_oauth2_client.yaml"
+        ]
     },
     "liip/imagine-bundle": {
         "version": "2.12",
@@ -121,6 +158,9 @@
             "phpunit.xml.dist",
             "tests/bootstrap.php"
         ]
+    },
+    "presta/sitemap-bundle": {
+        "version": "v4.1.1"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.10",

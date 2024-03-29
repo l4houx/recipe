@@ -15,7 +15,7 @@ trait HasProfileDetailsTrait
     use HasIsTeamTrait;
     use HasIdentifyTrait;
     use HasSocialMediaTrait;
-    // use HasKnpUOAuthLoggableTrait;
+    use HasKnpUOAuthLoggableTrait;
     use HasRegistrationDetailsTrait;
     //use HasTimestampTrait;
     //use HasGedmoTimestampTrait;

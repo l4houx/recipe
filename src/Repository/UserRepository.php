@@ -50,6 +50,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
+     * Looking for an oauth user.
+     */
+    public function findForOauth(string $service, ?string $serviceId, ?string $email): ?User
+    {
+        if (null === $serviceId || null === $email) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('u')
+            ->where('u.email = :email')
+            ->orWhere("u.{$service}Id = :serviceId")
+            ->setMaxResults(1)
+            ->setParameters([
+                'email' => $email,
+                'serviceId' => $serviceId,
+            ])
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
      * To get the aministrator.
      */
     public function getAdministrator()
@@ -118,6 +140,50 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 'sortFieldAllowList' => ['u.id'],
             ]
         );
+    }
+
+    /**
+     * @return User[]
+     */
+    public function clean(): array
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.deletedAt IS NOT NULL')
+            ->andWhere('u.deletedAt < NOW()')
+        ;
+
+        /** @var User[] $users */
+        $users = $query->getQuery()->getResult();
+        $query->delete(User::class, 'u')->getQuery()->execute();
+
+        return $users;
+    }
+
+    /**
+     * Returns the list of discord ids of premium members.
+     *
+     * @return string[]
+     */
+    public function findPremiumDiscordIds(): array
+    {
+        return array_map(fn (array $user) => $user['discordId'], $this->createQueryBuilder('u')
+            ->where('u.discordId IS NOT NULL AND u.discordId <> \'\'')
+            ->andWhere('u.premiumEnd > NOW()')
+            ->select('u.discordId')
+            ->getQuery()
+            ->getResult())
+        ;
+    }
+
+    /**
+     * List suspended users
+     */
+    public function querySuspended(): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.isSuspended IS NOT NULL')
+            ->orderBy('u.isSuspended', 'DESC')
+        ;
     }
 
     /**

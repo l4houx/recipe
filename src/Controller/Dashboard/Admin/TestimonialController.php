@@ -104,4 +104,17 @@ class TestimonialController extends AdminBaseController
 
         return $this->render('dashboard/admin/testimonials/new-edit.html.twig', compact('form', 'testimonial'));
     }
+
+    #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
+    public function delete(Request $request, Testimonial $testimonial): Response
+    {
+        if ($this->isCsrfTokenValid('testimonial_deletion_'.$testimonial->getId(), $request->request->get('_token'))) {
+            $this->em->remove($testimonial);
+            $this->em->flush();
+
+            $this->addFlash('danger', $this->translator->trans('Content was deleted successfully.'));
+        }
+
+        return $this->redirectToRoute('dashboard_admin_testimonial_index', [], Response::HTTP_SEE_OTHER);
+    }
 }

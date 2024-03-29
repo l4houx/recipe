@@ -1,7 +1,7 @@
 Installation en cours:
     ✔ composer require excelwebzone/recaptcha-bundle @done(24-03-21 14:14)
     ☐ composer require lexik/jwt-authentication-bundle
-    ☐ composer require exercise/htmlpurifier-bundle
+    ✔ composer require exercise/htmlpurifier-bundle @done(24-03-29 14:29)
     ✔ composer require league/glide @done(24-03-21 14:55)
     ✔ composer require illuminate/collections intervention/image liip/imagine-bundle @done(24-03-21 14:13)
 
@@ -18,11 +18,12 @@ Installation en cours:
     ☐ composer require willdurand/js-translation-bundle
 
 
-    ☐ composer require presta/sitemap-bundle
-    ☐ composer require debril/rss-atom-bundle
+    ✔ composer require presta/sitemap-bundle @done(24-03-29 18:39)
+    ✔ composer require debril/rss-atom-bundle @done(24-03-29 19:57)
+    ☐ composer require welp/mailchimp-bundle Not compatible with sf7
 
     // Auth
-    ☐ composer require knpuniversity/oauth2-client-bundle league/oauth2-facebook league/oauth2-github league/oauth2-google wohali/oauth2-discord-new
+    ✔ composer require knpuniversity/oauth2-client-bundle league/oauth2-facebook league/oauth2-github league/oauth2-google wohali/oauth2-discord-new @done(24-03-29 14:34)
 
     // Payment
     ✔ composer require stripe/stripe-php phpjuice/paypal-checkout-sdk @done(24-03-19 10:41)

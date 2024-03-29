@@ -28,7 +28,11 @@ security:
             provider: app_user_provider
             entry_point: App\Security\AuthenticationEntryPoint
             user_checker: App\Security\UserChecker
-            custom_authenticator: App\Security\Authenticator
+            custom_authenticator: 
+                - App\Security\Authenticator
+                - App\Infrastructural\KnpUOAuth\Auth\GithubAuthenticator
+                - App\Infrastructural\KnpUOAuth\Auth\GoogleAuthenticator
+                - App\Infrastructural\KnpUOAuth\Auth\FacebookAuthenticator
             logout:
                 path: logout
                 # where to redirect after logout

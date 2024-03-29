@@ -28,6 +28,9 @@ trait HasRegistrationDetailsTrait
     #[ORM\Column(type: Types::INTEGER, nullable: false, options: ['default' => 0])]
     private int $registerDuration = 0;
 
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $resetToken = null;
+
     public function isSuspended(): bool
     {
         return $this->isSuspended;
@@ -120,5 +123,27 @@ trait HasRegistrationDetailsTrait
         $this->registerDuration = $registerDuration;
 
         return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    public function hasValidatedReset(): bool
+    {
+        return null === $this->resetToken;
+    }
+
+    public function canLogin(): bool
+    {
+        return !$this->isSuspended() && null === $this->getResetToken();
     }
 }

@@ -158,3 +158,17 @@ services:
     # Sign key Resize Picture
     App\Infrastructural\Uploads\Picture\ResizerPicture:
         arguments: ['%resize_picture_key%']
+
+    # Sitemap
+    sitemap.subscriber:
+        class: App\EventListener\SitemapSubscriber
+        arguments:
+            - "@router"
+            - "@app.setting"
+        tags:
+            - { name: "kernel.event_subscriber", priority: 100 }
+
+    # RSS
+    debril.rss_atom.provider:
+        class: App\Feed\Provider
+        arguments: ["@app.setting", "@router.default", "@assets.packages"]
