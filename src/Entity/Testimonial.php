@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\HasIdTrait;
 use App\Entity\Traits\HasRatingTrait;
@@ -17,8 +18,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: TestimonialRepository::class)]
 // #[Vich\Uploadable]
+//#[UniqueEntity('headline')]
+//#[UniqueEntity('slug')]
 class Testimonial
 {
+    //use HasIdGedmoHeadlineAndSlugTrait;
     use HasIdTrait;
     use HasContentTrait;
     use HasRatingTrait;
@@ -26,6 +30,8 @@ class Testimonial
     use HasTimestampTrait;
     //use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
+
+    public const TESTIMONIAL_LIMIT = HasLimit::TESTIMONIAL_LIMIT;
 
     /*
     // NOTE: This is not a mapped field of entity metadata, just a simple property.

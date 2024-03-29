@@ -130,13 +130,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @param string                   $firstname
      * @param string                   $lastname
      * @param bool                     $isVerified
+     * @param bool                     $isSuspended
      * @param HomepageHeroSetting|null $isOnHomepageSlider
      * @param int                      $limit
      * @param string                   $sort
      * @param string                   $order
      * @param int                      $count
      */
-    public function getUsers($keyword, $username, $slug, $email, $firstname, $lastname, $isVerified, $isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
+    public function getUsers($keyword, $username, $slug, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -172,6 +173,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         if ('all' !== $isVerified) {
             $qb->andWhere('u.isVerified = :isVerified')->setParameter('isVerified', $isVerified);
+        }
+
+        if ('all' !== $isSuspended) {
+            $qb->andWhere('u.isSuspended = :isSuspended')->setParameter('isSuspended', $isSuspended);
         }
 
         if (true === $isOnHomepageSlider) {

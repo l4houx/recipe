@@ -246,6 +246,12 @@
 									</a>
 								</li>
 								<li class="nav-item">
+									<a class="nav-link {% if routename == "dashboard_admin_testimonial_index" %}active{% endif %}" href="{{ path('dashboard_admin_testimonial_index') }}">
+										<i class="nav-icon bi bi-star me-2"></i>
+										{{ 'Testimonials'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
 									<a class="nav-link" href="#!">
 										<i class="nav-icon bi bi-bar-chart me-2"></i>
 										{{ 'Stats'|trans }}

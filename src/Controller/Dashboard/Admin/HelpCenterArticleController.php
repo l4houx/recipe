@@ -79,7 +79,7 @@ class HelpCenterArticleController extends AbstractController
                     $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
                 }
 
-                return $this->redirectToRoute('dashboard_administrator_help_center_article_index');
+                return $this->redirectToRoute('dashboard_admin_help_center_article_index', [], Response::HTTP_SEE_OTHER);
             }
             $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }

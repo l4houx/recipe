@@ -1,0 +1,20 @@
+<div class="card border-0 mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">
+            {{ pagetitle }} 
+            {% if app.request.attributes.get('_route') == 'dashboard_admin_testimonial_edit' %}
+                "{{ testimonial.author.username }}"
+            {% endif %}
+        </h4>
+    </div>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+        <div class="card-body">
+            {{ form_widget(form) }}
+            <div class="col-12 pt-2">
+                <button type="submit" class="{% if testimonial.id %}btn btn-warning{% else %}btn btn-primary{% endif %} me-4">
+                    {% if testimonial.id %}{{ 'Update'|trans }}{% else %}{{ 'Save'|trans }}{% endif %}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+</div>

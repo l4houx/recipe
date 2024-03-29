@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReportRepository::class)]
-#[Assert\Expression(expression: 'this.getReview() !== null || this.getComment() !== null', message: 'A report must be associated with a comment or review')]
+#[Assert\Expression(expression: 'this.getReview() !== null || this.getRecipe() !== null', message: 'A report must be associated with a recipe or review')]
 class Report
 {
     use HasGedmoTimestampTrait;
@@ -43,6 +43,11 @@ class Report
     #[Groups(['create:report'])]
     private ?Review $review = null;
 
+    #[ORM\ManyToOne(targetEntity: Recipe::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
+    #[Groups(['create:report'])]
+    private ?Recipe $recipe = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +58,16 @@ class Report
         $this->id = $id;
 
         return $this;
+    }
+
+    public function getTarget(): Review|Recipe
+    {
+        if ($this->review) {
+            return $this->review;
+        } elseif ($this->recipe) {
+            return $this->recipe;
+        }
+        throw new \RuntimeException("This report is not linked to any content");
     }
 
     public function getReason(): string
@@ -99,6 +114,18 @@ class Report
     public function setReview(?Review $review): static
     {
         $this->review = $review;
+
+        return $this;
+    }
+
+    public function getRecipe(): ?Recipe
+    {
+        return $this->recipe;
+    }
+
+    public function setRecipe(?Recipe $recipe): static
+    {
+        $this->recipe = $recipe;
 
         return $this;
     }

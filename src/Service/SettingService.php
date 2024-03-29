@@ -270,24 +270,23 @@ class SettingService
         $firstname = array_key_exists('firstname', $criterias) ? $criterias['firstname'] : 'all';
         $lastname = array_key_exists('lastname', $criterias) ? $criterias['lastname'] : 'all';
         $isVerified = array_key_exists('isVerified', $criterias) ? $criterias['isVerified'] : true;
+        $isSuspended = array_key_exists('isSuspended', $criterias) ? $criterias['isSuspended'] : false;
         $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
         $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'u.createdAt';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
-        return $this->em->getRepository("App\Entity\User")->getUsers($keyword, $username, $slug, $email, $firstname, $lastname, $isVerified, $isOnHomepageSlider, $limit, $sort, $order, $count);
+        return $this->em->getRepository("App\Entity\User")->getUsers($keyword, $username, $slug, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $limit, $sort, $order, $count);
     }
 
-    /*
     // Returns the testimonials after applying the specified search criterias
     public function getTestimonials($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
-        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $id = array_key_exists('id', $criterias) ? $criterias['id'] : 'all';
         $user = array_key_exists('user', $criterias) ? $criterias['user'] : 'all';
-        $recipe = array_key_exists('recipe', $criterias) ? $criterias['recipe'] : 'all';
         $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $rating = array_key_exists('rating', $criterias) ? $criterias['rating'] : 'all';
         $minrating = array_key_exists('minrating', $criterias) ? $criterias['minrating'] : 'all';
@@ -297,9 +296,8 @@ class SettingService
         $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'createdAt';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
 
-        return $this->em->getRepository("App\Entity\Testimonial")->getTestimonials($keyword, $slug, $user, $recipe, $isOnline, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
+        return $this->em->getRepository("App\Entity\Testimonial")->getTestimonials($keyword, $id, $user, $isOnline, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
     }
-    */
 
     // Returns the help center categories after applying the specified search criterias
     public function getHelpCenterCategories($criterias): QueryBuilder

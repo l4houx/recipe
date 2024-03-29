@@ -10,6 +10,8 @@ final class HasLimit
 
     public const REVIEW_LIMIT = 10;
 
+    public const TESTIMONIAL_LIMIT = 10;
+
     public const RECIPE_LIMIT = 10;
 
     public const CATEGORY_LIMIT = 10;

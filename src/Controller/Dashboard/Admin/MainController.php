@@ -25,14 +25,14 @@ class MainController extends AdminBaseController
         PaginatorInterface $paginator,
         ReviseRepository $reviseRepository,
         RecipeRepository $recipeRepository,
-        CommentRepository $commentRepository,
+        //CommentRepository $commentRepository,
         ReportRepository $reportRepository,
         TransactionRepository $transactionRepository
     ): Response {
         return $this->render('dashboard/admin/main.html.twig', [
             'revises' => $reviseRepository->findLatest(10),
             'recipes' => $recipeRepository->findLatest(4),
-            'comments' => $paginator->paginate($commentRepository->queryLatest(6)),
+            //'comments' => $paginator->paginate($commentRepository->queryLatest(6)),
             'reports' => $reportRepository->findAll(),
             'months' => $transactionRepository->getMonthlyRevenues(),
             'days' => $transactionRepository->getDailyRevenues(),
