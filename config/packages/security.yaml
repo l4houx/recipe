@@ -42,7 +42,8 @@ security:
                 lifetime: 604800
                 path: /
                 always_remember_me: true
-            switch_user: { role: ROLE_ADMIN_APPLICATION }
+            #switch_user: { role: ROLE_ADMIN_APPLICATION }
+            switch_user: true
             access_denied_handler: App\Security\AccessDeniedHandler
 
     # Easy way to control access for large sections of your site
@@ -53,9 +54,11 @@ security:
         - { path: ^/api/, roles: ROLE_APPLICATION}
 
     role_hierarchy:
-        ROLE_MODERATOR: [ROLE_TEAM, ROLE_USER]
+        ROLE_CREATOR: ROLE_USER
+        ROLE_MODERATOR: [ROLE_TEAM, ROLE_CREATOR]
         ROLE_ADMIN: [ROLE_MODERATOR, ROLE_APPLICATION]
-        ROLE_ADMIN_APPLICATION: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN_APPLICATION: ROLE_SUPER_ADMIN
 
 when@test:
     security:

@@ -29,4 +29,8 @@ final class HasLimit
     public const HELPCENTERARTICLE_LIMIT = 10;
 
     public const HELPCENTERCATEGORY_LIMIT = 10;
+
+    public const LANG_LIMIT = 10;
+
+    public const COUNTRY_LIMIT = 10;
 }

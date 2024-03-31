@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Page;
+use App\Entity\Setting\Page;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -82,8 +82,6 @@ class AppPagesFixtures extends Fixture
                 ->setSlug($value['slug'])
                 ->setContent($value['content'])
                 ->setViews($value['views'])
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ;
 
             $manager->persist($page);

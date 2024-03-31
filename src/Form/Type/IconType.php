@@ -14,6 +14,7 @@ class IconType extends \Symfony\Component\Form\Extension\Core\Type\TextType
             'label' => t('Icon'),
             'html5' => false,
             'required' => false,
+            'purify_html' => true,
             'widget' => 'single_text',
             'attr' => ['class' => 'icon-picker', 'autocomplete' => 'disabled'],
             'help' => '',

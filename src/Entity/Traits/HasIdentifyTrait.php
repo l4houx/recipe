@@ -11,6 +11,8 @@ use function Symfony\Component\String\u;
 
 trait HasIdentifyTrait
 {
+    //use HasAddressTrait;
+
     #[Assert\Length(min: 4, max: 20)]
     #[Assert\NotBlank(groups: ['user:create'])]
     #[Assert\Regex(

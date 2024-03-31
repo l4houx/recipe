@@ -1,0 +1,41 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Add a new testimonials'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "dashboard_testimonial_new": ('Testimonials'|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="d-lg-flex justify-content-between align-items-center card-header">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span></span>
+            </div>
+            <div>
+                <a href="{{ path('dashboard_account_testimonial_index') }}" class="btn btn-outline-primary btn-sm">
+                    {{ 'Return to list'|trans }}
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                    {{ form_errors(form) }}
+                    <div class="mb-3 col-12 col-md-12">
+                        {{ form_row(form.rating) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-12">
+                        {{ form_row(form.content) }}
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

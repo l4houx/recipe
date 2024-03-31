@@ -4,18 +4,23 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use App\Entity\Traits\HasLimit;
+use App\Entity\Setting\Language;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasTagTrait;
 use App\Entity\Traits\HasLevelTrait;
 use App\Entity\Traits\HasViewsTrait;
 use App\Repository\RecipeRepository;
+use App\Entity\Traits\HasAuthorTrait;
 use App\Entity\Traits\HasContentTrait;
+use Gedmo\Mapping\Annotation as Gedmo;
 use App\Entity\Traits\HasIsOnlineTrait;
-use App\Entity\Traits\HasTimestampTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
+use App\Entity\Traits\HasReferenceTrait;
 use App\Entity\Setting\HomepageHeroSetting;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasSocialNetworksTrait;
 use Symfony\Component\HttpFoundation\File\File;
-use App\Entity\Traits\HasIdTitleSlugAssertTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
@@ -24,33 +29,38 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 #[Vich\Uploadable]
 #[UniqueEntity('title')]
 #[UniqueEntity('slug')]
 class Recipe
 {
-    use HasIdTitleSlugAssertTrait;
-    //use HasIdGedmoTitleSlugAssertTrait;
+    use HasIdGedmoTitleSlugAssertTrait;
     use HasContentTrait;
     use HasIsOnlineTrait;
     use HasViewsTrait;
     use HasLevelTrait;
-    use HasTimestampTrait;
-    //use HasGedmoTimestampTrait;
+    use HasSocialNetworksTrait;
+    use HasReferenceTrait;
+    use HasAuthorTrait;
+    use HasTagTrait;
+    use HasGedmoTimestampTrait;
+    use HasDeletedAtTrait;
 
     public const RECIPE_LIMIT = HasLimit::RECIPE_LIMIT;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
-    #[Vich\UploadableField(mapping: 'recipe_image', fileNameProperty: 'thumbnail')]
+    #[Vich\UploadableField(mapping: 'recipe_image', fileNameProperty: 'imageName')]
     #[Assert\File(
-        maxSize: '2M',
+        maxSize: '5M',
         mimeTypes: ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'],
         mimeTypesMessage: 'The file should be an image'
     )]
-    private ?File $thumbnailFile = null;
+    #[Assert\NotNull(groups: ['create'])]
+    private ?File $imageFile = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $thumbnail = null;
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]
     #[Assert\NotBlank]
@@ -64,17 +74,6 @@ class Recipe
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
     #[Assert\NotNull(groups: ['create', 'update'])]
     private bool $enablereviews = true;
-
-    #[ORM\ManyToOne(inversedBy: 'recipes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $author = null;
-
-    /**
-     * @var collection<int, Comment>
-     */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist'])]
-    #[ORM\OrderBy(['publishedAt' => 'DESC'])]
-    private Collection $comments;
 
     /**
      * @var collection<int, Review>
@@ -104,6 +103,41 @@ class Recipe
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
     private bool $premium = false;
 
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    private ?Restaurant $restaurant = null;
+
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Country $country = null;
+
+    /**
+     * @var collection<int, RecipeImage>
+     */
+    #[ORM\OneToMany(targetEntity: RecipeImage::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist', 'remove'])]
+    private Collection $images;
+
+    /**
+     * @var Collection<int, Language>
+     */
+    #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'recipes', cascade: ['persist', 'merge'])]
+    #[ORM\JoinTable(name: 'recipe_language')]
+    #[ORM\JoinColumn(name: 'recipe_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'language_id', referencedColumnName: 'id')]
+    private Collection $languages;
+
+    /**
+     * @var Collection<int, Language>
+     */
+    #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'recipessubtitled', cascade: ['persist', 'merge'])]
+    #[ORM\JoinTable(name: 'recipe_subtitle')]
+    #[ORM\JoinColumn(name: 'recipe_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'language_id', referencedColumnName: 'id')]
+    private Collection $subtitles;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
+    #[Assert\NotNull(groups: ['create', 'update'])]
+    private bool $isShowattendees = true;
+
     public function __toString(): string
     {
         return sprintf('#%d %s', $this->getId(), $this->getTitle());
@@ -111,10 +145,53 @@ class Recipe
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
+        $this->reference = $this->generateReference(10);
         $this->reviews = new ArrayCollection();
         $this->quantities = new ArrayCollection();
         $this->addedtofavoritesby = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->languages = new ArrayCollection();
+        $this->subtitles = new ArrayCollection();
+    }
+
+    public function hasContactAndSocialMedia(): bool
+    {
+        return $this->externallink
+            || $this->phone || $this->email
+            || $this->youtubeurl || $this->twitterurl
+            || $this->instagramurl || $this->facebookurl
+            || $this->googleplusurl || $this->linkedinurl
+        ;
+    }
+
+    public function stringifyStatus(): string
+    {
+        if (!$this->restaurant->getUser()->isVerified()) {
+            return 'Restaurant is disabled';
+        } elseif (!$this->isOnline) {
+            return 'Recipe is not published';
+        } else {
+            return 'On sale';
+        }
+    }
+
+    public function stringifyStatusClass(): string
+    {
+        if (!$this->restaurant->getUser()->isVerified()) {
+            return 'danger';
+        } elseif (!$this->isOnline) {
+            return 'warning';
+        } else {
+            return 'success';
+        }
+    }
+
+    public function isOnSale()
+    {
+        return
+            $this->restaurant->getUser()->isVerified()()
+            && $this->isOnline
+        ;
     }
 
     /**
@@ -124,45 +201,45 @@ class Recipe
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      */
-    public function setThumbnailFile(File|UploadedFile|null $thumbnailFile): static
+    public function setImageFile(File|UploadedFile|null $imageFile): static
     {
-        $this->thumbnailFile = $thumbnailFile;
+        $this->imageFile = $imageFile;
 
-        if (null !== $thumbnailFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+        if (null !== $imageFile) {
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;
     }
 
-    public function getThumbnailFile(): ?File
+    public function getImageFile(): ?File
     {
-        return $this->thumbnailFile;
+        return $this->imageFile;
     }
 
-    public function getThumbnail(): ?string
+    public function getImageName(): ?string
     {
-        return $this->thumbnail;
+        return $this->imageName;
     }
 
-    public function setThumbnail(?string $thumbnail): static
+    public function setImageName(?string $imageName): static
     {
-        $this->thumbnail = $thumbnail;
+        $this->imageName = $imageName;
 
         return $this;
     }
 
-    public function getThumbnailPath(): string
+    public function getImagePath(): string
     {
-        return '/images/recipe/'.$this->thumbnail;
+        return '/images/recipe/'.$this->imageName;
     }
 
-    public function getThumbnailPlaceholder(string $size = 'default'): string
+    public function getImagePlaceholder(string $size = 'default'): string
     {
         if ('small' == $size) {
-            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeCAMAAAD69YcoAAAAyVBMVEUAAADd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d0jcjdZAAAAQnRSTlMAAQIEBQYLDA8SExQWFxkaHyAhJCUmKi06O0lRVVZfYmNkb3V3g46PkZKbo6ivtLW5vL7FyMrT19na3Ojr7fHz9/luoWfVAAACeUlEQVR42u3cBXKDQBiAUaDukkrqSb1N3d3uf6jeoJbuBtj3nWD3zTDAvwxZJkmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJElSjD5qWxsvXrx48eLFixcvXrx48eLFixcvXrwl571oV7cK8JZiTTXaCl68eG0FrzXhxYsXL168ePHixYsXr62kwXuz/2WbeLvayjdd4sWLFy9evHjx4sWLFy9evHjx4sX7B96ir7zl1efdL/H30Qt48eLFixcvXrx48eLFixcvXrx48eKtF+9Yo7wNOK1wWoEXL168ePHixYsXL168ePHixYsXL94f8/7vOL3RFYjTCrx48eLFixcvXrx48eLFixcvXrx48XbBm/wHqGF5jdPx4sWLFy9evHjx4sWLFy9evHjx4sVrnI4XL168ePHixYsXL168ePHixYsXL168eI3T8eLFixcvXrx48eLFixcvXrx48eLFW07e3/1gYAJvyHF6By9evHjx4sWLFy9evHjx4sWLFy9evPXmHWv8Z/3mvdUNL168ePHixYsXbyV5L/CG5D3CG5L3AG9I3hbekLxNvCF5R/AG5H3N8Abk3YmzprePNJuOw/uQpu59pCuqkyZvMxLvepK6d3kk3pkkeedi3W7zpwR1d+M9zqykp3tbxOMtHlPTfRmO+TS+lJju+2Tct529pHSfJ+LqZsV1QrpXQ9Ff1gdOk9HdyrP45dtp4J6P92jaNHVWf9zj2R6O8+YPa217sjLY43lpMdVc3WjXrtba8uJokUmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmS1Js+AbSytGbYpVXAAAAAAElFTkSuQmCC';
+            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAMAAABG8BK2AAAAXVBMVEUAAAD2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhHkayjUAAAAHnRSTlMABQ0PEBEcKixARkdJSk1WYmRmZ3R1eHl7f4WjsMpiv/ZRAAAAtUlEQVRYw+3X2Q7CIBCFYVqRLmoH3Oly3v8xvfCiJrYsSjRp578l+RJIIIMQHLfEMiKiYmKhICLKQhkJAHZiwQKAXC2zPWjTAsBg3hsAoDW6zj3KDWEdncoZSOBsEJ5jX/sIpp5ndASj5xkTwRhm/s101lcXwijv9VXMMPMzRlZj5edM9XKTemaYWTNT9mNXfm++YzQANMpX45m2Es1+iSZRcQlWTs7TuydRnn8GX3qXC45bXA+ADIuZ4XkIYQAAAABJRU5ErkJggg==';
         } else {
-            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAYACAMAAACHMHNZAAABVlBMVEUAAADd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d18zGJfAAAAcXRSTlMAAQIDBAUHCAkLDA0PEBESExQWFxocHiAjJCUmKywtLzA0NTY3ODk6Pj9AQUJHSU1OT1BYWV9jZGZoaWtsbW90dXd7fH5/goOFjpSXmJqeoKOlpqq1t7nBw8XKzs/T1dfZ3N7g4uTm6+3v8fP19/n7/XM0K4AAABCKSURBVHja7d1bbxR1HMfhBSe1EKkYUEAjkaioCWjwUmO4IF544ZXR97GvZN+FhlTlwqChRoyHiASCLaek0FLLSqEFSkuB3e62XTmESqHF0m6Znfk9zz1Rvo799N/OzBYKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAECrWxV9gKJrAFJTMkGqVpsAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQCg2RITLE/JBARWNIETAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAA9KTACkpZjyP7/kBACAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACACAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACACAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAEBzJSZIV9EEpKhkAicAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAAmikxQbpKJgCcAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABABAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQAQAAAEAAABAEAAABAAAPIiMUG6iiZYlpL9U90PJwAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEAQAAAEAAABAAAAQBAAAAQAADmSExAZCUT4AQAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgBA8yQmILJi8L9/ySXgBACAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACACAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACACAAAAgAAAIAAACAIAAACAAAAgAAAIAgAAAIAAACAAAAgCAAAAgAAAIAAACAEAzJSYgspIJcAIAQAAAEAAABAAAAQBAAAAQAAAEAAABAEAAABAAAAQAAAEA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';
+            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeCAMAAAD69YcoAAAA9lBMVEUAAAD2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhEZWD6+AAAAUXRSTlMAAQIDBAYJDQ4QExQVFhcYGhseHyAhKi0uLzAxMjQ6Ozw+P0BERUZHSUpPUVVWV1hZYmRmcXN0dYOFiYuXmJq3ur7HyNHT1dfZ3Obo8fX3+fvgzUWiAAADeklEQVR42u3cSVNTQRSA0RcBgQhOKCg4MImoJPKCA+BAQGVUof//n3Gpm7iQCt3ver51qjo5i5fu26lUlSRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRdVdc/DGjrChbfGrT49Si8k2lA+1ew+P6gxSfx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjHbj5a79S93+0M+oSnveF3OmjxnT9eVG+szbWvNcD23puj1NT2OuNF246+PkvNrj9bLG6r+yM1v4O7Zere/ppitD1SoO7LFKbjdnG6uylQF/OFPXY/pVitFsX7MSW+Q+tdilc5z4enAXXTRSnfbxPnEXnTcSH7s36K2XYRuk9S1Eo4v7XOwvIeFMC7nOJWwHznMDBvP7vuVIpc9vlvLzRvJzfvQWjevdz3Eyl2me/fpoPzZj4ZzwfnncvLux6cdy0vbzc470Ze3jo4b23bO8x6ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168/8J7st+kTprGu1g1qUW8ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168eIfQ5MplWsL791Yu9c8453jx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjxNp136fwyfcebJbx48eLFixcvXrx48eLFixcvXrx48eLFixcvXrx48eLFixfvf8BbD3pfu4tNanfQx6jz8nZT7Dby8q4H513LyzsfnPdBXt7p4LztvLyjwXmvZd7SfAmtu5d7x9gLzdvJzTsVmnc8+4HnMLBuP/95cjkw72x+3tZZWN0vJYxDnoblnSli3NQPqrtTxjRv4jyk7vFI6dPSJnfRrkrpfUDehYKm/Z/C6a6WdJnS+hxM91lht1UfQj13F6rSehVoz9CuyuvOtyj73ZGqxFqbPyOchGeqUhvdbPoAoj9bFd39t0fNte1ONOAnL2O3Hr/o1r0mVXeeP7wxUkmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEnSsPoFIVJb/voL1VsAAAAASUVORK5CYII=';
         }
     }
 
@@ -203,81 +280,6 @@ class Recipe
     public function setEnablereviews(bool $enablereviews): static
     {
         $this->enablereviews = $enablereviews;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): static
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Provides the overall average rating for this ad.
-     */
-    public function getAvgRatings(): float
-    {
-        // Calculate sum of ratings
-        $sum = array_reduce($this->comments->toArray(), function ($total, $comment) {
-            return $total + $comment->getRating();
-        }, 0);
-
-        // Divide to get the averages
-        if (\count($this->comments) > 0) {
-            return $sum / \count($this->comments);
-        }
-
-        return 0;
-    }
-
-    /**
-     * Returns a user's comment on an article.
-     */
-    public function getCommentFromAuthor(User $author): ?Comment
-    {
-        /** @var Comment $comment */
-        foreach ($this->comments as $comment) {
-            if ($comment->getAuthor() === $author) {
-                return $comment;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return Collection<int, Comment>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): static
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setRecipe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): static
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getRecipe() === $this) {
-                $comment->setRecipe(null);
-            }
-        }
 
         return $this;
     }
@@ -480,6 +482,146 @@ class Recipe
     public function setPremium(bool $premium): static
     {
         $this->premium = $premium;
+
+        return $this;
+    }
+
+    public function getRestaurant(): ?Restaurant
+    {
+        return $this->restaurant;
+    }
+
+    public function setRestaurant(?Restaurant $restaurant): static
+    {
+        $this->restaurant = $restaurant;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecipeImage>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(RecipeImage $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(RecipeImage $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getRecipe() === $this) {
+                $image->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function displayLanguages(): string
+    {
+        $languages = '';
+
+        if (\count($this->languages) > 0) {
+            foreach ($this->languages as $language) {
+                $languages .= $language->getName().', ';
+            }
+        }
+
+        return rtrim($languages, ', ');
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getLanguages(): Collection
+    {
+        return $this->languages;
+    }
+
+    public function addLanguage(Language $language): static
+    {
+        if (!$this->languages->contains($language)) {
+            $this->languages->add($language);
+        }
+
+        return $this;
+    }
+
+    public function removeLanguage(Language $language): static
+    {
+        $this->languages->removeElement($language);
+
+        return $this;
+    }
+
+    public function displaySubtitles(): string
+    {
+        $subtitles = '';
+
+        if (\count($this->subtitles) > 0) {
+            foreach ($this->subtitles as $subtitle) {
+                $subtitles .= $subtitle->getName().', ';
+            }
+        }
+
+        return rtrim($subtitles, ', ');
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getSubtitles(): Collection
+    {
+        return $this->subtitles;
+    }
+
+    public function addSubtitle(Language $subtitle): static
+    {
+        if (!$this->subtitles->contains($subtitle)) {
+            $this->subtitles->add($subtitle);
+        }
+
+        return $this;
+    }
+
+    public function removeSubtitle(Language $subtitle): static
+    {
+        $this->subtitles->removeElement($subtitle);
+
+        return $this;
+    }
+
+    public function isShowattendees(): bool
+    {
+        return $this->isShowattendees;
+    }
+
+    public function setIsShowattendees(bool $isShowattendees): static
+    {
+        $this->isShowattendees = $isShowattendees;
 
         return $this;
     }

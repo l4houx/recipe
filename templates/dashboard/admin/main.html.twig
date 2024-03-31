@@ -200,7 +200,7 @@
 									<div class="row">
 										<div class="col-md-3 col-12 mb-3 mb-md-0">
 											<a href="{{ link }}">
-												<img src="{{ recipe.thumbnail ? asset(recipe.getThumbnailPath) : recipe.getThumbnailPlaceholder }}" alt="{{ recipe.title }}" class="img-fluid rounded">
+												<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" alt="{{ recipe.title }}" class="img-fluid rounded">
 											</a>
 										</div>
 										<div class="col-md-8 col-10">
@@ -209,7 +209,7 @@
 											</a>
 											<div class="d-flex align-items-center">
 												{% include "global/user-avatar.html.twig" with { user: app.user, type: "xs", class: "me-2" } %}
-												<span class="fs-6">{{ recipe.author.username }}</span>
+												<span class="fs-6">User</span>
 											</div>
 										</div>
 										<div class="col-1 col-auto d-flex justify-content-center">

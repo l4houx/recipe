@@ -1,6 +1,7 @@
 {% extends 'admin.html.twig' %}
 
 {% set pagetitle = 'Add a new category'|trans %}
+{% if category.id %}{% set pagetitle = 'Edit the category'|trans %}{% endif %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}

@@ -9,30 +9,47 @@ parameters:
     #is_website_configured: '%env(IS_WEBSITE_CONFIGURED)%'
     maintenance_mode:        '%env(MAINTENANCE_MODE)%'
 
-    # Website configuration
+    # Name
     website_name:            '%env(WEBSITE_NAME)%'
     website_slug:            '%env(WEBSITE_SLUG)%'
+
+    # Support
     website_support:         '%env(WEBSITE_SUPPORT)%'
     website_marketing:       '%env(WEBSITE_MARKETING)%'
     website_compta:          '%env(WEBSITE_COMPTA)%'
+
+    # Contact
     website_no_reply_email:  '%env(WEBSITE_NO_REPLY_EMAIL)%'
     website_sav:             '%env(WEBSITE_SAV)%'
+    website_contact_name:    '%env(WEBSITE_CONTACT_NAME)%'
     website_contact_email:   '%env(WEBSITE_CONTACT_EMAIL)%'
     website_contact_phone:   '%env(WEBSITE_CONTACT_PHONE)%'
     website_contact_fax:     '%env(WEBSITE_CONTACT_FAX)%'
     website_contact_address: '%env(WEBSITE_CONTACT_ADDRESS)%'
+
+    # URL
     website_root_url:        '%env(WEBSITE_ROOT_URL)%'
     website_url:             '%env(WEBSITE_URL)%'
     website_dashboard_path:  '%env(WEBSITE_DASHBOARD_PATH)%'
+
+    # Website configuration
     #website_jwt_secret:      '%env(WEBSITE_JWT_SECRET)%'
     website_dkim_key:        '%env(resolve:default::WEBSITE_MAILER_DKIM)%'
     website_geoip_database:  '%kernel.project_dir%/var/GeoLite2-Country.mmdb'
     website_security_salt:    '%env(WEBSITE_SECURITY_SALT)%'
+
+    # Social
     website_facebook_url:    '%env(WEBSITE_FACEBOOK_URL)%'
     website_instagram_url:   '%env(WEBSITE_INSTAGRAM_URL)%'
     website_youtube_url:     '%env(WEBSITE_YOUTUBE_URL)%'
     website_twitter_url:     '%env(WEBSITE_TWITTER_URL)%'
     website_github_url:      '%env(WEBSITE_GITHUB_URL)%'
+
+    # Company
+    website_company:         '%env(WEBSITE_COMPANY)%'
+    website_siret:           '%env(WEBSITE_SIRET)%'
+    website_ape:             '%env(WEBSITE_APE)%'
+    website_vat:             '%env(WEBSITE_VAT)%'
 
     # Date and time
     date_format:           '%env(DATE_FORMAT)%'
@@ -69,7 +86,9 @@ parameters:
     #user_avatar:                     /images/user
     #payment_gateway:                 /images/payment/gateways
     recipe_image:                     /images/recipe
-    #photo_testimonial:               /images/testimonial
+    category_image:                   /images/categories
+    restaurant_logo:                  /images/restaurant
+    restaurant_cover:                 /images/restaurant/covers
 
 imports:
     - { resource: data/ }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Page;
-use App\Form\Type\TextEditorType;
-use Symfony\Component\Form\FormEvents;
+use App\Entity\Setting\Page;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,11 +15,6 @@ use function Symfony\Component\Translation\t;
 
 class PageFormType extends AbstractType
 {
-    public function __construct(private FormListenerFactory $formListenerFactory)
-    {
-        // code...
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -30,7 +23,7 @@ class PageFormType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
                 'required' => true,
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'empty_data' => '',
                 'help' => t('Keep your page titles under 10 characters. Write heading that describe the topic content. Contextualize for Your Audience.'),
             ])
@@ -47,8 +40,6 @@ class PageFormType extends AbstractType
                 'attr' => ['placeholder' => '', 'rows' => 6],
                 'help' => t(''),
             ])
-            ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('title'))
-            ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;
     }
 

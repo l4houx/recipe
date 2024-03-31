@@ -22,15 +22,16 @@ class AccountTestimonialController extends BaseController
     #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(Request $request, TestimonialRepository $testimonialRepository, PaginatorInterface $paginator): Response
     {
-        $page = $request->query->getInt('page', 1);
-        $testimonials = $testimonialRepository->findForPagination($page);
+        $user = $this->getUserOrThrow();
+        $rows = $testimonialRepository->findLastByUser($user, 1);
 
-        return $this->render('dashboard/shared/testimonials/index.html.twig', compact('testimonials'));
+        return $this->render('dashboard/shared/testimonials/index.html.twig', compact('rows', 'user'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em, TranslatorInterface $translator)
     {
+        $user = $this->getUserOrThrow();
         $testimonial = new Testimonial();
 
         $form = $this->createForm(TestimonialFormType::class, $testimonial)->handleRequest($request);
@@ -56,6 +57,6 @@ class AccountTestimonialController extends BaseController
             }
         }
 
-        return $this->render('dashboard/shared/testimonials/new.html.twig', compact('form', 'testimonial'));
+        return $this->render('dashboard/shared/testimonials/new.html.twig', compact('form', 'testimonial', 'user'));
     }
 }

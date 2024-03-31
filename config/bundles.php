@@ -33,4 +33,7 @@ return [
     KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle::class => ['all' => true],
     Presta\SitemapBundle\PrestaSitemapBundle::class => ['all' => true],
     Debril\RssAtomBundle\DebrilRssAtomBundle::class => ['all' => true],
+    A2lix\AutoFormBundle\A2lixAutoFormBundle::class => ['all' => true],
+    A2lix\TranslationFormBundle\A2lixTranslationFormBundle::class => ['all' => true],
+    Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle::class => ['all' => true],
 ];

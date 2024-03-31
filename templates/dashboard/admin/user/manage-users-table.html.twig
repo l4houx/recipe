@@ -20,9 +20,11 @@
 					<td>
 						<a href="{{ link }}" class="text-inherit" target="_blank">
 							<div class="d-flex align-items-center">
+								<div>
+									{% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
+								</div>
 								<div class="ms-3">
-									<h4 class="mb-1 text-primary-hover">{{ user.username }}
-										{{ user.email }}</h4>
+									<h4 class="mb-1 text-primary-hover">{{ user.username }} / {{ user.email }}</h4>
 									<span>
 										{{ 'Joined the'|trans }}
 										{{ user.createdAt ? user.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}

@@ -2,19 +2,19 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use App\Entity\Traits\HasLimit;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasIdTrait;
 use App\Entity\Traits\HasIPTrait;
-use App\Repository\CommentRepository;
-use App\Entity\Traits\HasContentTrait;
-use function Symfony\Component\String\u;
-
 use App\Entity\Traits\HasIsApprovedTrait;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasLimit;
+use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+
+use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -38,12 +38,8 @@ class Comment
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    //#[ORM\JoinColumn(nullable: false)]
+    // #[ORM\JoinColumn(nullable: false)]
     private ?Post $post = null;
-
-    #[ORM\ManyToOne(inversedBy: 'comments')]
-    //#[ORM\JoinColumn(nullable: false)]
-    private ?Recipe $recipe = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]
     private ?self $comment = null;
@@ -119,18 +115,6 @@ class Comment
     public function setPost(?Post $post): static
     {
         $this->post = $post;
-
-        return $this;
-    }
-
-    public function getRecipe(): ?Recipe
-    {
-        return $this->recipe;
-    }
-
-    public function setRecipe(?Recipe $recipe): static
-    {
-        $this->recipe = $recipe;
 
         return $this;
     }

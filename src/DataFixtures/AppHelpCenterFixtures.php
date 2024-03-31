@@ -30,7 +30,7 @@ class AppHelpCenterFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $this->getHelpCenterCategoryData('User', null, 1, 'success', 'bi bi-person', $manager);
-        $this->getHelpCenterCategoryData('Recipe', null, 1, 'primary', 'bi bi-book', $manager);
+        $this->getHelpCenterCategoryData('Restaurant', null, 1, 'primary', 'bi bi-book', $manager);
 
         $manager->flush();
 
@@ -48,10 +48,11 @@ class AppHelpCenterFixtures extends Fixture
                 ->setViews(rand(10, 160))
                 ->setIsOnline($this->faker()->randomElement([true, false]))
                 ->setIsFeatured($this->faker()->randomElement([true, false]))
-                ->setCreatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
-                ->setCategory($this->subcategories[$article % \count($this->subcategories)])
+                //->setCategory($this->subcategories[$article % \count($this->subcategories)])
             ;
+
+            $category = $this->getReference('helpcentercategory-' . $this->faker()->numberBetween(1, 2));
+            $helpcenterarticle->setCategory($category);
 
             $manager->persist($helpcenterarticle);
         }
@@ -63,8 +64,6 @@ class AppHelpCenterFixtures extends Fixture
                 ->setQuestion($this->faker()->sentence)
                 ->setAnswer($content)
                 ->setIsOnline($this->faker()->randomElement([true, false]))
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ;
 
             $manager->persist($faq);
@@ -91,12 +90,10 @@ class AppHelpCenterFixtures extends Fixture
             ->setIsOnline($isOnline)
             ->setColor($color)
             ->setIcon($icon)
-            ->setCreatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTime::createFromInterface($this->faker()->dateTime()))
         ;
         $manager->persist($helpcentercategory);
 
-        $this->addReference('cat-'.$this->counter, $helpcentercategory);
+        $this->addReference('helpcentercategory-'.$this->counter, $helpcentercategory);
         ++$this->counter;
 
         return $helpcentercategory;

@@ -48,7 +48,7 @@
                         </span>
 					</td>
 					<td>
-						{{ article.updatedAt ? article.updatedAt | ago() : '' }}
+						{{ article.updatedAt ? article.updatedAt | format_date('long') : '' }}
 					</td>
 					<td>
 						{% if article.isFeatured == false %}

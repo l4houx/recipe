@@ -28,7 +28,7 @@ class HelpCenterArticleType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
                 'required' => true,
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'empty_data' => '',
                 'help' => t('Keep your article titles under 10 characters. Write a name that describes the content of the topic. Contextualize for your audience..'),
             ])
@@ -47,12 +47,13 @@ class HelpCenterArticleType extends AbstractType
             ])
             ->add('tags', TextType::class, [
                 'label' => t('Keywords :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => false,
+                'attr' => ['class' => 'tags-input'],
                 'help' => t('Make sure you select the correct keyword to allow users to find it quickly.'),
             ])
             ->add('category', EntityType::class, [
-                'label' => t('Category'),
+                'label' => t('Category :'),
                 'required' => true,
                 'multiple' => false,
                 'class' => HelpCenterCategory::class,

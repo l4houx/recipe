@@ -63,7 +63,7 @@ class Provider implements FeedProviderInterface
 
             // Media
             $media = new Media();
-            $media->setUrl($this->settingService->getSettings('website_url').$this->assets->getUrl($recipe->getThumbnailPath()));
+            $media->setUrl($this->settingService->getSettings('website_url').$this->packages->getUrl($recipe->getThumbnailPath()));
             $item->addMedia($media);
 
             // Category

@@ -17,30 +17,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class TestimonialFormType extends AbstractType
 {
-    public function __construct(private FormListenerFactory $formListenerFactory)
-    {
-        # code...
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
 
         $builder
-            /*
-            ->add('photoFile', VichImageType::class, [
-                'required' => false,
-                'allow_delete' => true,
-                'download_label' => false,
-                'download_uri' => false,
-                'image_uri' => false,
-                'imagine_pattern' => 'scale',
-                'label' => t('Profile picture'),
-                'translation_domain' => 'messages'
-            ])
-            */
             ->add('rating', ChoiceType::class, [
-                'label' => t('Your rating (out of 5 stars)'),
+                'label' => t('Your rating (out of 5 stars) :'),
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
@@ -48,7 +31,7 @@ class TestimonialFormType extends AbstractType
             ])
             ->add('content', TextareaType::class, [
                 'label' => t("Content :"),
-                //'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
@@ -56,8 +39,6 @@ class TestimonialFormType extends AbstractType
             ])
             ->add('author', UserAutocompleteField::class, ['label' => t('Author :')])
             ->add('isOnline', SwitchType::class, ['label' => t('Online')])
-            ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
-            //->add('user')
         ;
     }
 

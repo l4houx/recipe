@@ -38,7 +38,7 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Site URL', 'website_url', $this->params->get('website_url'), UrlType::class);
         $settings[] = new Setting('Site slug', 'website_slug', $this->params->get('website_slug'), TextType::class);
         $settings[] = new Setting('Root URL', 'website_root_url', $this->params->get('website_root_url'), UrlType::class);
-        $settings[] = new Setting('Website configured', 'is_website_configured', $this->params->get('is_website_configured'), CheckboxType::class);
+        //$settings[] = new Setting('Website configured', 'is_website_configured', $this->params->get('is_website_configured'), CheckboxType::class);
 
         // Contact
         $settings[] = new Setting('No reply email', 'website_no_reply_email', $this->params->get('website_no_reply_email'), EmailType::class);
@@ -47,22 +47,22 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Contact by phone', 'website_contact_phone', $this->params->get('website_contact_phone'), TelType::class);
         $settings[] = new Setting('Contact by fax', 'website_contact_fax', $this->params->get('website_contact_fax'), TelType::class);
         $settings[] = new Setting('Contact address', 'website_contact_address', $this->params->get('website_contact_address'), TextareaType::class);
-        $settings[] = new Setting('Name', 'name', $this->params->get('name'), TextType::class);
+        $settings[] = new Setting('Contact Name', 'website_contact_name', $this->params->get('website_contact_name'), TextType::class);
         $settings[] = new Setting('Support', 'website_support', $this->params->get('website_support'), EmailType::class);
         $settings[] = new Setting('Marketing', 'website_marketing', $this->params->get('website_marketing'), EmailType::class);
         $settings[] = new Setting('Compta', 'website_compta', $this->params->get('website_compta'), EmailType::class);
 
         // Company
-        $settings[] = new Setting('Company', 'company', $this->params->get('company'), TextareaType::class);
-        $settings[] = new Setting('Siret', 'siret', $this->params->get('siret'), TextareaType::class);
-        $settings[] = new Setting('APE', 'ape', $this->params->get('ape'), TextareaType::class);
-        $settings[] = new Setting('VAT', 'vat', $this->params->get('vat'), TextareaType::class);
+        $settings[] = new Setting('Company', 'website_company', $this->params->get('website_company'), TextareaType::class);
+        $settings[] = new Setting('Siret', 'website_siret', $this->params->get('website_siret'), TextareaType::class);
+        $settings[] = new Setting('APE', 'website_ape', $this->params->get('website_ape'), TextareaType::class);
+        $settings[] = new Setting('VAT', 'website_vat', $this->params->get('website_vat'), TextareaType::class);
 
         // Social
-        $settings[] = new Setting('Facebook URL', 'facebook_url', 'https://www.facebook.com', UrlType::class);
-        $settings[] = new Setting('Instagram URL', 'instagram_url', 'https://www.instagram.com', UrlType::class);
-        $settings[] = new Setting('Youtube URL', 'youtube_url', 'https://www.youtube.com', UrlType::class);
-        $settings[] = new Setting('Twitter URL', 'twitter_url', 'https://www.twitter.com', UrlType::class);
+        $settings[] = new Setting('Facebook URL', 'website_facebook_url', 'https://www.facebook.com', UrlType::class);
+        $settings[] = new Setting('Instagram URL', 'website_instagram_url', 'https://www.instagram.com', UrlType::class);
+        $settings[] = new Setting('Youtube URL', 'website_youtube_url', 'https://www.youtube.com', UrlType::class);
+        $settings[] = new Setting('Twitter URL', 'website_twitter_url', 'https://www.twitter.com', UrlType::class);
 
         // General settings
         $settings[] = new Setting('Copyright', 'website_copyright', '© 2020 '.$this->params->get('website_name').', Inc. All rights reserved.', TextType::class);

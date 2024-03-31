@@ -2,16 +2,17 @@
 
 namespace App\Repository;
 
-use Doctrine\ORM\Query;
+use App\DTO\CategoryWithCountDTO;
 use App\Entity\Category;
 use App\Entity\Traits\HasLimit;
-use App\DTO\CategoryWithCountDTO;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
 use Gedmo\Translatable\TranslatableListener;
 use Knp\Component\Pager\Pagination\PaginationInterface;
-use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Category>
@@ -24,7 +25,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 class CategoryRepository extends ServiceEntityRepository
 {
     public function __construct(
-        ManagerRegistry $registry, 
+        ManagerRegistry $registry,
         private readonly PaginatorInterface $paginator
     ) {
         parent::__construct($registry, Category::class);
@@ -40,7 +41,7 @@ class CategoryRepository extends ServiceEntityRepository
             HasLimit::CATEGORY_LIMIT,
             [
                 'distinct' => false,
-                'sortFieldAllowList' => ['c.id', 'c.name']
+                'sortFieldAllowList' => ['c.id', 'c.name'],
             ]
         );
     }
@@ -62,5 +63,49 @@ class CategoryRepository extends ServiceEntityRepository
             ->setHint(TranslatableListener::HINT_FALLBACK, 1)
             ->getResult()
         ;
+    }
+
+    /**
+     * Returns the categories after applying the specified search criterias.
+     *
+     * @param bool   $isOnline
+     * @param string $keyword
+     * @param string $slug
+     * @param bool   $isFeatured
+     * @param int    $limit
+     * @param string $sort
+     * @param string $order
+     */
+    public function getCategories($isOnline, $keyword, $slug, $isFeatured, $limit, $sort, $order): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('DISTINCT c');
+
+        if ($isOnline !== "all") {
+            $qb->andWhere('c.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
+        }
+
+        if ($keyword !== "all") {
+            $qb->andWhere('c.name LIKE :keyword or :keyword LIKE c.name')->setParameter('keyword', '%'.$keyword.'%');
+        }
+
+        if ($slug !== "all") {
+            $qb->andWhere('c.slug = :slug')->setParameter('slug', $slug);
+        }
+
+        if ($isFeatured !== "all") {
+            $qb->andWhere('c.isFeatured = :isFeatured')->setParameter('isFeatured', $isFeatured);
+            if (true === $isFeatured) {
+                $qb->orderBy('c.featuredorder', 'ASC');
+            }
+        }
+
+        if ($limit !== "all") {
+            $qb->setMaxResults($limit);
+        }
+
+        $qb->orderBy($sort, $order);
+
+        return $qb;
     }
 }

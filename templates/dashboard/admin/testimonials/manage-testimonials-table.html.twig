@@ -18,14 +18,15 @@
 				<tr>
 					<td>{{ testimonial.id }}</td>
 					<td>
-						<a href="{{ link }}" class="text-inherit">
+						<a href="{{ link }}" class="text-inherit" target="_blank">
 							<div class="d-flex align-items-center">
+								<div>
+									{% include "global/user-avatar.html.twig" with { user: testimonial.author, type: "xl" } %}
+								</div>
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">
-                                        {{ testimonial.author.username | lower | capitalize }}
-                                    <br>
-										{{ testimonial.author.email }}
-                                    </h4>
+										{{ testimonial.author.username }} / {{ testimonial.author.email }}
+									</h4>
 									<span>
 										{{ 'Published the'|trans }}
 										{{ testimonial.createdAt ? testimonial.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
@@ -54,6 +55,7 @@
 								{{ "Online"|trans }}
 							</span>
 						{% endif %}
+						{#  
 						{% if testimonial.deletedAt %}
 							<br>
 							<br>
@@ -62,6 +64,7 @@
 								{{ "Deleted"|trans }}
 							</span>
 						{% endif %}
+						#}
 					</td>
 					<td>
 						<div class="dropdown dropstart">

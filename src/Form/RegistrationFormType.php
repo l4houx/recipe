@@ -37,7 +37,7 @@ class RegistrationFormType extends AbstractType
             // Profil
             ->add('username', TextType::class, [
                 'label' => t("User name :"),
-                //'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t("User name")],
@@ -48,14 +48,14 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('firstname', TextType::class, [
                 'label' => t('First name :'),
-                //'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('First name')],
             ])
             ->add('lastname', TextType::class, [
                 'label' => t('Last name :'),
-                //'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('Last name')],
@@ -63,7 +63,7 @@ class RegistrationFormType extends AbstractType
             // Contact
             ->add('email', EmailType::class, [
                 'label' => t('Email address :'),
-                //'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'attr' => ['placeholder' => t('Email address here')],
             ])
@@ -78,7 +78,7 @@ class RegistrationFormType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'options' => [
-                    //'purify_html' => true,
+                    'purify_html' => true,
                     'toggle' => true,
                     'translation_domain' => 'messages',
                     'attr' => [

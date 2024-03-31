@@ -2,11 +2,11 @@
 
 namespace App\Controller\Dashboard\Admin;
 
-use App\Entity\Page;
+use App\Entity\Setting\Page;
 use App\Entity\Traits\HasRoles;
 use App\Entity\User;
 use App\Form\PageFormType;
-use App\Repository\PageRepository;
+use App\Repository\Setting\PageRepository;
 use App\Service\SettingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -35,16 +35,7 @@ class PagesController extends AdminBaseController
     #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(Request $request, #[CurrentUser] User $user, PaginatorInterface $paginator): Response
     {
-        $query = $this->pageRepository->findAll();
-        $page = $request->query->getInt('page', 1);
-
-        $rows = $paginator->paginate(
-            $query,
-            $page,
-            Page::PAGE_LIMIT
-        );
-
-        // $rows = $paginator->paginate($this->settingService->getPages([]), $request->query->getInt('page', 1), Page::PAGE_LIMIT, ['wrap-queries' => true]);
+        $rows = $paginator->paginate($this->settingService->getPages([]), $request->query->getInt('page', 1), Page::PAGE_LIMIT, ['wrap-queries' => true]);
 
         return $this->render('dashboard/admin/pages/index.html.twig', compact('rows'));
     }
@@ -78,8 +69,9 @@ class PagesController extends AdminBaseController
                 }
 
                 return $this->redirectToRoute('dashboard_admin_page_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
-            $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
         return $this->render('dashboard/admin/pages/new-edit.html.twig', compact('page', 'form'));

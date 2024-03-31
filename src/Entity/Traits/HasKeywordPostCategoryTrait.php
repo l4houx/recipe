@@ -4,12 +4,10 @@ namespace App\Entity\Traits;
 
 trait HasKeywordPostCategoryTrait
 {
-    use HasIdNameSlugAssertTrait;
-    //use HasIdGedmoNameSlugAssertTrait;
+    use HasIdGedmoNameSlugAssertTrait;
     use HasBackgroundColorTrait;
-    //use HasIsOnlineTrait;
-    use HasTimestampTrait;
-    //use HasGedmoTimestampTrait;
+    use HasIsOnlineTrait;
+    use HasGedmoTimestampTrait;
 
     public function __toString(): string
     {

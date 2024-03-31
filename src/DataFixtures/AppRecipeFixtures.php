@@ -73,147 +73,67 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
             'cuillère à café' => 'cuillères à café',
         ];
 
-        //$users = $this->userRepository->findAll();
-
-        /*
-        $categories = ['Plat chaud', 'Dessert', 'Entrée', 'Goûter'];
-        foreach ($categories as $cat) {
-            $category = (new Category())
-                ->setName($cat)
-                ->setSlug($this->slugger->slug($cat))
-                ->setColor($this->faker()->hexColor())
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()));
-            $manager->persist($category);
-            $this->addReference($cat, $category);
-        }
-        */
-
-        /*
-        // Create 1 User Admin
-        $admins = [];
-
-        // User Admin
-        /** @var User $admin /
-        $admin = (new User());
-        $admin
-            ->setRoles([HasRoles::ADMIN])
-            ->setLastname('Anne')
-            ->setFirstname('Carlier')
-            ->setUsername('anne-carlier')
-            ->setSlug('anne-carlier')
-            ->setEmail('anne-carlier@yourdomain.com')
-            //->setPhone($this->faker()->phoneNumber())
-            ->setIsTeam(true)
-            ->setIsVerified(true)
-            ->setAbout($this->faker()->realText(254))
-            ->setDesignation('Admin Staff')
-            ->setLastLogin(new \DateTimeImmutable())
-            ->setLastLoginIp($this->faker()->ipv4())
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()));
-
-        $manager->persist(
-            $admin->setPassword(
-                $this->hasher->hashPassword($admin, 'admin')
-            )
-        );
-        $admins[] = $admin;
-        */
-
         // Create 20 Recipes by User and admin
         $recipes = [];
-        /*foreach ($users as $user) {*/
-            for ($i = 0; $i <= 20; ++$i) {
-                $recipe = new Recipe();
-                $recipe
-                    ->setTitle($this->faker()->foodName())
-                    ->setSlug($this->slugger->slug($recipe->getTitle())->lower())
-                    ->setContent($this->faker()->paragraphs(10, true))
-                    ->setDuration($this->faker()->numberBetween(2, 60))
-                    ->setViews(rand(10, 160))
-                    ->setEnablereviews($this->faker()->numberBetween(0, 1))
-                    ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                    ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                    //->setAuthor($this->faker()->boolean(50) ? $user : $admin)
-                    ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
-                    ->setIsOnline($this->faker()->numberBetween(0, 1))
-                    //->setCategory($this->getReference($this->faker()->randomElement($categories)));
-                ;
 
-                $category = $this->getReference('cat-' . $this->faker()->numberBetween(1, 4));
-                $recipe->setCategory($category);
+        for ($i = 0; $i <= 20; ++$i) {
+            $recipe = new Recipe();
+            $recipe
+                ->setTitle($this->faker()->foodName())
+                ->setSlug($this->slugger->slug($recipe->getTitle())->lower())
+                ->setContent($this->faker()->paragraphs(10, true))
+                ->setDuration($this->faker()->numberBetween(2, 60))
+                ->setViews(rand(10, 160))
+                ->setEnablereviews($this->faker()->numberBetween(0, 1))
+                ->setIsOnline($this->faker()->numberBetween(0, 1))
+            ;
 
-                foreach ($this->faker()->randomElements($ingredients, $this->faker()->numberBetween(2, 5)) as $ingredient) {
-                    $recipe->addQuantity((new Quantity())
-                        ->setQuantity($this->faker()->numberBetween(1, 250))
-                        ->setUnit($this->faker()->randomElement($units))
-                        ->setIngredient($ingredient)
-                    );
-                }
+            $category = $this->getReference('cat-' . $this->faker()->numberBetween(1, 4));
+            $recipe->setCategory($category);
 
-                $manager->persist($recipe);
-
-                $recipes[] = $recipe;
-
-                // Create Comments
-                for ($k = 1; $k <= $this->faker()->numberBetween(1, 5); ++$k) {
-                    $comment = new Comment();
-                    $comment
-                        //->setAuthor($this->faker()->boolean(50) ? $user : $admin)
-                        ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
-                        ->setContent($this->faker()->paragraph())
-                        ->setIsApproved($this->faker()->numberBetween(0, 1))
-                        //->setIsReply()
-                        //->setIsRGPD(true)
-                        ->setIp($this->faker()->ipv4)
-                        ->setRecipe($recipe)
-                        ->setPublishedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                    ;
-
-                    $manager->persist($comment);
-                }
+            foreach ($this->faker()->randomElements($ingredients, $this->faker()->numberBetween(2, 5)) as $ingredient) {
+                $recipe->addQuantity((new Quantity())
+                    ->setQuantity($this->faker()->numberBetween(1, 250))
+                    ->setUnit($this->faker()->randomElement($units))
+                    ->setIngredient($ingredient)
+                );
             }
-        /*}*/
+
+            $manager->persist($recipe);
+
+            $recipes[] = $recipe;
+        }
 
         // Create 10 Testimonial by User
-        /*foreach ($users as $user) {*/
-            for ($i = 0; $i <= 10; ++$i) {
-                $testimonial = new Testimonial();
-                $testimonial
-                    //->setAuthor($user)
-                    ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
-                    ->setContent($this->faker()->paragraph())
-                    ->setIsOnline($this->faker()->numberBetween(0, 1))
-                    ->setRating($this->faker()->numberBetween(1, 5))
-                    ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                    ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ;
+        for ($i = 0; $i <= 10; ++$i) {
+            $testimonial = new Testimonial();
+            $testimonial
+                ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                ->setHeadline($this->faker()->unique()->sentence())
+                ->setSlug($this->slugger->slug($testimonial->getHeadline())->lower())
+                ->setContent($this->faker()->paragraph())
+                ->setIsOnline($this->faker()->numberBetween(0, 1))
+                ->setRating($this->faker()->numberBetween(1, 5))
+            ;
 
-                $manager->persist($testimonial);
-            }
-        /*}*/
+            $manager->persist($testimonial);
+        }
 
         // Create 10 Review by Recipe
-        /*foreach ($users as $user) {*/
-            for ($i = 0; $i <= 10; ++$i) {
-                $review = new Review();
-                $review
-                    //->setAuthor($user)
-                    ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
-                    ->setRecipe($this->faker()->randomElement($recipes))
-                    ->setIsVisible($this->faker()->numberBetween(0, 1))
-                    ->setRating($this->faker()->numberBetween(1, 5))
-                    ->setHeadline($this->faker()->unique()->sentence())
-                    ->setSlug($this->slugger->slug($review->getHeadline())->lower())
-                    ->setContent($this->faker()->paragraph())
-                    ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                    ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ;
+        for ($i = 0; $i <= 10; ++$i) {
+            $review = new Review();
+            $review
+                ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                ->setRecipe($this->faker()->randomElement($recipes))
+                ->setIsVisible($this->faker()->numberBetween(0, 1))
+                ->setRating($this->faker()->numberBetween(1, 5))
+                ->setHeadline($this->faker()->unique()->sentence())
+                ->setSlug($this->slugger->slug($review->getHeadline())->lower())
+                ->setContent($this->faker()->paragraph())
+            ;
 
-                $manager->persist($review);
-            }
-        /*}*/
+            $manager->persist($review);
+        }
 
         $manager->flush();
     }

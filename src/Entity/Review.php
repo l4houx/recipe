@@ -2,29 +2,25 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasContentTrait;
+use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasIdGedmoHeadlineAndSlugTrait;
+use App\Entity\Traits\HasRatingTrait;
+use App\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ReviewRepository;
-use App\Entity\Traits\HasRatingTrait;
-use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasTimestampTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
-use App\Entity\Traits\HasIdHeadlineAndSlugTrait;
-use App\Entity\Traits\HasIdGedmoHeadlineAndSlugTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 #[UniqueEntity('headline')]
 #[UniqueEntity('slug')]
 class Review
 {
-    use HasIdHeadlineAndSlugTrait;
-    //use HasIdGedmoHeadlineAndSlugTrait;
+    use HasIdGedmoHeadlineAndSlugTrait;
     use HasRatingTrait;
     use HasContentTrait;
-    use HasTimestampTrait;
-    //use HasGedmoTimestampTrait;
+    use HasGedmoTimestampTrait;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
     #[Assert\NotNull]
@@ -35,7 +31,7 @@ class Review
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'reviews')]
-    //#[ORM\JoinColumn(nullable: false)]
+    // #[ORM\JoinColumn(nullable: false)]
     private ?Recipe $recipe = null;
 
     public function __construct()

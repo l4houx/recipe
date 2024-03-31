@@ -47,8 +47,6 @@ class AppPostCategoryFixtures extends Fixture
             ->setSlug($this->slugger->slug($category->getName())->lower())
             ->setColor($color)
             ->setParent($parent)
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
         $manager->persist($category);
 

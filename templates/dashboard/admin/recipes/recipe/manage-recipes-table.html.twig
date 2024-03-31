@@ -21,7 +21,7 @@
 						<a href="{{ link }}" class="text-inherit">
 							<div class="d-flex align-items-center">
 								<div>
-									<img src="{{ recipe.thumbnail ? asset(recipe.getThumbnailPath) : recipe.getThumbnailPlaceholder }}" alt="{{ recipe.title }}" class="img-4by3-lg rounded">
+									<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" alt="{{ recipe.title }}" class="img-4by3-lg rounded">
 								</div>
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ recipe.title }}</h4>

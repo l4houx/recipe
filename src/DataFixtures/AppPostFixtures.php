@@ -35,6 +35,7 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
         $author = (new User());
         $author
             ->setRoles([HasRoles::ADMIN])
+            ->setAvatar($this->faker()->unique()->userName())
             ->setCountry('FR')
             ->setLastname('Tom')
             ->setFirstname('Doe')
@@ -48,8 +49,6 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
             ->setDesignation('Admin Staff')
             ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ->setLastLoginIp($this->faker()->ipv4())
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
 
         $manager->persist(
@@ -58,63 +57,6 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
             )
         );
         $authors[] = $author;
-
-        /*
-        // Create 1 Customer
-        $customers = [];
-
-        /** @var User $customer /
-        $customer = new User();
-        $customer
-            ->setLastname('John')
-            ->setFirstname('Doe')
-            ->setUsername('john-customer')
-            ->setSlug('john-customer')
-            ->setEmail('john-customer@yourdomain.com')
-            //->setPhone($this->faker()->phoneNumber())
-            ->setLastLogin(new \DateTimeImmutable())
-            ->setLastLoginIp($this->faker()->ipv4())
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-        ;
-
-        $manager->persist(
-            $customer->setPassword(
-                $this->hasher->hashPassword($customer, 'password')
-            )
-        );
-        $customers[] = $customer;
-        */
-
-        /*
-        // Create 10 tags
-        $keywords = [];
-        for ($i = 0; $i <= 10; ++$i) {
-            $keyword = new Keyword();
-            $keyword
-                ->setName($this->faker()->unique()->name().' '.$i)
-                ->setSlug($this->slugger->slug($keyword->getName())->lower())
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ;
-            $manager->persist($keyword);
-            $keywords[] = $keyword;
-        }
-
-        // Create 10 Categories
-        $categories = [];
-        for ($i = 0; $i <= 10; ++$i) {
-            $category = new PostCategory();
-            $category
-                ->setName($this->faker()->unique()->name().' '.$i)
-                ->setSlug($this->slugger->slug($keyword->getName())->lower())
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ;
-            $manager->persist($category);
-            $categories[] = $category;
-        }
-        */
 
         /** @var array<array-key, PostCategory> $categories */
         $categories = $manager->getRepository(PostCategory::class)->findAll();
@@ -134,8 +76,6 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
                 ->setContent($this->faker()->paragraphs(10, true))
                 ->setReadtime(rand(10, 160))
                 ->setViews(rand(10, 160))
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
                 //->setAuthor($this->faker()->boolean(50) ? $customer : $admin)
                 ->setAuthor($author)
                 ->setIsOnline($this->faker()->numberBetween(0, 1))

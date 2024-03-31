@@ -39,11 +39,9 @@
 						</a>
 					</td>
 					<td>
-						<span class="text-decoration-none">{{ category.articles|length }}</span>
+						<span class="text-decoration-none">{{ category.articles | length }}</span>
 					</td>
-					<td>
-						<i class="{{ category.icon }}"></i>
-					</td>
+					<td><i class="{{ category.icon }} fa-2x fa-fw"></i></td>
 					<td>
 						{% if category.isOnline == false %}
 							<span class="badge bg-danger-soft">

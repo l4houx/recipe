@@ -2,12 +2,13 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
 use App\Entity\Recipe;
+use App\Entity\Restaurant;
 use App\Entity\Review;
+use App\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Review>
@@ -45,20 +46,21 @@ class ReviewRepository extends ServiceEntityRepository
     /**
      * Returns the reviews after applying the specified search criterias.
      *
-     * @param string      $keyword
-     * @param string      $slug
-     * @param User|null   $user
-     * @param Recipe|null $recipe
-     * @param bool|null   $visible
-     * @param int|null    $rating
-     * @param int         $minrating
-     * @param int         $maxrating
-     * @param int         $limit
-     * @param int         $count
-     * @param string      $sort
-     * @param string      $order
+     * @param string          $keyword
+     * @param string          $slug
+     * @param User|null       $user
+     * @param Recipe|null     $recipe
+     * @param Restaurant|null $restaurant
+     * @param bool|null       $visible
+     * @param int|null        $rating
+     * @param int             $minrating
+     * @param int             $maxrating
+     * @param int             $limit
+     * @param int             $count
+     * @param string          $sort
+     * @param string          $order
      */
-    public function getReviews($keyword, $slug, $user, $recipe, $visible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order): QueryBuilder
+    public function getReviews($keyword, $slug, $user, $recipe, $restaurant, $visible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order): QueryBuilder
     {
         $qb = $this->createQueryBuilder('r');
 
@@ -79,6 +81,15 @@ class ReviewRepository extends ServiceEntityRepository
         if ('all' !== $user) {
             $qb->leftJoin('r.author', 'user');
             $qb->andWhere('user.slug = :user')->setParameter('user', $user);
+        }
+
+        if ('all' !== $recipe || 'all' !== $restaurant) {
+            $qb->leftJoin('r.recipe', 'recipe');
+        }
+
+        if ('all' !== $restaurant) {
+            $qb->leftJoin('recipe.restaurant', 'restaurant');
+            $qb->andWhere('restaurant.slug = :restaurant')->setParameter('restaurant', $restaurant);
         }
 
         if ('all' !== $recipe || 'all' !== $user) {

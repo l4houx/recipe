@@ -81,8 +81,9 @@ class HelpCenterCategoryController extends AbstractController
                 }
 
                 return $this->redirectToRoute('dashboard_admin_help_center_category_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
-            $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
         return $this->render('dashboard/admin/helpCenter/category/new-edit.html.twig', compact('form', 'category'));

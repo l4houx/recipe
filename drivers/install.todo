@@ -9,13 +9,14 @@ Installation en cours:
 
     ✔ composer require api-platform/core @done(24-03-15 17:35)
 
+    ☐ composer require knplabs/doctrine-behaviors Not compatible with sf7
 
     // Translate your doctrine objects easily with some helpers
-    ☐ composer require a2lix/translation-form-bundle
+    ✔ composer require a2lix/translation-form-bundle @done(24-03-31 21:04)
     // Puts the Symfony Translation Component on steroids
-    ☐ composer require jms/translation-bundle
+    ☐ composer require jms/translation-bundle Not compatible with sf7
     // A pretty nice way to expose your translation messages to your JavaScript.
-    ☐ composer require willdurand/js-translation-bundle
+    ✔ composer require willdurand/js-translation-bundle @done(24-03-31 21:04)
 
 
     ✔ composer require presta/sitemap-bundle @done(24-03-29 18:39)
@@ -48,10 +49,14 @@ Entity:
     ✔ Setting @done(24-03-11 18:43)
     ✔ AppLayoutSetting @done(24-03-11 18:43)
     ✔ Testimonial @done(24-03-01 21:12)
+    ☐ TestimonialTranslation
     ✔ HelpCenterArticle @done(24-03-13 16:58)
+    ☐ HelpCenterArticleTranslation
     ✔ HelpCenterCategory @done(24-03-13 16:58)
+    ☐ HelpCenterCategoryTranslation
     ✔ Subscription @done(24-03-12 18:54)
     ✔ Pricing @done(24-03-12 18:54)
+    ☐ PricingTranslation
     ✔ Transaction @done(24-03-12 18:54)
     ✔ Level @done(24-03-15 18:11)
     ✔ Response @done(24-03-15 19:34)
@@ -64,3 +69,40 @@ Entity:
     ✔ Revise @done(24-03-21 19:00)
     ✔ Report.php @done(24-03-22 12:48)
     ✔ Notification @done(24-03-22 16:51)
+    ✔ Venue @done(24-03-30 17:00)
+    ☐ VenueTranslation
+    ☐ VenueType
+    ☐ VenueTypeTranslation
+    ☐ VenueImage
+    ☐ VenueSeatingPlan
+    ☐ VenueSeatingPlanTranslation
+    ☐ PageTranslation
+    ☐ FaqTranslation
+    ☐ RecipeTranslation
+    ☐ CategoryTranslation
+    ☐ PostTranslation
+    ☐ PostCategoryTranslation
+    ☐ ContentTranslation
+    ☐ MenuTranslation
+    ☐ MenuElementTranslation
+    ☐ HomepageHeroSettingsTranslation
+    ☐ Audience
+    ☐ AudienceTranslation
+    ☐ Amenity
+    ☐ AmenityTranslation
+    ✔ Language @done(24-03-30 16:04)
+    ☐ LanguageTranslation
+    ✔ Country @done(24-03-30 14:45)
+    ☐ CountryTranslation
+    ✔ RecipeImage @done(24-03-30 14:51)
+    Roles:
+        ✔ Restaurant @done(24-03-30 03:30)
+        ✔ PointOfSale @done(24-03-30 03:30)
+        ✔ Scanner @done(24-03-30 03:30)
+
+Relation:
+    Entity:
+        Recipe:
+            ✘ Comment @cancelled(24-03-30 17:45)
+            ✘ User @cancelled(24-03-30 17:45)
+

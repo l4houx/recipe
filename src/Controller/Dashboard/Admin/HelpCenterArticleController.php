@@ -80,8 +80,9 @@ class HelpCenterArticleController extends AbstractController
                 }
 
                 return $this->redirectToRoute('dashboard_admin_help_center_article_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
-            $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
         return $this->render('dashboard/admin/helpCenter/articles/new-edit.html.twig', compact('form', 'article'));

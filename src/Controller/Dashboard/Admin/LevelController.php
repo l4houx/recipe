@@ -65,8 +65,9 @@ class LevelController extends AdminBaseController
                 }
 
                 return $this->redirectToRoute('dashboard_admin_level_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
-            $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
         return $this->render('dashboard/admin/level/add-edit.html.twig', compact('form', 'level'));

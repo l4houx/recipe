@@ -4,20 +4,26 @@
 			<tr>
 				<th>{{ knp_pagination_sortable(rows, '#', 'c.id') }}</th>
 				<th>{{ 'Name'|trans }}</th>
-				{# <th>Recettes</th> #}
+				<th>{{ 'Recipes count'|trans }}</th>
+				<th>{{ 'Icon'|trans }}</th>
 				<th>{{ 'Color'|trans }}</th>
 				<th>{{ 'Last updated'|trans }}</th>
+				<th>{{ 'Is featured'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for category in rows %}
-				{% set link = path('dashboard_admin_recipe_category_edit', { id : category.id }) %}
+				{% set link = path('dashboard_admin_recipe_category_edit', { slug : category.slug }) %}
 				<tr>
 					<td>{{ category.id }}</td>
 					<td>
 						<a href="{{ link }}" class="text-inherit">
 							<div class="d-flex align-items-center">
+								<div>
+									<img src="{{ category.imageName ? asset(category.getImagePath) : category.getImagePlaceholder }}" alt="{{ category.name }}" class="img-4by3-lg rounded">
+								</div>
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ category.name }}</h4>
 									<span>
@@ -28,15 +34,40 @@
 							</div>
 						</a>
 					</td>
-					{#  
-                    <td>
-                        {{ category.count }}
-                    </td>
-                    #}
+					<td>{{ category.recipes | length }}</td>
+					<td><i class="{{ category.icon }} fa-2x fa-fw"></i></td>
 					<td>
 						<span class="text-decoration-none" style="color: {{ category.color }}">{{ category.name }}</span>
 					</td>
-					<td>{{ category.updatedAt ? category.updatedAt | ago() : '' }}</td>
+					<td>{{ category.updatedAt ? category.updatedAt | format_date('long') : '' }}</td>
+					<td>
+						{% if category.isFeatured == false %}
+							{{ "No"|trans }}
+						{% else %}
+							{{ "Yes"|trans }} {% if category.featuredorder %}( {{ "Order ="|trans }} {{ category.featuredorder }} ){% endif %}
+						{% endif %}
+					</td>
+					<td>
+						{% if category.isOnline == false %}
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-eye-slash"></i>
+								{{ "Offline"|trans }}
+							</span>
+						{% else %}
+							<span class="badge bg-success-soft">
+								<i class="bi bi-eye"></i>
+								{{ "Online"|trans }}
+							</span>
+						{% endif %}
+						{% if category.deletedAt %}
+							<br>
+							<br>
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-alarm"></i>
+								{{ "Deleted"|trans }}
+							</span>
+						{% endif %}
+					</td>
 					<td>
 						<div class="dropdown dropstart">
 							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,14 +79,48 @@
 									<i class="bi bi-pencil dropdown-item-icon"></i>
 									{{ 'Edit'|trans }}
 								</a>
-								<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-category-delete-form').submit();" class="dropdown-item">
-									<i class="bi bi-trash dropdown-item-icon"></i>
-									{{ 'Delete'|trans }}
-								</a>
-								<form id="js-category-delete-form" action="{{ path('dashboard_admin_recipe_category_delete', {id: category.id}) }}" method="post" class="">
-									<input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.id) }}">
-									<input type="hidden" name="_method" value="DELETE">
-								</form> 
+								{% if category.isOnline %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_category_show', { slug : category.slug }) }}">
+										<i class="bi bi-eye dropdown-item-icon"></i>
+										{{ "Online"|trans }}
+									</a>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_category_hide', { slug : category.slug }) }}">
+										<i class="bi bi-eye-slash dropdown-item-icon"></i>
+										{{ "Offline"|trans }}
+									</a>
+								{% endif %}
+								{% if category.isFeatured %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_category_notfeatured', { slug : category.slug }) }}">
+										<i class="bi bi-pin dropdown-item-icon"></i>
+										{{ 'Mark as not featured'|trans }}
+									</a>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_category_featured', { slug : category.slug }) }}">
+										<i class="bi bi-star dropdown-item-icon"></i>
+										{{ "Mark as featured"|trans }}
+										<i class="bi bi-info-circle dropdown-item-icon ms-2" title="{{ "Will be show in the homepage, the explore menu item dropdown and in the footer"|trans }}" data-toggle="tooltip" data-placement="left"></i>
+									</a>
+								{% endif %}
+								{% if category.deletedAt %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_category_restore', { slug : category.slug }) }}">
+										<i class="bi bi-trash-fill dropdown-item-icon"></i>
+										{{ 'Restore'|trans }}
+									</a>
+									<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-category-delete-form').submit();" class="dropdown-item">
+										<i class="bi bi-trash dropdown-item-icon"></i>
+										{{ 'Delete permanently'|trans }}
+									</a>
+									<form id="js-category-delete-form" action="{{ path('dashboard_admin_recipe_category_delete', {slug: category.slug}) }}" method="post" class="">
+										<input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.slug) }}">
+										<input type="hidden" name="_method" value="DELETE">
+									</form>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_category_disable', { slug : category.slug }) }}">
+										<i class="bi bi-alarm dropdown-item-icon"></i>
+										{{ 'Delete'|trans }}
+									</a>
+								{% endif %}
 							</div>
 						</div>
 					</td>

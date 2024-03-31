@@ -10,6 +10,7 @@ use App\Security\Exception\PremiumNotBanException;
 use App\Service\AccountSuspendedService;
 use App\Service\SettingService;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,10 +34,22 @@ class UserController extends AdminBaseController
     }
 
     #[Route(path: '/', name: 'index', methods: ['GET'])]
-    public function index(Request $request): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        $page = $request->query->getInt('page', 1);
-        $rows = $this->userRepository->findForPagination($page);
+        // $page = $request->query->getInt('page', 1);
+        // $rows = $this->userRepository->findForPagination($page);
+
+        $role = '' == $request->query->get('role') ? 'all' : $request->query->get('role');
+        $createdbyrestaurantslug = '' == $request->query->get('createdbyrestaurantslug') ? 'all' : $request->query->get('createdbyrestaurantslug');
+        $restaurantname = '' == $request->query->get('restaurantname') ? 'all' : $request->query->get('restaurantname');
+        $username = '' == $request->query->get('username') ? 'all' : $request->query->get('username');
+        $email = '' == $request->query->get('email') ? 'all' : $request->query->get('email');
+        $firstname = '' == $request->query->get('firstname') ? 'all' : $request->query->get('firstname');
+        $lastname = '' == $request->query->get('lastname') ? 'all' : $request->query->get('lastname');
+        $isVerified = '' == $request->query->get('isVerified') ? 'all' : $request->query->get('isVerified');
+        $isSuspended = '' == $request->query->get('isSuspended') ? 'all' : $request->query->get('isSuspended');
+        $countryslug = '' == $request->query->get('countryslug') ? 'all' : $request->query->get('countryslug');
+        $rows = $paginator->paginate($this->settingService->getUsers(['role' => $role, 'createdbyrestaurantslug' => $createdbyrestaurantslug, 'restaurantname' => $restaurantname, 'username' => $username, 'email' => $email, 'firstname' => $firstname, 'lastname' => $lastname, 'isVerified' => $isVerified, 'isSuspended' => $isSuspended, 'countryslug' => $countryslug]), $request->query->getInt('page', 1), 10, ['wrap-queries' => true]);
 
         return $this->render('dashboard/admin/user/index.html.twig', compact('rows'));
     }

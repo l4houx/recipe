@@ -31,6 +31,7 @@ class AppAdminTeamUserFixtures extends Fixture
         $superadmin
             ->setId(1)
             ->setRoles([HasRoles::ADMINAPPLICATION])
+            ->setAvatar($this->faker()->unique()->userName())
             ->setCountry('US')
             ->setLastname('Cameron')
             ->setFirstname('Williamson')
@@ -44,8 +45,6 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setDesignation('Super Admin Staff')
             ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ->setLastLoginIp($this->faker()->ipv4())
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
 
         $this->addReference(self::ADMINAPPLICATION, $superadmin);
@@ -62,6 +61,7 @@ class AppAdminTeamUserFixtures extends Fixture
         $admin
             ->setId(2)
             ->setRoles([HasRoles::ADMIN])
+            ->setAvatar($this->faker()->unique()->userName())
             ->setCountry('BE')
             ->setLastname('Wade')
             ->setFirstname('Warren')
@@ -75,8 +75,6 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setDesignation('Admin Staff')
             ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ->setLastLoginIp($this->faker()->ipv4())
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
 
         $this->addReference(self::ADMIN, $admin);
@@ -93,6 +91,7 @@ class AppAdminTeamUserFixtures extends Fixture
         $moderator
             ->setId(3)
             ->setRoles([HasRoles::MODERATOR])
+            ->setAvatar($this->faker()->unique()->userName())
             ->setCountry('DE')
             ->setLastname('Jane')
             ->setFirstname('Cooper')
@@ -106,8 +105,6 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setDesignation('Moderator Staff')
             ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ->setLastLoginIp($this->faker()->ipv4())
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
         ;
 
         $this->addReference(self::MODERATOR, $moderator);
@@ -125,6 +122,7 @@ class AppAdminTeamUserFixtures extends Fixture
             /** @var User $user */
             $user = (new User());
             $user
+                ->setAvatar($this->faker()->unique()->userName())
                 ->setCountry($this->faker()->countryCode())
                 ->setLastname($this->faker()->lastName)
                 ->setFirstname($this->faker()->firstName($genre))
@@ -133,8 +131,6 @@ class AppAdminTeamUserFixtures extends Fixture
                 ->setEmail($this->faker()->email())
                 ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
                 ->setLastLoginIp($this->faker()->ipv4())
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ;
 
             if ($i > 5) {

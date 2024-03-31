@@ -2,18 +2,17 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasIdTrait;
+use App\Entity\Traits\HasStripeEntityTrait;
+use App\Repository\PricingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Traits\HasIdTrait;
-use App\Repository\PricingRepository;
-use App\Entity\Traits\HasTimestampTrait;
-use App\Entity\Traits\HasStripeEntityTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PricingRepository::class)]
 #[UniqueEntity('ccy')]
@@ -22,8 +21,7 @@ class Pricing implements \Stringable
 {
     use HasIdTrait;
     use HasStripeEntityTrait;
-    use HasTimestampTrait;
-    //use HasGedmoTimestampTrait;
+    use HasGedmoTimestampTrait;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
     #[Vich\UploadableField(mapping: 'icon', fileNameProperty: 'thumbnail')]
@@ -82,7 +80,7 @@ class Pricing implements \Stringable
         $this->thumbnailFile = $thumbnailFile;
 
         if (null !== $thumbnailFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;

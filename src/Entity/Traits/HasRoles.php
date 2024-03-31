@@ -7,6 +7,9 @@ namespace App\Entity\Traits;
  */
 final class HasRoles
 {
+    // Role Super Admin
+    public const SUPERADMIN = 'ROLE_SUPER_ADMIN';
+
     // Role Admin Application
     public const ADMINAPPLICATION = 'ROLE_ADMIN_APPLICATION';
 
@@ -27,4 +30,16 @@ final class HasRoles
 
     // Role isVerified
     public const VERIFIED = 'ROLE_VERIFIED';
+
+    // Role Restaurant
+    public const RESTAURANT = 'ROLE_RESTAURANT';
+
+    // Role PointOfSale
+    public const POINTOFSALE = 'ROLE_POINTOFSALE';
+
+    // Role Creator
+    public const CREATOR = 'ROLE_CREATOR';
+
+    // Role Scanner
+    public const SCANNER = 'ROLE_SCANNER';
 }

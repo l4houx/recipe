@@ -9,9 +9,16 @@
 		</thead>
         <tbody>
             <tr>
+                <td width="30%">{{ "Avatar"|trans }}</td>
+                <td>
+                    {% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
+                </td>
+            </tr>
+            <tr>
                 <td width="30%">{{ "Role"|trans }}</td>
                 <td>
-                    {% include "global/user-roles.html.twig" %}
+                    {#{% include "global/user-roles.html.twig" %} #}
+                    {{ user.getRole|trans }} 
                 </td>
             </tr>
             <tr>
@@ -109,6 +116,7 @@
                     {% endif %}
                 </td>
             </tr>
+            {#
             <tr>
                 <td width="30%">{{ "Reviews"|trans }}</td>
                 <td>
@@ -121,7 +129,6 @@
                     {{ user.favorites | length }}
                 </td>
             </tr>
-            {#
             {% if user.phone %}
                 <tr>
                     <td width="30%">{{ "Phone number"|trans }}</td>
@@ -138,6 +145,8 @@
                     </td>
                 </tr>
             {% endif %}
+            #}
+
             {% if user.facebookId %}
                 <tr>
                     <td width="30%">{{ "Registered using Facebook"|trans }} <i class="fab fa-facebook-f fa-sm btn-facebook ml-2 p-2"></i></td>
@@ -164,6 +173,7 @@
                     </td>
                 </tr>
             {% endif %}
+            {#  
             {% if user.birthdate %}
                 <tr>
                     <td width="30%">{{ "Birthdate"|trans }}</td>
@@ -184,3 +194,62 @@
         </tbody>
 	</table>
 </div>
+{% if user.hasRole('ROLE_CREATOR') %}
+    <div class="table-responsive overflow-y-hidden">
+        <table class="table mb-0 text-nowrap table-hover table-centered">
+            <thead class="">
+                <tr>
+                    <th colspan="2">
+                        <i class="bi bi-file text-muted"></i>  {{ "Creator information"|trans }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="30%">{{ "Avatar"|trans }}</td>
+                    <td>
+                        <img src="{{ user.avatar }}" class="avatar-xl rounded-circle" />
+                    </td>
+                </tr>
+                {#  
+                    <tr>
+                        <td width="30%">{{ "Cart elements"|trans }}</td>
+                        <td>
+                            {{ user.cartelements|length }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="30%">{{ "Bought tickets"|trans }}</td>
+                        <td>
+                            {{ user.getOrdersQuantitySum }}
+                        </td>
+                    </tr>
+                #}
+                <tr>
+                    <td width="30%">{{ "Reviews"|trans }}</td>
+                    <td>
+                        {{ user.reviews | length }}
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">{{ "Favorites"|trans }}</td>
+                    <td>
+                        {{ user.favorites | length }}
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">{{ "Following"|trans }}</td>
+                    <td>
+                        {{ user.following | length }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% elseif user.hasRole('ROLE_RESTAURANT') %}
+
+{% elseif user.hasRole('ROLE_SCANNER') %}
+
+{% elseif user.hasRole('ROLE_POINTOFSALE') %}
+
+{% endif %}

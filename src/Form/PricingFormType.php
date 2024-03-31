@@ -24,13 +24,13 @@ class PricingFormType extends AbstractType
             ])
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'empty_data' => '',
                 'required' => true,
             ])
             ->add('subtitle', TextType::class, [
                 'label' => t('Subtitle :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'empty_data' => '',
                 'required' => true,
             ])

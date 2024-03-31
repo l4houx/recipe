@@ -7,6 +7,7 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "a2lix/translation-form-bundle": "^3.2",
         "api-platform/core": "^3.2",
         "beberlei/doctrineextensions": "^1.5",
         "debril/rss-atom-bundle": "^5.2",
@@ -82,6 +83,7 @@
         "twig/string-extra": "^3.8",
         "twig/twig": "^2.12|^3.0",
         "vich/uploader-bundle": "^2.3",
+        "willdurand/js-translation-bundle": "^6.0",
         "wohali/oauth2-discord-new": "^1.2"
     },
     "config": {

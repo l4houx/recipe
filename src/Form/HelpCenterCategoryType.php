@@ -43,7 +43,7 @@ class HelpCenterCategoryType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => t('Name'),
                 'required' => true,
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'empty_data' => '',
                 'help' => t('Keep your category names under 10 characters. Write a name that describes the content of the topic. Contextualize for your audience..'),
             ])
@@ -56,21 +56,10 @@ class HelpCenterCategoryType extends AbstractType
             ->add('icon', IconType::class)
             ->add('color', ColorType::class, [
                 'label' => t('Color :'),
+                'purify_html' => true,
                 'empty_data' => '',
                 'required' => false,
             ])
-            /*
-            ->add('color', ChoiceType::class, [
-                'label' => t('Color'),
-                'required' => false,
-                'multiple' => false,
-                'expanded' => true,
-                'choices' => ['label.light' => 'text-bg-light', 'label.secondary' => 'text-bg-secondary', 'label.warning' => 'text-bg-warning',
-                    'label.info' => 'text-bg-info', 'label.primary' => 'text-bg-primary', 'label.danger' => 'text-bg-danger', 'label.success' => 'text-bg-success', 'label.dark' => 'text-bg-dark'],
-                'label_attr' => ['class' => 'radio-custom radio-inline'],
-                'help' => 'help.color',
-            ])
-            */
             ->add('isOnline', SwitchType::class, ['label' => t('Online')])
         ;
     }

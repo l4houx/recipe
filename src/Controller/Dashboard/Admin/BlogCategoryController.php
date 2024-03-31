@@ -67,8 +67,9 @@ class BlogCategoryController extends AdminBaseController
                 }
 
                 return $this->redirectToRoute('dashboard_admin_blog_category_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
-            $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         }
 
         return $this->render('dashboard/admin/blog/category/new-edit.html.twig', compact('form', 'postcategory'));

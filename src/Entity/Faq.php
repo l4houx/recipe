@@ -3,13 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\Traits\HasGedmoTimestampTrait;
-use Doctrine\DBAL\Types\Types;
-use App\Entity\Traits\HasLimit;
-use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\HasIdTrait;
-use App\Repository\FaqRepository;
 use App\Entity\Traits\HasIsOnlineTrait;
-use App\Entity\Traits\HasTimestampTrait;
+use App\Entity\Traits\HasLimit;
+use App\Repository\FaqRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FaqRepository::class)]
@@ -17,8 +16,7 @@ class Faq
 {
     use HasIdTrait;
     use HasIsOnlineTrait;
-    use HasTimestampTrait;
-    //use HasGedmoTimestampTrait;
+    use HasGedmoTimestampTrait;
 
     public const FAQ_LIMIT = HasLimit::FAQ_LIMIT;
 

@@ -17,13 +17,13 @@ class CurrencyFormType extends AbstractType
         $builder
             ->add('ccy', TextType::class, [
                 'label' => t('CCY'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'help' => t('Please refer to this following list and use the Code column: https://en.wikipedia.org/wiki/ISO_4217'),
             ])
             ->add('symbol', TextType::class, [
                 'label' => t('Currency symbol'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
             ])
         ;

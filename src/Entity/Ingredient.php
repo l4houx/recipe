@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
+use App\Repository\IngredientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\IngredientRepository;
-use App\Entity\Traits\HasIdNameSlugAssertTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
@@ -15,8 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('slug')]
 class Ingredient
 {
-    use HasIdNameSlugAssertTrait;
-    //use HasIdGedmoNameSlugAssertTrait;
+    use HasIdGedmoNameSlugAssertTrait;
 
     #[ORM\OneToMany(targetEntity: Quantity::class, mappedBy: 'ingredient', orphanRemoval: true)]
     private Collection $quantities;

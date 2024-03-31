@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Post;
 use App\Entity\PostCategory;
+use App\Form\Type\SwitchType;
 use App\Service\SettingService;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -17,7 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\ColorType;
 class PostCategoryFormType extends AbstractType
 {
     public function __construct(
-        private FormListenerFactory $formListenerFactory,
         private readonly SettingService $settingService
     ) {
         # code...
@@ -29,9 +29,9 @@ class PostCategoryFormType extends AbstractType
 
         $builder
             ->add('name', TextType::class, [
-                'label' => t('Name'),
+                'label' => t('Name :'),
                 'required' => true,
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'empty_data' => '',
                 'help' => t('Keep your category names under 10 characters. Write a name that describes the content of the topic. Contextualize for your audience..'),
             ])
@@ -43,9 +43,11 @@ class PostCategoryFormType extends AbstractType
             ])
             ->add('color', ColorType::class, [
                 'label' => t('Color :'),
+                'purify_html' => true,
                 'empty_data' => '',
                 'required' => false,
             ])
+            ->add('isOnline', SwitchType::class, ['label' => t('Online')])
             /*
             ->add('parent', EntityType::class, [
                 'required' => false,
@@ -64,8 +66,6 @@ class PostCategoryFormType extends AbstractType
                 'multiple' => true,
             ])
             */
-            ->addEventListener(FormEvents::PRE_SUBMIT, $this->formListenerFactory->slug('name'))
-            ->addEventListener(FormEvents::POST_SUBMIT, $this->formListenerFactory->timestamps())
         ;
     }
 

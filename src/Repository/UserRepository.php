@@ -189,9 +189,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Returns the users after applying the specified search criterias.
      *
+     * @param string                   $role
      * @param string                   $keyword
+     * @param string                   $createdbyrestaurantslug
+     * @param string                   $restaurantname
+     * @param string                   $restaurantslug
      * @param string                   $username
      * @param string                   $slug
+     * @param string                   $followedby
      * @param string                   $email
      * @param string                   $firstname
      * @param string                   $lastname
@@ -203,7 +208,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @param string                   $order
      * @param int                      $count
      */
-    public function getUsers($keyword, $username, $slug, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
+    public function getUsers($role, $keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $slug, $followedby, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -213,8 +218,35 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->select('u');
         }
 
+        if ($role !== "all") {
+            $qb->andWhere("u.roles LIKE :roles")->setParameter("roles", "%ROLE_" . strtoupper($role) . "%");
+            if ($role == "pointofsale" && $createdbyrestaurantslug !== "all") {
+                $qb->leftJoin("u.pointofsale", "pointofsale");
+                $qb->leftJoin("pointofsale.restaurant", "pointofsalerestaurant");
+                $qb->andWhere("pointofsalerestaurant.slug = :pointofsalecreatedbyrestaurantslug");
+                $qb->setParameter("pointofsalecreatedbyrestaurantslug", $createdbyrestaurantslug);
+            } else if ($role == "scanner" && $createdbyrestaurantslug !== "all") {
+                $qb->leftJoin("u.scanner", "scanner");
+                $qb->leftJoin("scanner.restaurant", "scannerrestaurant");
+                $qb->andWhere("scannerrestaurant.slug = :scannercreatedbyrestaurantslug");
+                $qb->setParameter("scannercreatedbyrestaurantslug", $createdbyrestaurantslug);
+            }
+        }
+
         if ('all' !== $keyword) {
             $qb->andWhere('u.username LIKE :keyword or :keyword LIKE u.username or u.email LIKE :keyword or :keyword LIKE u.email or u.firstname LIKE :keyword or :keyword LIKE u.firstname or u.lastname LIKE :keyword or :keyword LIKE u.lastname')->setParameter('keyword', '%'.$keyword.'%');
+        }
+
+        if ($restaurantname !== "all" || $restaurantslug || $followedby) {
+            $qb->leftJoin("u.restaurant", "restaurant");
+        }
+
+        if ($restaurantname !== "all") {
+            $qb->andWhere("restaurant.name LIKE :restaurantname or :restaurantname LIKE restaurant.name")->setParameter("restaurantname", "%" . $restaurantname . "%");
+        }
+
+        if ($restaurantslug !== "all") {
+            $qb->andWhere("restaurant.slug = :restaurantslug")->setParameter("restaurantslug", $restaurantslug);
         }
 
         if ('all' !== $username) {
@@ -247,6 +279,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         if (true === $isOnHomepageSlider) {
             $qb->andWhere('u.isuseronhomepageslider IS NOT NULL');
+        }
+
+        if ($followedby !== "all") {
+            $qb->andWhere(":followedby MEMBER OF restaurant.followedby")->setParameter("followedby", $followedby);
         }
 
         if ('all' !== $limit) {

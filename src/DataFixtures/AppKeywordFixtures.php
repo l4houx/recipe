@@ -42,8 +42,7 @@ class AppKeywordFixtures extends Fixture
             ->setName($name)
             ->setSlug($this->slugger->slug($keyword->getName())->lower())
             ->setColor($color)
-            ->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setUpdatedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setIsOnline(true)
         ;
         $manager->persist($keyword);
 

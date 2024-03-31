@@ -69,6 +69,23 @@ class TestimonialRepository extends ServiceEntityRepository
     }
 
     /**
+     * Retrieves the latest testimonials created by the user.
+     *
+     * @return Testimonial[] Returns an array of Testimonial objects
+     */
+    public function findLastByUser(User $user, int $maxResults): array // AccountTestimonialController
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.author = :user')
+            ->orderBy('t.updatedAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
      * Returns the testimonials after applying the specified search criterias.
      *
      * @param string      $keyword

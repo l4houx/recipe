@@ -1,0 +1,86 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th># {# {{ knp_pagination_sortable(rows, '#', 't.id') }} #}</th>
+				<th>{{ 'User name / Email'|trans }}</th>
+				<th>{{ 'Full name / Premium'|trans }}</th>
+				<th>{{ 'Content'|trans }}</th>
+				<th>{{ 'Rating'|trans }}</th>
+				<th>{{ 'Last updated'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for testimonial in rows %}
+				{% set link = path('testimonial') %}
+				<tr>
+					<td>{{ testimonial.id }}</td>
+					<td>
+						<a href="{{ link }}" class="text-inherit">
+							<div class="d-flex align-items-center">
+								<div class="ms-3">
+									<h4 class="mb-1 text-primary-hover">
+                                        {{ testimonial.author.username | lower | capitalize }}
+                                    <br>
+										{{ testimonial.author.email }}
+                                    </h4>
+									<span>
+										{{ 'Published the'|trans }}
+										{{ testimonial.createdAt ? testimonial.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+									</span>
+								</div>
+							</div>
+						</a>
+					</td>
+					<td>{{ testimonial.author.getFullName() }}</td>
+                    <td>{{ testimonial.content | html_markdown_excerpt(40) }}</td>
+                    <td>
+						{% include 'global/rating.html.twig' with {'rating' : testimonial.rating, 'class' : 'fs-6 align-top'} %}
+                    </td>
+					<td>
+						{{ testimonial.updatedAt ? testimonial.updatedAt | format_date('long') : '' }}
+					</td>
+					<td>
+						{% if testimonial.isOnline == false %}
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-eye-slash"></i>
+								{{ "Offline"|trans }}
+							</span>
+						{% else %}
+							<span class="badge bg-success-soft">
+								<i class="bi bi-eye"></i>
+								{{ "Online"|trans }}
+							</span>
+						{% endif %}
+						{#  
+						{% if testimonial.deletedAt %}
+							<br>
+							<br>
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-alarm"></i>
+								{{ "Deleted"|trans }}
+							</span>
+						{% endif %}
+						#}
+					</td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+								<a class="dropdown-item" href="{{ link }}">
+									<i class="bi bi-eye dropdown-item-icon"></i>
+									{{ 'Show'|trans }}
+								</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

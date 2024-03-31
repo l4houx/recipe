@@ -2,24 +2,22 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use App\Entity\Traits\HasLimit;
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\PostRepository;
-use App\Entity\Traits\HasViewsTrait;
 use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasIsOnlineTrait;
-use App\Entity\Traits\HasTimestampTrait;
-use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\HasGedmoTimestampTrait;
-use Symfony\Component\HttpFoundation\File\File;
-use App\Entity\Traits\HasIdTitleSlugAssertTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasLimit;
+use App\Entity\Traits\HasViewsTrait;
+use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[Vich\Uploadable]
@@ -27,13 +25,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('slug')]
 class Post
 {
-    use HasIdTitleSlugAssertTrait;
-    //use HasIdGedmoTitleSlugAssertTrait;
+    use HasIdGedmoTitleSlugAssertTrait;
     use HasContentTrait;
     use HasIsOnlineTrait;
     use HasViewsTrait;
-    use HasTimestampTrait;
-    //use HasGedmoTimestampTrait;
+    use HasGedmoTimestampTrait;
 
     public const POST_LIMIT = HasLimit::POST_LIMIT;
 
@@ -51,9 +47,6 @@ class Post
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $readtime = null;
-
-    //#[ORM\Column(type: Types::STRING, length: 255)]
-    //private ?string $featuredImage = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
@@ -106,7 +99,7 @@ class Post
         $this->thumbnailFile = $thumbnailFile;
 
         if (null !== $thumbnailFile) {
-            $this->setUpdatedAt(new \DateTimeImmutable());
+            $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;
@@ -154,20 +147,6 @@ class Post
 
         return $this;
     }
-
-    /*
-    public function getFeaturedImage(): ?string
-    {
-        return $this->featuredImage;
-    }
-
-    public function setFeaturedImage(string $featuredImage): static
-    {
-        $this->featuredImage = $featuredImage;
-
-        return $this;
-    }
-    */
 
     public function getAuthor(): ?User
     {

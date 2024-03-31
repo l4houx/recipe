@@ -7,7 +7,6 @@ namespace App\Form;
 use App\Entity\Review;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,20 +20,20 @@ class ReviewFormType extends AbstractType
     {
         $builder
             ->add('rating', ChoiceType::class, [
-                'label' => t('Your rating (out of 5 stars)'),
+                'label' => t('Your rating (out of 5 stars) :'),
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
                 'choices' => [t('5 stars') => 5, t('4 stars') => 4, t('3 stars') => 3, t('2 stars') => 2, t('1 star') => 1],
             ])
             ->add('headline', TextType::class, [
-                'label' => t('Title of your review'),
-                //'purify_html' => true,
+                'label' => t('Title of your review :'),
+                'purify_html' => true,
                 'required' => true,
             ])
             ->add('content', TextareaType::class, [
-                'label' => t("Tell the other participant more details about your experience"),
-                //'purify_html' => true,
+                'label' => t("Tell the other participant more details about your experience :"),
+                'purify_html' => true,
                 'required' => true,
                 'attr' => ['rows' => 10],
             ])

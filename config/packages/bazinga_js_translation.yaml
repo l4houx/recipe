@@ -1,0 +1,14 @@
+bazinga_js_translation:
+    locale_fallback: en
+    default_domain: javascript
+    active_locales:
+        - en
+        - fr
+        - es
+        - ar
+        - de
+        - pt
+        - it
+        - br
+    active_domains:
+        - javascript
