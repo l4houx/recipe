@@ -2,34 +2,29 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use App\Entity\Traits\HasLimit;
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\CountryRepository;
-use Gedmo\Mapping\Annotation as Gedmo;
-use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasDeletedAtTrait;
-use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasIdTrait;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasLimit;
+use App\Repository\CountryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CountryRepository::class)]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Country
 {
-    use HasIdGedmoNameSlugAssertTrait;
+    use HasIdTrait;
     use HasIsOnlineTrait;
     use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
 
     public const COUNTRY_LIMIT = HasLimit::COUNTRY_LIMIT;
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 50)]
     #[Assert\NotBlank(message: "Please don't leave your name blank!")]
@@ -79,18 +74,6 @@ class Country
     public function __toString(): string
     {
         return (string) $this->getName() ?: '';
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getName(): string

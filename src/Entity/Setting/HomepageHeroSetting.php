@@ -52,19 +52,19 @@ class HomepageHeroSetting
     /**
      * @var Collection<int, Recipe>
      */
-    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'isonhomepageslider', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'isonhomepageslider', cascade: ['persist'])]
     private Collection $recipes;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'isuseronhomepageslider')]
-    private Collection $users;
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'isrestaurantonhomepageslider')]
+    private Collection $restaurants;
 
     public function __construct()
     {
         $this->recipes = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->restaurants = new ArrayCollection();
     }
 
     public function clearRecipes(): void
@@ -198,27 +198,27 @@ class HomepageHeroSetting
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    public function getRestaurants(): Collection
     {
-        return $this->users;
+        return $this->restaurants;
     }
 
-    public function addUser(User $user): static
+    public function addRestaurant(User $restaurant): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setIsuseronhomepageslider($this);
+        if (!$this->restaurants->contains($restaurant)) {
+            $this->restaurants->add($restaurant);
+            $restaurant->setisrestaurantonhomepageslider($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeRestaurant(User $restaurant): static
     {
-        if ($this->users->removeElement($user)) {
+        if ($this->restaurants->removeElement($restaurant)) {
             // set the owning side to null (unless already changed)
-            if ($user->getIsuseronhomepageslider() === $this) {
-                $user->setIsuseronhomepageslider(null);
+            if ($restaurant->getisrestaurantonhomepageslider() === $this) {
+                $restaurant->setisrestaurantonhomepageslider(null);
             }
         }
 

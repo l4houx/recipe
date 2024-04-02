@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\QuantityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasIdTrait;
+use App\Repository\QuantityRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuantityRepository::class)]
 class Quantity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use HasIdTrait;
 
     #[ORM\Column]
     #[Assert\NotBlank]
@@ -29,11 +27,6 @@ class Quantity
     #[ORM\ManyToOne(inversedBy: 'quantities')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Ingredient $ingredient = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getQuantity(): ?float
     {

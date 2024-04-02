@@ -11,7 +11,6 @@ use App\Entity\Traits\HasNotifiableTrait;
 use App\Entity\Traits\HasPremiumTrait;
 use App\Entity\Traits\HasProfileDetailsTrait;
 use App\Entity\Traits\HasRoles;
-use App\Entity\Traits\HasTimestampTrait;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -84,13 +83,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     /**
      * @var collection<int, Review>
      */
-    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author', orphanRemoval: true, cascade: ['remove'])]
     private Collection $reviews;
 
     /**
      * @var collection<int, Testimonial>
      */
-    #[ORM\OneToMany(targetEntity: Testimonial::class, mappedBy: 'author', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Testimonial::class, mappedBy: 'author', orphanRemoval: true, cascade: ['remove'])]
     private Collection $testimonials;
 
     /**
@@ -105,11 +104,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\ManyToMany(targetEntity: Restaurant::class, mappedBy: 'followedby', fetch: 'LAZY', cascade: ['remove'])]
     private Collection $following;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?HomepageHeroSetting $isuseronhomepageslider = null;
+    #[ORM\ManyToOne(inversedBy: 'restaurants')]
+    private ?HomepageHeroSetting $isrestaurantonhomepageslider = null;
 
     /**
-     * @var Collection<int,Application>
+     * @var Collection<int, Application>
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Application::class, orphanRemoval: true)]
     #[Groups(['user:read'])]
@@ -128,6 +127,109 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private ?Scanner $scanner = null;
 
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, cascade: ['remove'])]
+    private Collection $orders;
+
+    /**
+     * @var Collection<int, CartElement>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CartElement::class, cascade: ['remove'])]
+    private Collection $cartelements;
+
+    /**
+     * @var Collection<int, SubscriptionReservation>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SubscriptionReservation::class, cascade: ['remove'])]
+    private Collection $subscriptionReservations;
+
+    public function hasBoughtASubscriptionForRecipe($recipe) {
+        foreach ($this->orders as $order) {
+            if ($order->getStatus() == 1 && $order->containsRecipe($recipe)) {
+                return $order;
+            }
+        }
+        return false;
+    }
+
+    public function getOrdersQuantitySum($status = 1, $upcomingtickets = "all") {
+        $sum = 0;
+        foreach ($this->orders as $order) {
+            foreach ($order->getOrderelements() as $orderelement) {
+                if ($status === "all" || $orderelement->getOrder()->getStatus() === $status && ($upcomingtickets === "all" || ($upcomingtickets == 1 && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() >= new \DateTime) || ($upcomingtickets == 0 && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() < new \DateTime) )) {
+                    $sum += $orderelement->getquantity();
+                }
+            }
+        }
+        return $sum;
+    }
+
+    public function isRecipeSubscriptionInCart($recipesubscription) {
+        foreach ($this->cartelements as $cartelement) {
+            if ($cartelement->getRecipeSubscription() == $recipesubscription) {
+                return $cartelement->getQuantity();
+            }
+        }
+        return false;
+    }
+
+    public function getCartelementByRecipeSubscriptionReference($recipesubscriptionreference): ?CartElement {
+        foreach ($this->cartelements as $cartelement) {
+            if ($cartelement->getRecipeSubscription()->getReference() == $recipesubscriptionreference) {
+                return $cartelement;
+            }
+        }
+        return null;
+    }
+
+    public function getSubscriptionsInCartPriceSum(bool $includeFees = false): float {
+        $sum = 0;
+        foreach ($this->cartelements as $cartelement) {
+            $sum += $cartelement->getPrice();
+        }
+        if ($includeFees) {
+            $sum += $this->getTotalFees();
+        }
+        return (float) $sum;
+    }
+
+    public function getTotalSubscriptionFees() {
+        if (!count($this->cartelements)) {
+            return 0;
+        }
+        $sum = 0;
+        foreach ($this->cartelements as $cartelement) {
+            $sum += $cartelement->getQuantity() * $cartelement->getSubscriptionFee();
+        }
+        return (float) $sum;
+    }
+
+    public function getTotalFees() {
+        $sum = 0;
+        $sum += $this->getTotalSubscriptionFees();
+        return $sum;
+    }
+
+    public function getNotFreeSubscriptionsInCartQuantitySum() {
+        $sum = 0;
+        foreach ($this->cartelements as $cartelement) {
+            if (!$cartelement->getRecipeSubscription()->getIsFree()) {
+                $sum += $cartelement->getQuantity();
+            }
+        }
+        return $sum;
+    }
+
+    public function getSubscriptionsInCartQuantitySum() {
+        $sum = 0;
+        foreach ($this->cartelements as $cartelement) {
+            $sum += $cartelement->getQuantity();
+        }
+        return $sum;
+    }
+
     public function __toString(): string
     {
         return $this->username ?? $this->email;
@@ -143,6 +245,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         $this->favorites = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->applications = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+        $this->cartelements = new ArrayCollection();
+        $this->subscriptionReservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,13 +307,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     {
         if ($this->hasRole(HasRoles::CREATOR)) {
             return 'Creator';
-        } else if ($this->hasRole(HasRoles::RESTAURANT)) {
+        } elseif ($this->hasRole(HasRoles::RESTAURANT)) {
             return 'Restaurant';
-        } else if ($this->hasRole(HasRoles::POINTOFSALE)) {
+        } elseif ($this->hasRole(HasRoles::POINTOFSALE)) {
             return 'Point of sale';
-        } else if ($this->hasRole(HasRoles::SCANNER)) {
+        } elseif ($this->hasRole(HasRoles::SCANNER)) {
             return 'Scanner';
-        } else if ($this->hasRole(HasRoles::SUPERADMIN) || $this->hasRole(HasRoles::ADMINAPPLICATION)) {
+        } elseif ($this->hasRole(HasRoles::SUPERADMIN) || $this->hasRole(HasRoles::ADMINAPPLICATION)) {
             return 'Administrator';
         } else {
             return 'N/A';
@@ -219,11 +324,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     {
         if ($this->hasRole(HasRoles::CREATOR)) {
             return $this->getFullName();
-        } else if ($this->hasRole(HasRoles::RESTAURANT) && $this->restaurant) {
+        } elseif ($this->hasRole(HasRoles::RESTAURANT) && $this->restaurant) {
             return $this->restaurant->getName();
-        } else if ($this->hasRole(HasRoles::POINTOFSALE) && $this->pointofsale) {
+        } elseif ($this->hasRole(HasRoles::POINTOFSALE) && $this->pointofsale) {
             return $this->pointofsale->getName();
-        } else if ($this->hasRole(HasRoles::SCANNER) && $this->scanner) {
+        } elseif ($this->hasRole(HasRoles::SCANNER) && $this->scanner) {
             return $this->scanner->getName();
         } else {
             return 'N/A';
@@ -476,14 +581,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         return $this;
     }
 
-    public function getIsuseronhomepageslider(): ?HomepageHeroSetting
+    public function getIsrestaurantonhomepageslider(): ?HomepageHeroSetting
     {
-        return $this->isuseronhomepageslider;
+        return $this->isrestaurantonhomepageslider;
     }
 
-    public function setIsuseronhomepageslider(?HomepageHeroSetting $isuseronhomepageslider): static
+    public function setIsrestaurantonhomepageslider(?HomepageHeroSetting $isrestaurantonhomepageslider): static
     {
-        $this->isuseronhomepageslider = $isuseronhomepageslider;
+        $this->isrestaurantonhomepageslider = $isrestaurantonhomepageslider;
 
         return $this;
     }
@@ -550,6 +655,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     public function setScanner(?Scanner $scanner): static
     {
         $this->scanner = $scanner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartElement>
+     */
+    public function getCartelements(): Collection
+    {
+        return $this->cartelements;
+    }
+
+    public function addCartelement(CartElement $cartelement): static
+    {
+        if (!$this->cartelements->contains($cartelement)) {
+            $this->cartelements->add($cartelement);
+            $cartelement->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartelement(CartElement $cartelement): static
+    {
+        if ($this->cartelements->removeElement($cartelement)) {
+            // set the owning side to null (unless already changed)
+            if ($cartelement->getUser() === $this) {
+                $cartelement->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SubscriptionReservation>
+     */
+    public function getSubscriptionReservations(): Collection
+    {
+        return $this->subscriptionReservations;
+    }
+
+    public function addSubscriptionReservation(SubscriptionReservation $subscriptionReservation): static
+    {
+        if (!$this->subscriptionReservations->contains($subscriptionReservation)) {
+            $this->subscriptionReservations->add($subscriptionReservation);
+            $subscriptionReservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriptionReservation(SubscriptionReservation $subscriptionReservation): static
+    {
+        if ($this->subscriptionReservations->removeElement($subscriptionReservation)) {
+            // set the owning side to null (unless already changed)
+            if ($subscriptionReservation->getUser() === $this) {
+                $subscriptionReservation->setUser(null);
+            }
+        }
 
         return $this;
     }

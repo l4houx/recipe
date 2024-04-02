@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\HasIdTrait;
 use App\Repository\ScannerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,12 +21,23 @@ class Scanner
     private string $name = '';
 
     #[ORM\ManyToOne(inversedBy: 'scanners')]
-    #[ORM\JoinColumn(nullable: false)]
+    // #[ORM\JoinColumn(nullable: false)]
     private ?Restaurant $restaurant = null;
 
     #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private ?User $user = null;
+
+    /**
+     * @var Collection<int, RecipeDate>
+     */
+    #[ORM\ManyToMany(targetEntity: RecipeDate::class, mappedBy: 'scanners')]
+    private Collection $recipedates;
+
+    public function __construct()
+    {
+        $this->recipedates = new ArrayCollection();
+    }
 
     public function getName(): string
     {
@@ -58,6 +71,33 @@ class Scanner
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecipeDate>
+     */
+    public function getRecipedates(): Collection
+    {
+        return $this->recipedates;
+    }
+
+    public function addRecipedate(RecipeDate $recipedate): static
+    {
+        if (!$this->recipedates->contains($recipedate)) {
+            $this->recipedates->add($recipedate);
+            $recipedate->addScanner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipedate(RecipeDate $recipedate): static
+    {
+        if ($this->recipedates->removeElement($recipedate)) {
+            $recipedate->removeScanner($this);
+        }
 
         return $this;
     }

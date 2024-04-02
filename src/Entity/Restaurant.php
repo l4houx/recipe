@@ -96,6 +96,18 @@ class Restaurant
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Venue::class, cascade: ['remove'])]
     private Collection $venues;
 
+    /**
+     * @var Collection<int, PayoutRequest>
+     */
+    #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: PayoutRequest::class, cascade: ['remove'])]
+    private Collection $payoutRequests;
+
+    /**
+     * @var Collection<int, PaymentGateway>
+     */
+    #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: PaymentGateway::class, cascade: ['remove'])]
+    private Collection $paymentGateways;
+
     public function __construct()
     {
         $this->isShowvenuesmap = true;
@@ -109,6 +121,8 @@ class Restaurant
         $this->categories = new ArrayCollection();
         $this->followedby = new ArrayCollection();
         $this->venues = new ArrayCollection();
+        $this->payoutRequests = new ArrayCollection();
+        $this->paymentGateways = new ArrayCollection();
     }
 
     public function getContent(): ?string
@@ -381,6 +395,66 @@ class Restaurant
             // set the owning side to null (unless already changed)
             if ($venue->getRestaurant() === $this) {
                 $venue->setRestaurant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PayoutRequest>
+     */
+    public function getPayoutRequests(): Collection
+    {
+        return $this->payoutRequests;
+    }
+
+    public function addPayoutRequest(PayoutRequest $payoutRequest): static
+    {
+        if (!$this->payoutRequests->contains($payoutRequest)) {
+            $this->payoutRequests->add($payoutRequest);
+            $payoutRequest->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayoutRequest(PayoutRequest $payoutRequest): static
+    {
+        if ($this->payoutRequests->removeElement($payoutRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($payoutRequest->getRestaurant() === $this) {
+                $payoutRequest->setRestaurant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PaymentGateway>
+     */
+    public function getPaymentGateways(): Collection
+    {
+        return $this->paymentGateways;
+    }
+
+    public function addPaymentGateway(PaymentGateway $paymentGateway): static
+    {
+        if (!$this->paymentGateways->contains($paymentGateway)) {
+            $this->paymentGateways->add($paymentGateway);
+            $paymentGateway->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaymentGateway(PaymentGateway $paymentGateway): static
+    {
+        if ($this->paymentGateways->removeElement($paymentGateway)) {
+            // set the owning side to null (unless already changed)
+            if ($paymentGateway->getRestaurant() === $this) {
+                $paymentGateway->setRestaurant(null);
             }
         }
 

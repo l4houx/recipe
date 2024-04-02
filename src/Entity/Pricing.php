@@ -24,16 +24,16 @@ class Pricing implements \Stringable
     use HasGedmoTimestampTrait;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
-    #[Vich\UploadableField(mapping: 'icon', fileNameProperty: 'thumbnail')]
+    #[Vich\UploadableField(mapping: 'icon', fileNameProperty: 'imageName')]
     #[Assert\File(
-        maxSize: '2M',
+        maxSize: '5M',
         mimeTypes: ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'],
         mimeTypesMessage: 'The file should be an image'
     )]
-    private ?File $thumbnailFile = null;
+    private ?File $imageFile = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $thumbnail = null;
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    private ?string $imageName = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     #[Assert\NotBlank]
@@ -75,40 +75,40 @@ class Pricing implements \Stringable
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      */
-    public function setThumbnailFile(File|UploadedFile|null $thumbnailFile): static
+    public function setImageFile(File|UploadedFile|null $imageFile): static
     {
-        $this->thumbnailFile = $thumbnailFile;
+        $this->imageFile = $imageFile;
 
-        if (null !== $thumbnailFile) {
+        if (null !== $imageFile) {
             $this->setUpdatedAt(new \DateTime());
         }
 
         return $this;
     }
 
-    public function getThumbnailFile(): ?File
+    public function getImageFile(): ?File
     {
-        return $this->thumbnailFile;
+        return $this->imageFile;
     }
 
-    public function getThumbnail(): ?string
+    public function getImageName(): ?string
     {
-        return $this->thumbnail;
+        return $this->imageName;
     }
 
-    public function setThumbnail(?string $thumbnail): static
+    public function setImageName(?string $imageName): static
     {
-        $this->thumbnail = $thumbnail;
+        $this->imageName = $imageName;
 
         return $this;
     }
 
-    public function getThumbnailPath(): string
+    public function getImagePath(): string
     {
-        return '/images/icon/'.$this->thumbnail;
+        return '/images/icon/'.$this->imageName;
     }
 
-    public function getThumbnailPlaceholder(string $size = 'default'): string
+    public function getImagePlaceholder(string $size = 'default'): string
     {
         if ('small' == $size) {
             return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeCAMAAAD69YcoAAAAyVBMVEUAAADd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d0jcjdZAAAAQnRSTlMAAQIEBQYLDA8SExQWFxkaHyAhJCUmKi06O0lRVVZfYmNkb3V3g46PkZKbo6ivtLW5vL7FyMrT19na3Ojr7fHz9/luoWfVAAACeUlEQVR42u3cBXKDQBiAUaDukkrqSb1N3d3uf6jeoJbuBtj3nWD3zTDAvwxZJkmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJElSjD5qWxsvXrx48eLFixcvXrx48eLFixcvXrwl571oV7cK8JZiTTXaCl68eG0FrzXhxYsXL168ePHixYsXr62kwXuz/2WbeLvayjdd4sWLFy9evHjx4sWLFy9evHjx4sX7B96ir7zl1efdL/H30Qt48eLFixcvXrx48eLFixcvXrx48eKtF+9Yo7wNOK1wWoEXL168ePHixYsXL168ePHixYsXL94f8/7vOL3RFYjTCrx48eLFixcvXrx48eLFixcvXrx48XbBm/wHqGF5jdPx4sWLFy9evHjx4sWLFy9evHjx4sVrnI4XL168ePHixYsXL168ePHixYsXL168eI3T8eLFixcvXrx48eLFixcvXrx48eLFW07e3/1gYAJvyHF6By9evHjx4sWLFy9evHjx4sWLFy9evPXmHWv8Z/3mvdUNL168ePHixYsXbyV5L/CG5D3CG5L3AG9I3hbekLxNvCF5R/AG5H3N8Abk3YmzprePNJuOw/uQpu59pCuqkyZvMxLvepK6d3kk3pkkeedi3W7zpwR1d+M9zqykp3tbxOMtHlPTfRmO+TS+lJju+2Tct529pHSfJ+LqZsV1QrpXQ9Ff1gdOk9HdyrP45dtp4J6P92jaNHVWf9zj2R6O8+YPa217sjLY43lpMdVc3WjXrtba8uJokUmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEmS1Js+AbSytGbYpVXAAAAAAElFTkSuQmCC';

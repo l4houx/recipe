@@ -14,17 +14,13 @@ trait HasProfileDetailsTrait
     // use HasAvatarVichTrait;
     use HasIsTeamTrait;
     use HasIdentifyTrait;
-    use HasSocialMediaTrait;
+    // use HasSocialMediaTrait;
     use HasKnpUOAuthLoggableTrait;
     use HasRegistrationDetailsTrait;
     use HasGedmoTimestampTrait;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank()]
-    private string $avatar = '';
-
-    #[ORM\Column(type: Types::STRING, length: 2, nullable: true, options: ['default' => 'FR'])]
-    private ?string $country = null;
+    // #[ORM\Column(type: Types::STRING, length: 2, nullable: true, options: ['default' => 'FR'])]
+    // private ?string $country = null;
 
     #[ORM\Column(type: Types::STRING, options: ['default' => null], nullable: true)]
     private ?string $theme = null;
@@ -66,19 +62,6 @@ trait HasProfileDetailsTrait
     #[Groups(['user:read', 'user:create', 'user:update'])]
     private string $email = '';
 
-    #[ORM\PrePersist]
-    public function prePersist(): void
-    {
-        $this->avatar = 'https://api.dicebear.com/8.x/initials/svg?seed=' . $this->username;
-    }
-
-    #[ORM\PreUpdate]
-    public function preUpdate(): void
-    {
-        $this->avatar = 'https://api.dicebear.com/8.x/initials/svg?seed=' . $this->username;
-        $this->updatedAt = new \DateTimeImmutable();
-    }
-
     public function getGravatarUrl(?int $size = 100): string
     {
         return sprintf('https://www.gravatar.com/avatar/%s?s=%d', md5(strtolower(trim($this->getEmail()))), $size);
@@ -89,18 +72,7 @@ trait HasProfileDetailsTrait
         return (string) $this->getFullName();
     }
 
-    public function getAvatar(): string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(string $avatar): static
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
+    /*
     public function getCountry(): string
     {
         return $this->country ?: 'FR';
@@ -112,6 +84,7 @@ trait HasProfileDetailsTrait
 
         return $this;
     }
+    */
 
     public function getTheme(): ?string
     {

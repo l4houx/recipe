@@ -6,25 +6,25 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-trait HasIsOnlineTrait
+trait HasIsActiveTrait
 {
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
     #[Assert\NotNull(groups: ['create', 'update'])]
-    private bool $isOnline = false;
+    private bool $isActive = false;
 
-    public function isOnline(): bool
+    public function isActive(): bool
     {
-        return $this->isOnline;
+        return $this->isActive;
     }
 
-    public function getIsOnline(): bool
+    public function getIsActive(): bool
     {
-        return $this->isOnline;
+        return $this->isActive;
     }
 
-    public function setIsOnline(bool $isOnline): static
+    public function setIsActive(bool $isActive): static
     {
-        $this->isOnline = $isOnline;
+        $this->isActive = $isActive;
 
         return $this;
     }

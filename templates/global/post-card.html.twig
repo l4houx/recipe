@@ -6,8 +6,8 @@
             <img src="{{ asset('images/post/blogpost-4.jpg') }}" class="card-img-top" alt="{{ post.title }}">
             {#
 			<img 
-                src="{{ vich_uploader_asset(post.thumbnail, 'thumbnailFile') | imagine_filter('thumbnail', runtimeConfig) }}"
-                {#src="{{ post.thumbnailName ? asset(post.getThumbnailPath | imagine_filter('thumbnail', runtimeConfig)) : post.getThumbnailPlaceholder }}" }
+                src="{{ vich_uploader_asset(post.imageName, 'imageFile') | imagine_filter('thumbnail', runtimeConfig) }}"
+                {#src="{{ post.imageName ? asset(post.getImagePath | imagine_filter('thumbnail', runtimeConfig)) : post.getImagePlaceholder }}" }
                 alt="{{ post.title }}" 
                 class="rounded-t-lg"
             >#}

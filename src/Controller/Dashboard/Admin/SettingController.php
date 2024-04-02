@@ -646,12 +646,12 @@ class SettingController extends AdminBaseController
                 $homeSliderOwners = $this->settingervice->getUsers(['isOnHomepageSlider' => true, 'roles' => 'owner'])->getQuery()->getResult();
                 /** @var User $user */
                 foreach ($homeSliderOwners as $user) {
-                    $user->setIsuseronhomepageslider(null);
+                    $user->setisrestaurantonhomepageslider(null);
                     $this->em->persist($user);
                 }
                 $this->em->flush();
                 foreach ($homepageherosetting->getUsers() as $owner) {
-                    $owner->setIsuseronhomepageslider($homepageherosetting);
+                    $owner->setisrestaurantonhomepageslider($homepageherosetting);
                     $this->em->persist($owner);
                 }
 

@@ -278,7 +278,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         if (true === $isOnHomepageSlider) {
-            $qb->andWhere('u.isuseronhomepageslider IS NOT NULL');
+            $qb->andWhere('u.isrestaurantonhomepageslider IS NOT NULL');
         }
 
         if ($followedby !== "all") {

@@ -11,6 +11,17 @@ Installation en cours:
 
     ☐ composer require knplabs/doctrine-behaviors Not compatible with sf7
 
+    ☐ composer require dompdf/dompdf phpoffice/phpspreadsheet php-http/httplug-bundle
+
+    ☐ composer require cmen/google-charts-bundle
+
+    ☐ composer require ninsuo/symfony-collection
+
+    ☐ pugx/autocompleter-bundle Not compatible with sf7
+
+    ☐ composer require yellowskies/qr-code-bundle
+
+
     // Translate your doctrine objects easily with some helpers
     ✔ composer require a2lix/translation-form-bundle @done(24-03-31 21:04)
     // Puts the Symfony Translation Component on steroids
@@ -29,6 +40,8 @@ Installation en cours:
     // Payment
     ✔ composer require stripe/stripe-php phpjuice/paypal-checkout-sdk @done(24-03-19 10:41)
     ☐ composer require paypal/paypal-checkout-sdk ou composer require phpjuice/paypal-checkout-sdk ou composer require league/omnipay
+
+    ☐ composer require mercadopago/dx-php paypal/rest-api-sdk-php payum/offline payum/paypal-express-checkout-nvp payum/payum-bundle payum/stripe
 
     ☐ composer require symfony/polyfill-intl-messageformatter
     ✔ composer require symfony/ux-toggle-password @done(24-03-07 13:35)
@@ -49,14 +62,10 @@ Entity:
     ✔ Setting @done(24-03-11 18:43)
     ✔ AppLayoutSetting @done(24-03-11 18:43)
     ✔ Testimonial @done(24-03-01 21:12)
-    ☐ TestimonialTranslation
     ✔ HelpCenterArticle @done(24-03-13 16:58)
-    ☐ HelpCenterArticleTranslation
     ✔ HelpCenterCategory @done(24-03-13 16:58)
-    ☐ HelpCenterCategoryTranslation
     ✔ Subscription @done(24-03-12 18:54)
     ✔ Pricing @done(24-03-12 18:54)
-    ☐ PricingTranslation
     ✔ Transaction @done(24-03-12 18:54)
     ✔ Level @done(24-03-15 18:11)
     ✔ Response @done(24-03-15 19:34)
@@ -67,14 +76,50 @@ Entity:
     ✔ Content @done(24-03-21 18:13)
     ✔ Attachment @done(24-03-21 18:13)
     ✔ Revise @done(24-03-21 19:00)
-    ✔ Report.php @done(24-03-22 12:48)
+    ✔ Report @done(24-03-22 12:48)
     ✔ Notification @done(24-03-22 16:51)
+
     ✔ Venue @done(24-03-30 17:00)
+    ✔ VenueType @done(24-04-01 16:50)
+    ✔ VenueImage @done(24-04-01 16:00)
+    ✔ VenueSeatingPlan @done(24-04-01 17:13)
+    ✔ Audience @done(24-04-01 19:34)
+    ✔ Amenity @done(24-04-01 19:17)
+
+    ✔ CartElement @done(24-04-01 21:44)
+    ✔ Order @done(24-04-01 18:19)
+    ✔ OrderElement @done(24-04-01 22:31)
+    ✔ OrderSubscription @done(24-04-01 22:59)
+    ✔ SubscriptionReservation @done(24-04-02 05:44)
+
+    ✔ Payment @done(24-04-02 06:21)
+    ✔ PaymentGateway @done(24-04-02 06:51)
+    ✔ PaymentToken @done(24-04-02 07:41)
+    ✔ PayoutRequest @done(24-04-02 08:05)
+
+    ✔ Language @done(24-03-30 16:04)
+    ✔ Country @done(24-03-30 14:45)
+
+    ✔ RecipeImage @done(24-03-30 14:51)
+    ✔ RecipeSubscription @done(24-04-01 20:29)
+    ✔ RecipeDate @done(24-04-01 21:37)
+    Roles:
+        ✔ Restaurant @done(24-03-30 03:30)
+        ✔ PointOfSale @done(24-03-30 03:30)
+        ✔ Scanner @done(24-03-30 03:30)
+
+EntityTranslation:
+    ☐ PaymentGatewayTranslation
+    ☐ ResponseTranslation
+    ☐ TicketTranslation
+    ☐ StatusTranslation
+    ☐ LevelTranslation
+    ☐ TestimonialTranslation
+    ☐ HelpCenterArticleTranslation
+    ☐ HelpCenterCategoryTranslation
+    ☐ PricingTranslation
     ☐ VenueTranslation
-    ☐ VenueType
     ☐ VenueTypeTranslation
-    ☐ VenueImage
-    ☐ VenueSeatingPlan
     ☐ VenueSeatingPlanTranslation
     ☐ PageTranslation
     ☐ FaqTranslation
@@ -86,23 +131,13 @@ Entity:
     ☐ MenuTranslation
     ☐ MenuElementTranslation
     ☐ HomepageHeroSettingsTranslation
-    ☐ Audience
     ☐ AudienceTranslation
-    ☐ Amenity
     ☐ AmenityTranslation
-    ✔ Language @done(24-03-30 16:04)
     ☐ LanguageTranslation
-    ✔ Country @done(24-03-30 14:45)
     ☐ CountryTranslation
-    ✔ RecipeImage @done(24-03-30 14:51)
-    Roles:
-        ✔ Restaurant @done(24-03-30 03:30)
-        ✔ PointOfSale @done(24-03-30 03:30)
-        ✔ Scanner @done(24-03-30 03:30)
 
-Relation:
-    Entity:
-        Recipe:
-            ✘ Comment @cancelled(24-03-30 17:45)
-            ✘ User @cancelled(24-03-30 17:45)
 
+Rename:
+    ✔ Post field thumbnailFile by imageFile @done(24-04-01 19:01)
+    ✔ Pricing field thumbnailFile by imageFile @done(24-04-01 19:01)
+    ☐ Comment add new field

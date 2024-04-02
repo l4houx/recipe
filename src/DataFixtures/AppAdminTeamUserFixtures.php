@@ -31,14 +31,13 @@ class AppAdminTeamUserFixtures extends Fixture
         $superadmin
             ->setId(1)
             ->setRoles([HasRoles::ADMINAPPLICATION])
-            ->setAvatar($this->faker()->unique()->userName())
             ->setCountry('US')
             ->setLastname('Cameron')
             ->setFirstname('Williamson')
             ->setUsername('superadmin')
             ->setSlug('superadmin')
             ->setEmail('superadmin@yourdomain.com')
-            //->setPhone($this->faker()->phoneNumber())
+            ->setPhone($this->faker()->phoneNumber())
             ->setIsTeam(true)
             ->setIsVerified(true)
             ->setAbout($this->faker()->realText(254))
@@ -61,14 +60,13 @@ class AppAdminTeamUserFixtures extends Fixture
         $admin
             ->setId(2)
             ->setRoles([HasRoles::ADMIN])
-            ->setAvatar($this->faker()->unique()->userName())
             ->setCountry('BE')
             ->setLastname('Wade')
             ->setFirstname('Warren')
             ->setUsername('admin')
             ->setSlug('admin')
             ->setEmail('admin@yourdomain.com')
-            //->setPhone($this->faker()->phoneNumber())
+            ->setPhone($this->faker()->phoneNumber())
             ->setIsTeam(true)
             ->setIsVerified(true)
             ->setAbout($this->faker()->realText(254))
@@ -91,14 +89,13 @@ class AppAdminTeamUserFixtures extends Fixture
         $moderator
             ->setId(3)
             ->setRoles([HasRoles::MODERATOR])
-            ->setAvatar($this->faker()->unique()->userName())
             ->setCountry('DE')
             ->setLastname('Jane')
             ->setFirstname('Cooper')
             ->setUsername('moderator')
             ->setSlug('moderator')
             ->setEmail('moderator@yourdomain.com')
-            //->setPhone($this->faker()->phoneNumber())
+            ->setPhone($this->faker()->phoneNumber())
             ->setIsTeam(true)
             ->setIsVerified(true)
             ->setAbout($this->faker()->realText(254))
@@ -122,7 +119,6 @@ class AppAdminTeamUserFixtures extends Fixture
             /** @var User $user */
             $user = (new User());
             $user
-                ->setAvatar($this->faker()->unique()->userName())
                 ->setCountry($this->faker()->countryCode())
                 ->setLastname($this->faker()->lastName)
                 ->setFirstname($this->faker()->firstName($genre))
@@ -131,6 +127,7 @@ class AppAdminTeamUserFixtures extends Fixture
                 ->setEmail($this->faker()->email())
                 ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
                 ->setLastLoginIp($this->faker()->ipv4())
+                ->setPhone($this->faker()->phoneNumber())
             ;
 
             if ($i > 5) {

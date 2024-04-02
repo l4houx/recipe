@@ -2,31 +2,31 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use App\Entity\Traits\HasLimit;
+use App\Entity\Setting\HomepageHeroSetting;
 use App\Entity\Setting\Language;
-use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Traits\HasTagTrait;
-use App\Entity\Traits\HasLevelTrait;
-use App\Entity\Traits\HasViewsTrait;
-use App\Repository\RecipeRepository;
 use App\Entity\Traits\HasAuthorTrait;
 use App\Entity\Traits\HasContentTrait;
-use Gedmo\Mapping\Annotation as Gedmo;
-use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasDeletedAtTrait;
-use App\Entity\Traits\HasReferenceTrait;
-use App\Entity\Setting\HomepageHeroSetting;
-use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\HasGedmoTimestampTrait;
-use App\Entity\Traits\HasSocialNetworksTrait;
-use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasLevelTrait;
+use App\Entity\Traits\HasLimit;
+use App\Entity\Traits\HasReferenceTrait;
+use App\Entity\Traits\HasSocialNetworksTrait;
+use App\Entity\Traits\HasTagTrait;
+use App\Entity\Traits\HasViewsTrait;
+use App\Repository\RecipeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
@@ -138,6 +138,23 @@ class Recipe
     #[Assert\NotNull(groups: ['create', 'update'])]
     private bool $isShowattendees = true;
 
+    /**
+     * @var Collection<int, Audience>
+     */
+    #[ORM\ManyToMany(targetEntity: Audience::class, inversedBy: 'recipes', cascade: ['persist', 'merge'])]
+    #[ORM\JoinTable(name: 'recipe_audience')]
+    #[ORM\JoinColumn(name: 'recipe_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'audience_id', referencedColumnName: 'id')]
+    private Collection $audiences;
+
+    /**
+     * @var collection<int, RecipeDate>
+     */
+    #[ORM\OneToMany(targetEntity: RecipeDate::class, mappedBy: 'recipe', orphanRemoval: true, cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\OrderBy(['startdate' => 'ASC'])]
+    #[Assert\Valid(groups: ['create', 'update'])]
+    private Collection $recipedates;
+
     public function __toString(): string
     {
         return sprintf('#%d %s', $this->getId(), $this->getTitle());
@@ -152,6 +169,8 @@ class Recipe
         $this->images = new ArrayCollection();
         $this->languages = new ArrayCollection();
         $this->subtitles = new ArrayCollection();
+        $this->audiences = new ArrayCollection();
+        $this->recipedates = new ArrayCollection();
     }
 
     public function hasContactAndSocialMedia(): bool
@@ -161,36 +180,6 @@ class Recipe
             || $this->youtubeurl || $this->twitterurl
             || $this->instagramurl || $this->facebookurl
             || $this->googleplusurl || $this->linkedinurl
-        ;
-    }
-
-    public function stringifyStatus(): string
-    {
-        if (!$this->restaurant->getUser()->isVerified()) {
-            return 'Restaurant is disabled';
-        } elseif (!$this->isOnline) {
-            return 'Recipe is not published';
-        } else {
-            return 'On sale';
-        }
-    }
-
-    public function stringifyStatusClass(): string
-    {
-        if (!$this->restaurant->getUser()->isVerified()) {
-            return 'danger';
-        } elseif (!$this->isOnline) {
-            return 'warning';
-        } else {
-            return 'success';
-        }
-    }
-
-    public function isOnSale()
-    {
-        return
-            $this->restaurant->getUser()->isVerified()()
-            && $this->isOnline
         ;
     }
 
@@ -237,9 +226,9 @@ class Recipe
     public function getImagePlaceholder(string $size = 'default'): string
     {
         if ('small' == $size) {
-            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAMAAABG8BK2AAAAXVBMVEUAAAD2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhHkayjUAAAAHnRSTlMABQ0PEBEcKixARkdJSk1WYmRmZ3R1eHl7f4WjsMpiv/ZRAAAAtUlEQVRYw+3X2Q7CIBCFYVqRLmoH3Oly3v8xvfCiJrYsSjRp578l+RJIIIMQHLfEMiKiYmKhICLKQhkJAHZiwQKAXC2zPWjTAsBg3hsAoDW6zj3KDWEdncoZSOBsEJ5jX/sIpp5ndASj5xkTwRhm/s101lcXwijv9VXMMPMzRlZj5edM9XKTemaYWTNT9mNXfm++YzQANMpX45m2Es1+iSZRcQlWTs7TuydRnn8GX3qXC45bXA+ADIuZ4XkIYQAAAABJRU5ErkJggg==';
+            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAMAAABG8BK2AAAA/1BMVEUAAAD2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhFzESFhAAAAVHRSTlMAAQIDBQYICQsNDhAREhQVGBobISQmLC0wMTQ1ODlAQkNLT1xdY2ZpbXR1d3mDhoiLjpGSlZeYnaCjpaaqtLq8yMrMzs/R1d7k5ujp6+3z9ff5+/1JGcHEAAABMUlEQVRYw+3W2U4CQRCF4dMzAqO47zvuu6iAorjgDjpuQL3/s3jjBTCkulLpRBP7f4AvmaqeTgM+n8/3Gw2un5R/Km6NKRGzRx2VAhWTp66uNMoUJcopmLMk86BgXpMMKabTQ6EoaM9oma7i3YwLhuhjwglDXwNOGDp3w1Dohsm6YYb/PVOci0Rnn2Oa2ykV0clU+9VIG1MyANC3tHNaZjqa4ZlLAyB9aJ91xDF3IYCFhl2JDcO8ZACsSBY/yXxUYwQ9L/dkq9yIpwFkPwXKPrepNQCpmkCpcAs/AGBuBMp9yDAXAFAQKDFzs9NtAGBToDRHmVNcTwNYlCxpnvsZhgCMtwTKBixFbwLl2KaEjwLl2noN5QVKxf46sA/mfdmKALlnjmg9FWZ1zzifz+f7c30DdESL++xXlRkAAAAASUVORK5CYII=';
         } else {
-            return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeCAMAAAD69YcoAAAA9lBMVEUAAAD2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhH2dhEZWD6+AAAAUXRSTlMAAQIDBAYJDQ4QExQVFhcYGhseHyAhKi0uLzAxMjQ6Ozw+P0BERUZHSUpPUVVWV1hZYmRmcXN0dYOFiYuXmJq3ur7HyNHT1dfZ3Obo8fX3+fvgzUWiAAADeklEQVR42u3cSVNTQRSA0RcBgQhOKCg4MImoJPKCA+BAQGVUof//n3Gpm7iQCt3ver51qjo5i5fu26lUlSRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRdVdc/DGjrChbfGrT49Si8k2lA+1ew+P6gxSfx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjHbj5a79S93+0M+oSnveF3OmjxnT9eVG+szbWvNcD23puj1NT2OuNF246+PkvNrj9bLG6r+yM1v4O7Zere/ppitD1SoO7LFKbjdnG6uylQF/OFPXY/pVitFsX7MSW+Q+tdilc5z4enAXXTRSnfbxPnEXnTcSH7s36K2XYRuk9S1Eo4v7XOwvIeFMC7nOJWwHznMDBvP7vuVIpc9vlvLzRvJzfvQWjevdz3Eyl2me/fpoPzZj4ZzwfnncvLux6cdy0vbzc470Ze3jo4b23bO8x6ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168/8J7st+kTprGu1g1qUW8ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168ePHixYsXL168eIfQ5MplWsL791Yu9c8453jx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjx4sWLFy9evHjxNp136fwyfcebJbx48eLFixcvXrx48eLFixcvXrx48eLFixcvXrx48eLFixfvf8BbD3pfu4tNanfQx6jz8nZT7Dby8q4H513LyzsfnPdBXt7p4LztvLyjwXmvZd7SfAmtu5d7x9gLzdvJzTsVmnc8+4HnMLBuP/95cjkw72x+3tZZWN0vJYxDnoblnSli3NQPqrtTxjRv4jyk7vFI6dPSJnfRrkrpfUDehYKm/Z/C6a6WdJnS+hxM91lht1UfQj13F6rSehVoz9CuyuvOtyj73ZGqxFqbPyOchGeqUhvdbPoAoj9bFd39t0fNte1ONOAnL2O3Hr/o1r0mVXeeP7wxUkmSJEmSJEmSJEmSJEmSJEmSJEmSJEmSJEnSsPoFIVJb/voL1VsAAAAASUVORK5CYII=';
+            return 'data:image/png;base64,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';
         }
     }
 
@@ -622,6 +611,247 @@ class Recipe
     public function setIsShowattendees(bool $isShowattendees): static
     {
         $this->isShowattendees = $isShowattendees;
+
+        return $this;
+    }
+
+    public function displayAudiences(): string
+    {
+        $audiences = '';
+
+        if (count($this->audiences) > 0) {
+            foreach ($this->audiences as $audience) {
+                $audiences .= $audience->getName().', ';
+            }
+        }
+
+        return rtrim($audiences, ', ');
+    }
+
+    /**
+     * @return Collection<int, Audience>
+     */
+    public function getAudiences(): Collection
+    {
+        return $this->audiences;
+    }
+
+    public function addAudience(Audience $audience): static
+    {
+        if (!$this->audiences->contains($audience)) {
+            $this->audiences->add($audience);
+        }
+
+        return $this;
+    }
+
+    public function removeAudience(Audience $audience): static
+    {
+        $this->audiences->removeElement($audience);
+
+        return $this;
+    }
+
+    public function hasRecipeDateWithSeatingPlan(): bool
+    {
+        foreach ($this->recipedates as $recipeDate) {
+            if ($recipeDate->getHasSeatingPlan()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getSales(string $role = 'all', string $user = 'all', bool $formattedForPayoutApproval = false, bool $includeFees = false): mixed
+    {
+        $sum = 0;
+        foreach ($this->recipedates as $recipeDate) {
+            $sum += $recipeDate->getSales($role, $user, $formattedForPayoutApproval, $includeFees);
+        }
+
+        return $sum;
+    }
+
+    public function getSubscriptionPricePercentageCutSum(string $role = 'all'): mixed
+    {
+        $sum = 0;
+        foreach ($this->recipedates as $recipeDate) {
+            $sum += $recipeDate->getSubscriptionPricePercentageCutSum($role);
+        }
+
+        return $sum;
+    }
+
+    public function getTotalOrderElementsQuantitySum(int $status = 1, string $user = 'all', string $role = 'all'): mixed
+    {
+        $sum = 0;
+        foreach ($this->recipedates as $recipeDate) {
+            $sum += $recipeDate->getOrderElementsQuantitySum($status, $user, $role);
+        }
+
+        return $sum;
+    }
+
+    public function getTotalCheckInPercentage()
+    {
+        if (0 == count($this->recipedates)) {
+            return 0;
+        }
+        $recipeDatesCheckInPercentageSum = 0;
+        foreach ($this->recipedates as $recipeDate) {
+            $recipeDatesCheckInPercentageSum += $recipeDate->getTotalCheckInPercentage();
+        }
+
+        return round($recipeDatesCheckInPercentageSum / count($this->recipedates));
+    }
+
+    public function getTotalSalesPercentage()
+    {
+        if (0 == count($this->recipedates)) {
+            return 0;
+        }
+        $recipeDatesSalesPercentageSum = 0;
+        foreach ($this->recipedates as $recipeDate) {
+            $recipeDatesSalesPercentageSum += $recipeDate->getTotalSalesPercentage();
+        }
+
+        return round($recipeDatesSalesPercentageSum / count($this->recipedates));
+    }
+
+    public function stringifyStatus(): string
+    {
+        if (!$this->restaurant->getUser()->isVerified()) {
+            return 'Restaurant is disabled';
+        } elseif (!$this->isOnline) {
+            return 'Recipe is not published';
+        } elseif (!$this->hasAnRecipeDateOnSale()) {
+            return 'No recipes on sale';
+        } else {
+            return 'On sale';
+        }
+    }
+
+    public function stringifyStatusClass(): string
+    {
+        if (!$this->restaurant->getUser()->isVerified()) {
+            return 'danger';
+        } elseif (!$this->isOnline) {
+            return 'warning';
+        } elseif (!$this->hasAnRecipeDateOnSale()) {
+            return 'info';
+        } else {
+            return 'success';
+        }
+    }
+
+    public function isOnSale(): bool
+    {
+        return
+        $this->hasAnRecipeDateOnSale()
+            && $this->restaurant->getUser()->isVerified()()
+            && $this->isOnline
+        ;
+    }
+
+    public function getOrderElementsQuantitySum(int $status = 1): mixed
+    {
+        $sum = 0;
+        foreach ($this->recipedates as $recipedate) {
+            $sum += $recipedate->getOrderElementsQuantitySum($status);
+        }
+
+        return $sum;
+    }
+
+    public function hasTwoOrMoreRecipeDatesOnSale(): bool
+    {
+        $count = 0;
+        foreach ($this->recipedates as $recipedate) {
+            if ($recipedate->isOnSale()) {
+                ++$count;
+            }
+        }
+
+        return $count >= 2 ? true : false;
+    }
+
+    public function hasAnRecipeDateOnSale(): bool
+    {
+        foreach ($this->recipedates as $recipedate) {
+            if ($recipedate->isOnSale()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getFirstOnSaleRecipeDate(): ?RecipeDate
+    {
+        foreach ($this->recipedates as $recipedate) {
+            if ($recipedate->isOnSale()) {
+                return $recipedate;
+            }
+        }
+
+        return null;
+    }
+
+    public function isFree(): bool
+    {
+        foreach ($this->recipedates as $recipedate) {
+            if (!$recipedate->isFree()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getCheapestSubscription(): ?RecipeSubscription
+    {
+        if (!$this->hasAnRecipeDateOnSale()) {
+            return null;
+        }
+        $cheapestsubscription = $this->getFirstOnSaleRecipeDate()->getCheapestSubscription();
+        foreach ($this->recipedates as $recipedate) {
+            if ($recipedate->isOnSale()) {
+                if ($recipedate->getCheapestSubscription()->getSalePrice() < $cheapestsubscription->getSalePrice()) {
+                    $cheapestsubscription = $recipedate->getCheapestSubscription();
+                }
+            }
+        }
+
+        return $cheapestsubscription;
+    }
+
+    /**
+     * @return Collection<int, RecipeDate>
+     */
+    public function getRecipeDates(): Collection
+    {
+        return $this->recipedates;
+    }
+
+    public function addRecipeDate(RecipeDate $recipedate): static
+    {
+        if (!$this->recipedates->contains($recipedate)) {
+            $this->recipedates->add($recipedate);
+            $recipedate->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipeDate(RecipeDate $recipedate): static
+    {
+        if ($this->recipedates->removeElement($recipedate)) {
+            // set the owning side to null (unless already changed)
+            if ($recipedate->getRecipe() === $this) {
+                $recipedate->setRecipe(null);
+            }
+        }
 
         return $this;
     }
