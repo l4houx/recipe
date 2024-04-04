@@ -1,0 +1,34 @@
+<html lang="{{ app.request.locale }}">
+    <head>
+        <!--[if IE]>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <![endif]-->
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex,nofollow">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{{ "Loading..."|trans }}</title>
+        <link rel="shortcut icon" href="{{ absolute_url(asset(services.getAppLayoutSettings.getFaviconPath)) }}">
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+
+    </head>
+    <body>
+
+        <form id="redirectToPaymentGatewayCheckoutUrl" action="{{ postUrl }}" method="POST">
+            {% for field in payload %}
+                <input type="hidden" name="{{ field.fieldName }}" value="{{ field.fieldValue }}">
+            {% endfor %}
+        </form>
+
+        <script>
+
+            $(document).ready(function () {
+                $.LoadingOverlay("show");
+                $('#redirectToPaymentGatewayCheckoutUrl').submit();
+            });
+
+        </script>
+
+    </body>
+</html>

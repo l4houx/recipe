@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-pricings', name: 'dashboard_admin_pricing_')]
+#[Route('/%website_dashboard_path%/admin/manage-pricings', name: 'dashboard_admin_pricing_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class PricingController extends AdminBaseController
 {

@@ -46,6 +46,9 @@ class Restaurant
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $allowTapToCheckInOnScannerApp = null;
 
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
+    private ?bool $showRecipeDateStatsOnScannerApp = null;
+
     #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private ?User $user = null;
@@ -114,6 +117,7 @@ class Restaurant
         $this->isShowfollowers = true;
         $this->isShowreviews = true;
         $this->allowTapToCheckInOnScannerApp = true;
+        $this->showRecipeDateStatsOnScannerApp = true;
 
         $this->scanners = new ArrayCollection();
         $this->pointofsales = new ArrayCollection();
@@ -183,9 +187,31 @@ class Restaurant
         return $this->allowTapToCheckInOnScannerApp;
     }
 
+    public function getAllowTapToCheckInOnScannerApp(): ?bool
+    {
+        return $this->allowTapToCheckInOnScannerApp;
+    }
+
     public function setAllowTapToCheckInOnScannerApp(?bool $allowTapToCheckInOnScannerApp): static
     {
         $this->allowTapToCheckInOnScannerApp = $allowTapToCheckInOnScannerApp;
+
+        return $this;
+    }
+
+    public function isShowRecipeDateStatsOnScannerApp(): ?bool
+    {
+        return $this->showRecipeDateStatsOnScannerApp;
+    }
+
+    public function getShowRecipeDateStatsOnScannerApp(): ?bool
+    {
+        return $this->showRecipeDateStatsOnScannerApp;
+    }
+
+    public function setShowRecipeDateStatsOnScannerApp(?bool $showRecipeDateStatsOnScannerApp): static
+    {
+        $this->showRecipeDateStatsOnScannerApp = $showRecipeDateStatsOnScannerApp;
 
         return $this;
     }

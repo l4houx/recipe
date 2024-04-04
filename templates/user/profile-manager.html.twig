@@ -24,6 +24,7 @@
                                     {{ 'Registered'|trans }} {{ user.createdAt | ago() }}
                                 </span>
                             </div>
+                            {#  
                             {% if user.hasSocialMedia %}
                                 <div class="d-flex text-center gap-3 ms-3 ms-md-0 my-3 my-md-0">
                                     {% if user.youtubeurl %}
@@ -62,6 +63,7 @@
                                     {% endif %}
                                 </div>
                             {% endif %}
+                            #}
                         </div>
                     </div>
                 </div>

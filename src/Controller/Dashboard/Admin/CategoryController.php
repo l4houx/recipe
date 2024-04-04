@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-recipes', name: 'dashboard_admin_recipe_category_')]
+#[Route('/%website_dashboard_path%/admin/manage-recipes', name: 'dashboard_admin_recipe_category_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class CategoryController extends AdminBaseController
 {

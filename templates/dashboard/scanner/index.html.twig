@@ -1,0 +1,57 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Events list' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="box shadow-none bg-gray mb-4">
+                        <div class="row">
+                            <div class="col-12 pt-2 pb-2">
+                                <span class="center-lg-y text-muted">{{ "%resultsCount% event(s)"|trans({'%resultsCount%': events.getTotalItemCount}) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {% if events.getTotalItemCount > 0 %}
+                                {% for event in events %}
+                                    {% for eventDate in event.eventdates if eventDate.canBeScannedBy(app.user.scanner) %}
+                                        <div class="card">
+                                            <div class="card-header" id="{{ event.slug }}">
+                                                <div class="row h-100">
+                                                    <div class="col-12 col-md-9 ">
+                                                        {% include "Global/event-preview-horizontal.html.twig" with { eventdate: eventDate, hideorganizer: true } %}
+                                                    </div>
+                                                    <div class="col-12 col-md-3 my-auto">
+                                                        <a href="{{ path('dashboard_scanner_event_date_attendees_check_in', {reference: eventDate.reference}) }}" class="btn btn-light btn-sm float-right"><i class="fas fa-check"></i> {{ "Check In Attendees for this event date"|trans }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% else %}
+                                {% include "Global/message.html.twig" with { type: "info", message: ('No events found'|trans), icon: "fas fa-exclamation-circle" } %}
+                            {% endif %}
+                            {{ knp_pagination_render(events, null, {}, {'align': 'center'}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

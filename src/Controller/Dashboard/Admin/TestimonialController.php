@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-testimonials', name: 'dashboard_admin_testimonial_')]
+#[Route('/%website_dashboard_path%/admin/manage-testimonials', name: 'dashboard_admin_testimonial_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class TestimonialController extends AdminBaseController
 {

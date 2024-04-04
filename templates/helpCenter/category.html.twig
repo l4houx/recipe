@@ -22,7 +22,7 @@
 						<p class="mb-5 lead"></p>
 						<div class="mb-3">
 							<h2 class="fw-semibold"></h2>
-                            {% for article in services.getHelpCenterArticles({"category":category.slug}).getQuery().getResult() %}
+                            {% for article in setting.getHelpCenterArticles({"category":category.slug}).getQuery().getResult() %}
                                 <p>
                                     <a href="{{ path('help_center_article', {slug: article.slug}) }}">
                                         {{ article.title }}

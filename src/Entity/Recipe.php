@@ -334,7 +334,7 @@ class Recipe
 
         /** @var Review $review */
         foreach ($this->reviews as $review) {
-            if ($review->getVisible() && $review->getRating() === $rating) {
+            if ($review->getIsVisible() && $review->getRating() === $rating) {
                 ++$ratingCount;
             }
         }
@@ -352,7 +352,7 @@ class Recipe
 
         /** @var Review $review */
         foreach ($this->reviews as $review) {
-            if ($review->getVisible()) {
+            if ($review->getIsVisible()) {
                 $ratingAvg += $review->getRating();
             }
         }
@@ -370,7 +370,7 @@ class Recipe
 
         /** @var Review $review */
         foreach ($this->reviews as $review) {
-            if ($review->getVisible()) {
+            if ($review->getIsVisible()) {
                 $ratingPercentage += $review->getRatingPercentage();
             }
         }
@@ -384,7 +384,7 @@ class Recipe
 
         /** @var Review $review */
         foreach ($this->reviews as $review) {
-            if ($review->getVisible()) {
+            if ($review->getIsVisible()) {
                 ++$count;
             }
         }

@@ -31,26 +31,26 @@
                                 </div>
                                 <div>
                                     {% if app.request.attributes.get('_route') == 'dashboard_account_profile' %}
-                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                        <a href="{{ path('dashboard_account_index') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'My dashboard'|trans }}
                                         </a>
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_account_edit' %}
-                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                        <a href="{{ path('dashboard_account_index') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'My dashboard'|trans }}
                                         </a>
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_account_avatar' %}
-                                        <a href="{{ path('dashboard_main_account') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                        <a href="{{ path('dashboard_account_index') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'My dashboard'|trans }}
                                         </a>
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_account_recipe_index' %}
                                         <a href="{{ path('dashboard_account_recipe_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'New recipe'|trans }}
                                         </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_ticket_index' %}
-                                        <a href="{{ path('dashboard_account_ticket_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_ticket_index_index' %}
+                                        <a href="{{ path('dashboard_ticket_index_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'New ticket'|trans }}
                                         </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_main_account' %}
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_index' %}
                                         <a href="{{ path('dashboard_account_edit') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'Account Setting'|trans }}
                                         </a>

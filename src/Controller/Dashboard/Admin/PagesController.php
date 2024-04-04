@@ -20,7 +20,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-pages', name: 'dashboard_admin_page_')]
+#[Route('/%website_dashboard_path%/admin/manage-pages', name: 'dashboard_admin_page_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class PagesController extends AdminBaseController
 {

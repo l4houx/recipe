@@ -16,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route(path: '/%website_dashboard_path%/main-panel/manage-settings', name: 'dashboard_admin_setting_currency_')]
+#[Route(path: '/%website_dashboard_path%/admin/manage-settings', name: 'dashboard_admin_setting_currency_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class CurrencyController extends AbstractController
 {

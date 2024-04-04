@@ -236,7 +236,7 @@
                             <ul>
                                 {% for recipe in rows %}
                                     <li>
-                                        <a href="{{ path('recipe_show', {id: recipe.id, slug: recipe.slug}) }}">
+                                        <a href="{{ path('recipe', {id: recipe.id, slug: recipe.slug}) }}">
                                             {{ recipe.title }}
                                         </a>
                                     </li>

@@ -38,7 +38,7 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Site URL', 'website_url', $this->params->get('website_url'), UrlType::class);
         $settings[] = new Setting('Site slug', 'website_slug', $this->params->get('website_slug'), TextType::class);
         $settings[] = new Setting('Root URL', 'website_root_url', $this->params->get('website_root_url'), UrlType::class);
-        //$settings[] = new Setting('Website configured', 'is_website_configured', $this->params->get('is_website_configured'), CheckboxType::class);
+        // $settings[] = new Setting('Website configured', 'is_website_configured', $this->params->get('is_website_configured'), CheckboxType::class);
 
         // Contact
         $settings[] = new Setting('No reply email', 'website_no_reply_email', $this->params->get('website_no_reply_email'), EmailType::class);
@@ -68,13 +68,13 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Copyright', 'website_copyright', '© 2020 '.$this->params->get('website_name').', Inc. All rights reserved.', TextType::class);
         $settings[] = new Setting('Everyone can sign up', 'users_can_register', true, CheckboxType::class);
         $settings[] = new Setting('About', 'website_about', 'Lorem ipsum dolor sit amet, consectetur adipisicing.', TextareaType::class);
-        //$settings[] = new Setting('Primary color', 'primary_color', '#9a6ee2', TextType::class);
+        // $settings[] = new Setting('Primary color', 'primary_color', '#9a6ee2', TextType::class);
         $settings[] = new Setting('Back to top', 'show_back_to_top_button', true, CheckboxType::class);
         $settings[] = new Setting('Custom CSS', 'custom_css', '', TextareaType::class);
         $settings[] = new Setting('Google Analytics', 'google_analytics_code', '', TextareaType::class);
         $settings[] = new Setting('App Env', 'app_environment', 'dev', TextType::class);
-        //$settings[] = new Setting('App Theme', 'app_theme', 'violet', TextType::class);
-        //$settings[] = new Setting('App Layout', 'app_layout', 'container', TextType::class);
+        // $settings[] = new Setting('App Theme', 'app_theme', 'violet', TextType::class);
+        // $settings[] = new Setting('App Layout', 'app_layout', 'container', TextType::class);
         $settings[] = new Setting('Maintenance mode', 'maintenance_mode', $this->params->get('maintenance_mode'), CheckboxType::class);
         $settings[] = new Setting('Custom maintenance mode message', 'maintenance_mode_custom_message', '', TextareaType::class);
 
@@ -84,7 +84,7 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Number of posts per page', 'website_posts_limit', 9, NumberType::class);
         $settings[] = new Setting('Number of comments per page', 'website_comments_limit', 4, NumberType::class);
         $settings[] = new Setting('Number of posts on the homepage', 'homepage_posts_number', 3, NumberType::class);
-        $settings[] = new Setting('Number of testimonials on the homepage', 'homepage_testimonials_number', 5, NumberType::class);
+        $settings[] = new Setting('Number of testimonials on the homepage', 'homepage_testimonials_number', 2, NumberType::class);
         $settings[] = new Setting('Number of categories on the homepage', 'homepage_categories_number', 12, NumberType::class);
         $settings[] = new Setting('Number of recipes on the homepage', 'homepage_recipes_number', 12, NumberType::class);
 
@@ -250,7 +250,7 @@ class AppSettingsFixtures extends Fixture
             'CRC' => '₡',
             'CUP' => '$',
             'CVE' => '$',
-            'CZK' => 'Kč',
+            'CZK' => 'K�?',
             'DJF' => '₣',
             'DKK' => 'kr',
             'DOP' => '$',

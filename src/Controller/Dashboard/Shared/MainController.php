@@ -23,8 +23,8 @@ class MainController extends BaseController
     {
     }
 
-    #[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_main_account', methods: ['GET'])]
-    public function mainDashboard(
+    #[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_account_index', methods: ['GET'])]
+    public function index(
         //#[CurrentUser] ?User $user,
         TicketRepository $ticketRepository,
         LevelRepository $levelRepository,
@@ -52,6 +52,6 @@ class MainController extends BaseController
             $tickets = array_merge($ticketsApp, $ticketsUser);
         }
 
-        return $this->render('dashboard/shared/main.html.twig', compact('user', 'tickets', 'statuses', 'levels'));
+        return $this->render('dashboard/shared/index.html.twig', compact('user', 'tickets', 'statuses', 'levels'));
     }
 }

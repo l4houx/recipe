@@ -13,10 +13,9 @@ use Symfony\Component\HttpKernel\Attribute\Cache;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/blog')]
 class BlogCategoryController extends AbstractController
 {
-    #[Route(path: '/categories/{slug}', name: 'blog_category', defaults: ['_format' => 'html'], requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
+    #[Route(path: '/blog-category/categories/{slug}', name: 'blog_category', defaults: ['_format' => 'html'], requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
     #[Route(path: '/rss.xml', name: 'blog_rss', defaults: ['_format' => 'xml'], methods: ['GET'])]
     #[Cache(smaxage: 10)]
     public function blogCategory(Request $request, string $_format, PostRepository $post, PostCategory $category): Response

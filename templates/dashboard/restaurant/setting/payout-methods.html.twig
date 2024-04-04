@@ -1,0 +1,105 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Payout methods' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="b mb-0 float-lg-left">{{ pagetitle }}</h6>
+                        </div>
+                        <div class="card-body">
+                            {% set paymentgateways = services.getPaymentGateways({"organizer": app.user.organizer.slug}).getQuery().getResult() %}
+
+                            {% set paypalInformationProvided = false %}
+                            {% set paypalPaymentGatewaySlug = null %}
+                            {% set stripeInformationProvided = false %}
+                            {% set stripePaymentGatewaySlug = null %}
+                            {% for paymentgateway in paymentgateways %}
+                                {% if paymentgateway.factoryName == "paypal_rest" %}
+                                    {% set paypalInformationProvided = true %}
+                                    {% set paypalPaymentGatewaySlug = paymentgateway.slug %}
+                                {% elseif paymentgateway.factoryName == "stripe_checkout" %}
+                                    {% set stripeInformationProvided = true %}
+                                    {% set stripePaymentGatewaySlug = paymentgateway.slug %}
+                                {% endif %}
+                            {% endfor %}
+                            <table class="table table-hover table-vcenter text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>{{'Payout method'|trans}}</th>
+                                        <th>{{'Status'|trans}}</th>
+                                        <th class="text-center"><i class="fas fa-cog"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% if services.getSetting("organizer_payout_paypal_enabled") == "yes" %}
+                                        <tr>
+                                            <td>
+                                                <img src="{{ asset('assets/img/icons/payment/paypal.svg') }}">
+                                            </td>
+                                            <td>
+                                                {% if paypalInformationProvided %}
+                                                    <span class="badge badge-success">{{ "Information provided"|trans }}</span>
+                                                {% else %}
+                                                    <span class="badge badge-warning">{{ "Information not provided"|trans }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center">
+                                                {% if paypalInformationProvided %}
+                                                    <a href="{{ path('dashboard_organizer_settings_payouts_edit', { slug : paypalPaymentGatewaySlug }) }}" class="btn btn-primary"><i class="fas fa-edit fa-fw"></i> {{ "Edit"|trans }}</a>
+                                                    <a href="{{ path('dashboard_organizer_settings_payouts_unset', { slug : paypalPaymentGatewaySlug }) }}" class="btn btn-outline-primary"><i class="fas fa-times fa-fw"></i> {{ "Uset"|trans }}</a>
+                                                {% else %}
+                                                    <a href="{{ path('dashboard_organizer_settings_payouts_add', { factoryName : "paypal_rest" }) }}" class="btn btn-primary"><i class="fas fa-plus fa-fw"></i> {{ "Set"|trans }}</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if services.getSetting("organizer_payout_stripe_enabled") == "yes" %}
+                                        <tr>
+                                            <td>
+                                                <img src="{{ asset('assets/img/icons/payment/stripe.svg') }}">
+                                            </td>
+                                            <td>
+                                                {% if stripeInformationProvided %}
+                                                    <span class="badge badge-success">{{ "Information provided"|trans }}</span>
+                                                {% else %}
+                                                    <span class="badge badge-warning">{{ "Information not provided"|trans }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center">
+                                                {% if stripeInformationProvided %}
+                                                    <a href="{{ path('dashboard_organizer_settings_payouts_edit', { slug : stripePaymentGatewaySlug }) }}" class="btn btn-primary"><i class="fas fa-edit fa-fw"></i> {{ "Edit"|trans }}</a>
+                                                    <a href="{{ path('dashboard_organizer_settings_payouts_unset', { slug : stripePaymentGatewaySlug }) }}" class="btn btn-outline-primary"><i class="fas fa-times fa-fw"></i> {{ "Uset"|trans }}</a>
+                                                {% else %}
+                                                    <a href="{{ path('dashboard_organizer_settings_payouts_add', { factoryName : "stripe_checkout" }) }}" class="btn btn-primary"><i class="fas fa-plus fa-fw"></i> {{ "Set"|trans }}</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

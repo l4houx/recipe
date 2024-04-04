@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-users', name: 'dashboard_admin_user_')]
+#[Route('/%website_dashboard_path%/admin/manage-users', name: 'dashboard_admin_user_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class UserController extends AdminBaseController
 {

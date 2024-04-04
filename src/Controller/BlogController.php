@@ -17,13 +17,12 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/blog')]
 class BlogController extends AbstractController
 {
-    #[Route(path: '', name: 'blog_list', defaults: ['_format' => 'html'], methods: ['GET'])]
-    #[Route(path: '/rss.xml', name: 'blog_rss', defaults: ['_format' => 'xml'], methods: ['GET'])]
+    #[Route(path: '/blog', name: 'blog', defaults: ['_format' => 'html'], methods: ['GET'])]
+    #[Route(path: '/blog/rss.xml', name: 'blog_rss', defaults: ['_format' => 'xml'], methods: ['GET'])]
     #[Cache(smaxage: 10)]
-    public function blogList(Request $request, string $_format, PostRepository $post): Response
+    public function blog(Request $request, string $_format, PostRepository $post): Response
     {
         $searchDataDTO = new SearchDataDTO();
 
@@ -40,7 +39,7 @@ class BlogController extends AbstractController
         return $this->render('blog/blog.'.$_format.'.twig', compact('form', 'rows'));
     }
 
-    #[Route(path: '/{slug}', name: 'blog_article', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
+    #[Route(path: '/blog-article/{slug}', name: 'blog_article', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
     public function blogArticle(
         Request $request,
         Post $post,
@@ -48,8 +47,8 @@ class BlogController extends AbstractController
         TranslatorInterface $translator
     ): Response {
         if (!$post) {
-            $this->addFlash('secondary', $translator->trans('The article not be found'));
-            return $this->redirectToRoute('blog_list');
+            $this->addFlash('danger', $translator->trans('The article not be found'));
+            return $this->redirectToRoute('blog');
         }
 
         $post->viewed();
@@ -59,7 +58,7 @@ class BlogController extends AbstractController
         return $this->render('blog/blog-article.html.twig', compact('post'));
     }
 
-    #[Route(path: '/search', name: 'blog_search', methods: ['GET'])]
+    #[Route(path: '/blog-search/search', name: 'blog_search', methods: ['GET'])]
     public function blogSearch(Request $request): Response
     {
         return $this->render('blog/blog-search.html.twig', ['query' => (string) $request->query->get('q', '')]);

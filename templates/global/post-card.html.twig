@@ -1,9 +1,9 @@
 {# {% set runtimeConfig = {"thumbnail": {"size": thumbnailsize } } %} #}
 {% set link = path('blog_article', { slug : post.slug }) %}
-<div class="col-lg-6 col-md-12 col-12">
+<div class="{% if app.request.attributes.get('_route') == 'home' %}col-xl-4 col-lg-4 col-md-6 {% endif %}col-lg-6 col-md-12 col-12">
     <div class="card mb-4 shadow-lg card-lift">
         <a href="{{ link }}">
-            <img src="{{ asset('images/post/blogpost-4.jpg') }}" class="card-img-top" alt="{{ post.title }}">
+            <img src="{{ post.imageName ? (post.getImagePath) : post.getImagePlaceholder }}" class="card-img-top" alt="{{ post.title }}">
             {#
 			<img 
                 src="{{ vich_uploader_asset(post.imageName, 'imageFile') | imagine_filter('thumbnail', runtimeConfig) }}"
@@ -22,7 +22,7 @@
             <p>{{ post.content | html_markdown_excerpt(72) }}</p>
             <div class="row align-items-center g-0 mt-4">
                 <div class="col-auto">
-                    <img src="{{ asset('images/avatar/avatar-1.jpg') }}" alt="avatar" class="rounded-circle avatar-sm me-2">
+                    {% include "global/user-avatar.html.twig" with { user: app.user, type: "sm", class: "me-2" } %}
                 </div>
                 <div class="col lh-1">
                     <h5 class="mb-1">{{ post.author.username }}</h5>

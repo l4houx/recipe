@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\HasContentTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
 use App\Entity\Traits\HasGedmoTimestampTrait;
 use App\Entity\Traits\HasIdGedmoHeadlineAndSlugTrait;
 use App\Entity\Traits\HasRatingTrait;
@@ -21,6 +22,7 @@ class Review
     use HasRatingTrait;
     use HasContentTrait;
     use HasGedmoTimestampTrait;
+    use HasDeletedAtTrait;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
     #[Assert\NotNull]
@@ -44,7 +46,7 @@ class Review
         return $this->isVisible;
     }
 
-    public function getVisible(): bool
+    public function getIsVisible(): bool
     {
         return $this->isVisible;
     }

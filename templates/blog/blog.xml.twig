@@ -5,7 +5,7 @@
         <description>{{ 'Most recent articles published on the '|trans }} {{ website_name }}</description>
         <pubDate>{{ 'now' | date('r', timezone='GMT') }}</pubDate>
         <lastBuildDate>{{ (rows | last).createdAt | default('now') | date('r', timezone='GMT') }}</lastBuildDate>
-        <link>{{ url('blog_list') }}</link>
+        <link>{{ url('blog') }}</link>
         <language>{{ app.request.locale }}</language>
 
         {% for post in rows %}

@@ -22,10 +22,9 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/blog')]
 class BlogCommentController extends AbstractController
 {
-    #[Route(path: '/comment/{slug}/add', name: 'blog_comment_add', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['POST'])]
+    #[Route(path: '/blog-comment/comment/{slug}/add', name: 'blog_comment_add', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED')]
     public function blogcommentAdd(
         Request $request,
@@ -63,7 +62,7 @@ class BlogCommentController extends AbstractController
         return $this->render('blog/_comment_form.html.twig', compact('post', 'form'));
     }
 
-    #[Route(path: '/comment/{id<[0-9]+>}', name: 'blog_comment_delete', methods: ['POST'])]
+    #[Route(path: '/blog-comment/comment/{id<[0-9]+>}', name: 'blog_comment_delete', methods: ['POST'])]
     #[Security("is_granted('ROLE_USER') and user === comment.getAuthor()")]
     public function blogcommentDeleted(
         Request $request,

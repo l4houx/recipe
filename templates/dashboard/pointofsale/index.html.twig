@@ -1,0 +1,212 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Events on sale' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+
+{% block stylesheets %}
+
+    <style>
+
+        .container {
+            max-width: none;
+            width: 100% !important;
+            padding-right: 15px !important;
+            padding-left: 15px !important;
+            margin-right: auto !important;
+            margin-left: auto !important;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+
+    {% set navigation = [{"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    {% if events.getTotalItemCount > 0 %}
+                        <div class="box shadow-none bg-gray mb-4">
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
+                                    <span class="center-lg-y text-muted">{{ "%resultsCount% event(s) currently on sale"|trans({'%resultsCount%': events.getTotalItemCount}) }}</span>
+                                </div>
+                                <div class="col-sm-12 col-lg-6 text-center text-lg-right">
+                                    {% set anEventhasEventDateWithSeatingPlan = false %}
+                                    {% for event in events if event.hasAnEventDateOnSale %}
+                                        {% set anEventhasEventDateWithSeatingPlan = true %}
+                                    {% endfor %}
+                                    <button id="pos-save-order-button" class="btn btn-primary {% if anEventhasEventDateWithSeatingPlan %}an-event-date-has-seating-plan{% endif %}"><i class="fas fa-cart-arrow-down"></i> {{ "Save order"|trans }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-12">
+                            {% if events.getTotalItemCount > 0 %}
+
+                                <div class="accordion" id="events-accordion">
+                                    <form id="pos-order-form" action="{{ path('dashboard_pointofsale_cart_add') }}" method="post">
+                                        {% for event in events if event.hasAnEventDateOnSale %}
+                                            <div class="card">
+                                                <div class="card-header" id="{{ event.slug }}">
+                                                    <div class="row h-100">
+                                                        <div class="col-12 col-md-9 ">
+                                                            {% include "Global/event-preview-horizontal.html.twig" with { event: event, hideorganizer: true } %}
+                                                        </div>
+                                                        <div class="col-12 col-md-3 my-auto">
+                                                            <button type="button" class="btn btn-light btn-sm float-right" data-toggle="collapse" data-target="#event-{{event.reference}}"><i class="fas fa-plus"></i> {{ "Show event dates and tickets"|trans }}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="event-{{event.reference}}" class="collapse" aria-labelledby="{{ event.slug }}" data-parent="#events-accordion">
+                                                    <div class="card-body">
+                                                        {% for eventDate in event.eventdates if eventDate.isOnSaleByPos(app.user.pointofsale) %}
+                                                            <div class="card {% if eventDate.hasSeatingPlan %}has-seating-plan{% endif %}">
+                                                                <div class="card-header">
+                                                                    <i class="fas fa-clock fa-fw"></i> {{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+
+                                                                    <i class="fas fa-map-marker-alt fa-fw"></i>
+                                                                    {% if eventDate.venue %}
+                                                                        {{ eventDate.venue.name }}: {{ eventDate.venue.stringifyAddress }}
+                                                                    {% else %}
+                                                                        {{ "Online"|trans }}
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="card-body">
+
+                                                                    {% if eventDate.hasSeatingPlan %}
+                                                                        <div class="mb-3">
+                                                                            {% include "Dashboard/Shared/Venue/SeatingPlans/seating-plan-seats.html.twig" with {seatingPlan: eventDate.seatingPlan} %}
+                                                                        </div>
+                                                                    {% endif %}
+
+                                                                    {% for ticket in eventDate.tickets %}
+                                                                        {% if ticket.active %}
+                                                                            <div class="mb-2">
+                                                                                <b>{{ ticket.name }}</b>
+                                                                                {% if ticket.description %}
+                                                                                    <i class="fas fa-info-circle text-primary ml-2" data-toggle="tooltip" title="{{ ticket.description }}"></i>
+                                                                                {% endif %}
+                                                                                {% if not ticket.isOnSale %}
+                                                                                    <span class="badge badge-{{ ticket.stringifyStatusClass }} ml-5">{{ ticket.stringifyStatus|trans }}</span>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                            <div class="b mb-2">
+                                                                                {{ ticket.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getSalePrice ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+                                                                                {% if ticket.promotionalprice and not ticket.free %}
+                                                                                    <del class="price-old">{{ (services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '') }}</del>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                            {% if ticket.salesstartdate %}
+
+                                                                                <div class="mb-2">
+                                                                                    {% if ticket.salesstartdate|date("Y/m/d H:i") > "now"|date("Y/m/d H:i") %}
+                                                                                        <small class="text-danger font-size-10px mt-1">
+                                                                                            {{ "Sales start in"|trans }}
+                                                                                            <span class="countdown" data-count-down-to="{{ ticket.salesstartdate|date('Y/m/d H:i') }}"></span>
+                                                                                        </small>
+                                                                                    {% else %}
+                                                                                        <small class="text-success font-size-10px mt-1">
+                                                                                            {{ "Sales started"|trans }}
+                                                                                            {{ ticket.salesstartdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                                                        </small>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                            {% endif %}
+
+                                                                            {% if ticket.salesenddate and ticket.salesstartdate|date("Y/m/d H:i") <= "now"|date("Y/m/d H:i") %}
+                                                                                <div class="mb-2">
+                                                                                    {% if ticket.salesenddate|date("Y/m/d H:i") < "now"|date("Y/m/d H:i") %}
+                                                                                        <small class="text-danger font-size-10px  mt-1">
+                                                                                            {{ "Sales ended"|trans }}
+                                                                                            <span>{{ ticket.salesenddate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</span>
+                                                                                        </small>
+                                                                                    {% else %}
+                                                                                        <small class="text-danger font-size-10px  mt-1">
+                                                                                            {{ "Sales end"|trans }}
+                                                                                            <span class="countdown" data-count-down-to="{{ ticket.salesenddate|date('Y/m/d H:i') }}"></span>
+                                                                                        </small>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                            {% endif %}
+
+                                                                            <div class="mb-2">
+                                                                                <input type="text" class="form-control touchspin-integer pos-eventdate-ticket-qte eventdate-ticket-qte" name="{{ ticket.reference }}" data-ticket-id="{{ ticket.id }}" data-min="0" data-max="{{ ticket.getTicketsLeftCount }}" {% if not ticket.isOnSale %}disabled{% endif %} />
+                                                                            </div>
+
+                                                                            <div class="b mb-2">
+                                                                                <small class="text-muted">{{ "Tickets left"|trans }}: {{ ticket.getTicketsLeftCount }} / {{ ticket.quantity }}</small>
+                                                                                <br>
+                                                                                <small class="text-muted">{{ "Scanned tickets"|trans }}: {{ ticket.getScannedTicketsCount }} / {{ ticket.getOrderElementsQuantitySum }}</small>
+                                                                            </div>
+
+                                                                            {% if not loop.last %}
+                                                                                <hr class="mt-5 mb-5">
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </form>
+                                </div>
+
+                            {% else %}
+                                {% include "Global/message.html.twig" with { type: "info", message: ('No events found'|trans), icon: "fas fa-exclamation-circle" } %}
+                            {% endif %}
+                            {{ knp_pagination_render(events, null, {}, {'align': 'center'}) }}
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    {% for event in events if event.hasAnEventDateOnSale %}
+        {% if event.hasAnEventDateOnSale %}
+            {% for eventDate in event.eventdates if eventDate.isOnSale %}
+                {% if eventDate.hasSeatingPlan %}
+                    {% include "Dashboard/Shared/Venue/SeatingPlans/seating-plan-sections-modals.html.twig" with {seatingPlan: eventDate.seatingPlan, eventDate: eventDate} %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function () {
+            $(".collapse.show").each(function () {
+                $(this).prev(".card-header").find(".fa").addClass("fa-minus").removeClass("fa-plus");
+            });
+
+            $(".collapse").on('show.bs.collapse', function () {
+                $(this).prev(".card-header").find(".fa").removeClass("fa-plus").addClass("fa-minus");
+            }).on('hide.bs.collapse', function () {
+                $(this).prev(".card-header").find(".fa").removeClass("fa-minus").addClass("fa-plus");
+            });
+        });
+    </script>
+
+{% endblock %}

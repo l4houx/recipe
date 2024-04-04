@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-translations', name: 'dashboard_admin_translation_')]
+#[Route('/%website_dashboard_path%/admin/manage-translations', name: 'dashboard_admin_translation_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class TranslationController extends AdminBaseController
 {

@@ -200,7 +200,7 @@ class Payment
         return $this->order;
     }
 
-    public function setOrder(Order $order): static
+    public function setOrder(?Order $order): static
     {
         $this->order = $order;
 

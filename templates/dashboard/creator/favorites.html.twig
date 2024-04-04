@@ -1,0 +1,40 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'My favorites' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_index": "Dashboard"|trans, "current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    {% if events.getTotalItemCount > 0 %}
+                        <div class="card box">
+                            <div class="card-body">
+                                <div class="row">
+                                    {% for event in events %}
+                                        <div class="col-12 col-sm-6 col-lg-6 mb-3">
+                                            {% include "Global/event-card.html.twig" with {event: event} %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% include "Global/message.html.twig" with { type: "info", message: ('Add events to your favorites by clicking the heart button'|trans), icon: "fas fa-exclamation-circle" } %}
+                    {% endif %}
+                    {{ knp_pagination_render(events, null, {}, {'align': 'center'}) }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+<html lang="{{ app.request.locale }}">
+    <head>
+        <!--[if IE]>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <![endif]-->
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex,nofollow">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>MercadoPago Checkout Pro</title>
+        <link rel="shortcut icon" href="{{ absolute_url(asset(services.getAppLayoutSettings.getFaviconPath)) }}">
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+    </head>
+    <body>
+
+        <div id="wallet_container">
+        </div>
+
+        <script>
+
+            $(document).ready(function () {
+
+                const mercadopago = new MercadoPago('{{ mercadoPagoPublicKey }}', {
+                    locale: '{{ app.request.locale }}'
+                });
+
+                mercadopago.bricks().create("wallet", "wallet_container", {
+                    initialization: {
+                        preferenceId: "{{ preferenceId }}",
+                    },
+                });
+
+            });
+
+        </script>
+
+    </body>
+</html>

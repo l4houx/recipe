@@ -124,7 +124,7 @@ class TestimonialRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $isOnline) {
-            $qb->andWhere('r.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
+            $qb->andWhere('t.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
         }
 
         if ('all' !== $rating) {

@@ -1,0 +1,131 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Manage venues types' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="box shadow-none bg-gray mb-4">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-2 text-center text-lg-left mb-3 mb-lg-0">
+                                <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': venuestypes.getTotalItemCount}) }}</span>
+                            </div>
+                            <div class="col-sm-12 col-lg-4 text-center mb-3 mb-lg-0">
+                                <form>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ "Search"|trans }}</a>
+                                            <div class="dropdown-menu dropdown-menu-arrow p-3" style="min-width:300px;max-width:500px;">
+                                                <label for="keyword">{{ "Keyword"|trans }}</label>
+                                                <input id="keyword" name="keyword" type="text" class="form-control" value="{{ app.request.get('keyword') }}">
+                                            </div>
+                                        </li>
+                                        <li class="list-inline-item ml-3"><button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button></li>
+                                    </ul>
+                                </form>
+                            </div>
+                            <div class="col-sm-12 col-lg-6 text-center text-lg-right">
+                                <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
+                                    <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
+                                        {{ knp_pagination_sortable(venuestypes, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}
+                                        {{ knp_pagination_sortable(venuestypes, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}
+                                    </select>
+                                </label>
+                                <a href="{{ path('dashboard_administrator_venuetype_add') }}" class="btn btn-primary ml-3" data-toggle="tooltip" title="{{'Add a new venue type' | trans}}"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if venuestypes.getTotalItemCount > 0 %}
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-vcenter text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{'Name' | trans}}</th>
+                                                    <th>{{'Venues count' | trans}}</th>
+                                                    <th>{{'Status' | trans}}</th>
+                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                {% for venuetype in venuestypes %}
+
+                                                    <tr>
+                                                        <td>
+                                                            {{ venuetype.name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ venuetype.venues|length }}
+                                                        </td>
+                                                        <td>
+                                                            {% if venuetype.hidden %}
+                                                                <span class="badge badge-danger"><i class="fas fa-eye-slash fa-fw"></i> {{ "Hidden"|trans }}</span>
+                                                            {% else %}
+                                                                <span class="badge badge-success"><i class="fas fa-eye fa-fw"></i> {{ "Visible"|trans }}</span>
+                                                            {% endif %}
+                                                            {% if venuetype.deletedAt %}
+                                                                <br>
+                                                                <br>
+                                                                <span class="badge badge-danger"><i class="fas fa-times fa-fw"></i> {{ "Deleted"|trans }}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="item-action dropdown">
+                                                                <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a href="{{ path('dashboard_administrator_venuetype_edit', { slug : venuetype.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
+                                                                    {% if venuetype.hidden %}
+                                                                        <a href="{{ path('dashboard_administrator_venuetype_show', { slug : venuetype.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye fa-fw text-muted"></i> {{ "Show"|trans }}</a>
+                                                                    {% else %}
+                                                                        <a href="{{ path('dashboard_administrator_venuetype_hide', { slug : venuetype.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye-slash fa-fw text-muted"></i> {{ "Hide"|trans }} </a>
+                                                                    {% endif %}
+                                                                    {% if venuetype.deletedAt %}
+                                                                        <a href="{{ path('dashboard_administrator_venuetype_restore', { slug : venuetype.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-trash-restore fa-fw text-muted"></i> {{ "Restore"|trans }}</a>
+                                                                        <span data-target="{{ path('dashboard_administrator_venuetype_delete', { slug : venuetype.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the venue type PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-trash fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
+                                                                    {% else %}
+                                                                        <a href="{{ path('dashboard_administrator_venuetype_disable', { slug : venuetype.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-times fa-fw text-muted"></i> {{ "Delete"|trans }} </a>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {{ knp_pagination_render(venuestypes, null, {}, {'align': 'center'}) }}
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        {% include "Global/message.html.twig" with { type: "info", message: ('No venue types found'|trans), icon: "fas fa-exclamation-circle" } %}
+
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

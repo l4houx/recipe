@@ -1,0 +1,228 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Reports' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="box shadow-none bg-gray mb-4">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-3 text-center text-lg-left mb-3 mb-lg-0">
+                                <span class="center-lg-y text-muted">{{ "%resultsCount% event date(s) found"|trans({'%resultsCount%': eventDates.getTotalItemCount}) }}</span>
+                            </div>
+                            <div class="col-sm-12 col-lg-5 text-center text-lg-right">
+                                <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
+                                    <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
+                                        {{ knp_pagination_sortable(eventDates, "Start date"|trans ~ ' (' ~ "asc"|trans ~ ')', "e.startdate", {"direction": "asc", "criteria": "e.startdate"}) }}
+                                        {{ knp_pagination_sortable(eventDates, "Start date"|trans ~ ' (' ~ "desc"|trans ~ ')', "e.startdate", {"direction": "desc", "criteria": "e.startdate"}) }}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-sm-12 col-lg-4 text-center text-lg-right">
+                                <a href="#search-filters" class="btn btn-primary has-tooltip" data-toggle="collapse" title="{{ "Toggle display the search filters"|trans }}" aria-expanded="false" aria-controls="search-filters"><i class="fab fa-searchengin fa-lg"></i></a>
+                            </div>
+                            <div id="search-filters" class="col-sm-12 col-lg-12 text-center mb-3 mb-lg-0 collapse show">
+                                <hr>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="event">{{ "Event"|trans }}</label>
+                                            <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="event" name="event" data-url-list="{{ path('get_events') }}" data-minimum-input-length="0">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="reference">{{ "Event date"|trans }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select a specific event date"|trans }}"></i></label>
+                                                {% if app.request.get('event') %}
+                                                    {% set event = app.request.get('event') %}
+                                                {% else %}
+                                                    {% set event = "all" %}
+                                                {% endif %}
+                                            <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="reference" name="reference" data-url-list="{{ path('get_eventdates_by_event', { eventSlug : event }) }}" data-minimum-input-length="0">
+                                        </div>
+                                        {% if is_granted("ROLE_ADMINISTRATOR") %}
+                                            <div class="col-12 col-sm-4 text-left mb-4">
+                                                <label for="organizer">{{ "Organizer"|trans }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "All event dates for an organizer"|trans }}"></i></label>
+                                                <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="organizer" name="organizer" data-url-list="{{ path('get_organizers') }}" data-minimum-input-length="0">
+                                            </div>
+                                        {% endif %}
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="{{ "Search"|trans }}"><i class="fas fa-search"></i></button>
+                                            <button type="reset" class="btn btn-primary" data-toggle="tooltip" title="{{ "Reset"|trans }}"><i class="fas fa-search-minus"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div class="card">
+
+                                {% if eventDates.getTotalItemCount %}
+
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-vcenter">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">{{ "Reference"|trans }}</th>
+                                                    <th>{{'Event date'|trans}}</th>
+                                                        {% if is_granted("ROLE_ADMINISTRATOR") %}
+                                                        <th>{{'Organizer'|trans}}</th>
+                                                        {% endif %}
+                                                    <th>{{'Tickets sold'|trans}}</th>
+                                                    <th>{{'Net sales'|trans}}</th>
+                                                        {% if is_granted("ROLE_ADMINISTRATOR") %}
+                                                        <th>{{'Ticket fees'|trans}}</th>
+                                                        {% endif %}
+                                                    <th>{{'Percentage cut'|trans}}</th>
+                                                    <th>{{'Status'|trans}}</th>
+                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                {% for eventDate in eventDates %}
+
+                                                    <tr>
+                                                        <td class="text-center text-muted text-sm">
+                                                            {{ eventDate.reference }}
+                                                        </td>
+                                                        <td class="text-sm">
+                                                            {{ eventDate.event.name }}
+                                                            <br>
+                                                            {{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                        </td>
+                                                        {% if is_granted("ROLE_ADMINISTRATOR") %}
+                                                            <td class="text-sm">
+                                                                {{ eventDate.event.organizer.name }}
+                                                            </td>
+                                                        {% endif %}
+                                                        <td class="text-sm">
+                                                            {{ eventDate.getOrderElementsQuantitySum }}
+                                                        </td>
+                                                        <td class="text-sm">
+                                                            {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ eventDate.getOrganizerPayoutAmount() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
+                                                        </td>
+                                                        {% if is_granted("ROLE_ADMINISTRATOR") %}
+                                                            <td class="text-sm">
+                                                                {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ eventDate.getTotalTicketFees() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
+                                                            </td>
+                                                        {% endif %}
+                                                        <td class="text-sm">
+                                                            <b>{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ eventDate.getTicketPricePercentageCutSum() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</b>
+                                                        </td>
+
+                                                        <td class="text-sm">
+                                                            <span class="badge badge-{{ eventDate.stringifyStatusClass }}">{{ eventDate.stringifyStatus|trans }}</span>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="item-action dropdown">
+                                                                <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    {% if is_granted("ROLE_ORGANIZER") %}
+                                                                        <a href="{{ path('dashboard_organizer_event', {slug: eventDate.event.slug}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-calendar-alt fa-fw text-muted"></i> {{ "Manage event"|trans }}</a>
+                                                                        <a href="{{ path('dashboard_organizer_event_date_statistics', {eventSlug: eventDate.event.slug, eventDateReference: eventDate.reference}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-chart-line fa-fw text-muted"></i> {{ "View detailed statistics"|trans }}</a>
+                                                                        <a href="{{ path('dashboard_organizer_orders', {event: eventDate.event.slug, eventdate: eventDate.reference}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-cart-arrow-down fa-fw text-muted"></i> {{ "Orders"|trans }}</a>
+                                                                        {% if eventDate.payoutRequested() %}
+                                                                            <a href="{{ path('dashboard_organizer_payout_requests', {eventdate: eventDate.reference}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-file-invoice-dollar fa-fw text-muted"></i> {{ "Payout requests"|trans }}</a>
+                                                                        {% endif %}
+                                                                    {% elseif is_granted("ROLE_ADMINISTRATOR") %}
+                                                                        <a href="{{ path('dashboard_administrator_event', {slug: eventDate.event.slug}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-calendar-alt fa-fw text-muted"></i> {{ "Manage event"|trans }}</a>
+                                                                        <a href="{{ path('dashboard_administrator_event_date_statistics', {eventSlug: eventDate.event.slug, eventDateReference: eventDate.reference}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-chart-line fa-fw text-muted"></i> {{ "View detailed statistics"|trans }}</a>
+                                                                        <a href="{{ path('dashboard_administrator_orders', {event: eventDate.event.slug, eventdate: eventDate.reference}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-cart-arrow-down fa-fw text-muted"></i> {{ "Orders"|trans }}</a>
+                                                                        {% if eventDate.payoutRequested() %}
+                                                                            <a href="{{ path('dashboard_administrator_payout_requests', {eventdate: eventDate.reference}) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-file-invoice-dollar fa-fw text-muted"></i> {{ "Payout requests"|trans }}</a>
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                {% else %}
+                                    {% include "Global/message.html.twig" with { type: "info", message: ('No event dates found'|trans), icon: "fas fa-exclamation-circle" } %}
+                                {% endif %}
+
+                            </div>
+
+                            {{ knp_pagination_render(eventDates, null, {}, {'align': 'center'}) }}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        $(document).ready(function () {
+
+            if (getURLParameter("reference")) {
+                var url = "{{ path('get_eventdate', { reference : "reference" }) }}";
+                url = url.replace("reference", getURLParameter("reference"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_reference').select2('data', {id: data.id, text: data.text});
+                    $('#reference').val(data.id).change();
+                });
+
+            }
+
+            if (getURLParameter("event")) {
+                var url = "{{ path('get_event', { slug : "eventslug", published: "all", elapsed: "all" }) }}";
+                url = url.replace("eventslug", getURLParameter("event"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_event').select2('data', {id: data.slug, text: data.text});
+                    $('#event').val(data.slug).change();
+                });
+
+            }
+
+            if (getURLParameter("organizer")) {
+                var url = "{{ path('get_organizer', { slug : "slug" }) }}";
+                url = url.replace("slug", getURLParameter("organizer"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_organizer').select2('data', {id: data.slug, text: data.text});
+                    $('#organizer').val(data.slug).change();
+                });
+
+            }
+
+        });
+
+    </script>
+
+{% endblock %}

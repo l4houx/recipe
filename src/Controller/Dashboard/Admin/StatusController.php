@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-status', name: 'dashboard_admin_status_')]
+#[Route('/%website_dashboard_path%/admin/manage-status', name: 'dashboard_admin_status_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class StatusController extends AdminBaseController
 {

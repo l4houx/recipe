@@ -23,6 +23,205 @@
 
 {% block content %}
 	<section class="py-8">
+		<div class="container mb-lg-8">
+			<div class="row">
+				<div class="col-lg-8 col-md-7 col-12">
+					<div class="row">
+						<div class="col-md-12 col-12">
+							<div class="mb-8">
+								<h1 class="display-4 fw-semibold">{{ article.title }}</h1>
+								<p class="mb-5 lead"></p>
+								<div class="mb-3">
+									<h2 class="fw-semibold"></h2>
+									<p>{{ article.content |raw | nl2br }}</p>
+								</div>
+								{% if article.tags %}
+									<div class="mt-3">
+										{% for tag in article.tags|split(',') %}
+											<a href="{{ path('help_center', { keyword: tag }) }}" class="btn btn-light btn-xs mb-2">{{ tag }}</a>
+										{% endfor %}
+									</div>
+								{% endif %}
+								<div class="d-md-flex justify-content-between align-items-center">
+									<div class="mb-2 mb-md-0">
+										<p class="mb-0 fs-6">{{ 'Last updated'|trans }} {{ article.updatedAt | ago() }}</p>
+									</div>
+									<div>
+										<h5 class="mb-0">
+											{{ 'Was this article helpful?'|trans }}
+											<a href="#" class="ms-2">
+												<i class="bi bi-hand-thumbs-up"></i>
+											</a>
+											<a href="#" class="ms-2">
+												<i class="bi bi-hand-thumbs-down"></i>
+											</a>
+										</h5>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-5 col-12 mt-6 mt-md-0">
+					<div class="mb-4">
+						<form class="mb-3 position-relative" action="{{ path('help_center') }}">
+							<input type="search" name="keyword" class="form-control" placeholder="{{ "Keyword"|trans }}">
+							<span class="position-absolute end-0 top-0 mt-2 me-3">
+								<i class="bi bi-search fs-5"></i>
+							</span>
+						</form>
+					</div>
+					<div class="card mb-4 border">
+						<div class="card-body p-4">
+							<h3>{{ "Popular"|trans }}</h3>
+							<div class="mt-3">
+								<ul class="list-unstyled mb-0">
+									{% set populararticles = setting.getHelpCenterArticles({"limit": 5, "sort": "views", "otherthan": article.slug}).getQuery().getResult() %}
+									{% for article in populararticles %}
+										<li class="mb-3">
+											<h4 class="lh-lg">
+												<small class="text-muted">{{ article.category.name }}</small>
+												<a href="#" class="text-inherit">
+													{{ article.title }}
+												</a>
+											</h4>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="card mb-4 border">
+						<div class="card-body p-4">
+							<h3>{{ "Categories"|trans }}</h3>
+							<div class="mt-3">
+								<ul class="list-unstyled mb-0 nav nav-x-0 flex-column">
+									{% set helpcentercategories = setting.getHelpCenterCategories({}).getQuery().getResult() %}
+                                    {% for helpcentercategory in helpcentercategories %}
+										<li class="lh-lg mb-1">
+											<i class="bi bi-arrow-right"></i>
+											<a href="{{ path('help_center_category', {slug: helpcentercategory.slug}) }}" class="text-link d-inline">
+												{{ helpcentercategory.name }} {{ helpcentercategory.articles | length }}
+											</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="card mb-4 border">
+						<div class="card-body p-4">
+							<h3>{{ "Tags"|trans }}</h3>
+							<div class="mt-3">
+								{% for tag in setting.getHelpCenterArticles({"selecttags": true}).getQuery().getOneOrNullResult()[1]|split(',') %}
+									<a href="{{ path('help_center', { keyword: tag }) }}" class="btn btn-light btn-xs mb-2">{{ tag }}</a>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{# 
+	<section class="py-8">
+		<div class="container my-lg-8">
+			<div class="row">
+				<div class="offset-md-2 col-md-8 col-12">
+					<div class="mb-8">
+						<h1 class="display-4 fw-semibold">{{ article.title }}</h1>
+						<p class="mb-5 lead"></p>
+						<div class="mb-3">
+							<h2 class="fw-semibold"></h2>
+							<p>{{ article.content |raw | nl2br }}</p>
+						</div>
+						{% if article.tags %}
+							<div class="mt-3">
+								{% for tag in article.tags|split(',') %}
+									<a href="{{ path('help_center', { keyword: tag }) }}" class="btn btn-light btn-xs mb-2">{{ tag }}</a>
+								{% endfor %}
+							</div>
+						{% endif %}
+						<div class="d-md-flex justify-content-between align-items-center">
+							<div class="mb-2 mb-md-0">
+								<p class="mb-0 fs-6">Last updated 2 months ago</p>
+							</div>
+							<div>
+								<h5 class="mb-0">
+									Was this article helpful?
+									<a href="#" class="ms-2">
+										<i class="fe fe-thumbs-up"></i>
+									</a>
+									<a href="#" class="ms-2">
+										<i class="fe fe-thumbs-down"></i>
+									</a>
+								</h5>
+							</div>
+						</div>
+					</div>
+					<div class="card border">
+						<div class="card-body">
+							<h3 class="mb-3 fw-semibold">Related articles</h3>
+							<ul class="list-unstyled mb-0">
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>Billing and Plans Guide</span>
+									</a>
+								</li>
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>Manage Your User Profile</span>
+									</a>
+								</li>
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>Signing in to the dashboard</span>
+									</a>
+								</li>
+								<li class="mb-2">
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>What's New With Annual Payments?</span>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="text-body">
+										<span class="me-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+												<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+											</svg>
+										</span>
+										<span>User Roles and Permissions</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="py-8">
 		<div class="container">
 			<div class="row">
 				<div class="offset-md-2 col-md-8 col-12">
@@ -460,4 +659,5 @@
 			</div>
 		</div>
 	</section>
+#}
 {% endblock %}

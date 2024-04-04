@@ -20,7 +20,7 @@
                                         <i class="bi bi-search"></i>
                                     </span>
                                     <label for="SearchHelp" class="visually-hidden">{{ 'Search Help'|trans }}</label>
-                                    <input type="search" id="SearchHelp" class="form-control ps-6 border-0 py-3 smooth-shadow-md" placeholder="{{ "Enter a question, topic or keyword"|trans }}">
+                                    <input type="search" id="SearchHelp" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6 border-0 py-3 smooth-shadow-md" placeholder="{{ "Search for answers"|trans }}">
                                 </form>
                             </div>
                             <span class="mt-2 d-block">{{ "... or choose a category to quickly find the help you need"|trans }}</span>
@@ -31,6 +31,74 @@
                             </div>
                         </div>
                     </div>
+                    {% if app.request.get('keyword') %}
+                        <div class="row">
+                            {% set searchresults = setting.getHelpCenterArticles({"keyword":app.request.get('keyword')}).getQuery().getResult() %}
+                            <div class="col-lg-6 col-md-12 col-12 my-md-4">
+                                <div class="card border mb-4">
+                                    <div class="card-body p-5">
+                                        <div class="mb-5">
+                                            <p>
+                                                {{ "%resultsCount% result(s) found"|trans({'%resultsCount%': searchresults|length}) ~ " " ~ "for"|trans ~ ' "' ~ app.request.get('keyword') ~ '"' }}
+                                            </p>
+                                        </div>
+                                        {% if searchresults | length %}
+                                            <ul class="list-unstyled">
+                                                {% for article in searchresults %}
+                                                    <li class="mb-2">
+                                                        <a href="{{ path('help_center_article', {slug: article.slug}) }}" class="text-body">
+                                                            {{ article.category.name }}
+                                                            <span class="me-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>{{ article.title }}</span>
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card rounded-3 shadow-sm">
+                            <div class="row">
+                                {% for category in setting.getHelpCenterCategories({"parent": "none"}).getQuery().getResult() %}
+                                    <div class="col-md-4 col-12 border-end-md">
+                                        <div class="border-bottom border-bottom-md-0 mb-3 mb-lg-0">
+                                            <div class="p-5">
+                                                <div class="mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather {{ category.icon }} text-primary">
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                                    </svg>
+                                                    {{ category.name }}
+                                                </div>
+                                                {% for article in setting.getHelpCenterArticles({"category":category.slug, "isFeatured": true}).getQuery().getResult() %}
+                                                    <h3 class="fw-semibold">
+                                                        <a href="{{ path('help_center_article', {slug: article.slug}) }}" class="text-inherit">
+                                                            {{ article.title }}
+                                                        </a>
+                                                    </h3>
+                                                {% endfor %}
+                                                <p></p>
+                                                <a href="{{ path('help_center_category', { slug: category.slug }) }}" class="link-primary fw-semibold">
+                                                    {{ "See more articles"|trans }}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"></path>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </section>
             <section class="mt-n8">

@@ -37,20 +37,20 @@ class HelpCenterController extends AbstractController
     }
 
     #[Route('', name: 'help_center', methods: ['GET'])]
-    public function index(): Response
+    public function helpCenter(): Response
     {
         $faqs = $this->faqRepository->findRand(6);
 
         return $this->render('helpCenter/index.html.twig', compact('faqs'));
     }
 
-    #[Route('/{slug}-{id}', name: 'help_center_category', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
-    public function category(Request $request, string $slug, int $id): Response
+    #[Route('/{slug}', name: 'help_center_category', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function helpCenterCategory(Request $request, string $slug): Response
     {
-        ///** @var HelpCenterCategory $category */
-        //$category = $this->settingService->getHelpCenterCategories(['slug' => $slug])->getQuery()->getOneOrNullResult();
+        /** @var HelpCenterCategory $category */
+        $category = $this->settingService->getHelpCenterCategories(['slug' => $slug])->getQuery()->getOneOrNullResult();
 
-
+        /*
         $category = $this->helpCenterCategoryRepository->find($id);
 
         if ($category->getSlug() !== $slug) {
@@ -59,9 +59,10 @@ class HelpCenterController extends AbstractController
                 'slug' => $category->getSlug(),
             ], 301);
         }
+        */
 
         if (!$category) {
-            $this->addFlash('secondary', $this->translator->trans('The category not be found'));
+            $this->addFlash('danger', $this->translator->trans('The category not be found'));
 
             return $this->redirectToRoute('help_center');
         }
@@ -69,13 +70,13 @@ class HelpCenterController extends AbstractController
         return $this->render('helpCenter/category.html.twig', compact('category'));
     }
 
-    #[Route('/article/{slug}-{id}', name: 'help_center_article', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
-    public function article(Request $request, string $slug, int $id, EntityManagerInterface $em): Response
+    #[Route('/article/{slug}', name: 'help_center_article', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function helpCenterArticle(Request $request, string $slug, EntityManagerInterface $em): Response
     {
-        ///** @var HelpCenterArticle $article */
-        //$article = $this->settingService->getHelpCenterArticles(['slug' => $slug])->getQuery()->getOneOrNullResult();
+        /** @var HelpCenterArticle $article */
+        $article = $this->settingService->getHelpCenterArticles(['slug' => $slug])->getQuery()->getOneOrNullResult();
 
-
+        /*
         $article = $this->helpCenterArticleRepository->find($id);
 
         if ($article->getSlug() !== $slug) {
@@ -84,9 +85,10 @@ class HelpCenterController extends AbstractController
                 'slug' => $article->getSlug(),
             ], 301);
         }
+        */
 
         if (!$article) {
-            $this->addFlash('secondary', $this->translator->trans('The article not be found'));
+            $this->addFlash('danger', $this->translator->trans('The article not be found'));
             return $this->redirectToRoute('help_center');
         }
 
@@ -98,7 +100,7 @@ class HelpCenterController extends AbstractController
     }
 
     #[Route('/support', name: 'help_center_support', methods: ['GET', 'POST'])]
-    public function support(Request $request, EventDispatcherInterface $eventDispatcher): Response
+    public function helpCenterSupport(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
         $data = new HelpCenterSupportDTO();
 
@@ -122,7 +124,7 @@ class HelpCenterController extends AbstractController
     }
 
     #[Route('/faq', name: 'help_center_faq', methods: ['GET'])]
-    public function faq(Request $reques): Response
+    public function helpCenterFaq(Request $reques): Response
     {
         $faqs = $this->faqRepository->findAlls();
 

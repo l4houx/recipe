@@ -11,9 +11,11 @@ Installation en cours:
 
     ☐ composer require knplabs/doctrine-behaviors Not compatible with sf7
 
-    ☐ composer require dompdf/dompdf phpoffice/phpspreadsheet php-http/httplug-bundle
+    ✔ composer require dompdf/dompdf @done(24-04-04 16:14)
 
-    ☐ composer require cmen/google-charts-bundle
+    ☐ composer require phpoffice/phpspreadsheet php-http/httplug-bundle
+
+    ✔ composer require cmen/google-charts-bundle @done(24-04-04 16:15)
 
     ☐ composer require ninsuo/symfony-collection
 

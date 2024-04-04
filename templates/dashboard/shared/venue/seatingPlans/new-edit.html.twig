@@ -1,0 +1,138 @@
+{% extends "Global/layout.html.twig" %}
+
+{% form_theme form 'Global/jquery.collection.html.twig' %}
+
+{% set pagetitle = 'Add a new seating plan' | trans %}
+
+{% if seatingPlan.id %}{% set pagetitle = 'Update the seating plan' | trans %}{% endif %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+
+        .container {
+            max-width: none;
+            width: 100% !important;
+            padding-right: 15px !important;
+            padding-left: 15px !important;
+            margin-right: auto !important;
+            margin-left: auto !important;
+        }
+
+        #seating-plan-designer-container .seating-plan-section, #seating-plan-designer-container .seating-plan-stage {
+            width: 100px;
+            height: 100px;
+            display:block;
+            border: 1px solid #c5c5c5;
+            background: #f6f6f6;
+            font-weight: normal;
+            color: #454545;
+            padding: 0.5em 0;
+            position: absolute;
+        }
+
+        #seating-plan-designer-container {
+            width: 1300px;
+            height: 673px;
+            background-size: 37px 42px;
+            background-image: linear-gradient(to right, #eee 1px, transparent 1px), linear-gradient(to bottom, #eee 1px, transparent 1px);
+            border: none;
+            position: relative;
+        }
+
+        #seating-plan-designer-container .seating-plan-section-name,  #seating-plan-designer-container .seating-plan-stage-name {
+            border: 1px solid #dddddd;
+            background: #e9e9e9;
+            color: #333333;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+        }
+
+        .seating-plan-section-row {
+            border: 1px dashed #aaa;
+            margin: 30px 0;
+            padding: 35px 15px 15px;
+            position: relative;
+        }
+
+        .seating-plan-section-row .delete-row-icon {
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            cursor: pointer;
+        }
+
+        .seating-plan-section-row .row-position-container {
+            position: absolute;
+            left: 1px;
+            top: 2px;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans),  "dashboard_organizer_venue": ('my venues' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form) }}
+                            {{ form_row(form.translations) }}
+
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label class="col-form-label">{{ "Seating plan designer"|trans }}</label>
+
+                                    {% include "Global/message.html.twig" with { type: "info", message: ('<ul><li>Make sure to place the stage and the sections within the designer</li><li>Once assigned to an event date, a seating plan can not be edited anymore, you can duplicate it and create a new version and apply the desired changes to the duplicated version.</li></ul>'|trans), icon: "fas fa-exclamation-circle" } %}
+
+                                    <button id="add-new-section" type="button" class="btn btn-sm"><i class="fas fa-plus"></i> {{ "Add a new section"|trans }}</button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div id="seating-plan-designer-container" {% if app.request.get('_route') == 'dashboard_organizer_venue_seating_plans_edit' %}data-design-to-edit="{{ seatingPlan.design|json_encode() }}"{% endif %} class="ui-widget-content"></div>
+                                </div>
+                            </div>
+
+
+                            {{ form_row(form.save) }}
+                            {{ form_end(form) }}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        $(document).ready(function () {
+
+
+        });
+
+    </script>
+
+
+{% endblock %}

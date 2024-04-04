@@ -1,0 +1,271 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Statistics'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% if is_granted("ROLE_ADMINISTRATOR") %}
+        {% set navigation = [{"dashboard_administrator_event": ("Manage events"|trans), (path("dashboard_administrator_event", {slug: eventDate.event.slug})): eventDate.event.name, "current":(pagetitle)}] %}
+    {% elseif is_granted("ROLE_ORGANIZER") %}
+        {% set navigation = [{"dashboard_organizer_event": ("My events"|trans), (path("dashboard_organizer_event", {slug: eventDate.event.slug})): eventDate.event.name, "current":(pagetitle)}] %}
+    {% endif %}
+
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4><i class="dropdown-icon fas fa-chart-line fa-fw text-muted"></i> {{ eventDate.event.name }}</h4>
+                            <p><span class="badge badge-{{ eventDate.stringifyStatusClass }} mt-2">{{ eventDate.stringifyStatus|trans }}</span></p>
+                            <p>{{ "When"|trans }}: {{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</p>
+                            <p>{{ "Where"|trans }}: {% if eventDate.venue %} {{ eventDate.venue.name ~ ": " ~ eventDate.venue.stringifyAddress }}</p>{% else %}{{ "Online"|trans }}{% endif %}
+                            <p><a href="#event-date-details" class="btn btn-primary has-tooltip btn-sm" data-toggle="collapse" title="{{ "Toggle display the event date details"|trans }}" aria-expanded="false" aria-controls="event-date-details"><i class="fas fa-list"></i></a></p>
+                        </div>
+                        <div class="card-body">
+
+                            <div id="event-date-details" class="row mb-5 collapse">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            {{ "Details"|trans }}
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless table-striped table-hover table-sm mb-0">
+                                                    <tbody>
+                                                        {% if eventDate.payoutRequested %}
+                                                            <tr>
+                                                                <td width="30%">{{ "Payout request"|trans }}</td>
+                                                                <td>
+                                                                    <a href="{{ path("dashboard_organizer_payout_requests", {eventdate: eventDate.reference}) }}"><i class="fas fa-file-invoice-dollar"></i> {{ "View details"|trans }}</a>
+                                                                </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                        <tr>
+                                                            <td width="30%">{{ "Status"|trans }}</td>
+                                                            <td>
+                                                                <span class="badge badge-{{ eventDate.stringifyStatusClass }}">{{ eventDate.stringifyStatus|trans }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ "Reference"|trans }}</td>
+                                                            <td>{{ eventDate.reference }}</td>
+                                                        </tr>
+                                                        {% if eventDate.venue %}
+                                                            <tr>
+                                                                <td width="50%">{{ "Venue"|trans }}</td>
+                                                                <td>{{ eventDate.venue.name }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{{ "Address"|trans }}</td>
+                                                                <td>{{ eventDate.venue.stringifyAddress }}</td>
+                                                            </tr>
+                                                        {% else %}
+                                                            <tr>
+                                                                <td width="50%">{{ "Where"|trans }}</td>
+                                                                <td>{{ "Online"|trans }}</td>
+                                                            </tr>
+                                                        {% endif %}
+                                                        <tr>
+                                                            <td>{{ "Tickets types"|trans }}</td>
+                                                            <td>{{ eventDate.tickets|length }}</td>
+                                                        </tr>
+                                                        {% if eventDate.startdate|length %}
+                                                            <tr>
+                                                                <td>{{ "Start date"|trans }}</td>
+                                                                <td>{{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}}</td>
+                                                            </tr>
+                                                        {% endif %}
+                                                        {% if eventDate.enddate|length %}
+                                                            <tr>
+                                                                <td>{{ "End date"|trans }}</td>
+                                                                <td>{{ eventDate.enddate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}}</td>
+                                                            </tr>
+                                                        {% endif %}
+                                                        {% if eventDate.scanners|length %}
+                                                            <tr>
+                                                                <td>{{ "Scanners"|trans }}</td>
+                                                                <td>{{ eventDate.displayScannersNames }}</td>
+                                                            </tr>
+                                                        {% endif %}
+                                                        {% if eventDate.pointofsales|length %}
+                                                            <tr>
+                                                                <td>{{ "Point of sales"|trans }}</td>
+                                                                <td>{{ eventDate.displayPosNames }}</td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5 mt-5 pl-2 pr-2">
+                                {% if not eventDate.isFree %}
+                                    <div class="col-md-3 col-sm-6 col-12 p-1">
+                                        <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                                            <i class="fas fa-money-bill"></i>
+                                            <h4>{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}<b class="counter">{{ eventDate.getSales }}</b>{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</h4>
+                                            <h5 class="mb-0">{{ "Total gross sales"|trans }}</h5>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="col-md-3 col-sm-6 col-12 p-1">
+                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        <h4><b class="counter">{{ eventDate.getOrderElementsQuantitySum }}</b></h4>
+                                        <h5 class="mb-0">{{ "Tickets sold"|trans }}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-12 p-1">
+                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                                        <i class="far fa-eye"></i>
+                                        <h4><b class="counter">{{ eventDate.event.views }}</b></h4>
+                                        <h5 class="mb-0">{{ "Event views"|trans }}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-12 p-1">
+                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                                        <i class="fas fa-star"></i>
+                                        <h4><b class="counter">{{ eventDate.event.reviews|length }}</b></h4>
+                                        <h5 class="mb-0">{{ "Attendees reviews"|trans }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5 pl-2 pr-2">
+                                <div class="col-md-3 col-sm-6 col-12 p-1">
+                                    <p class="text-center mt-2"><small class="text-muted">{{ "Total tickets sales"|trans }}</small></p>
+                                    <div class="mx-auto chart-circle chart-circle" data-value="{{ eventDate.getTotalSalesPercentage / 100 }}">
+                                        <div class="chart-circle-value">{{ eventDate.getTotalSalesPercentage }}%</div>
+                                    </div>
+                                    <p class="text-center mb-1"><small class="text-muted font-weight-bold">{{ eventDate.getOrderElementsQuantitySum }} / {{ eventDate.getTicketsQuantitySum }}</small></p>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-12 p-1">
+                                    <p class="text-center mt-2"><small class="text-muted">{{ "Total attendees check-in"|trans }}</small></p>
+                                    <div class="mx-auto chart-circle chart-circle" data-value="{{ eventDate.getTotalCheckInPercentage / 100 }}">
+                                        <div class="chart-circle-value">{{ eventDate.getTotalCheckInPercentage }}%</div>
+                                    </div>
+                                    <p class="text-center"><small class="text-muted font-weight-bold">{{ eventDate.getScannedTicketsCount }} / {{ eventDate.getOrderElementsQuantitySum }}</small></p>
+                                </div>
+                                {% if eventDate.getOrderElementsQuantitySum %}
+                                    <div class="col-md-3 col-sm-6 col-12 p-1">
+                                        <div id="ticketsSoldByChannelPieChart">
+                                        </div>
+                                    </div>
+                                    {% if not eventDate.isFree %}
+                                        <div class="col-md-3 col-sm-6 col-12 p-1">
+                                            <div id="grossSalesByChannelPieChart">
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if eventDate.getOrderElementsQuantitySum(1, "all", "ROLE_POINTOFSALE") %}
+                                        {% if ticketsSoldPerPointOfSalePieChart is not null %}
+                                            <div class="col-md-3 col-sm-6 col-12 p-1">
+                                                <div id="ticketsSoldPerPointOfSalePieChart">
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if grossSalesPerPointOfSalePieChart is not null and not eventDate.isFree %}
+                                            <div class="col-md-3 col-sm-6 col-12 p-1">
+                                                <div id="grossSalesPerPointOfSalePieChart">
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+
+                            {% if eventDate.getOrderElementsQuantitySum %}
+                                <div class="row mb-5">
+                                    <div class="col-12">
+                                        <div id="ticketsSalesByDateLineChart">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% for eventTicket in eventDate.tickets %}
+                                <div class="row mb-5">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6 class="mb-0 d-inline">
+                                                    <b>
+                                                        <i class="dropdown-icon fas fa-chart-line fa-fw text-muted"></i> {{ eventTicket.name }} ({{ eventTicket.reference }}) -
+                                                        <span class="badge badge-{{ eventTicket.stringifyStatusClass }}">{{ eventTicket.stringifyStatus|trans }}</span> -
+                                                        {{ eventTicket.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ eventTicket.getSalePrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+                                                    </b>
+                                                </h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {% if not eventTicket.free %}
+                                                            <div class="bg-primary rounded p-4 text-center text-white mb-1 position-relative counter-box">
+                                                                <i class="fas fa-money-bill"></i>
+                                                                <h4>{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}<b class="counter">{{ eventTicket.getSales }}</b>{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</h4>
+                                                                <h5 class="mb-0">{{ "Gross sales"|trans }}</h5>
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                                                            <i class="fas fa-shopping-cart"></i>
+                                                            <h4>{{ eventTicket.cartelements|length }}</h4>
+                                                            <h5 class="mb-0">{{ "Still in cart"|trans }}</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col p-0">
+                                                        <p class="text-center mt-2"><small class="text-muted">{{ "Tickets sales"|trans }}</small></p>
+                                                        <div class="mx-auto chart-circle chart-circle" data-value="{{ eventTicket.getSalesPercentage / 100}}">
+                                                            <div class="chart-circle-value">{{ eventTicket.getSalesPercentage }}%</div>
+                                                        </div>
+                                                        <p class="text-center mb-1"><small class="text-muted font-weight-bold">{{ eventTicket.getOrderElementsQuantitySum }} / {{ eventTicket.quantity }}</small></p>
+                                                    </div>
+                                                    <div class="col p-0">
+                                                        <p class="text-center mt-2"><small class="text-muted">{{ "Attendees check-in"|trans }}</small></p>
+                                                        <div class="mx-auto chart-circle chart-circle" data-value="{{ eventTicket.getTotalCheckInPercentage / 100 }}">
+                                                            <div class="chart-circle-value">{{ eventTicket.getTotalCheckInPercentage }}%</div>
+                                                        </div>
+                                                        <p class="text-center"><small class="text-muted font-weight-bold">{{ eventTicket.getScannedTicketsCount }} / {{ eventTicket.getOrderElementsQuantitySum }}</small></p>
+                                                    </div>
+                                                    {% if eventTicket.getSalesPercentage %}
+                                                        <div class="col p-0">
+                                                            <div id="ticketsSoldByChannelPieChart{{loop.index}}">
+                                                            </div>
+                                                        </div>
+                                                        {% if not eventTicket.free %}
+                                                            <div class="col p-0">
+                                                                <div id="grossSalesByChannelPieChart{{loop.index}}">
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">        {{ gc_language(app.request.locale) }}        {% if ticketsSoldByChannelPieChart is not null %}            {{ gc_draw(ticketsSoldByChannelPieChart, 'ticketsSoldByChannelPieChart') }}        {% endif %}        {% if grossSalesByChannelPieChart is not null %}            {{ gc_draw(grossSalesByChannelPieChart, 'grossSalesByChannelPieChart') }}        {% endif %}        {% if ticketsSalesByDateLineChart is not null %}            {{ gc_draw(ticketsSalesByDateLineChart, 'ticketsSalesByDateLineChart') }}        {% endif %}        {% for ticketsSoldByChannelPieChartFromArray in ticketsSoldByChannelPieChartsArray if ticketsSoldByChannelPieChartFromArray is not null %}            {{ gc_draw(ticketsSoldByChannelPieChartFromArray, 'ticketsSoldByChannelPieChart'~loop.index) }}        {% endfor %}        {% for ticketsGrossSalesByChannelPieChartFromArray in ticketsGrossSalesByChannelPieChartsArray if ticketsGrossSalesByChannelPieChartFromArray is not null %}            {{ gc_draw(ticketsGrossSalesByChannelPieChartFromArray, 'grossSalesByChannelPieChart'~loop.index) }}        {% endfor %}        {% if eventDate.getOrderElementsQuantitySum(1, "all", "ROLE_POINTOFSALE") %}            {% if ticketsSoldPerPointOfSalePieChart is not null %}                {{ gc_draw([ticketsSoldPerPointOfSalePieChart], ['ticketsSoldPerPointOfSalePieChart']) }}            {% endif %}            {% if grossSalesPerPointOfSalePieChart is not null %}                {{ gc_draw([grossSalesPerPointOfSalePieChart], ['grossSalesPerPointOfSalePieChart']) }}            {% endif %}        {% endif %}    </script>
+{% endblock %}

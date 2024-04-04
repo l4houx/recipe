@@ -1,0 +1,118 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Stripe payout' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block stylesheets %}
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <style>
+
+        #card-errors {
+            margin-top: 1.5rem;
+            color: #e5424d;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_organizer_payout_requests": ("Payout requests"|trans), "current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+                            <div class="payment-form-wrapper">
+                                <form method="post" id="payment-form">
+                                    <div class="">
+                                        <label for="card-element" class="mb-5">
+                                            {{ "Credit or debit card"|trans }}
+                                        </label>
+                                        <div id="card-element">
+                                        </div>
+
+                                        <div id="card-errors" role="alert"></div>
+                                    </div>
+
+                                    <button class="btn btn-primary mt-5 mx-auto"><i class="fas fa-money-check-alt"></i> {{ "Submit payment"|trans }}</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        var stripe = Stripe('{{ stripePublishableKey }}');
+        var elements = stripe.elements({
+            locale: "{{ app.request.get('_locale') }}"
+        });
+
+        var style = {
+            base: {
+                color: '#303238',
+                fontSize: '16px',
+                fontFamily: '"Open Sans", sans-serif',
+                fontSmoothing: 'antialiased',
+                '::placeholder': {
+                    color: '#CFD7DF',
+                },
+                border: '1px solid #ddd'
+            },
+            invalid: {
+                color: '#e5424d',
+                ':focus': {
+                    color: '#303238',
+                },
+            },
+        };
+
+        var card = elements.create('card', {style: style});
+
+        card.mount('#card-element');
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    stripeTokenHandler(result.token);
+                }
+            });
+        });
+
+        function stripeTokenHandler(token) {
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            form.submit();
+        }
+
+    </script>
+{% endblock %}

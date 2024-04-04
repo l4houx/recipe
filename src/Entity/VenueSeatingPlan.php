@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
 use App\Repository\VenueSeatingPlanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class VenueSeatingPlan
 {
     use HasIdGedmoNameSlugAssertTrait;
+    use HasGedmoTimestampTrait;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $design = null;

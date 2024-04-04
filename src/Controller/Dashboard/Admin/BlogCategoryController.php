@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route(path: '/%website_dashboard_path%/main-panel/manage-blogs', name: 'dashboard_admin_blog_category_')]
+#[Route(path: '/%website_dashboard_path%/admin/manage-blogs', name: 'dashboard_admin_blog_category_')]
 #[IsGranted(HasRoles::TEAM)]
 class BlogCategoryController extends AdminBaseController
 {

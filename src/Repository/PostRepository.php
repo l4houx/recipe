@@ -219,4 +219,52 @@ class PostRepository extends ServiceEntityRepository
             return 2 <= $term->length();
         });
     }
+
+    /**
+     * Returns the blog posts after applying the specified search criterias.
+     *
+     * @param string   $selecttags
+     * @param bool     $isOnline
+     * @param string   $keyword
+     * @param string   $slug
+     * @param Category $category
+     * @param int      $limit
+     * @param string   $sort
+     * @param string   $order
+     * @param string   $otherthan
+     *
+     * @return QueryBuilder<Post> (BlogController)
+     */
+    public function getBlogPosts($selecttags, $isOnline, $keyword, $slug, $category, $limit, $sort, $order, $otherthan): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder("p");
+
+        if (!$selecttags) {
+            $qb->select("p");
+            if ($isOnline !== "all") {
+                $qb->andWhere("p.isOnline = :isOnline")->setParameter("isOnline", $isOnline);
+            }
+            if ($keyword !== "all") {
+                $qb->andWhere("p.title LIKE :keyword or :keyword LIKE p.title or :keyword LIKE p.content or p.content LIKE :keyword or :keyword LIKE p.tags or p.tags LIKE :keyword")->setParameter("keyword", "%" . $keyword . "%");
+            }
+            if ($slug !== "all") {
+                $qb->andWhere("p.slug = :slug")->setParameter("slug", $slug);
+            }
+            if ($category !== "all") {
+                $qb->leftJoin("p.category", "category");
+                $qb->andWhere("category.slug = :category")->setParameter("category", $category);
+            }
+            if ($limit !== "all") {
+                $qb->setMaxResults($limit);
+            }
+            if ($otherthan !== "all") {
+                $qb->andWhere("p.id != :otherthan")->setParameter("otherthan", $otherthan);
+            }
+            $qb->orderBy("p." . $sort, $order);
+        } else {
+            $qb->select("SUBSTRING_INDEX(GROUP_CONCAT(p.tags SEPARATOR ','), ',', 8)");
+        }
+
+        return $qb;
+    }
 }

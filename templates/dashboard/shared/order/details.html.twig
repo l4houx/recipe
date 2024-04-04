@@ -1,0 +1,404 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Order details'|trans %}
+
+{% if is_granted('ROLE_ADMINISTRATOR') %}
+    {% set parentpagetitle = 'Manage orders'|trans %}
+    {% set parentpagelink = path('dashboard_administrator_orders') %}
+{% elseif is_granted('ROLE_ORGANIZER') %}
+    {% set parentpagetitle = 'Recent orders'|trans %}
+    {% set parentpagelink = path('dashboard_organizer_orders') %}
+{% elseif is_granted('ROLE_ATTENDEE') %}
+    {% set parentpagetitle = 'My tickets'|trans %}
+    {% set parentpagelink = path('dashboard_attendee_orders') %}
+{% elseif is_granted('ROLE_POINTOFSALE') %}
+    {% set parentpagetitle = 'My orders'|trans %}
+    {% set parentpagelink = path('dashboard_pointofsale_orders') %}
+{% endif %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_index": ("Dashboard"|trans), (parentpagelink):parentpagetitle}, {"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4><span class="badge badge-{{ order.getStatusClass }}">{{ order.stringifyStatus|trans }}</span> {{ "Order"|trans ~ " #" ~ order.reference ~ " " ~ ("placed on"|trans) ~ " " ~ order.createdAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</h4>
+                                </div>
+                                <div class="card-body">
+
+                                    {% if order.note %}
+                                        {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info', message: order.note } %}
+                                    {% endif %}
+
+                                    {% if order.paymentGateway and order.paymentGateway.instructions %}
+                                        {% include "Global/message.html.twig" with { type: "info", message: (order.paymentGateway.instructions|raw), icon: "fas fa-info-circle" } %}
+                                    {% endif %}
+
+                                    <div class="row mb-3">
+
+                                        {% if not is_granted('ROLE_ORGANIZER') and order.payment and order.status == 1 and order.getOrderElementsPriceSum(true) > 0 %}
+
+                                            <div class="col-12 col-lg-6">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        {{ "Payment"|trans }}
+                                                    </div>
+                                                    <div class="card-body p-4">
+
+                                                        {% if status %}
+                                                            <span class="badge badge-{{order.getPaymentStatusClass(status.value)}}">{{ status.value|capitalize|trans }}</span>
+                                                        {% endif %}
+                                                        {% if order.payment.details["TIMESTAMP"] is defined %}
+                                                            {{ order.payment.details["TIMESTAMP"]|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                        {% elseif order.payment.details["created"] is defined %}
+                                                            {{ order.payment.details["created"]|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                        {% else %}
+                                                            {{ order.payment.updatedAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                        {% endif %}
+
+                                                        <button data-toggle="collapse" data-target="#payment-details" class="btn btn-default btn-sm float-right"><i class="fas fa-plus"></i> {{ "More details"|trans }}</button>
+
+                                                        <div id="payment-details" class="collapse mt-3">
+                                                            {% if order.paymentgateway %}
+                                                                <dl class="dlist-align">
+                                                                    <dt>{{ "Payment method"|trans }}</dt>
+                                                                    <dd>
+                                                                        {{ order.paymentgateway.name }}
+                                                                        <br>
+                                                                        <img src="{{  asset(order.paymentgateway.getLogoPath) }}" class="img-50-50 mt-2" />
+                                                                    </dd>
+                                                                </dl>
+                                                            {% endif %}
+                                                            {% if order.paymentgateway.factoryName == "paypal_express_checkout" %}
+                                                                {% if order.payment.details["DESC"] is defined %}
+                                                                    <dl class="dlist-align">
+                                                                        <dt>{{ "Description"|trans }}</dt>
+                                                                        <dd>{{ order.payment.details["DESC"] }}</dd>
+                                                                    </dl>
+                                                                {% endif %}
+                                                                {% if order.payment.details["AMT"] is defined %}
+                                                                    <dl class="dlist-align">
+                                                                        <dt>{{ "Amount"|trans }}</dt>
+                                                                        <dd>{{ order.payment.details["AMT"]|number_format(2, '.', ',') }}</dd>
+                                                                    </dl>
+                                                                {% endif %}
+                                                                {% if order.payment.details["CURRENCYCODE"] is defined %}
+                                                                    <dl class="dlist-align">
+                                                                        <dt>{{ "Currency"|trans }}</dt>
+                                                                        <dd>{{ order.payment.details["CURRENCYCODE"] }}</dd>
+                                                                    </dl>
+                                                                {% endif %}
+                                                            {% elseif order.paymentgateway.factoryName == "offline" %}
+                                                                {% if order.payment.details["description"] is defined %}
+                                                                    <dl class="dlist-align">
+                                                                        <dt>{{ "Description"|trans }}</dt>
+                                                                        <dd>{{ order.payment.details["description"] }}</dd>
+                                                                    </dl>
+                                                                {% endif %}
+                                                                {% if order.payment.details["amount"] is defined %}
+                                                                    <dl class="dlist-align">
+                                                                        <dt>{{ "Amount"|trans }}</dt>
+                                                                        <dd>{{ order.payment.details["amount"]|slice(0, order.payment.details["amount"]|length - 2) }}.{{ order.payment.details["amount"]|slice(order.payment.details["amount"]|length - 2, order.payment.details["amount"]|length) }}</dd>
+                                                                    </dl>
+                                                                {% endif %}
+                                                                {% if order.payment.details["currency"] is defined %}
+                                                                    <dl class="dlist-align">
+                                                                        <dt>{{ "Currency"|trans }}</dt>
+                                                                        <dd>{{ order.payment.details["currency"] }}</dd>
+                                                                    </dl>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        <div class="col-12 {% if not is_granted('ROLE_ORGANIZER') and order.payment and order.status == 1 and order.getOrderElementsPriceSum(true) > 0 %}col-lg-6{% endif %}">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    {{ "Attendee"|trans }} / {{ "Point of sale"|trans }}
+                                                </div>
+                                                <div class="card-body p-4">
+                                                    {% include "Global/user-avatar.html.twig" with { user: order.user } %}
+                                                    {{ order.user.getCrossRoleName }}
+                                                    {% if is_granted('ROLE_ADMINISTRATOR') %}
+                                                        <button class="btn btn-sm ml-3 ajax-loading" data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_administrator_user_information', { slug : order.user.slug }) }}" data-toggle="tooltip" title="{{ "User information"|trans }}"><i class="dropdown-icon fas fa-file-alt"></i></button>
+                                                        {% endif %}
+                                                        {% if order.payment and order.payment.hasBillingInformation %}
+                                                        <button data-toggle="collapse" data-target="#billing-information" class="btn btn-default btn-sm has-tooltip ml-3" title="{{ "Billing information"|trans }}"><i class="fas fa-plus"></i></button>
+                                                        <div id="billing-information" class="collapse mt-3">
+                                                            {% if order.payment.firstname and order.payment.lastname %}
+                                                                <dl class="dlist-align">
+                                                                    <dt>{{ "Full name"|trans }}</dt>
+                                                                    <dd>{{ order.payment.firstname ~ " " ~ order.payment.lastname }}</dd>
+                                                                </dl>
+                                                            {% endif %}
+                                                            {% if order.payment.clientEmail %}
+                                                                <dl class="dlist-align">
+                                                                    <dt>{{ "Email"|trans }}</dt>
+                                                                    <dd>{{ order.payment.clientEmail }}</dd>
+                                                                </dl>
+                                                            {% endif %}
+                                                            {% if order.payment.stringifyAddress %}
+                                                                <dl class="dlist-align">
+                                                                    <dt>{{ "Address"|trans }}</dt>
+                                                                    <dd>{{ order.payment.stringifyAddress }}</dd>
+                                                                </dl>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <div class="table-responsive">
+                                                <table class="table table-hover shopping-cart-wrap">
+                                                    <thead class="text-muted">
+                                                        <tr>
+                                                            <th scope="col">{{ "Event / Ticket"|trans }}</th>
+                                                            <th scope="col" width="100">{{ "Price"|trans }}</th>
+                                                            <th scope="col" width="100">{{ "Quantity"|trans }}</th>
+                                                            <th scope="col" class="text-right" width="100">{{ "Subtotal"|trans }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for orderelement in order.orderelements %}
+
+                                                            {% if is_granted('ROLE_ATTENDEE') or is_granted('ROLE_ADMINISTRATOR') or (is_granted('ROLE_ORGANIZER') and orderelement.belongsToOrganizer(app.user.organizer.slug)) or (is_granted("ROLE_POINTOFSALE") and order.user == app.user) %}
+
+                                                                <tr>
+                                                                    <td>
+                                                                        {% include "Global/event-preview-horizontal.html.twig" with { eventticket: orderelement.eventticket } %}
+
+                                                                        {% if orderelement.reservedSeats and orderelement.reservedSeats|length > 0 %}
+                                                                            <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
+                                                                            <ul class='list-check'>
+                                                                                {% for reservedSeat in orderelement.reservedSeats %}
+                                                                                    <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
+                                                                                    {% endfor %}
+                                                                            </ul>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="price-wrap">
+                                                                            {{ orderelement.eventticket.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ orderelement.displayUnitPrice ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ orderelement.quantity }}
+                                                                    </td>
+                                                                    <td class="text-right">
+                                                                        <div class="price-wrap">
+                                                                            <var class="price">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.getPrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+
+                                                            {% endif %}
+
+                                                            {% if is_granted('ROLE_ATTENDEE') %}
+                                                                <tr>
+                                                                    <td colspan="4">
+                                                                        <a href="{{ path('event', { slug: orderelement.eventticket.eventdate.event.slug }) }}" class="btn btn-default btn-sm"><i class="fas fa-ticket-alt"></i> {{ "Buy more tickets"|trans }}</a>
+                                                                        <a href="{{ path('dashboard_attendee_reviews_add', { slug: orderelement.eventticket.eventdate.event.slug }) }}" class="btn btn-default btn-sm ml-3"><i class="far fa-star"></i> {{ "Leave a review"|trans }}</a>
+                                                                        <a href="{{ path('organizer', { slug: orderelement.eventticket.eventdate.event.organizer.slug }) }}" class="btn btn-default btn-sm ml-3"><i class="far fa-id-card"></i> {{ "Organizer"|trans }}</a>
+                                                                    </td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        {% endfor %}
+
+                                                    </tbody>
+                                                    <tfoot>
+                                                        {% if is_granted("ROLE_ADMNISTRATOR") or is_granted("ROLE_ATTENDEE") %}
+                                                            <tr>
+                                                                <td colspan="5" class="text-right">
+                                                                    <div class="price-wrap">
+                                                                        <var class="price">{{ "Tickets"|trans }}: {{ services.getSetting('currency_position') == 'left' ? order.currencySymbol() : '' }}{{ order.getOrderElementsPriceSum() }}{{ services.getSetting('currency_position') == 'right' ? order.currencySymbol() : '' }} ({{ order.getOrderElementsQuantitySum }} {{ "ticket(s)"|trans }})</var>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5" class="text-right">
+                                                                    <div class="price-wrap">
+                                                                        <var class="price">{{ "Fees"|trans }}: {{ services.getSetting('currency_position') == 'left' ? order.currencySymbol() : '' }}{{ order.getTotalFees() }}{{ services.getSetting('currency_position') == 'right' ? order.currencySymbol() : '' }}</var>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="5" class="text-right">
+                                                                    <div class="price-wrap">
+                                                                        <var class="price">{{ "Total"|trans }}: <strong>{{ services.getSetting('currency_position') == 'left' ? order.currencySymbol() : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ services.getSetting('currency_position') == 'right' ? order.currencySymbol() : '' }}</strong></var>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                        <tr>
+                                                            <td class="pt-5 text-right" colspan="4">
+
+                                                                {% if is_granted('ROLE_ADMINISTRATOR') %}
+
+                                                                    {% if order.status == 0 or order.status == 1 %}
+                                                                        <button id="order-cancel-button" data-target="{{ path('dashboard_administrator_order_cancel', { reference : order.reference }) }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to cancel this order (this action cannot be undone)"|trans }}"><i class="fas fa-window-close fa-fw"></i> {{ "Cancel"|trans }}</button>
+                                                                    {% endif %}
+
+                                                                    {% if order.deletedAt %}
+                                                                        <button data-target="{{ path('dashboard_administrator_order_delete', { reference : order.reference, forceRedirect: 1 }) }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to delete the order and all its related information (payment details, tickets...)"|trans ~ " " ~ "PERMANENTLY"|trans }}"><i class="fas fa-trash fa-fw"></i> {{ "Delete permanently"|trans }}</button>
+                                                                        <a href="{{ path('dashboard_administrator_order_restore', { reference : order.reference }) }}" class="btn btn-outline-primary mr-3"><i class="fas fa-trash-restore fa-fw"></i> {{ "Restore"|trans }}</a>
+                                                                    {% else %}
+                                                                        <button data-target="{{ path('dashboard_administrator_order_delete', { reference : order.reference }) }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to delete the order and all its related information (payment details, tickets...)"|trans }}"><i class="fas fa-times fa-fw"></i> {{ "Delete"|trans }} </button>
+                                                                    {% endif %}
+
+                                                                    {% if order.status == 1 %}
+                                                                        <button data-target="{{ path('dashboard_administrator_order_resend_confirmation_email', { reference : order.reference }) }}" data-initial-email-address="{{ order.payment.clientEmail }}" class="btn btn-outline-primary mr-3 resend-confirmation-email-button" data-confirmation-text="{{ "If you need to send the confirmation email to a different email address, you can change it before submitting"|trans }}"><i class="far fa-envelope fa-fw"></i> {{ "Resend confirmation email"|trans }}</button>
+                                                                    {% endif %}
+
+                                                                    {% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}
+                                                                        <span data-target="{{ path('dashboard_administrator_order_validate', { reference : order.reference }) }}" class="btn btn-outline-primary requires-confirmation" data-confirmation-text="{{ "You are about to validate this order, generate the tickets and send a confirmation email to the attendee"|trans }}"><i class="dropdown-icon fas fa-check fa-fw"></i> {{ "Validate"|trans }}</span>
+                                                                    {% endif %}
+
+                                                                {% endif %}
+
+                                                                {% if is_granted('ROLE_ATTENDEE') and not order.deletedAt %}
+                                                                    <button class="btn btn-outline-primary mr-3 cursor-pointer" data-toggle="modal" data-target="#order-{{ order.reference }}-contactOrganizer"><i class="dropdown-icon fas fa-envelope fa-fw"></i> {{ "Contact the organizer"|trans }}</button>
+                                                                {% endif %}
+
+                                                                {% if is_granted('ROLE_ORGANIZER') and not order.deletedAt %}
+                                                                    <button class="btn btn-outline-primary mr-3 cursor-pointer" data-toggle="modal" data-target="#order-{{ order.reference }}-contactAttendee"><i class="dropdown-icon fas fa-envelope fa-fw"></i> {{ "Contact the attendee"|trans }}</button>
+                                                                {% endif %}
+
+                                                                {% if order.status == -2 or order.status == 1 %}
+                                                                    <button class="btn btn-outline-primary mr-3 cursor-pointer" data-toggle="modal" data-target="#order-{{ order.reference }}-payment-details"><i class="dropdown-icon fas fa-file-alt fa-fw"></i> {{ "Payment details"|trans }}</button>
+                                                                {% endif %}
+
+                                                                {% if order.status == 1 %}
+                                                                    <a href="{{ path('dashboard_tickets_print', { reference: order.reference }) }}" class="btn btn-primary" target="_blank"><i class="fas fa-ticket-alt"></i> {{ "Print tickets"|trans }}</a>
+                                                                {% endif %}
+
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+
+                                                {% if order.status == -2 or order.status == 1 %}
+
+                                                    <div class="modal fade" id="order-{{ order.reference }}-payment-details">
+                                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">{{ "Order payment details"|trans }} - {{ order.reference }}</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+
+                                                                    <p class="mb-3 text-center">
+                                                                        <img src="{{  asset(order.paymentgateway.getLogoPath) }}" class="img-80-80" />
+                                                                    </p>
+
+                                                                    {% if order.payment.details %}
+                                                                        {{ order.payment.details|json_encode(constant('JSON_PRETTY_PRINT'))|nl2br }}
+                                                                    {% else %}
+                                                                        N/A
+                                                                    {% endif %}
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_ATTENDEE') and not order.deletedAt %}
+
+                                                    <div class="modal fade" id="order-{{ order.reference }}-contactOrganizer">
+                                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">{{ "Order"|trans }} #{{ order.reference }}: {{ "Contact the organizer"|trans }}</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{{ path('dashboard_attendee_order_contactOrganizer', {reference: order.reference}) }}" method="POST">
+                                                                        <div class="form-group">
+                                                                            <label for="message" class="form-label required">{{ "Message"|trans }}</label>
+                                                                            <textarea name="message" id="message" class="form-control" rows="10" required></textarea>
+                                                                        </div>
+                                                                        <button type="submit" class="btn btn-primary btn-block mt-3">
+                                                                            <i class="fas fa-envelope"></i>
+                                                                            {{ "Send"|trans }}
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_ORGANIZER') and not order.deletedAt %}
+
+                                                    <div class="modal fade" id="order-{{ order.reference }}-contactAttendee">
+                                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">{{ "Order"|trans }} #{{ order.reference }}: {{ "Contact the attendee"|trans }}</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{{ path('dashboard_organizer_order_contactAttendee', {reference: order.reference}) }}" method="POST">
+                                                                        <div class="form-group">
+                                                                            <label for="message" class="form-label required">{{ "Message"|trans }}</label>
+                                                                            <textarea name="message" id="message" class="form-control" rows="10" required></textarea>
+                                                                        </div>
+                                                                        <button type="submit" class="btn btn-primary btn-block mt-3">
+                                                                            <i class="fas fa-envelope"></i>
+                                                                            {{ "Send"|trans }}
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                {% endif %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

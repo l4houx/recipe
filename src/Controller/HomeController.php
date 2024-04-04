@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Setting\HomepageHeroSetting;
 use App\Entity\Traits\HasRoles;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,20 +14,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'home', methods: ['GET'])]
-    public function index(/*EntityManagerInterface $em, UserPasswordHasherInterface $hasher*/): Response
+    public function home(EntityManagerInterface $em): Response
     {
-        /*
-        $user = new User();
-        $user
-            ->setRoles([HasRoles::APPLICATION])
-            ->setEmail('john-doe@example.com')
-            ->setUsername('JohnDoe')
-            ->setPassword($hasher->hashPassword($user, 'password'))
-        ;
-        $em->persist($user);
-        $em->flush();
-        */
+        $herosetting = $em->getRepository(HomepageHeroSetting::class)->find(1);
 
-        return $this->render('home/index.html.twig');
+        return $this->render('home/home.html.twig', compact('herosetting'));
     }
 }

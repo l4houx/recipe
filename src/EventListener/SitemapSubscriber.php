@@ -49,7 +49,7 @@ class SitemapSubscriber implements EventSubscriberInterface
         $urls->addUrl(new UrlConcrete($this->urlGenerator->generate('contact', [], UrlGeneratorInterface::ABSOLUTE_URL)), 'default');
 
         // Register blog posts urls
-        $urls->addUrl(new UrlConcrete($this->urlGenerator->generate('blog_list', [], UrlGeneratorInterface::ABSOLUTE_URL)), 'default');
+        $urls->addUrl(new UrlConcrete($this->urlGenerator->generate('blog', [], UrlGeneratorInterface::ABSOLUTE_URL)), 'default');
         $blogPosts = $this->settingService->getBlogPosts([])->getQuery()->getResult();
         foreach ($blogPosts as $blogPost) {
             $url = new UrlConcrete($this->urlGenerator->generate('blog_article', ['slug' => $blogPost->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL));

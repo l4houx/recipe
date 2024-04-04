@@ -1,0 +1,270 @@
+{% extends "Global/layout.html.twig" %}
+
+{% if is_granted("ROLE_ADMINISTRATOR") %}
+    {% set pagetitle = 'Manage orders'|trans %}
+{% elseif is_granted("ROLE_ORGANIZER") %}
+    {% set pagetitle = 'Attendees'|trans %}
+{% elseif is_granted("ROLE_ATTENDEE") %}
+    {% set pagetitle = 'My tickets'|trans %}
+{% elseif is_granted("ROLE_POINTOFSALE") %}
+    {% set pagetitle = 'My orders'|trans %}
+{% endif %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    {% if not is_granted('ROLE_ATTENDEE') %}
+
+                        <div class="box shadow-none bg-gray mb-4">
+                            <div class="row">
+                                <div class="col-sm-12 col-lg-3 text-center text-lg-left mb-3 mb-lg-0">
+                                    <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': orders.getTotalItemCount}) }}</span>
+                                </div>
+                                <div class="col-sm-12 col-lg-5 text-center text-lg-right">
+                                    <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
+                                        <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
+                                            {{ knp_pagination_sortable(orders, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "o.createdAt", {"direction": "desc", "criteria": "o.createdAt"}) }}
+                                            {{ knp_pagination_sortable(orders, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "o.createdAt", {"direction": "asc", "criteria": "o.createdAt"}) }}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="col-sm-12 col-lg-4 text-center text-lg-right">
+                                    <a href="#search-filters" class="btn btn-primary has-tooltip" data-toggle="collapse" title="{{ "Toggle display the search filters"|trans }}" aria-expanded="false" aria-controls="search-filters"><i class="fab fa-searchengin fa-lg"></i></a>
+                                        {% if orders.getTotalItemCount %}
+                                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all|merge({'excel': 1 }))) }}" target="_blank" class="btn btn-primary" data-toggle="tooltip" title="{{ "Export current orders to an Excel file"|trans }}"><i class="fas fa-file-excel fa-lg"></i></a>
+                                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all|merge({'csv': 1 }))) }}" target="_blank" class="btn btn-primary" data-toggle="tooltip" title="{{ "Export current orders to a CSV file"|trans }}"><i class="fas fa-file-csv fa-lg"></i></a>
+                                            {% if not is_granted("ROLE_POINTOFSALE") %}
+                                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all|merge({'pdf': 1 }))) }}" target="_blank" class="btn btn-primary has-tooltip {% if not app.request.get("event") or app.request.get("status") != 1 %} disabled{% endif %}" title="{% if not app.request.get("event") or app.request.get("status") != 1 %}{{ "You must choose an event and set the status to paid in order to export attendees list to a PDF file"|trans }} {% else %} {{ "Export attendees list to a PDF file"|trans }} {% endif %}"><i class="fas fa-file-pdf fa-lg"></i></a>
+                                            {% endif %}
+                                        {% endif %}
+                                </div>
+                                <div id="search-filters" class="col-sm-12 col-lg-12 text-center mb-3 mb-lg-0 collapse show">
+                                    <hr>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-4 text-left mb-4">
+                                                <label for="reference">{{ "Reference"|trans }}</label>
+                                                <input type="text" class="mr-sm-2 mb-2 mb-sm-0 form-control bg-white" id="reference" name="reference">
+                                            </div>
+
+                                            {% if is_granted("ROLE_POINTOFSALE") %}
+                                                <div class="col-12 col-sm-4 text-left mb-4">
+                                                    <label for="eventdate">{{ "Event date"|trans }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select a specific event date"|trans }}"></i></label>
+                                                    <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="eventdate" name="eventdate" data-url-list="{{ path('dashboard_pointofsale_get_eventdates') }}" data-minimum-input-length="0">
+                                                </div>
+                                            {% else %}
+                                                <div class="col-12 col-sm-4 text-left mb-4">
+                                                    <label for="event">{{ "Event"|trans }} </label>
+                                                    <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="event" name="event" data-url-list="{{ is_granted('ROLE_ADMINISTRATOR') ? path('get_events', { published: "all", elapsed: "all" }) : path('get_events', { organizer: app.user.organizer.slug, published: "all", elapsed: "all" }) }}" data-minimum-input-length="0">
+                                                </div>
+                                                {% if app.request.get('event') %}
+                                                    <div class="col-12 col-sm-4 text-left mb-4">
+                                                        <label for="eventdate">{{ "Event date"|trans }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select a specific event date"|trans }}"></i></label>
+                                                        <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="eventdate" name="eventdate" data-url-list="{{ path('get_eventdates_by_event', { eventSlug : app.request.get('event') }) }}" data-minimum-input-length="0">
+                                                    </div>
+                                                {% endif %}
+                                                {% if app.request.get('event') and app.request.get('eventdate') %}
+                                                    <div class="col-12 col-sm-4 text-left mb-4">
+                                                        <label for="eventticket">{{ "Event ticket"|trans }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select a specific event ticket"|trans }}"></i></label>
+                                                        <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="eventticket" name="eventticket" data-url-list="{{ path('get_eventtickets_by_eventdate', { eventSlug : app.request.get('event'), eventDateReference : app.request.get('eventdate') }) }}"  data-minimum-input-length="0">
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if is_granted("ROLE_ADMINISTRATOR") %}
+                                                <div class="col-12 col-sm-4 text-left mb-4">
+                                                    <label for="organizer">{{ "Organizer"|trans }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "All orders for an organizer"|trans }}"></i></label>
+                                                    <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="organizer" name="organizer" data-url-list="{{ path('get_organizers') }}" data-minimum-input-length="0">
+                                                </div>
+                                            {% endif %}
+                                            <div class="col-12 col-sm-4 text-left mb-4">
+                                                <label for="datefrom">{{ "From date"|trans }}</label>
+                                                <input type="text" class="mr-sm-2 mb-2 mb-sm-0 form-control bg-white datetimepicker" id="datefrom" name="datefrom">
+                                            </div>
+                                            <div class="col-12 col-sm-4 text-left mb-4">
+                                                <label for="dateto">{{ "Until date"|trans }}</label>
+                                                <input type="text" class="mr-sm-2 mb-2 mb-sm-0 form-control bg-white datetimepicker" id="dateto" name="dateto">
+                                            </div>
+                                            {% if not is_granted("ROLE_POINTOFSALE") %}
+                                                <div class="col-12 col-sm-4 text-left mb-4">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input id="status-all" type="radio" name="status" value="all" class="custom-control-input">
+                                                        <label for="status-all" class="custom-control-label">{{ "All"|trans }}</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input id="status-paid" type="radio" name="status" value="1" class="custom-control-input">
+                                                        <label for="status-paid" class="custom-control-label">{{ "Paid"|trans }}</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input id="status-waiting-for-payment" type="radio" name="status" value="0" class="custom-control-input">
+                                                        <label for="status-waiting-for-payment" class="custom-control-label">{{ "Awaiting payment"|trans }}</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input id="status-canceled" type="radio" name="status" value="-1" class="custom-control-input">
+                                                        <label for="status-canceled" class="custom-control-label">{{ "Canceled"|trans }}</label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input id="status-failed" type="radio" name="status" value="-2" class="custom-control-input">
+                                                        <label for="status-failed" class="custom-control-label">{{ "Failed"|trans }}</label>
+                                                    </div>
+                                                </div>
+                                                {% set paymentGateways = services.getPaymentGateways({}).getQuery().getResult() %}
+                                                {% if paymentGateways|length > 0 %}
+                                                    <div class="col-12 col-sm-4 text-left mb-4">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input id="paymentgateway-all" type="radio" name="paymentgateway" value="all" class="custom-control-input">
+                                                            <label for="paymentgateway-all" class="custom-control-label">{{ "All"|trans }}</label>
+                                                        </div>
+                                                        {% for paymentGateway in paymentGateways %}
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input id="paymentgateway-{{ paymentGateway.slug }}" type="radio" name="paymentgateway" value="{{ paymentGateway.slug }}" class="custom-control-input">
+                                                                <label for="paymentgateway-{{ paymentGateway.slug }}" class="custom-control-label">{{ paymentGateway.name }}</label>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            <div class="col-12 col-sm-4 text-left mb-4">
+                                                <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="{{ "Search"|trans }}"><i class="fas fa-search"></i></button>
+                                                <button type="reset" class="btn btn-primary" data-toggle="tooltip" title="{{ "Reset"|trans }}"><i class="fas fa-search-minus"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-12">
+
+                            {% if orders.getTotalItemCount %}
+                                <div class="card">
+                                    {% include "Dashboard/Shared/Order/manage-orders-table.html.twig" with {orders: orders} %}
+                                </div>
+                            {% else %}
+                                {% include "Global/message.html.twig" with { type: "info", message: ('No orders found'|trans), icon: "fas fa-exclamation-circle" } %}
+                            {% endif %}
+
+                            {{ knp_pagination_render(orders, null, {}, {'align': 'center'}) }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        $(document).ready(function () {
+
+            if (getURLParameter("reference")) {
+                $("#reference").val("{{ app.request.get('reference') }}");
+            }
+
+            if (getURLParameter("event")) {
+                var url = "{{ path('get_event', { slug : "eventslug", published: "all", elapsed: "all" }) }}";
+                url = url.replace("eventslug", getURLParameter("event"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_event').select2('data', {id: data.slug, text: data.text});
+                    $('#event').val(data.slug).change();
+                });
+
+            }
+
+            if (getURLParameter("user")) {
+                var url = "{{ path('get_user', { slug : "slug" }) }}";
+                url = url.replace("slug", getURLParameter("user"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_user').select2('data', {id: data.slug, text: data.text});
+                    $('#user').val(data.slug).change();
+                });
+
+            }
+
+            if (getURLParameter("organizer")) {
+                var url = "{{ path('get_organizer', { slug : "slug" }) }}";
+                url = url.replace("slug", getURLParameter("organizer"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_organizer').select2('data', {id: data.slug, text: data.text});
+                    $('#organizer').val(data.slug).change();
+                });
+
+            }
+
+            if (getURLParameter("eventdate")) {
+                var url = "{{ path('get_eventdate', { reference : "reference" }) }}";
+                url = url.replace("reference", getURLParameter("eventdate"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_eventdate').select2('data', {id: data.id, text: data.text});
+                    $('#eventdate').val(data.id).change();
+                });
+
+            }
+
+            if (getURLParameter("eventticket")) {
+                var url = "{{ path('get_eventticket', { reference : "reference" }) }}";
+                url = url.replace("reference", getURLParameter("eventticket"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_eventticket').select2('data', {id: data.id, text: data.text});
+                    $('#eventticket').val(data.id).change();
+                });
+
+            }
+
+            if (getURLParameter("datefrom")) {
+                $("#datefrom").val("{{ app.request.get('datefrom') }}");
+            }
+
+            if (getURLParameter("dateto")) {
+                $("#dateto").val("{{ app.request.get('dateto') }}");
+            }
+
+            if (getURLParameter('status') != "null") {
+                $('input[type="radio"][name="status"][value="' + getURLParameter('status') + '"]').attr("checked", "checked");
+            }
+
+            if (getURLParameter('paymentgateway') != "null") {
+                $('input[type="radio"][name="paymentgateway"][value="' + getURLParameter('paymentgateway') + '"]').attr("checked", "checked");
+            }
+
+        });
+
+    </script>
+
+{% endblock %}

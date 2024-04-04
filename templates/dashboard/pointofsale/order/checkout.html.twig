@@ -1,0 +1,147 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Checkout' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="checkout-timer-wrapper">
+                        {% set secondsLeft = 0 %}
+
+                        {% for orderElement in order.orderelements %}
+                            {% for ticketReservation in orderElement.ticketsReservations if not ticketReservation.isExpired %}
+
+                                {% set dateInterval = ticketReservation.expiresAt|date_modify("+"~ services.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
+                                {% set secondsLeft = dateInterval|date("%i") * 60 + dateInterval|date("%s") %}
+
+                            {% endfor %}
+                        {% endfor %}
+
+                        {% if secondsLeft > 0 %}
+                            {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-hourglass-half', message: '%mins% left before tickets are released'|trans({"%mins%" : "<span class='checkout-timer' data-seconds-left='"~secondsLeft~"'></span>"}) } %}
+                        {% endif %}
+
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="b mb-0">{{ "Order summary"|trans }}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover shopping-cart-wrap">
+                                    <thead class="text-muted">
+                                        <tr>
+                                            <th scope="col">{{ "Event / Ticket"|trans }}</th>
+                                            <th scope="col" width="100">{{ "Price"|trans }}</th>
+                                            <th scope="col" width="100">{{ "Quantity"|trans }}</th>
+                                            <th scope="col" class="text-right" width="100">{{ "Subtotal"|trans }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for orderelement in order.orderelements %}
+                                            <tr>
+                                                <td>
+                                                    {% include "Global/event-preview-horizontal.html.twig" with { eventticket: orderelement.eventticket } %}
+                                                    {% if orderelement.reservedSeats and orderelement.reservedSeats|length > 0 %}
+                                                        <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
+                                                        <ul class='list-check'>
+                                                            {% for reservedSeat in orderelement.reservedSeats %}
+                                                                <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
+                                                                {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <div class="price-wrap">
+                                                        {% if orderelement.eventticket.eventdate.event.isFree %}
+                                                            <span class="price-new">{{ "Free"|trans }}</span>
+                                                        {% else %}
+                                                            {% if orderelement.eventticket.eventdate %}
+                                                                <span class="price-new">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.eventticket.getSalePrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</span>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {{ orderelement.quantity }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <div class="price-wrap">
+                                                        <var class="price">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.getPrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_start(form, {'attr': { 'novalidate': 'novalidate' } }) }}
+
+                    {{ form_widget(form.orderReference, { value: order.reference }) }}
+
+                    <div class="card mt-4 mb-5">
+                        <div class="card-header">
+                            <h6 class="b mb-0">{{ "Optional attendee information"|trans }}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    {{ form_label(form.firstname, null, {'label_attr': {'class': 'not-required'}}) }}
+                                    {{ form_widget(form.firstname) }}
+                                    {{ form_errors(form.firstname) }}
+                                </div>
+                                <div class="col form-group">
+                                    {{ form_label(form.lastname, null, {'label_attr': {'class': 'not-required'}}) }}
+                                    {{ form_widget(form.lastname) }}
+                                    {{ form_errors(form.lastname) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <dl class="dlist-align">
+                        <dt>{{ "Tickets"|trans }}</dt>
+                        <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
+                        </dd>
+                    </dl>
+                    <dl class="dlist-align">
+                        <dt>{{ "Fees"|trans }}</dt>
+                        <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getTotalFees() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</dd>
+                    </dl>
+                    <dl class="dlist-align h4">
+                        <dt>{{ "Total"|trans }}</dt>
+                        <dd class="text-right ml-5"><strong>{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</strong></dd>
+                    </dl>
+
+                    {% if order.getOrderElementsPriceSum(true) > 0 %}
+                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-money-check"></i> {{ "Confirm payment and place order"|trans }}</button>
+                    {% else %}
+                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-edit"></i> {{ "Register attendees"|trans }}</button>
+                    {% endif %}
+                    {{ form_widget(form._token) }}
+
+                    {{ form_end(form, {'render_rest': false}) }}
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

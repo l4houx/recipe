@@ -1,0 +1,87 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'New payout request' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_organizer_payout_requests": ("Payout requests"|trans), "current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+
+                            {% include "Global/message.html.twig" with { type: "info", message: ('Once the payout request submitted, the event date will be locked and the sales will be suspended for the specific event date. If you wish, you can wait until the start date of the event date before requesting the payout. You can cancel the payout request any time before it is processed'|trans), icon: "fas fa-exclamation-circle" } %}
+
+                            <form name="payout_request" method="post">
+                                <ul class="list-group list-group-flush mt-5">
+                                    <li class="list-group-item">
+                                        <b>{{ "Event"|trans }}</b>
+                                        <h5 class="mt-1">{{ eventDate.event.name }}</h5>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>{{ "Date"|trans }}</b>
+                                        <h5 class="mt-1">{{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</h5>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>{{ "Venue"|trans }}</b>
+                                        <h5 class="mt-1">{{ eventDate.venue ? (eventDate.venue.name ~ ": " ~ eventDate.venue.stringifyAddress()) : ("Online"|trans) }}</h5>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b class="mr-3">{{ "Tickets sold"|trans }}</b>
+                                        <a href="{{ path('dashboard_organizer_event_date_statistics', {eventSlug: eventDate.event.slug, eventDateReference: eventDate.reference}) }}" target="_blank"><i class="fas fa-chart-line"></i> {{ "View detailed statistics"|trans }}</a>
+                                        <h5 class="mt-1">{{ eventDate.getOrderElementsQuantitySum }}</h5>
+                                    </li>
+                                    <li class="list-group-item ">
+                                        <b>{{ "Gross sales"|trans }}</b>
+                                        <h5 class="mt-1">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ eventDate.getSales() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</h5>
+                                    </li>
+                                    <li class="list-group-item ">
+                                        <b>{{ "Percentage cut"|trans }}</b>
+                                        <h5 class="mt-1">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ eventDate.getTicketPricePercentageCutSum() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</h5>
+                                    </li>
+                                    <li class="list-group-item  list-group-item-success">
+                                        <b>{{ "Net sales until"|trans }} {{ "now"|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</b>
+                                        <h5 class="mt-1">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ eventDate.getOrganizerPayoutAmount() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</h5>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b class="mr-3">{{ "Select a payout method"|trans }}</b>
+                                        {% set payoutMethods = services.getPaymentGateways({"organizer": app.user.organizer.slug}).getQuery().getResult() %}
+                                        <div class="form-row mt-2">
+                                            {% for payoutMethod in payoutMethods %}
+                                                <div class="col-3 form-group">
+
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input class="custom-control-input" id="{{ payoutMethod.slug }}" type="radio" name="payout_method" value="{{ payoutMethod.slug }}" {{ loop.first ? "checked"}}/>
+                                                        <label class="custom-control-label required" for="{{ payoutMethod.slug }}"><img src="{{  asset('assets/img/icons/payment/'~ payoutMethod.name|lower ~'.svg') }}" class="img-80-80" /></label>
+                                                    </div>
+
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item list-group-item-action text-center pt-5">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-file-invoice-dollar"></i> {{ "Confirm payout request"|trans }}
+                                        </button>
+                                    </li>
+                                </ul>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-languages', name: 'dashboard_admin_language_')]
+#[Route('/%website_dashboard_path%/admin/manage-languages', name: 'dashboard_admin_language_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class LanguageController extends AdminBaseController
 {

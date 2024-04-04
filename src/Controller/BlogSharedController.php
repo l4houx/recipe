@@ -13,10 +13,9 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/blog')]
 class BlogSharedController extends AbstractController
 {
-    #[Route('/{slug}/shared', name: 'blog_shared', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET', 'POST'])]
+    #[Route('/blog-article/{slug}/shared', name: 'blog_shared', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET', 'POST'])]
     public function blogShared(
         Request $request,
         Post $post,
@@ -25,7 +24,7 @@ class BlogSharedController extends AbstractController
     ): Response {
         if (!$post) {
             $this->addFlash('secondary', $translator->trans('The article not be found'));
-            return $this->redirectToRoute('blog_list');
+            return $this->redirectToRoute('blog');
         }
 
         $appErrors = [];
@@ -49,7 +48,7 @@ class BlogSharedController extends AbstractController
 
             $this->addFlash('success', $translator->trans('🚀 Post successfully shared with your friend!'));
 
-            return $this->redirectToRoute('blog_list');
+            return $this->redirectToRoute('blog');
         } elseif ($form->isSubmitted()) {
             /** @var FormError $error */
             foreach ($form->getErrors() as $error) {

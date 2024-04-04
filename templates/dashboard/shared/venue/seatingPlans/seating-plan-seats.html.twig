@@ -1,0 +1,22 @@
+<div class="seating-plan-preview-wrapper">
+
+    <div class="seating-plan-preview-stage" style="background: {{ seatingPlan.design['stage']['bgColor'] }}; left: {{ seatingPlan.design['stage']['positionX'] }}; top: {{ seatingPlan.design['stage']['positionY'] }};height: {{ seatingPlan.design['stage']['height'] }}px;width: {{ seatingPlan.design['stage']['width'] }}px;transform: rotate({{ seatingPlan.design['stage']['rotationAngle'] }}rad);">
+        <h6>{{ seatingPlan.design['stage']['name'] }}</h6>
+    </div>
+
+    {% for section in seatingPlan.design['sections'] %}
+
+        {% set relatifTicket = eventDate.getTicketBySectionName(section['name']) %}
+
+        {#        {% set currentUserRelatifTicketCartElements = relatifTicket.getEventTicketCartElementsByUserAndSection(app.user, section) %}#}
+        {% if relatifTicket %}
+            <div class="seating-plan-preview-section {% if relatifTicket.active == false or not relatifTicket.isOnSale %}event-ticket-disabled{% endif %}" data-section-id="{{ section['randomId'] }}" data-ticket-reference="{{ relatifTicket.reference }}" data-toggle="modal" data-target="#section{{ section['randomId'] }}-rows-modal" style="background: {{ section['bgColor'] }}; left: {{ section['positionX'] }}; top: {{ section['positionY'] }};height: {{ section['height'] }}px;width: {{ section['width'] }}px;transform: rotate({{ section['rotationAngle'] }}rad);">
+                {#            <span class="seating-plan-section-tickets-choosen-indicator {% if currentUserRelatifTicketCartElements|length == 0 %} d-none{% endif %}" data-toggle="tooltip" title="{{ "Selected tickets in this section"|trans }}">{% if currentUserRelatifTicketCartElements|length > 0 %}{{ currentUserRelatifTicketCartElements|length }}{% endif %}</span>#}
+                <span class="seating-plan-section-tickets-choosen-indicator d-none" data-toggle="tooltip" title="{{ "Selected tickets in this section"|trans }}"></span>
+                <h6>{{ section['name'] }}</h6>
+            </div>
+        {% endif %}
+
+    {% endfor %}
+
+</div>

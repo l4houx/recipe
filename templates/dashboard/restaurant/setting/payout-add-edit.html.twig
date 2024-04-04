@@ -1,0 +1,87 @@
+{% extends "Global/layout.html.twig" %}
+
+{% if paymentgateway.id %}
+    {% set pagetitle = 'Update your %payoutMethodName% payout method'|trans({'%payoutMethodName%': paymentgateway.name}) %}
+{% else %}
+    {% if app.request.get('factoryName') == "paypal_rest" %}
+        {% set payoutMethodName = "Paypal" %}
+    {% elseif app.request.get('factoryName') == "stripe_checkout" %}
+        {% set payoutMethodName = "Stripe" %}
+    {% endif %}
+    {% set pagetitle = 'Set your %payoutMethodName% payout method'|trans({'%payoutMethodName%': payoutMethodName}) %}
+{% endif %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans),  "dashboard_administrator_settings_payment": ('Payment settings' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    {% include "Global/message.html.twig" with { type: "info", message: ('Make sure that the currency setting of your payout method matches the one currently used which is %currency%'|trans({'%currency%': services.getSetting('currency_ccy')})), icon: "fas fa-info-circle" } %}
+
+                    <div class="card box">
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_widget(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+        $(document).ready(function () {
+
+            if (getURLParameter('factoryName') == null) {
+                var factoryName = "{{ paymentgateway.factoryName }}";
+            } else {
+                var factoryName = getURLParameter('factoryName');
+            }
+
+            $("#organizer_payout_payment_gateway_save").click(function (e) {
+                e.preventDefault();
+                var error = false;
+                if (factoryName == "paypal_rest") {
+                    if ($("input[name='organizer_payout_payment_gateway[config][sandbox]']:checked").val() == undefined || $("#organizer_payout_payment_gateway_config_client_id").val() == "" || $("#organizer_payout_payment_gateway_config_client_secret").val() == "") {
+                        error = true;
+                    }
+                } else if (factoryName == "stripe_checkout") {
+                    if ($("#organizer_payout_payment_gateway_config_publishable_key").val() == "" || $("#organizer_payout_payment_gateway_config_secret_key").val() == "") {
+                        error = true;
+                    }
+                }
+                if (error) {
+                    showStackBarTop('error', '', '{{ "Please enter your payout method details"|trans }}');
+                } else {
+                    $("#organizer_payout_payment_gateway_save").closest("form").submit();
+                }
+            });
+
+            $(".payment_config_field").each(function () {
+                if ($(this).hasClass(factoryName)) {
+                    $(this).closest(".form-group").show();
+                } else {
+                    $(this).closest(".form-group").hide();
+                }
+            });
+
+        });
+
+    </script>
+{% endblock %}

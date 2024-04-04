@@ -1,3 +1,6 @@
+{% set routename = app.request.get('_route') %}
+{% set random = setting.generateReference(5) %}
+
 <nav class="navbar navbar-expand-lg">
 	<div class="container-fluid px-0">
 		<a class="navbar-brand" href="{{ path('home') }}">
@@ -47,28 +50,28 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route == 'home' ? 'active' : '' }}" href="{{ path('home') }}">{{ "Home"|trans }}</a>
+					<a class="nav-link {% if routename == "home" %}active{% endif %}" href="{{ path('home') }}">{{ "Home"|trans }}</a>
 				</li> 
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'recipe_' ? 'active' : '' }}" href="{{ path('recipe_index') }}">{{ 'Recipes' }}</a>
+					<a class="nav-link {% if routename == "recipes" or routename == "recipe" %}active{% endif %}" href="{{ path('recipes') }}">{{ 'Recipes' }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route starts with 'blog_' ? 'active' : '' }}" href="{{ path('blog_list') }}">{{ 'Blog'|trans }}</a>
+					<a class="nav-link {% if routename == "blog" or routename == "blog_article" or routename == "blog_shared" %}active{% endif %}" href="{{ path('blog') }}">{{ 'Blog'|trans }}</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route == 'help_center' ? 'active' : '' }}" href="{{ path('help_center') }}">
+					<a class="nav-link {% if routename == "help_center" %}active{% endif %}" href="{{ path('help_center') }}">
 						{{ 'Help Center'|trans }}
 					</a>
 				</li>
 				{% if not app.user or not app.user.premium  %}
 					<li class="nav-item">
-						<a class="nav-link {{ app.current_route == 'pricing' ? 'active' : '' }}" href="{{ path('pricing') }}">
+						<a class="nav-link {% if routename == "pricing" %}active{% endif %}" href="{{ path('pricing') }}">
 							{{ 'Pricing'|trans }}
 						</a>
 					</li>
 				{% endif %}
 				<li class="nav-item">
-					<a class="nav-link {{ app.current_route == 'contact' ? 'active' : '' }}" href="{{ path('contact') }}">
+					<a class="nav-link {% if routename == "contact" %}active{% endif %}" href="{{ path('contact') }}">
 						{{ 'Contact'|trans }}
 					</a>
 				</li>

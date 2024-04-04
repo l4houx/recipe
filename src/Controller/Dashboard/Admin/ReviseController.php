@@ -17,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @method User getUser()
  */
-#[Route('/%website_dashboard_path%/main-panel/manage-revises', name: 'dashboard_admin_revise_')]
+#[Route('/%website_dashboard_path%/admin/manage-revises', name: 'dashboard_admin_revise_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class ReviseController extends AdminBaseController
 {
@@ -38,7 +38,7 @@ class ReviseController extends AdminBaseController
                 $this->addFlash('success', $translator->trans('Content was accepted successfully.'));
             }
 
-            return $this->redirectToRoute('dashboard_main_panel', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('dashboard_admin_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('dashboard/admin/blog/articles/revise.html.twig', compact('revise'));

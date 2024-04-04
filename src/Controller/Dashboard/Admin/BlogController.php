@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
-#[Route(path: '/%website_dashboard_path%/main-panel/manage-blogs', name: 'dashboard_admin_blog_')]
+#[Route(path: '/%website_dashboard_path%/admin/manage-blogs', name: 'dashboard_admin_blog_')]
 #[IsGranted(HasRoles::TEAM)]
 class BlogController extends AdminBaseController
 {

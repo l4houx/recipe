@@ -28,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function Symfony\Component\Translation\t;
 
-#[Route(path: '/%website_dashboard_path%/main-panel/manage-settings', name: 'dashboard_admin_setting_')]
+#[Route(path: '/%website_dashboard_path%/admin/manage-settings', name: 'dashboard_admin_setting_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class SettingController extends AdminBaseController
 {
@@ -352,7 +352,7 @@ class SettingController extends AdminBaseController
         if ('1' === $this->settingervice->getEnv('DEMO_MODE')) {
             $this->addFlash('error', $this->translator->trans('This feature is disabled in demo mode', [], 'javascript'));
 
-            return $this->redirectToRoute('dashboard_main_panel', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('dashboard_admin_index', [], Response::HTTP_SEE_OTHER);
         }
 
         $form = $this->createFormBuilder()
@@ -620,7 +620,7 @@ class SettingController extends AdminBaseController
     public function homepagehero(Request $request): Response
     {
         /** @var HomepageHeroSetting $homepageherosetting */
-        $homepageherosetting = $this->em->getRepository("App\Entity\HomepageHeroSetting")->find(1);
+        $homepageherosetting = $this->em->getRepository("App\Entity\Setting\HomepageHeroSetting")->find(1);
         if (!$homepageherosetting) {
             $this->addFlash('error', $this->translator->trans('The homepage settings could not be loaded'));
 
@@ -642,17 +642,17 @@ class SettingController extends AdminBaseController
                     $this->em->persist($recipe);
                 }
 
-                /** @var HomepageHeroSetting $homeSliderOwner */
-                $homeSliderOwners = $this->settingervice->getUsers(['isOnHomepageSlider' => true, 'roles' => 'owner'])->getQuery()->getResult();
+                /** @var HomepageHeroSetting $homeSliderRestaurant */
+                $homeSliderRestaurants = $this->settingervice->getUsers(['isOnHomepageSlider' => true, 'roles' => 'restaurant'])->getQuery()->getResult();
                 /** @var User $user */
-                foreach ($homeSliderOwners as $user) {
-                    $user->setisrestaurantonhomepageslider(null);
+                foreach ($homeSliderRestaurants as $user) {
+                    $user->setIsrestaurantonhomepageslider(null);
                     $this->em->persist($user);
                 }
                 $this->em->flush();
-                foreach ($homepageherosetting->getUsers() as $owner) {
-                    $owner->setisrestaurantonhomepageslider($homepageherosetting);
-                    $this->em->persist($owner);
+                foreach ($homepageherosetting->getRestaurants() as $restaurant) {
+                    $restaurant->setIsrestaurantonhomepageslider($homepageherosetting);
+                    $this->em->persist($restaurant);
                 }
 
                 $this->em->persist($homepageherosetting);

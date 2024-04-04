@@ -1,0 +1,57 @@
+{% if app.request.locale == "ar" %}
+    {% set locale = "en" %}
+{% else %}
+    {% set locale = app.request.locale %}
+{% endif %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ event.name }}: {{ "Attendees list"|trans({}, "messages", locale) }}</title>
+        <style>
+            table, th, td {
+                padding: 10px;
+                border: 1px solid #aaa;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h2 style="text-align: center;">{{ event.translate(locale).name }}</h2>
+
+        {% for eventDate in event.eventdates %}
+
+            <p style="text-align: center;">{{ eventDate.startdate|localizeddate('none', 'none', locale, date_timezone, date_format) }}{% if eventDate.venue %} - {{ eventDate.venue.translate(locale).name }}{% endif %}</p>
+
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th style="width:5%;"></th>
+                        <th>{{ "Last name"|trans({}, "messages", locale) }}</th>
+                        <th>{{ "First name"|trans({}, "messages", locale) }}</th>
+                        <th>{{ "Quantity"|trans({}, "messages", locale) }}</th>
+                        <th>{{ "Ticket"|trans({}, "messages", locale) }}</th>
+                        <th>{{ "Payment"|trans({}, "messages", locale) }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        {% for orderElement in order.orderelements if (orderElement.eventticket.eventdate == eventDate)%}
+                            <tr>
+                                <td><input type="radio"/></td>
+                                <td>{{ orderElement.order.user.lastname }}</td>
+                                <td>{{ orderElement.order.user.firstname }}</td>
+                                <td>{{ orderElement.quantity }}</td>
+                                <td>{{ orderElement.eventticket.name }}</td>
+                                <td>{{ "#" ~ orderElement.order.reference }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% endfor %}
+
+    </body>
+</html>

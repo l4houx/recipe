@@ -1,0 +1,141 @@
+{% extends "Global/layout.html.twig" %}
+
+{% form_theme form 'Global/jquery.collection.html.twig' %}
+
+{% set pagetitle = 'Add a new venue' | trans %}
+
+{% if venue.id %}{% set pagetitle = 'Update the venue' | trans %}{% endif %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% if is_granted('ROLE_ADMINISTRATOR') %}
+        {% set navigation = [{ "dashboard_index": ('Dashboard' | trans),  "dashboard_administrator_venue": ('Manage venues' | trans), "current":(pagetitle) }] %}
+    {% elseif is_granted('ROLE_ORGANIZER') %}
+        {% set navigation = [{ "dashboard_index": ('Dashboard' | trans),  "dashboard_organizer_venue": ('my venues' | trans), "current":(pagetitle) }] %}
+    {% endif %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form) }}
+                            {{ form_row(form.translations) }}
+                            {{ form_row(form.type) }}
+                            {{ form_row(form.amenities) }}
+                            {{ form_row(form.seatedguests) }}
+                            {{ form_row(form.standingguests) }}
+                            {{ form_row(form.neighborhoods) }}
+                            {{ form_row(form.pricing) }}
+                            {{ form_row(form.availibility) }}
+                            {{ form_row(form.foodbeverage) }}
+                            {{ form_row(form.quoteform) }}
+                            {{ form_row(form.contactemail) }}
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    {{ form_row(form.street) }}
+                                    {{ form_row(form.street2) }}
+                                    {{ form_row(form.city) }}
+                                    {{ form_row(form.postalcode) }}
+                                    {{ form_row(form.state) }}
+                                    {{ form_row(form.country) }}
+                                    {{ form_row(form.showmap) }}
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="sticky-top sticky-sidebar pt-0">
+                                        <iframe width="100%" height="300" class="venue-map" src="{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q=university%20of%20san%20francisco&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{ form_row(form.images) }}
+                            {{ form_row(form.save) }}
+                            {{ form_end(form) }}
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {% if google_maps_api_key != "" %}
+        <script type="text/javascript" src="{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps/api/js?sensor=false&key={{google_maps_api_key}}"></script>
+    {% endif %}
+    <script>
+
+        $(document).ready(function () {
+            
+            $('.venue-map').hide();
+            function getVenueAddress() {
+                var address = '';
+                if ($('#venue_translations_en_name').val())
+                    address = $('#venue_translations_en_name').val();
+                if ($('#venue_street').val())
+                    address = address + ' ' + $('#venue_street').val();
+                if ($('#venue_street2').val())
+                    address = address + ' ' + $('#venue_street2').val();
+                if ($('#venue_city').val())
+                    address = address + ' ' + $('#venue_city').val();
+                if ($('#venue_postalcode').val())
+                    address = address + ' ' + $('#venue_postalcode').val();
+                if ($('#venue_state').val())
+                    address = address + ' ' + $('#venue_state').val();
+                if ($('#venue_country').val())
+                    address = address + ' ' + $('#venue_country option:selected').text();
+                return address;
+            }
+
+            $('#venue_street, #venue_street2, #venue_city, #venue_postalcode, #venue_state').blur(function () {
+                if (getVenueAddress() != "") {
+                    $('.venue-map').attr('src', '{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q=' + getVenueAddress() + '&t=&z=13&ie=UTF8&iwloc=&output=embed');
+                    $('.venue-map').show();
+                }
+            });
+            $('#venue_country').on("select2-blur", function (e) {
+                if (getVenueAddress() != "") {
+                    $('.venue-map').attr('src', '{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q=' + getVenueAddress() + '&t=&z=13&ie=UTF8&iwloc=&output=embed');
+                    $('.venue-map').show();
+                }
+            });
+
+        {% if venue.id %}
+                $('#venue_country').trigger('blur');
+        {% endif %}
+
+        {% if google_maps_api_key != "" %}
+                $('#venue_save').click(function (e) {
+                    if (getVenueAddress() != "") {
+                        e.preventDefault();
+                        var geocoder = new google.maps.Geocoder();
+                        geocoder.geocode({'address': getVenueAddress()}, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                $('#venue_lat').val(results[0].geometry.location.lat());
+                                $('#venue_lng').val(results[0].geometry.location.lng());
+                            }
+                            $('form[name="venue"]').submit();
+                        });
+                    }
+                });
+        {% endif %}
+
+            });
+
+    </script>
+
+
+{% endblock %}

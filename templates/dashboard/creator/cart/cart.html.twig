@@ -1,0 +1,128 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'My cart' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_index": "Dashboard"|trans,"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    {% if app.user.cartelements|length %}
+
+                        {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-info', message: "Your tickets are not reserved until checkout, the quantity you intend to buy might not be available if you do not proceed to checkout right away"|trans } %}
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="b mb-0">{{ app.user.getTicketsInCartQuantitySum }} {{ "tickets found in your cart"|trans }}</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <form method="post">
+                                        <table class="table table-hover shopping-cart-wrap">
+                                            <thead class="text-muted">
+                                                <tr>
+                                                    <th scope="col">{{ "Event"|trans ~ " / " ~ "Ticket"|trans }}</th>
+                                                    <th scope="col" width="100">{{ "Price"|trans }}</th>
+                                                    <th scope="col" width="100">{{ "Quantity"|trans }}</th>
+                                                    <th scope="col" width="100">{{ "Subtotal"|trans }}</th>
+                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for cartelement in app.user.cartelements %}
+                                                    <tr>
+                                                        <td>
+                                                            {% include "Global/event-preview-horizontal.html.twig" with { eventticket: cartelement.eventticket } %}
+                                                            {% if cartelement.reservedSeats and cartelement.reservedSeats|length > 0 %}
+                                                                <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
+                                                                <ul class='list-check'>
+                                                                    {% for reservedSeat in cartelement.reservedSeats %}
+                                                                        <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
+                                                                        {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <div class="price-wrap">
+                                                                {% if cartelement.eventticket.eventdate.event.isFree %}
+                                                                    <span class="price-new">{{ "Free"|trans }}</span>
+                                                                {% else %}
+                                                                    {% if cartelement.eventticket.eventdate %}
+                                                                        <span class="price-new">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ cartelement.eventticket.getSalePrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</span>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control touchspin-integer bg-white eventdate-ticket-qte {% if cartelement.eventticket.eventdate.hasSeatingPlan %}cart-eventdate-ticket-qte-hasSeatingPlan{% endif %}" {% if cartelement.eventticket.eventdate.hasSeatingPlan %}readonly{% endif %} name="{{ cartelement.eventticket.reference }}" data-min="0" data-max="{{ cartelement.eventticket.getMaxTicketsForSaleCount(app.user) }}" value="{{ cartelement.quantity }}" />
+                                                        </td>
+                                                        <td class="text-right">
+                                                            <div class="price-wrap">
+                                                                <var class="price">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ cartelement.getPrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <a href="{{ path('dashboard_attendee_cart_remove', { id: cartelement.id }) }}" data-toggle="tooltip" title="{{ "Remove"|trans }}"><i class="far fa-minus-square"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5" class="text-right">
+                                                        <div class="price-wrap">
+                                                            <var class="price">{{ "Fees"|trans }}: {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ app.user.getTotalFees }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" class="text-right">
+                                                        <div class="price-wrap">
+                                                            <var class="price">{{ "Total"|trans }}: {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ app.user.getTicketsInCartPriceSum(true) }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" class="text-right">
+                                                        <a href="{{ path('events') }}" class="btn btn-outline-primary mr-3"><i class="fas fa-ticket-alt"></i> {{ "Buy more tickets"|trans }}</a>
+                                                        <button type="submit" class="btn btn-outline-primary mr-3"><i class="fas fa-sync"></i> {{ "Update cart"|trans }}</button>
+                                                        <span data-target="{{ path('dashboard_attendee_cart_empty') }}" class="btn btn-outline-primary mr-3 requires-confirmation"  data-confirmation-text="{{ "You are about to empty your cart"|trans }}"><i class="far fa-minus-square"></i> {{ "Empty cart"|trans }}</span>
+                                                        <a href="{{ path('dashboard_attendee_checkout') }}" class="btn btn-primary">
+                                                            {% if app.user.getTicketsInCartPriceSum(true) > 0 %}
+                                                                {{ "Checkout"|trans }}
+                                                            {% else %}
+                                                                {{ "Register"|trans }}
+                                                            {% endif %}
+                                                            <i class="fas fa-chevron-right ml-2"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+
+                        {% include "Global/message.html.twig" with { icon: "fas fa-shopping-cart", type: "info", message: ('Your cart is empty'|trans) } %}
+
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}
+{{ setting.getSettings("website_description_" ~ (app.request.get('_locale') ? app.request.get('_locale') : app.request.defaultLocale)) }}
+{% endblock %}
+
+{% block page %}home{% endblock %}
+
+{% block content %}
+    {% if herosetting.content == "recipes" and herosetting.recipes | length %}
+
+    {% endif %}
+
+    {% if herosetting.content == "restaurants" and herosetting.restaurants | length %}
+
+    {% endif %}
+
+    {% if herosetting.content == "custom" %}
+        <section class="py-8 bg-white">
+            <div class="container my-lg-4">
+                <div class="row">
+                    <div class="offset-lg-2 col-lg-8 col-md-12 col-12 mb-8">
+                        <h1 class="display-2 fw-bold mb-3">
+                            Hi there, we’re
+                            <span class="text-primary">{{ website_name }}</span>
+                        </h1>
+                        <p class="h2 mb-3">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore ratione delectus eius rerum dicta. Eaque vel est qui consectetur dolor! Enim ut aliquam at deserunt nulla dolores officia numquam nemo!
+                        </p>
+                        <p class="mb-0 h4 text-body lh-lg">
+                            {{ website_name }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet reprehenderit cum suscipit cumque quam! Dolore vitae quia, velit vel quasi impedit. Corporis error suscipit voluptates optio dolorum blanditiis qui ipsam.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    {% if '1' == settings["homepage_show_search_box"] %}
+        <section class="py-8 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-10 col-12">
+                        <div>
+                            <div class="mb-4">
+                                <h1 class="fw-bold mb-1"></h1>
+                                <p></p>
+                            </div>
+                            <div class="bg-white rounded-md-pill me-lg-8 shadow rounded-3">
+                                <div class="p-md-2 p-4">
+                                    <form class="row g-1" action="{{ path('recipes') }}">
+                                        <div class="col-12 col-md-5">
+                                            <div class="input-group mb-2 mb-md-0 border-md-0 border rounded-pill">
+                                                <span class="input-group-text bg-transparent border-0 pe-0 ps-md-3 ps-md-0" id="searchJob">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                                                    </svg>
+                                                </span>
+                                                <label for="search-category" class="form-label text-dark visually-hidden">{{ "Looking for"|trans }}</label>
+                                                <select id="search-category" name="category" data-sort-options="1" class="form-select rounded-pill border-0 ps-3 form-focus-none">
+                                                    <option value>{{ "Anything"|trans }}</option>
+                                                    {% for category in setting.getCategories({}).getQuery().getResult() %}
+                                                        <option value="{{ category.slug }}">{{ category.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="input-group mb-3 mb-md-0 border-md-0 border rounded-pill">
+                                                <span class="input-group-text bg-transparent border-0 pe-0 ps-md-0" id="location">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
+                                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                                    </svg>
+                                                </span>
+                                                <label for="search-country" class="form-label text-dark visually-hidden">{{ "In"|trans }}</label>
+                                                <select id="search-country" name="country" data-sort-options="1" class="form-select rounded-pill border-0 ps-3 form-focus-none">
+                                                    <option value>{{ "Anywhere"|trans }}</option>
+                                                    {% for country in setting.getCountries({}).getQuery().getResult() %}
+                                                        <option value="{{ country.slug }}">{{ country.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="input-group mb-3 mb-md-0 border-md-0 border rounded-pill">
+                                                <span class="input-group-text bg-transparent border-0 pe-0 ps-md-0" id="location">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
+                                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                                    </svg>
+                                                </span>
+                                                <label for="search-startdate" class="form-label text-dark visually-hidden">{{ "When"|trans }}</label>
+                                                <select id="search-startdate" name="startdate" class="form-select rounded-pill border-0 ps-3 form-focus-none">
+                                                    <option value>{{ "Anytime"|trans }}</option>
+                                                    <option value="today">{{ "Today"|trans }}</option>
+                                                    <option value="tomorrow">{{ "Tomorrow"|trans }}</option>
+                                                    <option value="thisweekend">{{ "This weekend"|trans }}</option>
+                                                    <option value="thisweek">{{ "This week"|trans }}</option>
+                                                    <option value="nextweek">{{ "Next week"|trans }}</option>
+                                                    <option value="thismonth">{{ "This month"|trans }}</option>
+                                                    <option value="nextmonth">{{ "Next month"|trans }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3 text-end d-grid">
+                                            <button type="submit" class="btn btn-primary rounded-pill">{{ "Search"|trans }}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    {% if setting.getSettings('homepage_recipes_number') %}
+
+    {% endif %}
+
+    {% if setting.getSettings('homepage_categories_number') > 0 %}
+
+        {% for category in setting.getCategories({ "isFeatured": true, "limit": setting.getSettings('homepage_categories_number') }).getQuery().getResult() %}
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% if setting.getSettings('homepage_posts_number') > 0 %}
+        {% set latestblogposts = setting.getBlogPosts({"limit": setting.getSettings('homepage_posts_number')}).getQuery().getResult() %}
+        {% if latestblogposts | length %}
+            <section class="py-lg-8 py-6">
+                <div class="container my-lg-8">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <div class="mb-6 mb-lg-8">
+                                <h2 class="h1 fw-bold">
+                                    {{'Lastest'|trans}}
+                                    <u class="text-warning"><span class="text-primary">{{'blog posts'|trans}}</span></u>
+                                </h2>
+                                <p class="mb-0 lead"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% for post in latestblogposts %}
+                            {% include "global/post-card.html.twig" with {post: post, thumbnailsize: [241, 241]} %}
+                        {% endfor %}
+                        <div class="col-xl-12 col-md-12 col-12">
+                            <div class="mt-4">
+                                <a href="{{ path('blog') }}" class="btn btn-light-primary text-primary">
+                                    {{ 'Show more blog posts'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    {% endif %}
+
+    {% if setting.getSettings('homepage_testimonials_number') > 0 %}
+        {% set latesttestimonials = setting.getTestimonials({"limit": 2, "order": "DESC", "isOnline": true}).getQuery().getResult() %}
+        {% if latesttestimonials | length %}
+            <section class="py-7 py-lg-8 bg-gray-100">
+                <div class="container my-lg-8">
+                    <div class="row mb-8 justify-content-center">
+                        <div class="col-lg-6 col-md-12 col-12 text-center">
+                            <span class="text-primary mb-3 d-block text-uppercase fw-semibold ls-xl">{{ 'Testimonials'|trans }}</span>
+                            <h2 class="mb-2 display-4 fw-bold">{{ 'What our learners are saying'|trans }}</h2>
+                            <p class="lead">
+                                {{ '12+ million people are already learning on'|trans }} {{ website_name }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% for testimonial in latesttestimonials %}
+                            {% include "global/testimonial-card.html.twig" with {testimonial: testimonial} %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    {% endif %}
+
+    {% if '1' == settings["homepage_show_call_to_action"] %}
+        <section class="py-8 bg-gray-200">
+            <div class="container my-lg-8">
+                <div class="row">
+                    <div class="offset-lg-2 col-lg-8 col-md-12 col-12 text-center">
+                        <span class="fs-4 text-warning ls-md text-uppercase fw-semibold"></span>
+                        <h2 class="display-3 fw-bold mt-4 mb-3 text-primary">
+                            <span class="text-dark px-3 px-md-0">{{ "Are you ready to take your"|trans }}</span>
+                            <span class="headingTyped text-primary">
+                                {% for category in setting.getCategories({ "isFeatured": true, "limit": 9 }).getQuery().getResult() %}
+                                    {{ category.name | lower }}
+                                    {% if not loop.last %}
+                                        <span class="typed-cursor typed-cursor--blink" aria-hidden="true">|</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            {{ "recipe to the next level ?"|trans }}
+                        </h2>
+                        <p class="lead px-lg- 8 mb-6"></p>
+                        <a href="#" class="btn btn-primary">{{ "Create my recipe"|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

@@ -19,6 +19,9 @@
             "src/ApiResource/.gitignore"
         ]
     },
+    "cmen/google-charts-bundle": {
+        "version": "6.0.0"
+    },
     "debril/rss-atom-bundle": {
         "version": "5.2",
         "recipe": {

@@ -1,0 +1,183 @@
+{% if app.request.locale == "ar" %}
+    {% set locale = "en" %}
+{% else %}
+    {% set locale = app.request.locale %}
+{% endif %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ "Order"|trans({}, "messages", locale) }} #{{ order.reference }} - {{ "Tickets"|trans({}, "messages", locale) }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style>
+
+            *{
+                font-family: DejaVu Sans !important;
+            }
+
+            table.bordered, table.bordered th, table.bordered td {
+                padding: 10px;
+                border: 1px solid #eee;
+                border-collapse: collapse;
+            }
+            table tr {
+                vertical-align: top;
+            }
+            table td {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+            .text-center {
+                text-align: center;
+            }
+            .text-right {
+                text-align:right;
+            }
+            .tickets-container .ticket-wrapper {
+                page-break-inside: avoid;
+            }
+            .tickets-container .ticket-wrapper:not(:last-child) {
+                page-break-after: always;
+            }
+            .tickets-container .ticket-wrapper:not(:first-child) {
+                page-break-before: always;
+            }
+            .text-muted {
+                color: #777;
+            }
+            .footer {
+                position:absolute;
+                bottom:0;
+                width: 100%;
+            }
+            .scanned-ticket-stamp {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .qr-barcode-wrapper > div {
+                width: fit-content;
+                margin: 0 auto;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div class="tickets-container">
+
+            {% for orderElement in order.orderelements if (eventDateTicketReference == "all" or eventDateTicketReference == orderElement.eventticket.reference) and (is_granted("ROLE_ADMINISTRATOR") or is_granted("ROLE_ATTENDEE") or (is_granted("ROLE_ORGANIZER") and orderElement.belongsToOrganizer(app.user.organizer.slug)) or (is_granted("ROLE_POINTOFSALE") and orderElement.belongsToOrganizer(app.user.pointofsale.organizer.slug))) %}
+
+                {% for ticket in orderElement.tickets %}
+
+                    <div class="ticket-wrapper">
+
+                        <div class="footer text-center text-muted">
+                            <div class="qr-barcode-wrapper">
+                                {{ barcode({code: order.reference, type: 'c128', format: 'html'}) }}
+                            </div>
+                            <br>
+                            {{ services.getSetting("website_url") }}
+                            <br>
+                            {{ services.getSetting("website_name") }} - {{ services.getSetting("website_description_" ~ locale) }}
+                        </div>
+
+                        <table width="100%" class="bordered">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <img src=".{{ asset(services.getAppLayoutSettings.getLogoPath) }}" />
+                                    </td>
+                                </tr>
+                                <tr style="background-color: {{ services.getSetting("primary_color") }}; color: #fff;">
+                                    <td width="50%">
+                                        <h5>{{ "Order"|trans({}, "messages", locale) }} #{{ order.reference }}</h3>
+                                    </td>
+                                    <td width="50%">
+                                        <h5>{{ "Ticket"|trans({}, "messages", locale) }} #{{ ticket.reference }}</h3>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="50%">
+                                        <h3>{{ orderElement.eventticket.eventdate.event.translate(locale).name }}</h3>
+                                        {% if orderElement.eventticket.eventdate.startdate %}
+                                            <h6><span class="text-muted">{{ "Start date"|trans({}, "messages", locale) }}</span><br>{{ orderElement.eventticket.eventdate.startdate|localizeddate('none', 'none', locale, date_timezone, date_format) }}</h6>
+                                            {% endif %}
+                                            {% if orderElement.eventticket.eventdate.enddate %}
+                                            <h6><span class="text-muted">{{ "End date"|trans({}, "messages", locale) }}</span><br>{{ orderElement.eventticket.eventdate.enddate|localizeddate('none', 'none', locale, date_timezone, date_format) }}</h6>
+                                            {% endif %}
+                                        <h6>
+                                            <span class="text-muted">{{ "Venue / Location"|trans({}, "messages", locale) }}</span><br>
+                                            {% if orderElement.eventticket.eventdate.venue %}
+                                                {{ orderElement.eventticket.eventdate.venue.translate(locale).name }}
+                                            {% else %}
+                                                {{ "Online"|trans({}, "messages", locale) }}
+                                            {% endif %}
+                                        </h6>
+                                        {% if orderElement.eventticket.eventdate.event.organizer %}
+                                            <h6><span class="text-muted">{{ "Organizer"|trans({}, "messages", locale) }}</span><br>{{ orderElement.eventticket.eventdate.event.organizer.name }}</h6>
+                                            {% endif %}
+                                    </td>
+                                    <td width="50%">
+                                        <h3>
+                                            {{ order.user.getCrossRoleName }}
+                                            {% if order.user.hasRole("ROLE_POINTOFSALE") and order.payment.firstname and order.payment.lastname %}
+                                                ({{ order.payment.firstname ~ " " ~ order.payment.lastname }})
+                                            {% endif %}
+                                        </h3>
+                                        <h6><span class="text-muted">{{ "Ticket type"|trans({}, "messages", locale) }}</span><br>{{ orderElement.eventticket.name }}</h6>
+                                        <h6><span class="text-muted">{{ "Ticket price"|trans({}, "messages", locale) }}</span><br>{{ orderElement.eventticket.free ? "Free"|trans({}, "messages", locale) : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ orderElement.displayUnitPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}</h6>
+                                            {% if order.getOrderElementsPriceSum(true) > 0 %}
+                                            <h6><span class="text-muted">{{ "Payment method"|trans({}, "messages", locale) }}</span><br>{{ order.paymentgateway.name }}</h6>
+                                            {% endif %}
+                                        <h6><span class="text-muted">{{ "Order date"|trans({}, "messages", locale) }}</span><br>
+                                            {% if order.payment.details["TIMESTAMP"] is defined %}
+                                                {{ order.payment.details["TIMESTAMP"]|localizeddate('none', 'none', locale, date_timezone, date_format) }}
+                                            {% elseif order.payment.details["created"] is defined %}
+                                                {{ order.payment.details["created"]|localizeddate('none', 'none', locale, date_timezone, date_format) }}
+                                            {% else %}
+                                                {{ order.payment.updatedAt|localizeddate('none', 'none', locale, date_timezone, date_format) }}
+                                            {% endif %}
+                                        </h6>
+                                    </td>
+                                </tr>
+                                {% if ticket.reservedSeat %}
+                                    <tr>
+                                        <td class="text-center" colspan="2" style="padding-top: 35px;">
+                                            <img style="height: 40px;" src="data:image/png;base64,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">
+                                            <h4>
+                                                {{ services.stringifySeatLabel(ticket.reservedSeat) }}
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                <tr>
+                                    <td class="text-center" colspan="2">
+                                        <div class="qr-barcode-wrapper">
+                                            {{ barcode({code: ticket.reference, type: 'qrcode', format: 'html'}) }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% if ticket.scanned %}
+                                    <tr>
+                                        <td class="text-center" colspan="2">
+                                            <br><br>
+                                            <img src=".{{ asset('assets/img/scanned-ticket-stamp.png') }}" height="150" />
+
+                                            <p class="text-center text-muted">{{ "This ticket was scanned at %scanDate%"|trans({"%scanDate%": ticket.updatedAt|localizeddate('none', 'none', locale, date_timezone, date_format)}, "messages", locale) }}</p>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+    </body>
+</html>

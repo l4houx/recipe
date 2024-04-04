@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-contents', name: 'dashboard_admin_content_')]
+#[Route('/%website_dashboard_path%/admin/manage-contents', name: 'dashboard_admin_content_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class ContentController extends AdminBaseController
 {

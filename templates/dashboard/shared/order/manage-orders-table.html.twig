@@ -1,0 +1,244 @@
+<div class="table-responsive">
+    <table class="table table-hover table-vcenter">
+        <thead>
+            <tr>
+                <th class="text-center">{{ "Reference"|trans }}</th>
+                <th>{{'Organizer / Event / Date / Ticket'|trans}}</th>
+                    {% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_ATTENDEE") %}
+                    <th>{{'Attendee / POS'|trans}}</th>
+                    {% endif %}
+                <th>{{'Order date'|trans}}</th>
+                <th>{{'Status'|trans}}</th>
+                <th class="text-center"><i class="fas fa-cog"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for order in orders %}
+
+                <tr>
+                    <td class="text-center text-muted text-sm">
+                        {% if is_granted("ROLE_ADMINISTRATOR") %}
+                            <a href="{{ path('dashboard_administrator_order_details', { reference : order.reference }) }}">
+                                {{ order.reference }}
+                            </a>
+                        {% elseif is_granted("ROLE_ORGANIZER") %}
+                            <a href="{{ path('dashboard_organizer_order_details', { reference : order.reference }) }}">
+                                {{ order.reference }}
+                            </a>
+                        {% elseif is_granted("ROLE_POINTOFSALE") %}
+                            <a href="{{ path('dashboard_pointofsale_order_details', { reference : order.reference }) }}">
+                                {{ order.reference }}
+                            </a>
+                        {% elseif is_granted("ROLE_ATTENDEE") %}
+                            <a href="{{ path('dashboard_attendee_order_details', { reference : order.reference }) }}">
+                                {{ order.reference }}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td class="text-sm">
+                        <ul class="p-0">
+                            {% for orderelement in order.orderelements %}
+                                {% if is_granted('ROLE_ADMINISTRATOR') or (is_granted('ROLE_ORGANIZER') and orderelement.belongsToOrganizer(app.user.organizer.slug)) or is_granted('ROLE_POINTOFSALE') or is_granted('ROLE_ATTENDEE') %}
+                                    {% if (not app.request.get('event') or app.request.get('event') == orderelement.eventticket.eventdate.event.slug) and (not app.request.get('eventdate') or app.request.get('eventdate') == orderelement.eventticket.eventdate.reference) and (not app.request.get('eventticket') or app.request.get('eventticket') == orderelement.eventticket.reference) and (not app.request.get('organizer') or app.request.get('organizer') == orderelement.eventticket.eventdate.event.organizer.slug) %}
+                                        <li>
+                                            {% if is_granted("ROLE_ADMINISTRATOR") or is_granted("ROLE_ATTENDEE") %}
+                                                <a href="{{ path('organizer', { slug: orderelement.eventticket.eventdate.event.organizer.slug }) }}">{{ orderelement.eventticket.eventdate.event.organizer.name }}</a>
+                                                <i class="fas fa-chevron-{{ app.request.locale == "ar" ? "left" : "right" }} fa-sm"></i>
+                                            {% endif %}
+                                            <a href="{{ path('event', { slug: orderelement.eventticket.eventdate.event.slug }) }}">{{ orderelement.eventticket.eventdate.event.name }}</a>
+                                            <i class="fas fa-chevron-{{ app.request.locale == "ar" ? "left" : "right" }} fa-sm"></i>
+                                            {{ orderelement.eventticket.eventdate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                            <i class="fas fa-chevron-{{ app.request.locale == "ar" ? "left" : "right" }} fa-sm"></i>
+                                            {{ orderelement.eventticket.name }}
+                                            <br>
+                                            <small><strong>{{ orderelement.quantity }} {{ orderelement.quantity > 1 ? "tickets"|trans : "ticket"|trans }}</strong></small>
+                                            {% if order.status == 0 %}
+                                                {% for ticketReservation in orderelement.ticketsReservations if not ticketReservation.isExpired %}
+                                                    {% set dateInterval = ticketReservation.expiresAt|date_modify("+"~ services.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
+                                                    {% set secondsLeft = dateInterval|date("%i") * 60 + dateInterval|date("%s") %}
+                                                    {% if secondsLeft > 0 %}
+                                                        <span class="badge badge-warning">
+                                                            <i class="fas fa-hourglass-half"></i> <span class="checkout-timer" data-seconds-left="{{secondsLeft}}"></span> {{ "left before tickets are released"|trans }}
+                                                        </span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    {% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_ATTENDEE") %}
+                        <td class="text-sm">
+                            {% if is_granted('ROLE_ADMINISTRATOR') %}
+                                <span title="{{ "User information"|trans }}" data-toggle="tooltip" data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_administrator_user_information', { slug : order.user.slug }) }}" class="ajax-loading">{% include "Global/user-avatar.html.twig" with { user: order.user } %} {{ order.user.getCrossRoleName }}</span>
+                            {% else %}
+                                {% include "Global/user-avatar.html.twig" with { user: order.user } %}
+                                {{ order.user.getCrossRoleName }}
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                    <td class="text-sm">
+                        {{ order.createdAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                    </td>
+                    <td class="text-sm">
+                        <span class="badge badge-{{ order.getStatusClass }}">{{ order.stringifyStatus|trans }}</span>
+                        {% if not is_granted("ROLE_ATTENDEE") %}
+                            {% if order.deletedAt %}
+                                <br>
+                                <br>
+                                <span class="badge badge-danger"><i class="fas fa-times fa-fw"></i> {{ "Deleted"|trans }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="item-action dropdown">
+                            <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                {% if order.status == 1 %}
+                                    <a href="{{ path('dashboard_tickets_print', { reference: order.reference }) }}" class="dropdown-item" target="_blank"><i class="dropdown-icon fas fa-ticket-alt fa-fw text-muted"></i> {{ "Print tickets"|trans }}</a>
+                                {% endif %}
+                                {% if order.status == -2 or order.status == 1 %}
+                                    <span class="dropdown-item cursor-pointer" data-toggle="modal" data-target="#order-{{ order.reference }}-payment-details"><i class="dropdown-icon fas fa-file-alt fa-fw text-muted"></i> {{ "Payment details"|trans }}</span>
+                                {% endif %}
+                                {% if is_granted('ROLE_ADMINISTRATOR') %}
+                                    <a href="{{ path('dashboard_administrator_order_details', { reference : order.reference }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-file-invoice fa-fw text-muted"></i> {{ "Details"|trans }} </a>
+                                    {% if order.status == 1 %}
+                                        <span data-target="{{ path('dashboard_administrator_order_resend_confirmation_email', { reference : order.reference }) }}" data-initial-email-address="{{ order.payment.clientEmail }}" class="dropdown-item cursor-pointer resend-confirmation-email-button" data-confirmation-text="{{ "If you need to send the confirmation email to a different email address, you can change it before submitting"|trans }}"><i class="dropdown-icon far fa-envelope fa-fw text-muted"></i> {{ "Resend confirmation email"|trans }}</span>
+                                    {% endif %}
+                                    {% if order.status == 0 or order.status == 1 %}
+                                        <span data-target="{{ path('dashboard_administrator_order_cancel', { reference : order.reference }) }}" class="dropdown-item cursor-pointer order-cancel-button" data-confirmation-text="{{ "You are about to cancel this order (this action cannot be undone)"|trans }}"><i class="dropdown-icon fas fa-window-close fa-fw text-muted"></i> {{ "Cancel"|trans }}</span>
+                                    {% endif %}
+                                    {% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}
+                                        <span data-target="{{ path('dashboard_administrator_order_validate', { reference : order.reference }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to validate this order, generate the tickets and send a confirmation email to the attendee"|trans }}"><i class="dropdown-icon fas fa-check fa-fw text-muted"></i> {{ "Validate"|trans }}</span>
+                                    {% endif %}
+                                    {% if order.deletedAt %}
+                                        <a href="{{ path('dashboard_administrator_order_restore', { reference : order.reference }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-trash-restore fa-fw text-muted"></i> {{ "Restore"|trans }}</a>
+                                        <span data-target="{{ path('dashboard_administrator_order_delete', { reference : order.reference }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the order and all its related information (payment details, tickets...)"|trans ~ " " ~ "PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-trash fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
+                                    {% else %}
+                                        <span data-target="{{ path('dashboard_administrator_order_delete', { reference : order.reference }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the order and all its related information (payment details, tickets...)"|trans }}"><i class="dropdown-icon fas fa-times fa-fw text-muted"></i> {{ "Delete"|trans }} </span>
+                                    {% endif %}
+                                {% elseif is_granted('ROLE_ORGANIZER') %}
+                                    {% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}
+                                        <span data-target="{{ path('dashboard_organizer_order_validate', { reference : order.reference }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to validate this order, generate the tickets and send a confirmation email to the attendee"|trans }}"><i class="dropdown-icon fas fa-check fa-fw text-muted"></i> {{ "Validate"|trans }}</span>
+                                    {% endif %}
+                                    <span class="dropdown-item cursor-pointer" data-toggle="modal" data-target="#order-{{ order.reference }}-contactAttendee"><i class="dropdown-icon fas fa-envelope fa-fw text-muted"></i> {{ "Contact the attendee"|trans }}</span>
+                                    <a href="{{ path('dashboard_organizer_order_details', { reference : order.reference }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-file-invoice fa-fw text-muted"></i> {{ "Details"|trans }} </a>
+                                {% elseif is_granted('ROLE_POINTOFSALE') %}
+                                    <a href="{{ path('dashboard_pointofsale_order_details', { reference : order.reference }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-file-invoice fa-fw text-muted"></i> {{ "Details"|trans }} </a>
+                                {% elseif is_granted('ROLE_ATTENDEE') %}
+                                    {% if not order.deletedAt %}
+                                        {% if order.status == 0 %}
+                                            <a href="{{ path('dashboard_attendee_checkout', { orderReference : order.reference }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-money-check fa-fw text-muted"></i> {{ "Checkout"|trans }} </a>
+                                        {% endif %}
+                                        <span class="dropdown-item cursor-pointer" data-toggle="modal" data-target="#order-{{ order.reference }}-contactOrganizer"><i class="dropdown-icon fas fa-envelope fa-fw text-muted"></i> {{ "Contact the organizer"|trans }}</span>
+                                    {% endif %}
+                                    <a href="{{ path('dashboard_attendee_order_details', { reference : order.reference }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-file-invoice fa-fw text-muted"></i> {{ "Details"|trans }} </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% for order in orders %}
+
+        {% if is_granted('ROLE_ORGANIZER') and not order.deletedAt %}
+
+            <div class="modal fade" id="order-{{ order.reference }}-contactAttendee">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ "Order"|trans }} #{{ order.reference }}: {{ "Contact the attendee"|trans }}</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ path('dashboard_organizer_order_contactAttendee', {reference: order.reference}) }}" method="POST">
+                                <div class="form-group">
+                                    <label for="message" class="form-label required">{{ "Message"|trans }}</label>
+                                    <textarea name="message" id="message" class="form-control" rows="10" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block mt-3">
+                                    <i class="fas fa-envelope"></i>
+                                    {{ "Send"|trans }}
+                                </button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+        {% if is_granted('ROLE_ATTENDEE') and not order.deletedAt %}
+
+            <div class="modal fade" id="order-{{ order.reference }}-contactOrganizer">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ "Order"|trans }} #{{ order.reference }}: {{ "Contact the organizer"|trans }}</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ path('dashboard_attendee_order_contactOrganizer', {reference: order.reference}) }}" method="POST">
+                                <div class="form-group">
+                                    <label for="message" class="form-label required">{{ "Message"|trans }}</label>
+                                    <textarea name="message" id="message" class="form-control" rows="10" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block mt-3">
+                                    <i class="fas fa-envelope"></i>
+                                    {{ "Send"|trans }}
+                                </button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+        {% if order.status == -2 or order.status == 1 %}
+
+            <div class="modal fade" id="order-{{ order.reference }}-payment-details">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ "Order payment details"|trans }} - {{ order.reference }}</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+
+                            <p class="mb-3 text-center">
+                                <img src="{{  asset(order.paymentgateway.getLogoPath) }}" class="img-80-80" />
+                            </p>
+
+                            {% if order.payment.details %}
+                                {{ order.payment.details|json_encode(constant('JSON_PRETTY_PRINT'))|nl2br }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+</div>

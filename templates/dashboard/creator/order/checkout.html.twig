@@ -1,0 +1,275 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Checkout' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_index": "Dashboard"|trans, "dashboard_attendee_cart": ("My cart"|trans), "current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content bg-white padding-y">
+
+        <div class="{{ services.getSetting("app_layout") }}">
+
+            <div class="row">
+                <main class="col-lg-8 order-1 order-lg-0 mt-4 mt-lg-0">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="b mb-0">{{ "Order summary"|trans }}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover shopping-cart-wrap">
+                                    <thead class="text-muted">
+                                        <tr>
+                                            <th style="width:55%;" scope="col">{{ "Event / Ticket"|trans }}</th>
+                                            <th style="width:15%;" scope="col" width="100">{{ "Price"|trans }}</th>
+                                            <th style="width:15%;" scope="col" width="100">{{ "Quantity"|trans }}</th>
+                                            <th style="width:15%;" scope="col" class="text-right" width="100">{{ "Subtotal"|trans }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for orderelement in order.orderelements %}
+                                            <tr>
+                                                <td width="55%">
+                                                    {% include "Global/event-preview-horizontal.html.twig" with { eventticket: orderelement.eventticket } %}
+                                                    {% if orderelement.reservedSeats and orderelement.reservedSeats|length > 0 %}
+                                                        <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
+                                                        <ul class='list-check'>
+                                                            {% for reservedSeat in orderelement.reservedSeats %}
+                                                                <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
+                                                                {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </td>
+                                                <td width="15%">
+                                                    <div class="price-wrap">
+                                                        {% if orderelement.eventticket.eventdate.event.isFree %}
+                                                            <span class="price-new">{{ "Free"|trans }}</span>
+                                                        {% else %}
+                                                            {% if orderelement.eventticket.eventdate %}
+                                                                <span class="price-new">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.eventticket.getSalePrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</span>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                                <td width="15%">
+                                                    {{ orderelement.quantity }}
+                                                </td>
+                                                <td width="15%" class="text-right">
+                                                    <div class="price-wrap">
+                                                        <var class="price">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.getPrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_start(form, {'attr': { 'novalidate': 'novalidate' } }) }}
+
+                    {{ form_widget(form.orderReference, { value: order.reference }) }}
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h6 class="b mb-0">{{ "Billing information"|trans }}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    {{ form_label(form.firstname) }}
+                                    {{ form_widget(form.firstname, { value: app.user.firstname }) }}
+                                    {{ form_errors(form.firstname) }}
+                                </div>
+                                <div class="col form-group">
+                                    {{ form_label(form.lastname) }}
+                                    {{ form_widget(form.lastname, { value: app.user.lastname }) }}
+                                    {{ form_errors(form.lastname) }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    {{ form_label(form.email) }}
+                                    {{ form_widget(form.email, { value: app.user.email }) }}
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    {{ form_label(form.country) }}
+                                    {{ form_widget(form.country) }}
+                                    {{ form_errors(form.country) }}
+                                </div>
+                                <div class="col form-group">
+                                    {{ form_label(form.state) }}
+                                    {{ form_widget(form.state, { value: app.user.state }) }}
+                                    {{ form_errors(form.state) }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    {{ form_label(form.city) }}
+                                    {{ form_widget(form.city, { value: app.user.city }) }}
+                                    {{ form_errors(form.city) }}
+                                </div>
+                                <div class="col form-group">
+                                    {{ form_label(form.postalcode) }}
+                                    {{ form_widget(form.postalcode, { value: app.user.postalcode }) }}
+                                    {{ form_errors(form.postalcode) }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    {{ form_label(form.street) }}
+                                    {{ form_widget(form.street, { value: app.user.street }) }}
+                                    {{ form_errors(form.street) }}
+                                </div>
+                                <div class="col form-group">
+                                    {{ form_label(form.street2) }}
+                                    {{ form_widget(form.street2, { value: app.user.street2 }) }}
+                                    {{ form_errors(form.street2) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if order.getOrderElementsPriceSum(true) > 0 %}
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h6 class="b mb-0">{{ "Payment method"|trans }}</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    {% for paymentGateway in paymentGateways %}
+                                        <div class="col-6 form-group">
+
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input data-paymentGateway-id="{{ paymentGateway.id }}" class="custom-control-input" id="{{ paymentGateway.factoryName }}" type="radio" name="payment_gateway" value="{{ paymentGateway.factoryName }}" {{ loop.first ? "checked"}}/>
+                                                <label class="custom-control-label required" for="{{ paymentGateway.factoryName }}"><img src="{{  asset(paymentGateway.getLogoPath) }}" class="img-80-80 mr-3 ml-3" />{{ paymentGateway.name }}</label>
+                                            </div>
+
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {% for paymentGateway in paymentGateways %}
+                                    {% if paymentGateway.instructions %}
+
+                                        <div id="paymentGateway{{ paymentGateway.id }}-instructions" class="form-row paymentGateways-instructions">
+                                            <div class="col-12 form-group">
+
+                                                {% include "Global/message.html.twig" with { type: "info", message: (paymentGateway.instructions|raw), icon: "fas fa-info-circle" } %}
+
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-money-check"></i> {{ "Pay now"|trans }}</button>
+                    {% else %}
+                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-edit"></i> {{ "Register"|trans }}</button>
+                    {% endif %}
+
+
+                    {{ form_end(form) }}
+
+                </main>
+                <aside class="col-lg-4 pt-3 pt-lg-0 order-0 order-lg-1">
+                    <div class="sticky-top sticky-sidebar">
+                        <div class="checkout-timer-wrapper">
+
+                            {% set secondsLeft = 0 %}
+
+                            {% for orderElement in order.orderelements %}
+
+                                {% for ticketReservation in orderElement.ticketsReservations if not ticketReservation.isExpired %}
+
+                                    {% set dateInterval = ticketReservation.createdAt|date_modify("+"~ services.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
+                                    {% set secondsLeft = dateInterval|date("%i") * 60 + dateInterval|date("%s") %}
+
+                                {% endfor %}
+
+                            {% endfor %}
+
+                            {% if secondsLeft > 0 %}
+                                {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-hourglass-half', message: '%mins% left before tickets are released'|trans({"%mins%" : "<span class='checkout-timer' data-seconds-left='"~secondsLeft~"'></span>"}) } %}
+                            {% endif %}
+
+                        </div>
+                        <dl class="dlist-align">
+                            <dt>{{ "Tickets"|trans }}</dt>
+                            <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
+                            </dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>{{ "Fees"|trans }}</dt>
+                            <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getTotalFees() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</dd>
+                        </dl>
+                        <dl class="dlist-align h4">
+                            <dt>{{ "Total"|trans }}</dt>
+                            <dd class="text-right ml-5"><strong>{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</strong></dd>
+                        </dl>
+                        {% if order.getOrderElementsPriceSum(true) > 0 %}
+                            <hr>
+                            {% for paymentGateway in paymentGateways %}
+
+                                {% if paymentGateway.factoryName == "paypal_express_checkout" %}
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <img src="{{ asset('assets/img/icons/payment/americanexpress-dark.svg') }}" class="width-auto img-fluid">
+                                        </div>
+                                        <div class="col">
+                                            <img src="{{ asset('assets/img/icons/payment/visa-dark.svg') }}" class="width-auto img-fluid">
+                                        </div>
+                                        <div class="col">
+                                            <img src="{{ asset('assets/img/icons/payment/mastercard-dark.svg') }}" class="width-auto img-fluid">
+                                        </div>
+                                        <div class="col">
+                                            <img src="{{ asset('assets/img/icons/payment/discover-dark.svg') }}" class="width-auto img-fluid">
+                                        </div>
+                                        <div class="col">
+                                            <img src="{{ asset('assets/img/icons/payment/paypal-dark.svg') }}" class="width-auto img-fluid">
+                                        </div>
+                                    </div>
+
+                                {% endif %}
+
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </aside>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        $(document).ready(function () {
+        {% if app.user.country %}
+                $('#checkout_country').val('{{ app.user.country.id }}');
+                $('#checkout_country').trigger('change');
+        {% endif %}
+
+                $('input[name="payment_gateway"]').on('change', function () {
+                    if ($(this).is(':checked')) {
+                        $('.paymentGateways-instructions').hide();
+                        $('#paymentGateway' + $(this).attr('data-paymentGateway-id') + '-instructions').show();
+                    }
+                });
+                $('input[name="payment_gateway"]').trigger('change');
+
+            });
+    </script>
+
+{% endblock %}

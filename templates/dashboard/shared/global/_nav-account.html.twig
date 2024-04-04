@@ -14,8 +14,8 @@
                     </a>
                 </li>
             {% endif %}
-            <li class="nav-item {{ app.current_route == 'dashboard_main_account' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_main_account') }}">
+            <li class="nav-item {{ app.current_route == 'dashboard_account_index' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_account_index') }}">
                     <i class="bi bi-person nav-icon"></i>
                     {{ 'My account'|trans }}
                 </a>
@@ -32,8 +32,8 @@
                     {{ 'My favorites'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route starts with 'dashboard_account_ticket_' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_account_ticket_index') }}">
+            <li class="nav-item {{ app.current_route starts with 'dashboard_ticket_index_' ? 'active' : '' }}">
+                <a class="nav-link" href="{{ path('dashboard_ticket_index_index') }}">
                     <i class="bi bi-ticket nav-icon"></i>
                     {{ 'My tickets'|trans }}
                 </a>
@@ -45,7 +45,7 @@
                 </a>
             </li>
             <li class="nav-item {{ app.current_route starts with 'dashboard_account_testimonial_' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_account_testimonial_index') }}">
+                <a class="nav-link" href="{{ path('dashboard_testimonial_index') }}">
                     <i class="bi bi-star nav-icon"></i>
                     {{ 'My testimonials'|trans }}
                 </a>
@@ -57,7 +57,7 @@
                 </a>
             </li>
             <li class="nav-item {{ app.current_route starts with 'dashboard_account_invoice_' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_account_invoice_index') }}">
+                <a class="nav-link" href="{{ path('dashboard_invoice_index') }}">
                     <i class="bi bi-clipboard nav-icon"></i>
                     {{ 'My invoices'|trans }}
                 </a>

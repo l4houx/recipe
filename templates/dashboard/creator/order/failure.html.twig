@@ -1,0 +1,34 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Your payment could not be processed at this time'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+                            {% if paymentdetails.L_SHORTMESSAGE0 is defined and paymentdetails.L_LONGMESSAGE0 is defined %}
+                                {% include 'Global/message.html.twig' with { type: 'error',icon: 'fas fa-info', message: "<b>" ~ paymentdetails.L_SHORTMESSAGE0 ~ "</b><br>" ~ paymentdetails.L_LONGMESSAGE0 } %}
+                            {% else %}
+                                {% include 'Global/message.html.twig' with { type: 'error',icon: 'fas fa-info', message: pagetitle } %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

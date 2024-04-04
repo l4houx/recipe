@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-attachments', name: 'dashboard_admin_attachment_')]
+#[Route('/%website_dashboard_path%/admin/manage-attachments', name: 'dashboard_admin_attachment_')]
 #[IsGranted('ATTACHMENT')]
 class AttachmentController extends AdminBaseController
 {

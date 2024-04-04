@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/%website_dashboard_path%/main-panel/manage-countries', name: 'dashboard_admin_country_')]
+#[Route('/%website_dashboard_path%/admin/manage-countries', name: 'dashboard_admin_country_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class CountryController extends AdminBaseController
 {

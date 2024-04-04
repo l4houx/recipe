@@ -1,0 +1,1226 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = restaurant.name %}
+{% block title pagetitle %}
+
+{% block bg %}
+    <div class="" style="background: url({{ asset('images/background/profile-bg.jpg') }}) no-repeat; background-position: center; height: 300px"></div>
+    <section class="card p-lg-2 pt-2 pt-lg-0 rounded-0 border-0">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="d-flex align-items-center">
+                        <div class="position-relative mt-n8">
+                            {% include "global/user-avatar.html.twig" with { user: app.user, type: "xxl", class: "position-relative border-white border border-4" } %}
+                            {% include 'global/user-verified.html.twig' with { class: "me-2" } %}
+                        </div>
+                        <div class="d-md-flex justify-content-between w-100 align-items-center">
+                            <div class="ms-3">
+                                <div class="d-flex align-items-center">
+                                    <h3 class="mb-0 fw-bold me-2">{{ user.username }}</h3>
+                                    {% include "global/user-badge.html.twig" %}
+                                </div>
+                                <span class="mb-0 d-block fs-6">
+                                    {{ 'Registered'|trans }} {{ user.createdAt | ago() }}
+                                </span>
+                            </div> 
+                            {% if restaurant.hasSocialMedia %}
+                                <div class="d-flex text-center gap-3 ms-3 ms-md-0 my-3 my-md-0">
+                                    {% if restaurant.youtubeurl %}
+                                        <a href="{% if 'http://' not in restaurant.youtubeurl and 'https://' not in restaurant.youtubeurl %}http://{% endif %}{{ restaurant.youtubeurl }}" class="text-reset" target="_blank">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-youtube" viewBox="0 0 16 16">
+                                                <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z">
+                                            </path></svg>
+                                        </a>
+                                    {% endif %}
+                                    <a href="#" class="text-reset" target="_blank">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link-45deg" viewBox="0 0 16 16">
+                                            <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"></path>
+                                            <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"></path>
+                                        </svg>
+                                    </a>
+                                    {% if restaurant.instagramurl %}
+                                        <a href="{% if 'http://' not in restaurant.instagramurl and 'https://' not in restaurant.instagramurl %}http://{% endif %}{{ restaurant.instagramurl }}" class="text-reset" target="_blank">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                                                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z">
+                                            </path></svg>
+                                        </a>
+                                    {% endif %}
+                                    {% if restaurant.facebookurl %}
+                                        <a href="{% if 'http://' not in restaurant.facebookurl and 'https://' not in restaurant.facebookurl %}http://{% endif %}{{ restaurant.facebookurl }}" class="text-reset" target="_blank">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+                                                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                            </path></svg>
+                                        </a>
+                                    {% endif %}
+                                    {% if restaurant.twitterurl %}
+                                        <a href="{% if 'http://' not in restaurant.twitterurl and 'https://' not in restaurant.twitterurl %}http://{% endif %}{{ restaurant.twitterurl }}" class="text-reset" target="_blank">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+                                                <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                            </path></svg>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <section class="py-5 py-md-5">
+        <div class="container">
+            <div class="row">
+                {% if user.isTeam == '1' %}
+                    <div class="col-lg-3 col-md-4 col-12">
+                        {% if user.about %}
+                            <div class="card border-0 mb-4">
+                                <div class="card-body">
+                                    <h4>{{ 'About me'|trans }}</h4>
+                                    <p>
+                                        {{ user.about | html_markdown }}
+                                    </p>
+                                    <a href="#" class="btn-link">{{ 'Read more'|trans }}</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="card border-0 mb-4 mb-lg-0">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
+                                    <div>
+                                        <h4 class="mb-0 fw-bold">32</h4>
+                                        <p class="fs-6 mb-0">Courses</p>
+                                    </div>
+                                    <div>
+                                        <span><i class="fe fe-file-text fs-3"></i></span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
+                                    <div>
+                                        <h4 class="mb-0 fw-bold">11,604</h4>
+                                        <p class="fs-6 mb-0">Total Students</p>
+                                    </div>
+                                    <div>
+                                        <span><i class="fe fe-users fs-3"></i></span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h4 class="mb-0 fw-bold">12,230</h4>
+                                        <p class="fs-6 mb-0">Reviews</p>
+                                    </div>
+                                    <div>
+                                        <span><i class="fe fe-star fs-3"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="{% if user.isTeam == '1' %}col-lg-9 col-md-8{% else %}col-lg-12 col-md-12{% endif %}col-12">
+                    <div class="card border-0">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                My Courses
+                                <span class="fs-6">(12)</span>
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item px-0 pb-3 pt-0">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="#">
+                                            <div class="d-lg-flex align-items-center">
+                                                <div>
+                                                    <img src="../assets/images/course/course-wordpress.jpg" alt="course"
+                                                        class="rounded img-4by3-lg">
+                                                </div>
+                                                <div class="ms-lg-3 mt-2 mt-lg-0">
+                                                    <h4 class="text-primary-hover">
+                                                        Create a Website with WordPress
+                                                        <span class="badge bg-success-soft">New</span>
+                                                    </h4>
+                                                    <ul class="list-inline fs-6 mb-0 text-inherit">
+                                                        <li class="list-inline-item">
+                                                            <span class="align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                    height="10" fill="currentColor" class="bi bi-clock"
+                                                                    viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>3h 30m</span>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <svg class="mt-n1" width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="3" y="8" width="2" height="6" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="7" y="5" width="2" height="9" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                                <rect x="11" y="2" width="2" height="12" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                            </svg>
+                                                            Beginner
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <span class="lh-1">
+                                                                <span class="fs-6 align-text-top">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span class="text-warning">4.5</span>
+                                                            </span>
+                                                            <span>(1,345)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <span class="dropdown dropstart">
+                                                <a class="text-reset" href="#" role="button" id="courseDropdown"
+                                                    data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="true">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown">
+                                                    <span class="dropdown-header">Share</span>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-facebook text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Facebook</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-twitter text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Twitter</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-linkedin text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Linked</span>
+                                                        In
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                fill="currentColor" class="bi bi-copy text-secondary "
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Copy</span>
+                                                        Link
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item px-0 py-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="#">
+                                            <div class="d-lg-flex align-items-center">
+                                                <div>
+                                                    <img src="../assets/images/course/course-javascript.jpg" alt="course"
+                                                        class="rounded img-4by3-lg">
+                                                </div>
+                                                <div class="ms-lg-3 mt-2 mt-lg-0">
+                                                    <h4 class="text-primary-hover">JavaScript Fundamentals</h4>
+                                                    <ul class="list-inline fs-6 mb-0 text-inherit">
+                                                        <li class="list-inline-item">
+                                                            <span class="align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                    height="10" fill="currentColor" class="bi bi-clock"
+                                                                    viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>1h 20m</span>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <svg class="mt-n1" width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="3" y="8" width="2" height="6" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="7" y="5" width="2" height="9" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="11" y="2" width="2" height="12" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                            </svg>
+                                                            Advance
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <span class="lh-1">
+                                                                <span class="fs-6 align-text-top">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-light"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </span>
+                                                            <span class="text-warning">4</span>
+                                                            <span>(1,000)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <!-- Dropdown -->
+                                            <span class="dropdown dropstart">
+                                                <a class="text-reset" href="#" role="button" id="courseDropdown1"
+                                                    data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="true">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown1">
+                                                    <span class="dropdown-header">Share</span>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-facebook text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Facebook</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-twitter text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Twitter</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-linkedin text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Linked</span>
+                                                        In
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                fill="currentColor" class="bi bi-copy text-secondary "
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Copy</span>
+                                                        Link
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- List group item -->
+                                <li class="list-group-item px-0 py-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="#">
+                                            <div class="d-lg-flex align-items-center">
+                                                <div>
+                                                    <img src="../assets/images/course/course-angular.jpg" alt="course"
+                                                        class="rounded img-4by3-lg">
+                                                </div>
+                                                <div class="ms-lg-3 mt-2 mt-lg-0">
+                                                    <h4 class="text-primary-hover">AngularJS Forms Using Bootstrap</h4>
+                                                    <ul class="list-inline fs-6 mb-0 text-inherit">
+                                                        <li class="list-inline-item">
+                                                            <span class="align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                    height="10" fill="currentColor" class="bi bi-clock"
+                                                                    viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>2h 30m</span>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <svg class="mt-n1" width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="3" y="8" width="2" height="6" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="7" y="5" width="2" height="9" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                                <rect x="11" y="2" width="2" height="12" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                            </svg>
+                                                            Beginner
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <span class="lh-1">
+                                                                <span class="fs-6 align-text-top">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </span>
+                                                            <span class="text-warning">4.5</span>
+                                                            <span>(900)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <!-- Dropdown -->
+                                            <span class="dropdown dropstart">
+                                                <a class="text-reset" href="#" role="button" id="courseDropdown2"
+                                                    data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="true">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown2">
+                                                    <span class="dropdown-header">Share</span>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-facebook text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Facebook</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-twitter text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Twitter</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-linkedin text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Linked</span>
+                                                        In
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                fill="currentColor" class="bi bi-copy text-secondary "
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Copy</span>
+                                                        Link
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- List group item -->
+                                <li class="list-group-item px-0 py-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="#">
+                                            <div class="d-lg-flex align-items-center">
+                                                <div>
+                                                    <img src="../assets/images/course/course-python.jpg" alt="course"
+                                                        class="rounded img-4by3-lg">
+                                                </div>
+                                                <div class="ms-lg-3 mt-2 mt-lg-0">
+                                                    <h4 class="text-primary-hover">Get start with Python from base</h4>
+                                                    <ul class="list-inline fs-6 mb-0 text-inherit">
+                                                        <li class="list-inline-item">
+                                                            <span class="align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                    height="10" fill="currentColor" class="bi bi-clock"
+                                                                    viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>1h 30m</span>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <svg class="mt-n1" width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="3" y="8" width="2" height="6" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="7" y="5" width="2" height="9" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="11" y="2" width="2" height="12" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                            </svg>
+                                                            Intermediate
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <span class="lh-1">
+                                                                <span class="fs-6 align-text-top">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </span>
+                                                            <span class="text-warning">4.5</span>
+                                                            <span>(1,900)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <!-- Dropdown -->
+                                            <span class="dropdown dropstart">
+                                                <a class="text-reset" href="#" role="button" id="courseDropdown3"
+                                                    data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="true">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown3">
+                                                    <span class="dropdown-header">Share</span>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-facebook text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Facebook</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-twitter text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Twitter</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-linkedin text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Linked</span>
+                                                        In
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                fill="currentColor" class="bi bi-copy text-secondary "
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Copy</span>
+                                                        Link
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- List group item -->
+                                <li class="list-group-item px-0 py-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="#">
+                                            <div class="d-lg-flex align-items-center">
+                                                <div>
+                                                    <img src="../assets/images/course/course-laravel.jpg" alt="course"
+                                                        class="rounded img-4by3-lg">
+                                                </div>
+                                                <div class="ms-lg-3 mt-2 mt-lg-0">
+                                                    <h4 class="text-primary-hover">The Ultimate Advanced Laravel..</h4>
+                                                    <ul class="list-inline fs-6 mb-0 text-inherit">
+                                                        <li class="list-inline-item">
+                                                            <span class="align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                    height="10" fill="currentColor" class="bi bi-clock"
+                                                                    viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>2h 30m</span>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <svg class="mt-n1" width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="3" y="8" width="2" height="6" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="7" y="5" width="2" height="9" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="11" y="2" width="2" height="12" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                            </svg>
+                                                            Advance
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <span class="lh-1">
+                                                                <span class="fs-6 align-text-top">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </span>
+                                                            <span class="text-warning">4.5</span>
+                                                            <span>(1,900)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <!-- Dropdown -->
+                                            <span class="dropdown dropstart">
+                                                <a class="text-reset" href="#" role="button" id="courseDropdown4"
+                                                    data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="true">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown4">
+                                                    <span class="dropdown-header">Share</span>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-facebook text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Facebook</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-twitter text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Twitter</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-linkedin text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Linked</span>
+                                                        In
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                fill="currentColor" class="bi bi-copy text-secondary "
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Copy</span>
+                                                        Link
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- List group item -->
+                                <li class="list-group-item px-0 py-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="#">
+                                            <div class="d-lg-flex align-items-center">
+                                                <div>
+                                                    <img src="../assets/images/course/course-gatsby.jpg" alt="course"
+                                                        class="rounded img-4by3-lg">
+                                                </div>
+                                                <div class="ms-lg-3 mt-2 mt-lg-0">
+                                                    <h4 class="text-primary-hover">The Ultimate Advanced Gatsby Course..
+                                                    </h4>
+                                                    <ul class="list-inline fs-6 mb-0 text-inherit">
+                                                        <li class="list-inline-item">
+                                                            <span class="align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                    height="10" fill="currentColor" class="bi bi-clock"
+                                                                    viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>2h 30m</span>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <svg class="mt-n1" width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="3" y="8" width="2" height="6" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="7" y="5" width="2" height="9" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                                <rect x="11" y="2" width="2" height="12" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                            </svg>
+                                                            Beginner
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <span class="lh-1">
+                                                                <span class="fs-6 align-text-top">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-light"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-light"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </span>
+                                                            <span class="text-warning">3.5</span>
+                                                            <span>(4,900)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <!-- Dropdown -->
+                                            <span class="dropdown dropstart">
+                                                <a class="text-reset" href="#" role="button" id="courseDropdown5"
+                                                    data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="true">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown5">
+                                                    <span class="dropdown-header">Share</span>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-facebook text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Facebook</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-twitter text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Twitter</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-linkedin text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Linked</span>
+                                                        In
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                fill="currentColor" class="bi bi-copy text-secondary "
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Copy</span>
+                                                        Link
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- List group item -->
+                                <li class="list-group-item px-0 pb-0 pt-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="#">
+                                            <div class="d-lg-flex align-items-center">
+                                                <div>
+                                                    <img src="../assets/images/course/course-css.jpg" alt="course"
+                                                        class="rounded img-4by3-lg">
+                                                </div>
+                                                <div class="ms-lg-3 mt-2 mt-lg-0">
+                                                    <h4 class="text-primary-hover">Learn CSS Language....</h4>
+                                                    <ul class="list-inline fs-6 mb-0 text-inherit">
+                                                        <li class="list-inline-item">
+                                                            <span class="align-text-bottom">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10"
+                                                                    height="10" fill="currentColor" class="bi bi-clock"
+                                                                    viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                            <span>2h 30m</span>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <svg class="mt-n1" width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <rect x="3" y="8" width="2" height="6" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="7" y="5" width="2" height="9" rx="1"
+                                                                    fill="#754FFE"></rect>
+                                                                <rect x="11" y="2" width="2" height="12" rx="1"
+                                                                    fill="#DBD8E9"></rect>
+                                                            </svg>
+                                                            Intermediate
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <span class="lh-1">
+                                                                <span class="fs-6 align-text-top">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-warning"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-light"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9"
+                                                                        height="9" fill="currentColor"
+                                                                        class="bi bi-star-fill text-light"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </span>
+                                                            </span>
+                                                            <span class="text-warning">3.5</span>
+                                                            <span>(2,900)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <!-- Dropdown -->
+                                            <span class="dropdown dropstart">
+                                                <a class="text-reset" href="#" role="button" id="courseDropdown6"
+                                                    data-bs-toggle="dropdown" data-bs-offset="-20,20" aria-expanded="true">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown6">
+                                                    <span class="dropdown-header">Share</span>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-facebook text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Facebook</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-twitter text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Twitter</span>
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                                fill="currentColor" class="bi bi-linkedin text-secondary"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Linked</span>
+                                                        In
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <span class="me-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                                fill="currentColor" class="bi bi-copy text-secondary "
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                        <span>Copy</span>
+                                                        Link
+                                                    </a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

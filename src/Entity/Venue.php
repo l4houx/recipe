@@ -323,6 +323,11 @@ class Venue
         return $this->isListedondirectory;
     }
 
+    public function getIsListedondirectory(): bool
+    {
+        return $this->isListedondirectory;
+    }
+
     public function setIsListedondirectory(bool $isListedondirectory): static
     {
         $this->isListedondirectory = $isListedondirectory;
