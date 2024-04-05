@@ -2,33 +2,29 @@
 
 namespace App\Form;
 
-use App\Entity\Post;
-use App\Entity\User;
 use App\Entity\Keyword;
+use App\Entity\Post;
 use App\Entity\PostCategory;
+use App\Entity\User;
 use App\Form\Type\SwitchType;
 use App\Service\SettingService;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\AbstractType;
-use App\Repository\PostCategoryRepository;
-use function Symfony\Component\Translation\t;
-use Vich\UploaderBundle\Form\Type\VichFileType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+
+use function Symfony\Component\Translation\t;
 
 class PostFormType extends AbstractType
 {
     public function __construct(
         private readonly SettingService $settingService
     ) {
-        # code...
+        // code...
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -36,10 +32,11 @@ class PostFormType extends AbstractType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('thumbnailFile', VichFileType::class, [
+            /*
+            ->add('imageFile', VichFileType::class, [
                 'label' => t('Image :'),
             ])
-            /*
+            */
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => true,
@@ -50,7 +47,6 @@ class PostFormType extends AbstractType
                 'label' => t('Main blog post image :'),
                 'translation_domain' => 'messages'
             ])
-            */
             ->add('title', TextType::class, [
                 'label' => t('Title :'),
                 'required' => true,
@@ -88,12 +84,12 @@ class PostFormType extends AbstractType
                 'choice_label' => 'name',
                 'required' => true,
                 'multiple' => true,
-                //'expanded' => false,
-                //'by_reference' => false,
+                // 'expanded' => false,
+                // 'by_reference' => false,
                 'empty_data' => '',
                 'help' => t('Make sure you select the correct category to allow users to find it quickly.'),
                 'query_builder' => function () {
-                    return $this->settingService->getBlogPostCategories(array());
+                    return $this->settingService->getBlogPostCategories([]);
                 },
             ])
             ->add('keywords', EntityType::class, [

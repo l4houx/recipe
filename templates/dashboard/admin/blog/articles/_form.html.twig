@@ -11,8 +11,8 @@
         <div class="card-body">
             {% if app.request.attributes.get('_route') == 'dashboard_admin_blog_edit' %}
                 <div>
-                    <h5 class="mb-3">{{ 'Pictures'|trans }}</h5>
-                    <img src="{{ post.thumbnail ? asset(post.getThumbnailPath) : post.getThumbnailPlaceholder }}" alt="{{ post.title }}" class="img-4by3-lg rounded">
+                    <h5 class="mb-3">{{ 'Main blog post image'|trans }}</h5>
+                    <img src="{{ post.imageName ? asset(post.getImagePath) : post.getImagePlaceholder }}" alt="{{ post.title }}" class="img-4by3-lg rounded">
                 </div>
             {% endif %}
             {{ form_widget(form) }}

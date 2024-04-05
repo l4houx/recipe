@@ -10,20 +10,20 @@ trait HasAuthorTrait
 {
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(max: 500)]
-    private ?string $author = null;
+    private ?string $authors = null;
 
     #[ORM\Column(type: Types::STRING, length: 5, nullable: true)]
     #[Assert\Length(max: 5)]
     private ?string $year = null;
 
-    public function getAuthor(): ?string
+    public function getAuthors(): ?string
     {
-        return $this->author;
+        return $this->authors;
     }
 
-    public function setAuthor(?string $author): static
+    public function setAuthors(?string $authors): static
     {
-        $this->author = $author;
+        $this->authors = $authors;
 
         return $this;
     }

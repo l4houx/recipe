@@ -1,3 +1,6 @@
+{% set routename = app.request.get('_route') %}
+{% set random = setting.generateReference(5) %}
+
 <a class="d-xl-none d-lg-none d-md-none text-inherit fw-bold" href="#">{{ 'Menu'|trans }}</a>
 <button class="navbar-toggler d-md-none icon-shape icon-sm rounded bg-primary text-light" type="button" data-bs-toggle="collapse" data-bs-target="#sidenav" aria-controls="sidenav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="bi bi-list"></span>
@@ -6,45 +9,62 @@
     <div class="navbar-nav flex-column">
         <span class="navbar-header">{{ 'Dashboard'|trans }}</span>
         <ul class="list-unstyled ms-n2 mb-4">
-            {% if is_granted("ROLE_TEAM") %}
+            {% if not is_granted('ROLE_CREATOR') %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('dashboard_main') }}">
-                        <i class="bi bi-speedometer nav-icon"></i>
-                        {{ 'Dashboard'|trans }}
+                    <a class="nav-link {% if routename == "dashboard_admin_index" or routename == "dashboard_restaurant_index" or routename == "dashboard_pointofsale_index" or routename == "dashboard_scanner_index" %}active{% endif %}" href="{{ path('dashboard_main') }}">
+                        {% if is_granted("ROLE_POINTOFSALE") %}
+                            <i class="bi bi-book nav-icon"></i>
+                            {{ 'Recipes on sale'|trans }}
+                        {% elseif is_granted("ROLE_SCANNER") %}
+                            <i class="bi bi-calendar-date nav-icon"></i>
+                            {{ 'Recipes list'|trans }}
+                        {% elseif is_granted("ROLE_ADMIN_APPLICATION") %}
+                            <i class="bi bi-speedometer nav-icon"></i>
+                            {{ 'Dashboard'|trans }}
+                        {% elseif is_granted("ROLE_RESTAURANT") %}
+                            <i class="bi bi-speedometer nav-icon"></i>
+                            {{ 'Dashboard'|trans }}
+                        {% endif %}
                     </a>
                 </li>
             {% endif %}
-            <li class="nav-item {{ app.current_route == 'dashboard_account_index' ? 'active' : '' }}">
+            <li class="nav-item {% if routename == "dashboard_account_index" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_account_index') }}">
                     <i class="bi bi-person nav-icon"></i>
                     {{ 'My account'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route starts with 'dashboard_account_recipe_' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_account_recipe_index') }}">
+            <li class="nav-item {% if routename == "dashboard_restaurant_recipe_index" or routename == "dashboard_restaurant_recipe_new"  or routename == "dashboard_restaurant_recipe_edit" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_restaurant_recipe_index') }}">
                     <i class="bi bi-book nav-icon"></i>
                     {{ 'My recipes'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route starts with 'dashboard_account_favorites_' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_account_favorites_index') }}">
+            <li class="nav-item {% if routename == "dashboard_creator_favorites_index" or routename == "dashboard_creator_favorites_create"  or routename == "dashboard_creator_favorites_remove" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_creator_favorites_index') }}">
                     <i class="bi bi-heart nav-icon"></i>
                     {{ 'My favorites'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route starts with 'dashboard_ticket_index_' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_ticket_index_index') }}">
+            <li class="nav-item {% if routename == "dashboard_ticket_index" or routename == "dashboard_ticket_new"  or routename == "dashboard_ticket_edit" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_ticket_index') }}">
                     <i class="bi bi-ticket nav-icon"></i>
                     {{ 'My tickets'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route starts with 'dashboard_account_reviews_' ? 'active' : '' }}">
-                <a class="nav-link" href="{{ path('dashboard_account_reviews_index') }}">
+            <li class="nav-item {% if routename == "dashboard_application_index" or routename == "dashboard_application_new"  or routename == "dashboard_ticket_token" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_application_index') }}">
+                    <i class="bi bi-app nav-icon"></i>
+                    {{ 'My applications'|trans }}
+                </a>
+            </li>
+            <li class="nav-item {% if routename == "dashboard_restaurant_review_index" or routename == "dashboard_admin_review_index"  or routename == "dashboard_creator_review_index" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_creator_review_index') }}">
                     <i class="bi bi-star nav-icon"></i>
                     {{ 'My reviews'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route starts with 'dashboard_account_testimonial_' ? 'active' : '' }}">
+            <li class="nav-item {% if routename == "dashboard_testimonial_index" or routename == "dashboard_testimonial_new"  or routename == "dashboard_testimonial_edit" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_testimonial_index') }}">
                     <i class="bi bi-star nav-icon"></i>
                     {{ 'My testimonials'|trans }}
@@ -56,7 +76,7 @@
                     {{ 'My payments'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route starts with 'dashboard_account_invoice_' ? 'active' : '' }}">
+            <li class="nav-item {% if routename == "dashboard_invoice_index" or routename == "dashboard_invoice_show" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_invoice_index') }}">
                     <i class="bi bi-clipboard nav-icon"></i>
                     {{ 'My invoices'|trans }}
@@ -65,13 +85,13 @@
         </ul>
         <span class="navbar-header">{{ 'Account settings'|trans }}</span>
         <ul class="list-unstyled ms-n2 mb-0">
-            <li class="nav-item {{ app.current_route == 'dashboard_account_profile' ? 'active' : '' }}">
+            <li class="nav-item {% if routename == "dashboard_account_profile" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_account_profile') }}">
                     <i class="bi bi-person nav-icon"></i>
                     {{ 'My profile'|trans }}
                 </a>
             </li>
-            <li class="nav-item {{ app.current_route == 'dashboard_account_edit' ? 'active' : '' }}">
+            <li class="nav-item {% if routename == "dashboard_account_edit" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_account_edit') }}">
                     <i class="bi bi-pen nav-icon"></i>
                     {{ 'Edit my profile'|trans }}

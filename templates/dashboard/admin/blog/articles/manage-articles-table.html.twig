@@ -16,10 +16,10 @@
 				<tr>
 					<td>{{ post.id }}</td>
 					<td>
-						<a href="{{ link }}" class="text-inherit">
+						<a href="{{ path('blog_article', {slug: post.slug}) }}" target="_blank" class="text-inherit">
 							<div class="d-flex align-items-center">
 								<div>
-									<img src="{{ post.thumbnail ? asset(post.getThumbnailPath) : post.getThumbnailPlaceholder }}" alt="{{ post.title }}" class="img-4by3-lg rounded">
+									<img src="{{ post.imageName ? asset(post.getImagePath) : post.getImagePlaceholder }}" alt="{{ post.title }}" class="img-4by3-lg rounded">
 								</div>
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ post.title }}</h4>

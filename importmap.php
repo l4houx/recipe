@@ -78,4 +78,7 @@ return [
         'version' => '1.2.4',
         'type' => 'css',
     ],
+    'fontawesome-iconpicker' => [
+        'version' => '3.2.0',
+    ],
 ];

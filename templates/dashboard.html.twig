@@ -21,11 +21,11 @@
                                     </div>
                                     <div class="lh-1">
                                         <div class="d-flex align-items-center">
-                                            <h2 class="mb-0 fw-bold me-2">{{ user.username }}</h2>
-                                            {% include "global/user-badge.html.twig" %}
+                                            <h2 class="mb-0 fw-bold me-2">{{ app.user.username }}</h2>
+                                            {% include 'global/user-badge.html.twig' with { user: app.user } %}
                                         </div>
                                         <span class="mb-0 d-block fs-6">
-                                            {{ 'Registered'|trans }} {{ user.createdAt | ago() }}
+                                            {{ 'Member since'|trans }} {{ app.user.createdAt | ago() }}
                                         </span>
                                     </div>
                                 </div>
@@ -45,10 +45,6 @@
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_account_recipe_index' %}
                                         <a href="{{ path('dashboard_account_recipe_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'New recipe'|trans }}
-                                        </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_ticket_index_index' %}
-                                        <a href="{{ path('dashboard_ticket_index_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
-                                            {{ 'New ticket'|trans }}
                                         </a>
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_account_index' %}
                                         <a href="{{ path('dashboard_account_edit') }}" class="btn btn-primary btn-sm d-none d-md-block">

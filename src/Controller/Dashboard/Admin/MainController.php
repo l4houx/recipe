@@ -38,6 +38,7 @@ class MainController extends AdminBaseController
         TransactionRepository $transactionRepository
     ): Response {
         // Subscriptions Sales By Date Line Chart
+        /*
         $datefrom = date_format(new \DateTime(), 'Y-m-01');
         $dateto = date_format(new \DateTime(), 'Y-m-t');
 
@@ -56,6 +57,7 @@ class MainController extends AdminBaseController
         $subscriptionsSalesByDateLineChart->getOptions()->setCurveType('function');
         $subscriptionsSalesByDateLineChart->getOptions()->setLineWidth(2);
         $subscriptionsSalesByDateLineChart->getOptions()->getLegend()->setPosition('none');
+        */
 
         return $this->render('dashboard/admin/index.html.twig', [
             'revises' => $reviseRepository->findLatest(10),
@@ -64,7 +66,7 @@ class MainController extends AdminBaseController
             'reports' => $reportRepository->findAll(),
             'months' => $transactionRepository->getMonthlyRevenues(),
             'days' => $transactionRepository->getDailyRevenues(),
-            'subscriptionsSalesByDateLineChart' => $subscriptionsSalesByDateLineChart,
+            // 'subscriptionsSalesByDateLineChart' => $subscriptionsSalesByDateLineChart,
         ]);
     }
 

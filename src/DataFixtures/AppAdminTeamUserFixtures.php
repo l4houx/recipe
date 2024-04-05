@@ -112,6 +112,31 @@ class AppAdminTeamUserFixtures extends Fixture
             )
         );
 
+        // User Restaurant
+        /** @var User $restaurant */
+        $restaurant = (new User());
+        $restaurant
+            ->setId(4)
+            ->addRole(HasRoles::RESTAURANT)
+            ->setCountry('FR')
+            ->setLastname('Bob')
+            ->setFirstname('Cooper')
+            ->setUsername('restaurant')
+            ->setSlug('restaurant')
+            ->setEmail('restaurant@yourdomain.com')
+            ->setPhone($this->faker()->phoneNumber())
+            ->setIsVerified(true)
+            ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+            ->setLastLoginIp($this->faker()->ipv4())
+        ;
+        $restaurant->getRestaurant()->setUser($restaurant);
+
+        $manager->persist(
+            $restaurant->setPassword(
+                $this->hasher->hashPassword($restaurant, 'restaurant')
+            )
+        );
+
         // Create 10 Users
         $genres = ['male', 'female'];
         $genre = $this->faker()->randomElement($genres);
@@ -128,6 +153,7 @@ class AppAdminTeamUserFixtures extends Fixture
                 ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
                 ->setLastLoginIp($this->faker()->ipv4())
                 ->setPhone($this->faker()->phoneNumber())
+                ->addRole(HasRoles::CREATOR)
             ;
 
             if ($i > 5) {

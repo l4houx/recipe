@@ -2,31 +2,32 @@
 
 namespace App\Entity;
 
-use App\Entity\Setting\HomepageHeroSetting;
-use App\Entity\Setting\Language;
-use App\Entity\Traits\HasAuthorTrait;
-use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasDeletedAtTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
-use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
-use App\Entity\Traits\HasIsOnlineTrait;
-use App\Entity\Traits\HasLevelTrait;
+use App\Entity\Venue;
+use Doctrine\DBAL\Types\Types;
 use App\Entity\Traits\HasLimit;
-use App\Entity\Traits\HasReferenceTrait;
-use App\Entity\Traits\HasSocialNetworksTrait;
+use App\Entity\Setting\Language;
+use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\HasTagTrait;
+use App\Entity\Traits\HasLevelTrait;
 use App\Entity\Traits\HasViewsTrait;
 use App\Repository\RecipeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\HasAuthorTrait;
+use App\Entity\Traits\HasContentTrait;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
+use App\Entity\Traits\HasReferenceTrait;
+use App\Entity\Setting\HomepageHeroSetting;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasSocialNetworksTrait;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
@@ -69,6 +70,7 @@ class Recipe
     private ?int $duration = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes', cascade: ['persist'])]
+    #[Assert\NotNull(groups: ['create', 'update'])]
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 1])]
@@ -91,7 +93,7 @@ class Recipe
     /**
      * @var collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favorites', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favorites', cascade: ['persist', 'merge'])]
     #[ORM\JoinTable(name: 'favorites')]
     #[ORM\JoinColumn(name: 'recipe_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'user_id', referencedColumnName: 'id')]
@@ -608,6 +610,10 @@ class Recipe
         return $this->isShowattendees;
     }
 
+    public function getIsShowattendees(): bool {
+        return $this->isShowattendees;
+    }
+
     public function setIsShowattendees(bool $isShowattendees): static
     {
         $this->isShowattendees = $isShowattendees;
@@ -693,7 +699,7 @@ class Recipe
         return $sum;
     }
 
-    public function getTotalCheckInPercentage()
+    public function getTotalCheckInPercentage(): int|float
     {
         if (0 == count($this->recipedates)) {
             return 0;
@@ -706,7 +712,7 @@ class Recipe
         return round($recipeDatesCheckInPercentageSum / count($this->recipedates));
     }
 
-    public function getTotalSalesPercentage()
+    public function getTotalSalesPercentage(): int|float
     {
         if (0 == count($this->recipedates)) {
             return 0;
@@ -752,6 +758,17 @@ class Recipe
             && $this->restaurant->getUser()->isVerified()()
             && $this->isOnline
         ;
+    }
+
+    public function getFirstVenue(): ?Venue
+    {
+        foreach ($this->recipedates as $date) {
+            if ($date->getVenue()) {
+                return $date->getVenue();
+            }
+        }
+
+        return null;
     }
 
     public function getOrderElementsQuantitySum(int $status = 1): mixed

@@ -1,0 +1,30 @@
+<article class="ticket {{ hidden ? 'dropdown-ticket'}}">
+	<div class="flex justify-between">
+		<div>
+			<span style="--bg-color: {{ticket.level.color}};">{{ticket.level.name}}</span>
+			<span style="--bg-color: {{ticket.status.color}};">{{ticket.status.name}}</span>
+		</div>
+		{% if ticket.status.close %}
+			<span class="text-green-700 font-bold">Clos</span>
+		{% else %}
+			<a href="{{ path('dashboard_ticket_close', {id: ticket.id}) }}" class="btn">Cloturer</a>
+		{% endif %}
+	</div>
+	<h5>{{ticket.subject }}</h5>
+	{% if ticket.application %}
+		<h6>{{ticket.application.name}}</h6>
+	{% endif %}
+	<small>{{ticket.author ?? (ticket.user.firstname ~ ' ' ~ ticket.user.lastname) }}</small>
+	<strong class="info-responses">
+		{{ticket.responses | length}}
+		<img src="/images/Shape.png" alt="shape"/>
+	</strong>
+	<p>
+		{{ticket.content | nl2br}}
+	</p>
+	{% if hidden %}
+		<p class="flex justify-center !mt-2">
+			<a href="{{ path('dashboard_response_index', {id: ticket.id}) }}" class="btn">Répondre</a>
+		</p>
+	{% endif %}
+</article>

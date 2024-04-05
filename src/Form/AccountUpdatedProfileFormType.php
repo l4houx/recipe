@@ -34,7 +34,7 @@ class AccountUpdatedProfileFormType extends AbstractType
             // Profil
             ->add('username', TextType::class, [
                 'label' => t("User name :"),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t("User name")],
@@ -45,14 +45,14 @@ class AccountUpdatedProfileFormType extends AbstractType
             ])
             ->add('firstname', TextType::class, [
                 'label' => t('First name :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('First name')],
             ])
             ->add('lastname', TextType::class, [
                 'label' => t('Last name :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('Last name')],
@@ -67,21 +67,21 @@ class AccountUpdatedProfileFormType extends AbstractType
             // Contact
             ->add('email', EmailType::class, [
                 'label' => t('Email address :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'attr' => ['placeholder' => t('Email address here')],
             ])
             // Team
             ->add('designation', TextType::class, [
                 'label' => t('Designation :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
                 'attr' => ['placeholder' => ''],
             ])
             ->add('about', TextareaType::class, [
                 'label' => t('About :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],

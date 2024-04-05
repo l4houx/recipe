@@ -37,12 +37,12 @@ class ApplicationController extends BaseController
         }
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
-            $applications = $applicationRepository->findAll();
+            $rows = $applicationRepository->findAll();
         } else {
-            $applications = $applicationRepository->findBy(['user' => $user->getId()]);
+            $rows = $applicationRepository->findBy(['user' => $user->getId()]);
         }
 
-        return $this->render('dashboard/shared/application/index.html.twig', compact('user', 'applications'));
+        return $this->render('dashboard/shared/application/index.html.twig', compact('user', 'rows'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
@@ -90,7 +90,7 @@ class ApplicationController extends BaseController
             $tokenPlain .= $characters[random_int(0, $charactersLength - 1)];
         }
         // crypter le token
-        $salt = $this->getParameter('website_security_alt');
+        $salt = $this->getParameter('website_security_salt');
         $token = crypt($tokenPlain, $salt);
 
         $application->setToken($token);

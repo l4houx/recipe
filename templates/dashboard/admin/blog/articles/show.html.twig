@@ -26,8 +26,8 @@
                 <table class="table mb-0 text-nowrap table-centered table-hover">
                     <tbody>
                         <tr>
-                            <th>{{ 'Thumbnail'|trans }}</th>
-                            <td>{{ post.thumbnail }}</td>
+                            <th>{{ 'Image'|trans }}</th>
+                            <td>{{ post.imageName }}</td>
                         </tr>
                         <tr>
                             <th>{{ 'Readtime'|trans }}</th>
@@ -75,7 +75,6 @@
                 <a href="{{ path('dashboard_admin_blog_edit', {'id': post.id}) }}" class="btn btn-outline-warning btn-sm">
                     {{ 'Edit'|trans }}
                 </a>
-                {{ include('dashboard/admin/blog/_delete_form.html.twig') }}
             </div>
         </div>
     </div>

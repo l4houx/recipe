@@ -1,0 +1,21 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th># {# {{ knp_pagination_sortable(rows, '#', 't.id') }} #}</th>
+				<th>{{ 'User name / Email'|trans }}</th>
+				<th>{{ 'Full name / Premium'|trans }}</th>
+				<th>{{ 'Content'|trans }}</th>
+				<th>{{ 'Rating'|trans }}</th>
+				<th>{{ 'Last updated'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ticket in rows %}
+                {{ component('ticket', {'ticket': ticket, 'hidden': true}) }}
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

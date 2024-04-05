@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\PayoutRequest;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,50 @@ class PayoutRequestRepository extends ServiceEntityRepository
         parent::__construct($registry, PayoutRequest::class);
     }
 
-    //    /**
-    //     * @return PayoutRequest[] Returns an array of PayoutRequest objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getPayoutRequests($reference, $recipedate, $restaurant, $datefrom, $dateto, $status, $sort, $order, $limit, $count): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('p');
 
-    //    public function findOneBySomeField($value): ?PayoutRequest
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($count) {
+            $qb->select('COUNT(p)');
+        } else {
+            $qb->select('p');
+        }
+
+        if ('all' !== $reference) {
+            $qb->andWhere('p.reference = :reference')->setParameter('reference', $reference);
+        }
+
+        if ('all' !== $recipedate) {
+            $qb->leftJoin('p.recipeDate', 'recipeDate');
+            $qb->andWhere('recipeDate.reference = :recipeDate')->setParameter('recipeDate', $recipedate);
+        }
+
+        if ('all' !== $restaurant) {
+            $qb->leftJoin('p.restaurant', 'restaurant');
+            $qb->andWhere('restaurant.slug = :restaurant')->setParameter('restaurant', $restaurant);
+        }
+
+        if ('all' !== $datefrom) {
+            $qb->andWhere('p.createdAt >= :datefrom')->setParameter('datefrom', $datefrom);
+        }
+
+        if ('all' !== $dateto) {
+            $qb->andWhere('p.createdAt <= :dateto')->setParameter('dateto', $dateto);
+        }
+
+        if ('all' !== $status) {
+            $qb->andWhere('p.status = :status')->setParameter('status', $status);
+        }
+
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        if ($sort) {
+            $qb->orderBy('p.'.$sort, $order);
+        }
+
+        return $qb;
+    }
 }

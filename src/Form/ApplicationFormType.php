@@ -20,7 +20,6 @@ class ApplicationFormType extends AbstractType
                 'label' => t('Application name :'),
                 'empty_data' => '',
             ])
-            ->add(t('Save'), SubmitType::class)
         ;
     }
 

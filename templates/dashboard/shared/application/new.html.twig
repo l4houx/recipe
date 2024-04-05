@@ -1,0 +1,29 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Add a new applications'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "dashboard_application_index": ('My applications'|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">{{ pagetitle }}</h3>
+            <p class="mb-0">{{ ''|trans }}</p>
+        </div>
+        <div class="card-body">
+            <div>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                    {{ form_errors(form) }}
+                    {{ form_widget(form) }}
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

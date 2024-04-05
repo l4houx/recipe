@@ -258,7 +258,7 @@ class SettingService
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'translations.name';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'a.name';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
 
         return $this->em->getRepository("App\Entity\Audience")->getAudiences($isOnline, $keyword, $slug, $limit, $sort, $order);
@@ -272,7 +272,7 @@ class SettingService
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'translations.name';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'a.name';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
 
         return $this->em->getRepository("App\Entity\Amenity")->getAmenities($isOnline, $keyword, $slug, $limit, $sort, $order);
@@ -286,7 +286,7 @@ class SettingService
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'translations.name';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'v.name';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
         $hasvenues = array_key_exists('hasvenues', $criterias) ? $criterias['hasvenues'] : 'all';
 
@@ -337,7 +337,7 @@ class SettingService
         $user = array_key_exists('user', $criterias) ? $criterias['user'] : 'all';
         $recipe = array_key_exists('recipe', $criterias) ? $criterias['recipe'] : 'all';
         $restaurant = array_key_exists('restaurant', $criterias) ? $criterias['restaurant'] : 'all';
-        $visible = array_key_exists('visible', $criterias) ? $criterias['visible'] : true;
+        $isVisible = array_key_exists('isVisible', $criterias) ? $criterias['isVisible'] : true;
         $rating = array_key_exists('rating', $criterias) ? $criterias['rating'] : 'all';
         $minrating = array_key_exists('minrating', $criterias) ? $criterias['minrating'] : 'all';
         $maxrating = array_key_exists('maxrating', $criterias) ? $criterias['maxrating'] : 'all';
@@ -346,7 +346,7 @@ class SettingService
         $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'createdAt';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
 
-        return $this->em->getRepository("App\Entity\Review")->getReviews($keyword, $slug, $user, $recipe, $restaurant, $visible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
+        return $this->em->getRepository("App\Entity\Review")->getReviews($keyword, $slug, $user, $recipe, $restaurant, $isVisible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
     }
 
     // Returns the categories after applying the specified search criterias
@@ -377,7 +377,6 @@ class SettingService
         $onlineonly = array_key_exists('onlineonly', $criterias) ? $criterias['onlineonly'] : false;
         $pricemin = array_key_exists('pricemin', $criterias) ? $criterias['pricemin'] : 'all';
         $pricemax = array_key_exists('pricemax', $criterias) ? $criterias['pricemax'] : 'all';
-        /*
         $audience = array_key_exists('audience', $criterias) ? $criterias['audience'] : "all";
         $startdate = array_key_exists('startdate', $criterias) ? $criterias['startdate'] : "all";
         $startdatemin = array_key_exists('startdatemin', $criterias) ? $criterias['startdatemin'] : "all";
@@ -407,7 +406,6 @@ class SettingService
             $startdatemin = date_format(date_modify(new \DateTime, "+1 month"), "Y-m-01");
             $startdatemax = date_format(date_modify(new \DateTime, "+1 month"), "Y-m-t");
         }
-        */
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $otherthan = array_key_exists('otherthan', $criterias) ? $criterias['otherthan'] : 'all';
         $notId = array_key_exists('notId', $criterias) ? $criterias['notId'] : 'all';
@@ -428,31 +426,8 @@ class SettingService
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
-        return $this->em->getRepository("App\Entity\Recipe")->getRecipes($category, $venue, $country, $location, $restaurant, $keyword, $slug, $freeonly, $onlineonly, $pricemin, $pricemax/* , $audience, $startdate, $startdatemin, $startdatemax */, $isOnline, $elapsed, $restaurantEnabled, $addedtofavoritesby, $onsalebypos, $canbescannedby, $isOnHomepageSlider, $otherthan, $notId, $sort, $order, $limit, $count);
+        return $this->em->getRepository("App\Entity\Recipe")->getRecipes($category, $venue, $country, $location, $restaurant, $keyword, $slug, $freeonly, $onlineonly, $pricemin, $pricemax, $audience, $startdate, $startdatemin, $startdatemax, $isOnline, $elapsed, $restaurantEnabled, $addedtofavoritesby, $onsalebypos, $canbescannedby, $isOnHomepageSlider, $otherthan, $notId, $sort, $order, $limit, $count);
     }
-
-    /*
-    public function getRecipes($criterias): QueryBuilder
-    {
-        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
-        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
-
-        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
-        $user = array_key_exists('user', $criterias) ? $criterias['user'] : 'all';
-        $userEnabled = array_key_exists('userEnabled', $criterias) ? $criterias['userEnabled'] : true;
-        $addedtofavoritesby = array_key_exists('addedtofavoritesby', $criterias) ? $criterias['addedtofavoritesby'] : 'all';
-        $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
-        $otherthan = array_key_exists('otherthan', $criterias) ? $criterias['otherthan'] : 'all';
-
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'r.title';
-        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
-        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
-
-        return $this->em->getRepository("App\Entity\Recipe")->getRecipes($keyword, $slug, $isOnline, $user, $userEnabled, $addedtofavoritesby, $isOnHomepageSlider, $otherthan, $sort, $order, $limit, $count);
-    }
-    */
 
     // Returns the recipe dates after applying the specified search criterias
     public function getRecipeDates($criterias): QueryBuilder
@@ -493,6 +468,7 @@ class SettingService
     }
 
     // Returns the orders after applying the specified search criterias
+    /*
     public function getOrders($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
@@ -515,19 +491,20 @@ class SettingService
         $sumOrderElements = array_key_exists('sumOrderElements', $criterias) ? $criterias['sumOrderElements'] : false;
 
         if ($this->authChecker->isGranted(HasRoles::CREATOR) || $this->authChecker->isGranted(HasRoles::POINTOFSALE)) {
-            /** @var User $user */
+            /** @var User $user /
             $user = $this->security->getUser();
             $user = $user->getSlug();
         }
 
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            /** @var User $user */
+            /** @var User $user /
             $user = $this->security->getUser();
             $restaurant = $user->getRestaurant()->getSlug();
         }
 
         return $this->em->getRepository("App\Entity\Order")->getOrders($status, $user, $restaurant, $recipe, $recipeDate, $recipeSubscription, $reference, $upcomingSubscriptions, $datefrom, $dateto, $paymentgateway, $sort, $order, $limit, $count, $ordersQuantityByDateStat, $sumOrderElements);
     }
+    */
 
     // Returns the users after applying the specified search criterias
     public function getUsers($criterias): QueryBuilder
@@ -826,12 +803,12 @@ class SettingService
             $this->sendOrderConfirmationEmail($order, $order->getPayment()->getClientEmail());
         }
     }
-    */
+    
 
     // Handles all the operations needed after a canceled payment processing
     public function handleCanceledPayment($orderReference, $note = null): void
     {
-        /** @var Order $order */
+        /** @var Order $order /
         $order = $this->getOrders(['status' => 'all', 'reference' => $orderReference])->getQuery()->getOneOrNullResult();
         foreach ($order->getOrderelements() as $orderElement) {
             foreach ($orderElement->getSubscriptionReservations() as $subscriptionReservation) {
@@ -848,13 +825,14 @@ class SettingService
     // Handles all the operations needed after a failed payment processing
     public function handleFailedPayment($orderReference, $note = null): void
     {
-        /** @var Order $order */
+        /** @var Order $order /
         $order = $this->getOrders(['status' => 0, 'reference' => $orderReference])->getQuery()->getOneOrNullResult();
         $order->setStatus(-2);
         $order->setNote($note);
         $this->em->persist($order);
         $this->em->flush();
     }
+    */
 
     // Returns the currencies
     public function getCurrencies(mixed $criterias): QueryBuilder
@@ -887,7 +865,7 @@ class SettingService
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'name';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'l.name';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
 
         return $this->em->getRepository("App\Entity\Setting\Language")->getLanguages($isOnline, $keyword, $slug, $limit, $sort, $order);
@@ -903,7 +881,7 @@ class SettingService
         $isocode = array_key_exists('isocode', $criterias) ? $criterias['isocode'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'name';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'c.name';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
 
         return $this->em->getRepository("App\Entity\Country")->getCountries($id, $isOnline, $keyword, $isocode, $slug, $limit, $sort, $order);

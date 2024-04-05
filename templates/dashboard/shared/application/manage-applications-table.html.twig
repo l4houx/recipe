@@ -1,0 +1,43 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered text-nowrap">
+		<thead class="table-light">
+			<tr>
+				<th>{{ 'Name'|trans }}</th>
+				<th>{{ 'User'|trans }}</th>
+				<th>{{ 'Token'|trans }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for application in rows | sort((a, b) => a.name|lower <=> b.name|lower) %}
+                <tr>
+                    <td>{{ application.name }}</td>
+                    <td>
+                        {{ application.user.lastname }}
+                        {{ application.user.firstname }}
+                    </td>
+                    <td>
+                        {% if application.token %}
+                            <strong>{{ "Token OK"|trans }}</strong>
+                            <h4 class="mb-1 h5">
+                                <a href="{{ path('dashboard_application_token', { id : application.id }) }}" target="_blank" class="text-inherit">
+                                    {{ "Regenerate a token"|trans }}
+                                </a>
+                            </h4>
+                        {% else %}
+                            <h4 class="mb-1 h5">
+                                <a href="{{ path('dashboard_application_token', { id : application.id }) }}" target="_blank" class="text-inherit">
+                                    {{ "Generate a token"|trans }}
+                                </a>
+                            </h4>
+                        {% endif %}
+                    </td>
+                </tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {#  
+	<div class="card-footer">
+		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+	</div>
+    #}
+</div>

@@ -2,17 +2,17 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
 use App\Entity\Recipe;
-use Doctrine\ORM\Query;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\QueryBuilder;
 use App\Entity\Traits\HasLimit;
-use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
-use Knp\Component\Pager\Pagination\PaginationInterface;
-use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Recipe>
@@ -25,7 +25,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 class RecipeRepository extends ServiceEntityRepository
 {
     public function __construct(
-        ManagerRegistry $registry, 
+        ManagerRegistry $registry,
         private readonly PaginatorInterface $paginator
     ) {
         parent::__construct($registry, Recipe::class);
@@ -48,11 +48,11 @@ class RecipeRepository extends ServiceEntityRepository
     public function findWithDurationLowerThan(int $duration): array
     {
         return $this->createQueryBuilder('r')
-            //->select('r', 'c')
+            // ->select('r', 'c')
             ->where('r.duration <= :duration')
             ->setParameter('duration', $duration)
             ->orderBy('r.duration', 'ASC')
-            //->leftJoin('r.category', 'c')
+            // ->leftJoin('r.category', 'c')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -61,7 +61,7 @@ class RecipeRepository extends ServiceEntityRepository
 
     public function findTotalDuration(): int
     {
-        return (int)$this->createQueryBuilder('r')
+        return (int) $this->createQueryBuilder('r')
             ->select('SUM(r.duration) as total')
             ->where('r.isOnline = true')
             ->getQuery()
@@ -100,7 +100,7 @@ class RecipeRepository extends ServiceEntityRepository
             HasLimit::RECIPE_LIMIT,
             [
                 'distinct' => false,
-                'sortFieldAllowList' => ['r.id', 'r.title', 'r.category']
+                'sortFieldAllowList' => ['r.id', 'r.title', 'r.category'],
             ]
         );
     }
@@ -111,8 +111,8 @@ class RecipeRepository extends ServiceEntityRepository
     public function findLastRecent(int $maxResults): QueryBuilder // (HomeController)
     {
         return $this->createQueryBuilder('r')
-            //->select('r')
-            //->where('r.isOnline = true AND r.createdAt < NOW()')
+            // ->select('r')
+            // ->where('r.isOnline = true AND r.createdAt < NOW()')
             ->where('r.isOnline = true')
             ->orderBy('r.createdAt', 'DESC')
             ->setMaxResults($maxResults)
@@ -140,8 +140,8 @@ class RecipeRepository extends ServiceEntityRepository
         if (!$userPremium) {
             $date = new \DateTimeImmutable('+ 3 days');
             $qb = $qb
-                ->andWhere('r.createdAt < :published_at')
-                ->setParameter('published_at', $date, Types::DATETIME_IMMUTABLE)
+                ->andWhere('r.createdAt < :isonline_at')
+                ->setParameter('isonline_at', $date, Types::DATETIME_IMMUTABLE)
             ;
         }
 
@@ -175,31 +175,28 @@ class RecipeRepository extends ServiceEntityRepository
     }
 
     /**
-     * Returns the recipes after applying the specified search criterias
+     * Returns the recipes after applying the specified search criterias.
      *
      * @param string                   $keyword
      * @param string                   $slug
      * @param Collection               $addedtofavoritesby
-     * @param null|HomepageHeroSetting $isOnHomepageSlider
+     * @param HomepageHeroSetting|null $isOnHomepageSlider
      * @param bool                     $isOnline
-     * @param mixed                    $otherthan
      * @param User|null                $user
      * @param bool                     $userEnabled
      * @param string                   $sort
      * @param string                   $order
      * @param int                      $limit
      * @param int                      $count
-     *
-     * @return QueryBuilder
      */
-    public function getRecipes($keyword, $slug, $addedtofavoritesby, $isOnHomepageSlider, $isOnline, $otherthan, $user, $userEnabled,  $sort, $order, $limit, $count): QueryBuilder
+    public function getRecipe($keyword, $slug, $addedtofavoritesby, $isOnHomepageSlider, $isOnline, $otherthan, $user, $userEnabled, $sort, $order, $limit, $count): QueryBuilder
     {
-        $qb = $this->createQueryBuilder("r");
+        $qb = $this->createQueryBuilder('r');
 
         if ($count) {
-            $qb->select("COUNT(r)");
+            $qb->select('COUNT(r)');
         } else {
-            $qb->select("DISTINCT r");
+            $qb->select('DISTINCT r');
         }
 
         if ('all' !== $keyword) {
@@ -207,15 +204,15 @@ class RecipeRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $slug) {
-            $qb->andWhere("r.slug = :slug")->setParameter("slug", $slug);
+            $qb->andWhere('r.slug = :slug')->setParameter('slug', $slug);
         }
 
         if ('all' !== $addedtofavoritesby) {
-            $qb->andWhere(":addedtofavoritesbyuser MEMBER OF r.addedtofavoritesby")->setParameter("addedtofavoritesbyuser", $addedtofavoritesby);
+            $qb->andWhere(':addedtofavoritesbyuser MEMBER OF r.addedtofavoritesby')->setParameter('addedtofavoritesbyuser', $addedtofavoritesby);
         }
 
         if (true === $isOnHomepageSlider) {
-            $qb->andWhere("r.isonhomepageslider IS NOT NULL");
+            $qb->andWhere('r.isonhomepageslider IS NOT NULL');
         }
 
         if ('all' !== $isOnline) {
@@ -223,8 +220,8 @@ class RecipeRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $otherthan) {
-            $qb->andWhere("r.slug != :otherthan")->setParameter("otherthan", $otherthan);
-            $qb->andWhere("r.slug = :otherthan")->setParameter("otherthan", $otherthan);
+            $qb->andWhere('r.slug != :otherthan')->setParameter('otherthan', $otherthan);
+            $qb->andWhere('r.slug = :otherthan')->setParameter('otherthan', $otherthan);
         }
 
         if ('all' !== $user || 'all' !== $userEnabled) {
@@ -242,6 +239,153 @@ class RecipeRepository extends ServiceEntityRepository
 
         $qb->orderBy($sort, $order);
 
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb;
+    }
+
+    public function getRecipes($category, $venue, $country, $location, $restaurant, $keyword, $slug, $freeonly, $onlineonly, $pricemin, $pricemax, $audience, $startdate, $startdatemin, $startdatemax, $isOnline, $elapsed, $restaurantEnabled, $addedtofavoritesby, $onsalebypos, $canbescannedby, $isOnHomepageSlider, $otherthan, $notId, $sort, $order, $limit, $count): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        if ($count) {
+            $qb->select('COUNT(r)');
+        } else {
+            $qb->select('r');
+        }
+
+        /*
+        if ('all' !== $keyword || 'all' !== $slug || $otherthan) {
+            $qb->join('r.translations', 'translations');
+        }
+        */
+
+        if ('all' !== $category) {
+            $qb->leftJoin('r.category', 'category');
+            $qb->join('category.translations', 'categorytranslations');
+            $qb->andWhere('categorytranslations.slug = :category')->setParameter('category', $category);
+        }
+
+        if ('all' !== $venue || 'all' !== $country || 'all' !== $location || 'all' !== $pricemin || 'all' !== $pricemax || 'all' != $startdate || 'all' != $startdatemin || 'all' != $startdatemax || 'recipedates.startdate' === $sort || 'all' !== $elapsed || 'all' !== $onsalebypos || 'all' !== $onlineonly) {
+            $qb->leftJoin('r.recipedates', 'recipedates');
+            $qb->leftJoin('recipedates.venue', 'venue');
+        }
+
+        if ('1' == $onlineonly) {
+            $qb->andWhere('recipedates.online = 1');
+        }
+
+        if ('1' == $freeonly || 'all' !== $pricemin || 'all' !== $pricemax) {
+            $qb->leftJoin('recipedates.subscriptions', 'subscriptions');
+        }
+
+        if ('1' == $freeonly) {
+            $qb->andWhere('subscriptions.free = 1');
+        } elseif ('all' !== $pricemin || 'all' !== $pricemax) {
+            if ('all' !== $pricemin) {
+                $qb->andWhere('(subscriptions.price >= :pricemin AND subscriptions.promotionalprice IS NULL) OR (subscriptions.promotionalprice >= :pricemin)')->setParameter('pricemin', $pricemin);
+            }
+            if ('all' !== $pricemax) {
+                $qb->andWhere('((subscriptions.price <= :pricemax OR subscriptions.price IS NULL) AND subscriptions.promotionalprice IS NULL) OR (subscriptions.promotionalprice <= :pricemax)')->setParameter('pricemax', $pricemax);
+            }
+        }
+
+        if ('all' !== $startdate) {
+            $qb->andWhere('Date(recipedates.startdate) = :startdate')->setParameter('startdate', $startdate);
+        }
+
+        if ('all' !== $startdatemin) {
+            $qb->andWhere('Date(recipedates.startdate) >= :startdatemin')->setParameter('startdatemin', $startdatemin);
+        }
+
+        if ('all' !== $startdatemax) {
+            $qb->andWhere('Date(recipedates.startdate) <= :startdatemax')->setParameter('startdatemax', $startdatemax);
+        }
+
+        if ('all' !== $audience) {
+            $qb->leftJoin('r.audiences', 'audiences');
+            $qb->leftJoin('audiences.translations', 'audiencestranslations');
+            $qb->andWhere('audiencestranslations.slug = :audience')->setParameter('audience', $audience);
+        }
+
+        if ('all' !== $venue) {
+            $qb->leftJoin('venue.translations', 'venuetranslations');
+            $qb->andWhere('venuetranslations.slug = :venue')->setParameter('venue', $venue);
+        }
+
+        if ('all' !== $country || 'all' !== $location) {
+            $qb->leftJoin('venue.country', 'country');
+            $qb->leftJoin('country.translations', 'countrytranslations');
+        }
+
+        if ('all' !== $country) {
+            $qb->andWhere('countrytranslations.slug = :country')->setParameter('country', $country);
+        }
+
+        if ('all' !== $location) {
+            $qb->andWhere('countrytranslations.name LIKE :location or :location LIKE countrytranslations.name or venue.state LIKE :location or :location LIKE venue.state or venue.city LIKE :location or :location LIKE venue.city')->setParameter('location', $location);
+        }
+
+        if ('all' !== $restaurant || 'all' !== $restaurantEnabled) {
+            $qb->leftJoin('r.restaurant', 'restaurant');
+        }
+
+        if ('all' !== $restaurant) {
+            $qb->andWhere('restaurant.slug = :restaurant')->setParameter('restaurant', $restaurant);
+        }
+
+        if ('all' !== $keyword) {
+            $qb->andWhere('r.title LIKE :keyword or :keyword LIKE r.title or r.content LIKE :keyword or :keyword LIKE r.content or r.tags LIKE :keyword or :keyword LIKE r.tags or r.authors LIKE :keyword or :keyword LIKE r.authors')->setParameter('keyword', '%'.$keyword.'%');
+        }
+
+        if ('all' !== $slug) {
+            $qb->andWhere('r.slug = :slug')->setParameter('slug', $slug);
+        }
+
+        if ('all' !== $addedtofavoritesby) {
+            $qb->andWhere(':addedtofavoritesbyuser MEMBER OF r.addedtofavoritesby')->setParameter('addedtofavoritesbyuser', $addedtofavoritesby);
+        }
+
+        if ('all' !== $onsalebypos) {
+            $qb->andWhere(':onsalebypos MEMBER OF recipedates.pointofsales')->setParameter('onsalebypos', $onsalebypos);
+        }
+
+        if ('all' !== $canbescannedby) {
+            $qb->andWhere(':canbescannedby MEMBER OF recipedates.scanners')->setParameter('canbescannedby', $canbescannedby);
+        }
+
+        if (true === $isOnHomepageSlider) {
+            $qb->andWhere('e.isonhomepageslider IS NOT NULL');
+        }
+
+        if ('all' !== $isOnline) {
+            $qb->andWhere('r.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
+        }
+
+        if ('all' !== $otherthan) {
+            $qb->andWhere('r.slug != :otherthan')->setParameter('otherthan', $otherthan);
+        }
+
+        if ('all' !== $notId) {
+            $qb->andWhere('r.id != :notId')->setParameter('notId', $notId);
+        }
+
+        if ('all' !== $elapsed) {
+            if (true === $elapsed || '1' == $elapsed) {
+                $qb->andWhere('recipedates.startdate < CURRENT_TIMESTAMP()');
+            } elseif (false === $elapsed || '0' == $elapsed) {
+                $qb->andWhere('recipedates.startdate >= CURRENT_TIMESTAMP()');
+            }
+        }
+
+        if ('all' !== $restaurantEnabled) {
+            $qb->leftJoin('restaurant.user', 'user');
+            $qb->andWhere('user.isVerified = :userEnabled')->setParameter('userEnabled', $restaurantEnabled);
+        }
+
+        $qb->orderBy($sort, $order);
         if ('all' !== $limit) {
             $qb->setMaxResults($limit);
         }

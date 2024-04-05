@@ -1,0 +1,40 @@
+{% extends 'dashboard.html.twig' %}
+
+{# {% form_theme form 'form/jquery.collection.html.twig' %} #}
+
+{% set pagetitle = 'Add a new recipes'|trans %}
+{% if recipe.id %}{% set pagetitle = 'Update the recipe'|trans %}{% endif %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "dashboard_restaurant_recipe_index": ('My recipes'|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4 {{ "recipe_new" in app.request.get("_route") ? "new-recipe" : "edit-recipe" }}">
+        <div class="d-lg-flex justify-content-between align-items-center card-header">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span></span>
+            </div>
+            <div>
+                <a href="{{ path('dashboard_restaurant_recipe_index') }}" class="btn btn-outline-primary btn-sm">
+                    {{ 'Return to list'|trans }}
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                    {{ form_errors(form) }}
+                    {{ form_widget(form) }}
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

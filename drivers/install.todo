@@ -13,7 +13,9 @@ Installation en cours:
 
     ✔ composer require dompdf/dompdf @done(24-04-04 16:14)
 
-    ☐ composer require phpoffice/phpspreadsheet php-http/httplug-bundle
+    ☐ composer require phpoffice/phpspreadsheet (ext-gd: *)
+
+    ☐ composer require php-http/httplug-bundle
 
     ✔ composer require cmen/google-charts-bundle @done(24-04-04 16:15)
 
@@ -43,7 +45,9 @@ Installation en cours:
     ✔ composer require stripe/stripe-php phpjuice/paypal-checkout-sdk @done(24-03-19 10:41)
     ☐ composer require paypal/paypal-checkout-sdk ou composer require phpjuice/paypal-checkout-sdk ou composer require league/omnipay
 
-    ☐ composer require mercadopago/dx-php paypal/rest-api-sdk-php payum/offline payum/paypal-express-checkout-nvp payum/payum-bundle payum/stripe
+    ☐ composer require mercadopago/dx-php paypal/rest-api-sdk-php payum/offline payum/paypal-express-checkout-nvp payum/stripe
+
+    ☐ composer require payum/payum-bundle Not compatible with sf7
 
     ☐ composer require symfony/polyfill-intl-messageformatter
     ✔ composer require symfony/ux-toggle-password @done(24-03-07 13:35)

@@ -18,6 +18,8 @@ document.body.addEventListener('click', () => {
 import './vendor/simplebar/dist/simplebar.min.css';
 import './vendor/simplebar/simplebar.index.js';
 
+import './vendor/fontawesome-iconpicker/fontawesome-iconpicker.index.js';
+
 // start the Stimulus application
 import './bootstrap.js';
 

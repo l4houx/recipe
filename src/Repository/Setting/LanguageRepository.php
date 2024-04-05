@@ -25,19 +25,20 @@ class LanguageRepository extends ServiceEntityRepository
     /**
      * Returns the languages after applying the specified search criterias.
      *
+     * @param bool   $isOnline
      * @param string $keyword
      * @param string $slug
      * @param int    $limit
      * @param string $sort
      * @param string $order
      */
-    public function getLanguages($isonline, $keyword, $slug, $limit, $sort, $order): QueryBuilder
+    public function getLanguages($isOnline, $keyword, $slug, $limit, $sort, $order): QueryBuilder
     {
         $qb = $this->createQueryBuilder('l');
         $qb->select('l');
 
-        if ('all' !== $isonline) {
-            $qb->andWhere('l.isonline = :isonline')->setParameter('isonline', $isonline);
+        if ('all' !== $isOnline) {
+            $qb->andWhere('l.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
         }
 
         if ('all' !== $keyword) {

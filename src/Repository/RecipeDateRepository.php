@@ -2,8 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Recipe;
 use App\Entity\RecipeDate;
+use App\Entity\Restaurant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +24,51 @@ class RecipeDateRepository extends ServiceEntityRepository
         parent::__construct($registry, RecipeDate::class);
     }
 
-    //    /**
-    //     * @return RecipeDate[] Returns an array of RecipeDate objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Returns the recipe dates after applying the specified search criterias.
+     *
+     * @param string          $reference
+     * @param Restaurant|null $restaurant
+     * @param Recipe|null     $recipe
+     * @param int             $limit
+     * @param int             $count
+     *
+     * @return QueryBuilder<RecipeDate>
+     */
+    public function getRecipeDates($reference, $restaurant, $recipe, $limit, $count): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('r');
 
-    //    public function findOneBySomeField($value): ?RecipeDate
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($count) {
+            $qb->select('COUNT(r)');
+        } else {
+            $qb->select('r');
+        }
+
+        if ('all' !== $reference) {
+            $qb->andWhere('r.reference = :reference')->setParameter('reference', $reference);
+        }
+
+        if ('all' !== $recipe || 'all' !== $restaurant) {
+            $qb->leftJoin('r.recipe', 'recipe');
+        }
+
+        if ('all' !== $restaurant) {
+            $qb->leftJoin('recipe.restaurant', 'restaurant');
+            $qb->andWhere('restaurant.slug = :restaurant')->setParameter('restaurant', $restaurant);
+        }
+
+        if ('all' !== $recipe) {
+            $qb->leftJoin('recipe.translations', 'recipetranslations');
+            $qb->andWhere('recipetranslations.slug = :recipe')->setParameter('recipe', $recipe);
+        }
+
+        $qb->orderBy('r.startdate', 'ASC');
+
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb;
+    }
 }

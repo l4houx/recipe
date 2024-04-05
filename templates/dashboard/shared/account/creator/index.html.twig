@@ -1,0 +1,72 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Account settings'|trans %}
+{% block title pagetitle %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="mb-0">{{ 'Account status'|trans }}</h3>
+            <p class="mb-0">
+                <span class="ml-2 text-success"><i class="bi bi-person-check fa-fw"></i> {{ "Enabled"|trans }}</span>
+                <span class="ml-3">{{ "Last login"|trans }}</span> 
+                <span class="ml-3 text-success">
+                    <i class="bi bi-sign-intersection fa-fw"></i> {{ app.user.lastLogin|ago() }}
+                </span>
+                <span class="ml-3">{{ "Member since"|trans }}</span>
+                <span class="ml-3 text-success">
+                    <i class="bi bi-person-add fa-fw"></i> 
+                    {{ app.user.createdAt|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}
+                </span>
+            </p>
+        </div>
+        <div class="card-body">
+            <div>
+                <h4 class="mb-0">{{ 'Account details'|trans }}</h4>
+                <p class="mb-4">{{ 'Change your personal information and address.'|trans }}</p>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                    {{ form_errors(form) }}
+                    <div class="mb-3 col-12 col-md-4">
+                        {{ form_row(form.username) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-4">
+                        {{ form_row(form.firstname) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-4">
+                        {{ form_row(form.lastname) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-4">
+                        {{ form_row(form.birthdate) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-4">
+                        {{ form_row(form.email) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-4">
+                        {{ form_row(form.phone) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.street) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.street2) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.city) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.postalcode) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.state) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.country) }}
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">{{ 'Apply changes'|trans }}</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

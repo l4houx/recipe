@@ -31,9 +31,10 @@ class RestaurantProfileFormType extends AbstractType
                 'purify_html' => true,
                 'label' => t('Restaurant name :'),
             ])
-            ->add('content', TextareaType::class, [
+            ->add('description', TextareaType::class, [
                 'label' => t('About the restaurant :'),
                 'required' => false,
+                'purify_html' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
                 'help' => t(''),
@@ -69,7 +70,7 @@ class RestaurantProfileFormType extends AbstractType
                 'image_uri' => false,
                 'imagine_pattern' => 'scale',
                 'label' => t('Cover photo :'),
-                'help' => t('Optionally add a cover photo to showcase your organizer activities'),
+                'help' => t('Optionally add a cover photo to showcase your restaurant activities'),
                 'translation_domain' => 'messages',
             ])
             ->add('country', EntityType::class, [
@@ -97,27 +98,27 @@ class RestaurantProfileFormType extends AbstractType
                 'required' => false,
                 'label' => t('Phone :'),
             ])
-            ->add('facebookurl', TextType::class, [
+            ->add('facebook', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Facebook :'),
             ])
-            ->add('twitterurl', TextType::class, [
+            ->add('twitter', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Twitter :'),
             ])
-            ->add('instagramurl', TextType::class, [
+            ->add('instagram', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Instagram :'),
             ])
-            ->add('googleplusurl', TextType::class, [
+            ->add('googleplus', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Google Plus :'),
             ])
-            ->add('linkedinurl', TextType::class, [
+            ->add('linkedin', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('LinkedIn :'),

@@ -43,16 +43,16 @@ class TicketController extends BaseController
         }
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
-            $tickets = $ticketRepository->findAll();
+            $rows = $ticketRepository->findAll();
         } else {
             $applications = $applicationRepository->findBy(['user' => $user->getId()]);
 
             $ticketsApp = $ticketRepository->findBy(['application' => $applications]);
             $ticketsUser = $ticketRepository->findBy(['user' => $user->getId()]);
-            $tickets = array_merge($ticketsApp, $ticketsUser);
+            $rows = array_merge($ticketsApp, $ticketsUser);
         }
 
-        return $this->render('dashboard/shared/tickets/index.html.twig', compact('user', 'tickets'));
+        return $this->render('dashboard/shared/tickets/index.html.twig', compact('user', 'rows'));
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]

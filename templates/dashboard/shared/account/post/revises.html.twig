@@ -7,7 +7,7 @@
     <div class="card mb-4">
         {% if revises is empty %}
             <div class="card-header">
-                {% include "global/message.html.twig" with { type: "info", message: ("You haven't proposed any changes ye"|trans), icon: "bi bi-exclamation-circle" } %}
+                {% include "global/message.html.twig" with { type: "dark", message: ("You haven't proposed any changes ye"|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
             </div>
         {% else %}
             <div class="card-header">

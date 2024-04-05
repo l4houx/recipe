@@ -30,7 +30,7 @@ class MenuRepository extends ServiceEntityRepository
         $qb->select('m');
 
         if ('all' !== $slug) {
-            $qb->andWhere('translations.slug = :slug')->setParameter('slug', $slug);
+            $qb->andWhere('m.slug = :slug')->setParameter('slug', $slug);
         }
 
         return $qb;

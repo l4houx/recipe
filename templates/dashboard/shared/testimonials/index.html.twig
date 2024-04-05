@@ -8,13 +8,15 @@
         <div class="d-lg-flex justify-content-between align-items-center card-header">
             <div class="mb-3 mb-lg-0">
                 <h3 class="mb-0">{{ pagetitle }}</h3>
-                <span></span>
+                <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows | length}) }}</span>
             </div>
-            <div>
-                <a href="{{ path('dashboard_account_testimonial_new') }}" class="btn btn-outline-primary btn-sm">
-                    {{ 'Create'|trans }}
-                </a>
-            </div>
+            {% if is_granted('ROLE_VERIFIED') %}
+                <div>
+                    <a href="{{ path('dashboard_testimonial_new') }}" class="btn btn-outline-primary btn-sm">
+                        {{ 'Create'|trans }}
+                    </a>
+                </div>
+            {% endif %}
         </div>
         {% if rows | length > 0 %}
             <div class="card-body">
@@ -36,7 +38,7 @@
             {% include "dashboard/shared/testimonials/manage-testimonials-table.html.twig" with {rows: rows} %}
         {% else %}
             <div class="card-footer">
-                {% include "global/message.html.twig" with { type: "info", message: ('No testimonial found'|trans), icon: "bi bi-exclamation-circle" } %}
+                {% include "global/message.html.twig" with { type: "dark", message: ('No testimonial found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
             </div>
         {% endif %}
     </div>

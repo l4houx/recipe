@@ -1,0 +1,13 @@
+{% if recipeDate is defined %}
+    {% set displayedRecipeDate = recipeDate %}
+{% else %}
+    {% set displayedRecipeDate = recipe.getFirstOnSaleRecipeDate %}
+{% endif %}
+
+{% if customLink is defined %}
+    {% set link = customLink %}
+{% else %}
+    {% set link = path('recipe', { slug : recipe.slug }) %}
+{% endif %}
+
+

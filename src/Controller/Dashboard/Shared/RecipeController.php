@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route(path: '/%website_dashboard_path%/')]
+#[Route(path: '/%website_dashboard_path%')]
 #[IsGranted(HasRoles::DEFAULT)]
 class RecipeController extends BaseController
 {
@@ -49,7 +49,7 @@ class RecipeController extends BaseController
 
         $rows = $paginator->paginate($this->settingService->getRecipes(['slug' => $slug, 'category' => $category, 'venue' => $venue, 'elapsed' => $elapsed, 'isOnline' => $isOnline, 'restaurant' => $restaurant, 'sort' => 'startdate', 'restaurantEnabled' => 'all', 'sort' => 'r.createdAt', 'order' => 'DESC'])->getQuery(), $request->query->getInt('page', 1), HasLimit::RECIPE_LIMIT, ['wrap-queries' => true]);
 
-        return $this->render('dashboard/shared/recipe/index.html.twig', compact('user', 'rows'));
+        return $this->render('dashboard/shared/recipes/index.html.twig', compact('user', 'rows'));
     }
 
     #[Route(path: '/restaurant/my-recipes/new', name: 'dashboard_restaurant_recipe_new', methods: ['GET', 'POST'])]
@@ -66,11 +66,12 @@ class RecipeController extends BaseController
             $form = $this->createForm(RecipeFormType::class, $recipe, ['validation_groups' => ['create', 'Default']])->handleRequest($request);
         } else {
             /** @var Recipe $recipe */
-            $recipe = $this->settingService->getRecipes(['published' => 'all', 'elapsed' => 'all', 'slug' => $slug, 'restaurant' => $restaurant, 'restaurantEnabled' => 'all'])->getQuery()->getOneOrNullResult();
+            $recipe = $this->settingService->getRecipes(['isOnline' => 'all', 'elapsed' => 'all', 'slug' => $slug, 'restaurant' => $restaurant, 'restaurantEnabled' => 'all'])->getQuery()->getOneOrNullResult();
             if (!$recipe) {
                 $this->addFlash('danger', $this->translator->trans('The recipe can not be found'));
 
-                return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+                //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+                return $this->settingService->redirectToReferer('index');
             }
 
             $form = $this->createForm(RecipeFormType::class, $recipe, ['validation_groups' => ['update', 'Default']])->handleRequest($request);
@@ -151,13 +152,15 @@ class RecipeController extends BaseController
         if (!$recipe) {
             $this->addFlash('danger', $this->translator->trans('The recipe can not be found'));
 
-            return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->settingService->redirectToReferer('index');
         }
 
         if ($recipe->getOrderElementsQuantitySum() > 0) {
             $this->addFlash('danger', $this->translator->trans('The recipe can not be deleted because it has one or more orders'));
 
-            return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->settingService->redirectToReferer('index');
         }
 
         if (null !== $recipe->getDeletedAt()) {
@@ -169,7 +172,8 @@ class RecipeController extends BaseController
         $this->em->remove($recipe);
         $this->em->flush();
 
-        return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+        //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+        return $this->settingService->redirectToReferer('index');
     }
 
     #[Route(path: '/admin/manage-recipes/{slug}/restore', name: 'dashboard_admin_recipe_restore', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
@@ -181,7 +185,8 @@ class RecipeController extends BaseController
         if (!$recipe) {
             $this->addFlash('danger', $this->translator->trans('The recipe can not be found'));
 
-            return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->settingService->redirectToReferer('index');
         }
 
         $recipe->setDeletedAt(null);
@@ -191,7 +196,8 @@ class RecipeController extends BaseController
 
         $this->addFlash('success', $this->translator->trans('Content was restored successfully.'));
 
-        return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+        //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+        return $this->settingService->redirectToReferer('index');
     }
 
     #[Route(path: '/restaurant/my-recipes/{slug}/publish', name: 'dashboard_restaurant_recipe_publish', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
@@ -209,7 +215,8 @@ class RecipeController extends BaseController
         if (!$recipe) {
             $this->addFlash('danger', $this->translator->trans('The recipe can not be found'));
 
-            return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->settingService->redirectToReferer('index');
         }
 
         if (true === $recipe->getIsOnline()) {
@@ -223,7 +230,8 @@ class RecipeController extends BaseController
         $this->em->persist($recipe);
         $this->em->flush();
 
-        return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+        //return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
+        return $this->settingService->redirectToReferer('index');
     }
 
     #[Route(path: '/admin/manage-recipes/{slug}/details', name: 'dashboard_admin_recipe_details', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\VenueSeatingPlan;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,43 @@ class VenueSeatingPlanRepository extends ServiceEntityRepository
         parent::__construct($registry, VenueSeatingPlan::class);
     }
 
-    //    /**
-    //     * @return VenueSeatingPlan[] Returns an array of VenueSeatingPlan objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('v.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getVenuesSeatingPlans($id, $venue, $restaurant, $slug, $limit, $count): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('s');
 
-    //    public function findOneBySomeField($value): ?VenueSeatingPlan
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($count) {
+            $qb->select('COUNT(s)');
+        } else {
+            $qb->select('s');
+        }
+
+        if ('all' !== $id) {
+            $qb->andWhere('s.id = :id')->setParameter('id', $id);
+        }
+
+        if ('all' !== $slug) {
+            $qb->andWhere('s.slug = :slug')->setParameter('slug', $slug);
+        }
+
+        if ('all' !== $venue || 'all' !== $restaurant) {
+            $qb->join('s.venue', 'venue');
+        }
+
+        if ('all' !== $venue) {
+            $qb->andWhere('venue.slug = :venue')->setParameter('venue', $venue);
+        }
+
+        if ('all' !== $restaurant) {
+            $qb->join('venue.restaurant', 'restaurant');
+            $qb->andWhere('restaurant.slug = :restaurant')->setParameter('restaurant', $restaurant);
+        }
+
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        $qb->orderBy('s.id', 'DESC');
+
+        return $qb;
+    }
 }

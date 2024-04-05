@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\VenueType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,36 @@ class VenueTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, VenueType::class);
     }
 
-    //    /**
-    //     * @return VenueType[] Returns an array of VenueType objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('v.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getVenuesTypes($isOnline, $keyword, $slug, $limit, $sort, $order, $hasvenues): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('v');
+        $qb->select('v');
+        $qb->addSelect('COUNT(v) as HIDDEN venuescount');
 
-    //    public function findOneBySomeField($value): ?VenueType
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ('all' !== $isOnline) {
+            $qb->andWhere('v.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
+        }
+
+        if ('all' !== $keyword) {
+            $qb->andWhere('v.name LIKE :keyword or :keyword LIKE v.name')->setParameter('keyword', '%'.$keyword.'%');
+        }
+
+        if ('all' !== $slug) {
+            $qb->andWhere('v.slug = :slug')->setParameter('slug', $slug);
+        }
+
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        if (true === $hasvenues || 1 === $hasvenues) {
+            $qb->join('v.venues', 'venues');
+        }
+
+        // $qb->orderBy($sort, $order);
+
+        $qb->groupBy('v');
+
+        return $qb;
+    }
 }

@@ -47,7 +47,7 @@ class PostCategoryRepository extends ServiceEntityRepository
      * Returns the blog posts categories after applying the specified search criterias.
      *
      * @param PostCategory|null $parent
-     * //@param bool   $isOnline
+     * @param bool   $isOnline
      * @param string $keyword
      * @param string $slug
      * @param int    $limit
@@ -56,7 +56,7 @@ class PostCategoryRepository extends ServiceEntityRepository
      *
      * @return QueryBuilder<PostCategory> (BlogCategoryController)
      */
-    public function getBlogPostCategories($parent, /*$isOnline,*/ $keyword, $slug, $limit, $order, $sort): QueryBuilder
+    public function getBlogPostCategories($parent, $isOnline, $keyword, $slug, $limit, $order, $sort): QueryBuilder
     {
         $qb = $this->createQueryBuilder('c');
         $qb->select('c');
@@ -74,11 +74,9 @@ class PostCategoryRepository extends ServiceEntityRepository
             }
         }
 
-        /*
         if ('all' !== $isOnline) {
             $qb->andWhere('c.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
         }
-        */
 
         if ('all' !== $keyword) {
             $qb->andWhere('c.name LIKE :keyword or :keyword LIKE c.name')->setParameter('keyword', '%'.$keyword.'%');

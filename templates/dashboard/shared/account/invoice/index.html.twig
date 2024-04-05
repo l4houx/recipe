@@ -11,7 +11,7 @@
 		</div>
         {% if transactions is empty %}
             <div class="card-header border-bottom-0">
-                {% include "global/message.html.twig" with { type: "info", message: ("You don't have any invoices"|trans), icon: "bi bi-exclamation-circle" } %}
+                {% include "global/message.html.twig" with { type: "dark", message: ("You don't have any invoices"|trans), icon: "bi bi-exclamation-circle" } %}
             </div>
         {% else %}
             <div class="table-invoice table-responsive">

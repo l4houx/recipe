@@ -51,7 +51,7 @@ class ReviewRepository extends ServiceEntityRepository
      * @param User|null       $user
      * @param Recipe|null     $recipe
      * @param Restaurant|null $restaurant
-     * @param bool|null       $visible
+     * @param bool            $isVisible
      * @param int|null        $rating
      * @param int             $minrating
      * @param int             $maxrating
@@ -60,7 +60,7 @@ class ReviewRepository extends ServiceEntityRepository
      * @param string          $sort
      * @param string          $order
      */
-    public function getReviews($keyword, $slug, $user, $recipe, $restaurant, $visible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order): QueryBuilder
+    public function getReviews($keyword, $slug, $user, $recipe, $restaurant, $isVisible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order): QueryBuilder
     {
         $qb = $this->createQueryBuilder('r');
 
@@ -96,8 +96,8 @@ class ReviewRepository extends ServiceEntityRepository
             $qb->leftJoin('r.recipe', 'recipe');
         }
 
-        if ('all' !== $visible) {
-            $qb->andWhere('r.visible = :visible')->setParameter('visible', $visible);
+        if ('all' !== $isVisible) {
+            $qb->andWhere('r.isVisible = :isVisible')->setParameter('isVisible', $isVisible);
         }
 
         if ('all' !== $rating) {

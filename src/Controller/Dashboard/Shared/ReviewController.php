@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route(path: '/%website_dashboard_path%/')]
+#[Route(path: '/%website_dashboard_path%')]
 #[IsGranted(HasRoles::DEFAULT)]
 class ReviewController extends BaseController
 {
@@ -71,7 +71,7 @@ class ReviewController extends BaseController
         if (!$recipe) {
             $this->addFlash('danger', $this->translator->trans('The recipe not be found'));
 
-            return $this->redirectToRoute('recipe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('recipes', [], Response::HTTP_SEE_OTHER);
         }
 
         $review = new Review();
