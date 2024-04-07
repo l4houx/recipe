@@ -4,7 +4,6 @@ namespace App\Controller\Dashboard\Admin;
 
 use App\Entity\Recipe;
 use App\Entity\Setting\HomepageHeroSetting;
-use App\Entity\Setting\Menu;
 use App\Entity\Setting\Setting;
 use App\Entity\Traits\HasRoles;
 use App\Entity\User;
@@ -14,7 +13,6 @@ use App\Service\SettingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,6 +96,11 @@ class SettingController extends AdminBaseController
                 $this->settingervice->setSettings('website_contact_phone', $setting['website_contact_phone']);
                 $this->settingervice->setSettings('website_contact_fax', $setting['website_contact_fax']);
                 $this->settingervice->setSettings('website_contact_address', $setting['website_contact_address']);
+                $this->settingervice->setSettings('website_contact_name', $setting['website_contact_name']);
+                $this->settingervice->setSettings('website_company', $setting['website_company']);
+                $this->settingervice->setSettings('website_siret', $setting['website_siret']);
+                $this->settingervice->setSettings('website_ape', $setting['website_ape']);
+                $this->settingervice->setSettings('website_vat', $setting['website_vat']);
                 $this->settingervice->setSettings('facebook_url', $setting['facebook_url']);
                 $this->settingervice->setSettings('instagram_url', $setting['instagram_url']);
                 $this->settingervice->setSettings('youtube_url', $setting['youtube_url']);
@@ -106,7 +109,7 @@ class SettingController extends AdminBaseController
                 $this->settingervice->setSettings('app_theme', $setting['app_theme']);
                 $this->settingervice->setSettings('primary_color', $setting['primary_color']);
                 $this->settingervice->setSettings('custom_css', $setting['custom_css']);
-                $this->settingervice->setSettings('footer_about', $setting['footer_about']);
+                $this->settingervice->setSettings('website_about', $setting['website_about']);
                 $this->settingervice->setSettings('google_analytics_code', $setting['google_analytics_code']);
                 $this->settingervice->setSettings('users_can_register', $setting['users_can_register']);
                 $this->settingervice->setSettings('show_back_to_top_button', $setting['show_back_to_top_button']);
@@ -119,6 +122,10 @@ class SettingController extends AdminBaseController
                 $this->settingervice->setSettings('show_cookie_policy_bar', $setting['show_cookie_policy_bar']);
                 $this->settingervice->setSettings('show_gdpr_compliance_page', $setting['show_gdpr_compliance_page']);
                 $this->settingervice->setSettings('gdpr_compliance_page_slug', $setting['gdpr_compliance_page_slug']);
+                $this->settingervice->setSettings('show_feedback_page', $setting['show_feedback_page']);
+                $this->settingervice->setSettings('feedback_page_slug', $setting['feedback_page_slug']);
+                $this->settingervice->setSettings('show_support_page', $setting['show_support_page']);
+                $this->settingervice->setSettings('support_page_slug', $setting['support_page_slug']);
 
                 $this->settingervice->updateEnv('APP_ENV', $setting['app_environment']);
                 $this->settingervice->updateEnv('APP_DEBUG', $setting['app_debug']);
@@ -170,6 +177,11 @@ class SettingController extends AdminBaseController
             $form->get('website_contact_phone')->setData($this->settingervice->getSettings('website_contact_phone'));
             $form->get('website_contact_fax')->setData($this->settingervice->getSettings('website_contact_fax'));
             $form->get('website_contact_address')->setData($this->settingervice->getSettings('website_contact_address'));
+            $form->get('website_contact_name')->setData($this->settingervice->getSettings('website_contact_name'));
+            $form->get('website_company')->setData($this->settingervice->getSettings('website_company'));
+            $form->get('website_siret')->setData($this->settingervice->getSettings('website_siret'));
+            $form->get('website_ape')->setData($this->settingervice->getSettings('website_ape'));
+            $form->get('website_vat')->setData($this->settingervice->getSettings('website_vat'));
             $form->get('facebook_url')->setData($this->settingervice->getSettings('facebook_url'));
             $form->get('instagram_url')->setData($this->settingervice->getSettings('instagram_url'));
             $form->get('youtube_url')->setData($this->settingervice->getSettings('youtube_url'));
@@ -178,7 +190,7 @@ class SettingController extends AdminBaseController
             $form->get('app_theme')->setData($this->settingervice->getSettings('app_theme'));
             $form->get('primary_color')->setData($this->settingervice->getSettings('primary_color'));
             $form->get('custom_css')->setData($this->settingervice->getSettings('custom_css'));
-            $form->get('footer_about')->setData($this->settingervice->getSettings('footer_about'));
+            $form->get('website_about')->setData($this->settingervice->getSettings('website_about'));
             $form->get('google_analytics_code')->setData($this->settingervice->getSettings('google_analytics_code'));
             $form->get('users_can_register')->setData($this->settingervice->getSettings('users_can_register'));
             $form->get('show_back_to_top_button')->setData($this->settingervice->getSettings('show_back_to_top_button'));
@@ -191,6 +203,10 @@ class SettingController extends AdminBaseController
             $form->get('show_cookie_policy_bar')->setData($this->settingervice->getSettings('show_cookie_policy_bar'));
             $form->get('show_gdpr_compliance_page')->setData($this->settingervice->getSettings('show_gdpr_compliance_page'));
             $form->get('gdpr_compliance_page_slug')->setData($this->settingervice->getSettings('gdpr_compliance_page_slug'));
+            $form->get('show_feedback_page')->setData($this->settingervice->getSettings('show_feedback_page'));
+            $form->get('feedback_page_slug')->setData($this->settingervice->getSettings('feedback_page_slug'));
+            $form->get('show_support_page')->setData($this->settingervice->getSettings('show_support_page'));
+            $form->get('support_page_slug')->setData($this->settingervice->getSettings('support_page_slug'));
         }
 
         return $this->render('dashboard/admin/setting/layout.html.twig', compact('form'));
@@ -210,7 +226,6 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Enable comments'),
-                // 'choices' => ['No' => 'no', 'Native comments' => 'native', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
                 'choices' => ['No' => 'no', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -262,7 +277,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Enable Google Repatcha'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -338,7 +353,7 @@ class SettingController extends AdminBaseController
     public function mailServer(Request $request): Response
     {
         if ('1' === $this->settingervice->getEnv('DEMO_MODE')) {
-            $this->addFlash('error', $this->translator->trans('This feature is disabled in demo mode', [], 'javascript'));
+            $this->addFlash('danger', $this->translator->trans('This feature is disabled in demo mode', [], 'javascript'));
 
             return $this->redirectToRoute('dashboard_admin_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -374,15 +389,6 @@ class SettingController extends AdminBaseController
                 'choices' => ['None' => null, 'SSL' => 'ssl', 'TLS' => 'tls'],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
             ])
-            /* ->add('mail_server_auth_mode', ChoiceType::class, [
-                'label' => t('Authentication mode'),
-                'required' => true,
-                'multiple' => false,
-                'expanded' => true,
-                'choices' => ['None' => null, 'Login' => 'login', 'Cram-md5' => 'cram-md5', 'Plain' => 'plain'],
-                'label_attr' => ['class' => 'radio-custom radio-inline'],
-                ])
-            */
             ->add('mail_server_username', TextType::class, [
                 'label' => t('Username'),
                 'required' => false,
@@ -408,10 +414,6 @@ class SettingController extends AdminBaseController
                     new NotBlank(),
                 ],
                 'help' => t('This email address will receive the contact form messages'),
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => t('Save'),
-                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -512,7 +514,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'help' => t('SSL must be activated on your hosting server in order to use Mailchimp'),
                 'constraints' => [
@@ -563,7 +565,7 @@ class SettingController extends AdminBaseController
         /** @var HomepageHeroSetting $homepageherosetting */
         $homepageherosetting = $this->em->getRepository("App\Entity\Setting\HomepageHeroSetting")->find(1);
         if (!$homepageherosetting) {
-            $this->addFlash('error', $this->translator->trans('The homepage settings could not be loaded'));
+            $this->addFlash('danger', $this->translator->trans('The homepage settings could not be loaded'));
 
             return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
         }
@@ -604,6 +606,7 @@ class SettingController extends AdminBaseController
                 $this->settingervice->setSettings('homepage_recipes_number', $setting['homepage_recipes_number']);
                 $this->settingervice->setSettings('homepage_categories_number', $setting['homepage_categories_number']);
                 $this->settingervice->setSettings('homepage_posts_number', $setting['homepage_posts_number']);
+                $this->settingervice->setSettings('homepage_testimonials_number', $setting['homepage_testimonials_number']);
                 $this->settingervice->setSettings('homepage_show_call_to_action', $setting['homepage_show_call_to_action']);
 
                 $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
@@ -616,6 +619,7 @@ class SettingController extends AdminBaseController
             $form->get('homepage_recipes_number')->setData($this->settingervice->getSettings('homepage_recipes_number'));
             $form->get('homepage_categories_number')->setData($this->settingervice->getSettings('homepage_categories_number'));
             $form->get('homepage_posts_number')->setData($this->settingervice->getSettings('homepage_posts_number'));
+            $form->get('homepage_testimonials_number')->setData($this->settingervice->getSettings('homepage_testimonials_number'));
             $form->get('homepage_show_call_to_action')->setData($this->settingervice->getSettings('homepage_show_call_to_action'));
         }
 
@@ -636,7 +640,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show map button',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -647,7 +651,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show calendar button',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -658,7 +662,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show RSS feed button',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -669,7 +673,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show category filter',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -680,7 +684,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show location filter',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -691,7 +695,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show date filter',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -702,7 +706,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show subscription price filter',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -713,7 +717,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Show audience filter',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -765,7 +769,6 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Enable comments',
-                // 'choices' => ['No' => 'no', 'Native comments' => 'native', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
                 'choices' => ['No' => 'no', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -816,7 +819,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Enable Facebook Social Login',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -835,7 +838,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Enable Google Social Login',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),

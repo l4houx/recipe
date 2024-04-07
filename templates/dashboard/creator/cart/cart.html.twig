@@ -1,29 +1,26 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'dashboard.html.twig' %}
 
-{% set pagetitle = 'My cart' | trans %}
+{% set pagetitle = 'My cart'|trans %}
+{% block title pagetitle %}
 
-{% block title %}{{pagetitle}}{% endblock %}
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
-
-    {% set navigation = [{"dashboard_index": "Dashboard"|trans,"current":(pagetitle)}] %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
     <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
+        <div class="">
             <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
                 <div class="col-lg-9 mt-4 mt-lg-0">
 
                     {% if app.user.cartelements|length %}
 
-                        {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-info', message: "Your tickets are not reserved until checkout, the quantity you intend to buy might not be available if you do not proceed to checkout right away"|trans } %}
+                        {% include 'global/message.html.twig' with { type: 'warning',icon: 'bi bi-exclamation-circle', message: "Your subscriptions are not reserved until checkout, the quantity you intend to buy might not be available if you do not proceed to checkout right away"|trans } %}
 
                         <div class="card">
                             <div class="card-header">
-                                <h6 class="b mb-0">{{ app.user.getTicketsInCartQuantitySum }} {{ "tickets found in your cart"|trans }}</h6>
+                                <h6 class="b mb-0">{{ app.user.getSubscriptionsInCartQuantitySum }} {{ "subscriptions found in your cart"|trans }}</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -31,7 +28,7 @@
                                         <table class="table table-hover shopping-cart-wrap">
                                             <thead class="text-muted">
                                                 <tr>
-                                                    <th scope="col">{{ "Event"|trans ~ " / " ~ "Ticket"|trans }}</th>
+                                                    <th scope="col">{{ "Recipe"|trans ~ " / " ~ "Subscription"|trans }}</th>
                                                     <th scope="col" width="100">{{ "Price"|trans }}</th>
                                                     <th scope="col" width="100">{{ "Quantity"|trans }}</th>
                                                     <th scope="col" width="100">{{ "Subtotal"|trans }}</th>
@@ -42,37 +39,37 @@
                                                 {% for cartelement in app.user.cartelements %}
                                                     <tr>
                                                         <td>
-                                                            {% include "Global/event-preview-horizontal.html.twig" with { eventticket: cartelement.eventticket } %}
+                                                            {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription: cartelement.recipesubscription } %}
                                                             {% if cartelement.reservedSeats and cartelement.reservedSeats|length > 0 %}
                                                                 <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
                                                                 <ul class='list-check'>
                                                                     {% for reservedSeat in cartelement.reservedSeats %}
                                                                         <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
-                                                                        {% endfor %}
+                                                                    {% endfor %}
                                                                 </ul>
                                                             {% endif %}
                                                         </td>
                                                         <td>
                                                             <div class="price-wrap">
-                                                                {% if cartelement.eventticket.eventdate.event.isFree %}
+                                                                {% if cartelement.recipesubscription.recipedate.recipe.isFree %}
                                                                     <span class="price-new">{{ "Free"|trans }}</span>
                                                                 {% else %}
-                                                                    {% if cartelement.eventticket.eventdate %}
-                                                                        <span class="price-new">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ cartelement.eventticket.getSalePrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</span>
+                                                                    {% if cartelement.recipesubscription.recipedate %}
+                                                                        <span class="price-new">{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ cartelement.recipesubscription.getSalePrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</span>
                                                                     {% endif %}
                                                                 {% endif %}
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control touchspin-integer bg-white eventdate-ticket-qte {% if cartelement.eventticket.eventdate.hasSeatingPlan %}cart-eventdate-ticket-qte-hasSeatingPlan{% endif %}" {% if cartelement.eventticket.eventdate.hasSeatingPlan %}readonly{% endif %} name="{{ cartelement.eventticket.reference }}" data-min="0" data-max="{{ cartelement.eventticket.getMaxTicketsForSaleCount(app.user) }}" value="{{ cartelement.quantity }}" />
+                                                            <input type="text" class="form-control touchspin-integer bg-white recipedate-subscription-qte {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}cart-recipedate-subscription-qte-hasSeatingPlan{% endif %}" {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}readonly{% endif %} name="{{ cartelement.recipesubscription.reference }}" data-min="0" data-max="{{ cartelement.recipesubscription.getMaxSubscriptionsForSaleCount(app.user) }}" value="{{ cartelement.quantity }}" />
                                                         </td>
                                                         <td class="text-right">
                                                             <div class="price-wrap">
-                                                                <var class="price">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ cartelement.getPrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                                <var class="price">{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ cartelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</var>
                                                             </div>
                                                         </td>
                                                         <td class="text-center">
-                                                            <a href="{{ path('dashboard_attendee_cart_remove', { id: cartelement.id }) }}" data-toggle="tooltip" title="{{ "Remove"|trans }}"><i class="far fa-minus-square"></i></a>
+                                                            <a href="{{ path('dashboard_creator_cart_remove', { id: cartelement.id }) }}" data-toggle="tooltip" title="{{ "Remove"|trans }}"><i class="far fa-minus-square"></i></a>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
@@ -81,24 +78,24 @@
                                                 <tr>
                                                     <td colspan="5" class="text-right">
                                                         <div class="price-wrap">
-                                                            <var class="price">{{ "Fees"|trans }}: {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ app.user.getTotalFees }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                            <var class="price">{{ "Fees"|trans }}: {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ app.user.getTotalFees }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</var>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="5" class="text-right">
                                                         <div class="price-wrap">
-                                                            <var class="price">{{ "Total"|trans }}: {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ app.user.getTicketsInCartPriceSum(true) }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                            <var class="price">{{ "Total"|trans }}: {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ app.user.getSubscriptionsInCartPriceSum(true) }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</var>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="5" class="text-right">
-                                                        <a href="{{ path('events') }}" class="btn btn-outline-primary mr-3"><i class="fas fa-ticket-alt"></i> {{ "Buy more tickets"|trans }}</a>
+                                                        <a href="{{ path('recipes') }}" class="btn btn-outline-primary mr-3"><i class="fas fa-subscription-alt"></i> {{ "Buy more subscriptions"|trans }}</a>
                                                         <button type="submit" class="btn btn-outline-primary mr-3"><i class="fas fa-sync"></i> {{ "Update cart"|trans }}</button>
-                                                        <span data-target="{{ path('dashboard_attendee_cart_empty') }}" class="btn btn-outline-primary mr-3 requires-confirmation"  data-confirmation-text="{{ "You are about to empty your cart"|trans }}"><i class="far fa-minus-square"></i> {{ "Empty cart"|trans }}</span>
-                                                        <a href="{{ path('dashboard_attendee_checkout') }}" class="btn btn-primary">
-                                                            {% if app.user.getTicketsInCartPriceSum(true) > 0 %}
+                                                        <span data-target="{{ path('dashboard_creator_cart_empty') }}" class="btn btn-outline-primary mr-3 requires-confirmation"  data-confirmation-text="{{ "You are about to empty your cart"|trans }}"><i class="far fa-minus-square"></i> {{ "Empty cart"|trans }}</span>
+                                                        <a href="{{ path('dashboard_creator_checkout') }}" class="btn btn-primary">
+                                                            {% if app.user.getSubscriptionsInCartPriceSum(true) > 0 %}
                                                                 {{ "Checkout"|trans }}
                                                             {% else %}
                                                                 {{ "Register"|trans }}
@@ -112,17 +109,11 @@
                                 </div>
                             </div>
                         </div>
-
                     {% else %}
-
-                        {% include "Global/message.html.twig" with { icon: "fas fa-shopping-cart", type: "info", message: ('Your cart is empty'|trans) } %}
-
+                        {% include "global/message.html.twig" with { icon: "bi bi-shop", type: "dark", class: "my-2", message: ('Your cart is empty'|trans) } %}
                     {% endif %}
-
                 </div>
             </div>
-
         </div>
     </section>
-
 {% endblock %}

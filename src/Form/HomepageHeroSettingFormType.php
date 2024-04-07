@@ -9,7 +9,6 @@ use App\Service\SettingService;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -92,7 +91,7 @@ class HomepageHeroSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the homepage hero seach box'),
-                'choices' => ['Yes' => true, 'No' => false],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
             ])
             // Fields below are not stored in the entity, but in the settings cache
@@ -102,7 +101,7 @@ class HomepageHeroSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the search box'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -129,13 +128,20 @@ class HomepageHeroSettingFormType extends AbstractType
                 'label' => t('Number of posts to show'),
                 'attr' => ['class' => 'touchspin-integer', 'data-min' => 0, 'data-max' => 15],
             ])
+            ->add('homepage_testimonials_number', TextType::class, [
+                'purify_html' => true,
+                'mapped' => false,
+                'required' => true,
+                'label' => t('Number of testimonials to show'),
+                'attr' => ['class' => 'touchspin-integer', 'data-min' => 0, 'data-max' => 15],
+            ])
             ->add('homepage_show_call_to_action', ChoiceType::class, [
                 'mapped' => false,
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the call to action block'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),

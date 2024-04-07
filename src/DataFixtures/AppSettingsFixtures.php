@@ -54,9 +54,9 @@ class AppSettingsFixtures extends Fixture
 
         // Company
         $settings[] = new Setting('Company', 'website_company', $this->params->get('website_company'), TextareaType::class);
-        $settings[] = new Setting('Siret', 'website_siret', $this->params->get('website_siret'), TextareaType::class);
-        $settings[] = new Setting('APE', 'website_ape', $this->params->get('website_ape'), TextareaType::class);
-        $settings[] = new Setting('VAT', 'website_vat', $this->params->get('website_vat'), TextareaType::class);
+        $settings[] = new Setting('Siret', 'website_siret', $this->params->get('website_siret'), NumberType::class);
+        $settings[] = new Setting('APE', 'website_ape', $this->params->get('website_ape'), TextType::class);
+        $settings[] = new Setting('VAT', 'website_vat', $this->params->get('website_vat'), TextType::class);
 
         // Social
         $settings[] = new Setting('Facebook URL', 'website_facebook_url', 'https://www.facebook.com', UrlType::class);
@@ -67,7 +67,7 @@ class AppSettingsFixtures extends Fixture
         // General settings
         $settings[] = new Setting('Copyright', 'website_copyright', '© 2020 '.$this->params->get('website_name').', Inc. All rights reserved.', TextType::class);
         $settings[] = new Setting('Everyone can sign up', 'users_can_register', true, CheckboxType::class);
-        $settings[] = new Setting('About', 'website_about', 'Lorem ipsum dolor sit amet, consectetur adipisicing.', TextareaType::class);
+        $settings[] = new Setting('About Footer', 'website_about', 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore est repellendus adipisci voluptates, earum excepturi ut iusto quas alias, voluptatibus modi autem libero, ea delectus ex soluta quaerat aperiam atque!', TextareaType::class);
         // $settings[] = new Setting('Primary color', 'primary_color', '#9a6ee2', TextType::class);
         $settings[] = new Setting('Back to top', 'show_back_to_top_button', true, CheckboxType::class);
         $settings[] = new Setting('Custom CSS', 'custom_css', '', TextareaType::class);
@@ -78,20 +78,24 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Maintenance mode', 'maintenance_mode', $this->params->get('maintenance_mode'), CheckboxType::class);
         $settings[] = new Setting('Custom maintenance mode message', 'maintenance_mode_custom_message', '', TextareaType::class);
 
+        // Limit
+        $settings[] = new Setting('Limit of posts search per page', 'website_posts_search_limit', 10, NumberType::class);
+        $settings[] = new Setting('Limit of recipes per page', 'website_recipes_limit', 5, NumberType::class);
+        $settings[] = new Setting('Limit of posts per page', 'website_posts_limit', 9, NumberType::class);
+        $settings[] = new Setting('Limit of comments per page', 'website_comments_limit', 4, NumberType::class);
+
         // Number
-        $settings[] = new Setting('Number of posts search per page', 'website_posts_search_limit', 10, NumberType::class);
-        $settings[] = new Setting('Number of recipes per page', 'website_recipes_limit', 5, NumberType::class);
-        $settings[] = new Setting('Number of posts per page', 'website_posts_limit', 9, NumberType::class);
-        $settings[] = new Setting('Number of comments per page', 'website_comments_limit', 4, NumberType::class);
         $settings[] = new Setting('Number of posts on the homepage', 'homepage_posts_number', 3, NumberType::class);
         $settings[] = new Setting('Number of testimonials on the homepage', 'homepage_testimonials_number', 2, NumberType::class);
         $settings[] = new Setting('Number of categories on the homepage', 'homepage_categories_number', 12, NumberType::class);
         $settings[] = new Setting('Number of recipes on the homepage', 'homepage_recipes_number', 12, NumberType::class);
 
+        // Pages Show Action
+        $settings[] = new Setting('Show Search Box On Home page', 'homepage_show_search_box', 0, CheckboxType::class);
+        $settings[] = new Setting('Show Call To Action', 'homepage_show_call_to_action', 1, CheckboxType::class);
+        $settings[] = new Setting('Show Cookie policy bar', 'show_cookie_policy_bar', 1, CheckboxType::class);
+
         // Pages Show
-        $settings[] = new Setting('Show Search Box On Home page', 'homepage_show_search_box', false, CheckboxType::class);
-        $settings[] = new Setting('Show Call To Action', 'homepage_show_call_to_action', true, CheckboxType::class);
-        $settings[] = new Setting('Show Cookie policy bar', 'show_cookie_policy_bar', true, CheckboxType::class);
         $settings[] = new Setting('Show Cookie policy page', 'show_cookie_policy_page', true, CheckboxType::class);
         $settings[] = new Setting('Show Terms of Service page', 'show_terms_of_service_page', true, CheckboxType::class);
         $settings[] = new Setting('Show Privacy policy page', 'show_privacy_policy_page', true, CheckboxType::class);
@@ -100,7 +104,8 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Show Shipping page', 'show_shipping_page', true, CheckboxType::class);
         $settings[] = new Setting('Show About us page', 'show_about_page', true, CheckboxType::class);
         $settings[] = new Setting('Show Affiliates page', 'show_affiliates_page', true, CheckboxType::class);
-        $settings[] = new Setting('Show Careers page', 'show_careers_page', true, CheckboxType::class);
+        $settings[] = new Setting('Show Feedbacks page', 'show_feedbacks_page', true, CheckboxType::class);
+        $settings[] = new Setting('Show Supports page', 'show_supports_page', true, CheckboxType::class);
 
         // Pages Content
         $settings[] = new Setting('Cookie policy page content', 'cookie_policy_page_content', 'cookie_policy_page_content', TextareaType::class);
@@ -111,7 +116,8 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Free Shipping Page Content', 'shipping_content', 'shipping_page_content', TextareaType::class);
         $settings[] = new Setting('About us Page Content', 'about_content', 'about_page_content', TextareaType::class);
         $settings[] = new Setting('Affiliates Page Content', 'affiliates_content', 'affiliates_page_content', TextareaType::class);
-        $settings[] = new Setting('Careers Page Content', 'careers_content', 'careers_page_content', TextareaType::class);
+        $settings[] = new Setting('Feedbacks Page Content', 'feedbacks_content', 'feedbacks_page_content', TextareaType::class);
+        $settings[] = new Setting('Supports Page Content', 'supports_content', 'supports_page_content', TextareaType::class);
 
         // Pages Slug
         $settings[] = new Setting('Cookie policy page slug', 'cookie_policy_page_slug', 'cookie-policy', TextType::class);
@@ -122,12 +128,13 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Shipping Page Slug', 'shipping_page_slug', 'shipping', TextType::class);
         $settings[] = new Setting('About us Page Slug', 'about_page_slug', 'about', TextType::class);
         $settings[] = new Setting('Affiliates Page Slug', 'affiliates_page_slug', 'affiliates', TextType::class);
-        $settings[] = new Setting('Careers Page Slug', 'careers_page_slug', 'careers', TextType::class);
+        $settings[] = new Setting('Feedbacks Page Slug', 'feedback_page_slug', 'feedback', TextType::class);
+        $settings[] = new Setting('Supports Page Slug', 'support_page_slug', 'support', TextType::class);
 
         // Newsletter
         $settings[] = new Setting('Show GDPR compliance page', 'mailchimp_api_key', '', TextType::class);
         $settings[] = new Setting('Show GDPR compliance page', 'mailchimp_list_id', '', TextType::class);
-        $settings[] = new Setting('Newsletter enabled', 'newsletter_enabled', true, CheckboxType::class);
+        $settings[] = new Setting('Newsletter enabled', 'newsletter_enabled', 1, CheckboxType::class);
 
         // Currency
         $settings[] = new Setting('Currency to currency', 'currency_ccy', 'USD', TextType::class);
@@ -151,15 +158,15 @@ class AppSettingsFixtures extends Fixture
         // Google
         $settings[] = new Setting('google recaptcha secret key', 'google_recaptcha_secret_key', '', TextType::class);
         $settings[] = new Setting('google recaptcha site key', 'google_recaptcha_site_key', '', TextType::class);
-        $settings[] = new Setting('Google recaptcha enabled', 'google_recaptcha_enabled', false, CheckboxType::class);
+        $settings[] = new Setting('Google recaptcha enabled', 'google_recaptcha_enabled', 1, CheckboxType::class);
 
         // Social login
         $settings[] = new Setting('Facebook secret key', 'social_login_facebook_secret', '', TextType::class);
         $settings[] = new Setting('Facebook login', 'social_login_facebook_id', '', TextType::class);
-        $settings[] = new Setting('Facebook enabled', 'social_login_facebook_enabled', false, CheckboxType::class);
+        $settings[] = new Setting('Facebook enabled', 'social_login_facebook_enabled', 1, CheckboxType::class);
         $settings[] = new Setting('Google secret key', 'social_login_google_secret', '', TextType::class);
         $settings[] = new Setting('Google login', 'social_login_google_id', '', TextType::class);
-        $settings[] = new Setting('Google enabled', 'social_login_google_enabled', false, CheckboxType::class);
+        $settings[] = new Setting('Google enabled', 'social_login_google_enabled', 1, CheckboxType::class);
 
         foreach ($settings as $setting) {
             $manager->persist($setting);

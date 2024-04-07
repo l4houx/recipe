@@ -9,12 +9,15 @@
     <div class="mb-4">
         <a href="{{ path('home') }}">
             <img src="{{ asset('images/brand/logo/logo-icon.svg') }}" class="mb-4" alt="logo-icon">
+            {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="mb-4"> #}
         </a>
         <h1 class="mb-1 fw-bold">{{ pagetitle }}</h1>
-        <span>
-            {{ 'You do not have an account?'|trans }}
-            <a href="{{ path('register') }}" class="ms-1">{{ 'Sign up'|trans }}</a>
-        </span>
+        {% if '1' == settings['users_can_register'] %}
+            <span>
+                {{ 'You do not have an account?'|trans }}
+                <a href="{{ path('register') }}" class="ms-1">{{ 'Sign up'|trans }}</a>
+            </span>
+        {% endif %}
     </div>
     <form method="post" class="needs-validation" novalidate="">
         {% if error %}
@@ -43,7 +46,9 @@
                 <button type="submit" class="btn btn-primary">{{ pagetitle }}</button>
             </div>
         </div>
-        <hr class="my-4">
-        {% include "global/_social-auth.html.twig" %}
+        {% if '1' == settings['social_login_facebook_enabled'] or '1' == settings['social_login_google_enabled'] %}
+            <hr class="my-4">
+            {% include "global/_social-auth.html.twig" %}
+        {% endif %}
     </form>
 {% endblock %}

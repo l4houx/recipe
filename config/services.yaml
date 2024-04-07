@@ -83,12 +83,14 @@ parameters:
     app_layout:                       /images/layout
     post_image:                       /images/post
     icon:                             /images/icon
-    #user_avatar:                     /images/user
+    user_avatar:                      /images/user
     #payment_gateway:                 /images/payment/gateways
     recipe_image:                     /images/recipe
     category_image:                   /images/categories
     restaurant_logo:                  /images/restaurant
     restaurant_cover:                 /images/restaurant/covers
+    audience_image:                   /images/audiences
+    venue_image:                      /images/venues
 
 imports:
     - { resource: data/ }
@@ -144,9 +146,9 @@ services:
     #App\Infrastructural\Uploads\Naming\ThumbnailDirectoryNamer:
         #public: true
 
-    #App\Twig\TwigUrlExtension:
-        #arguments:
-            #$uploaderHelper: '@Vich\UploaderBundle\Templating\Helper\UploaderHelper'
+    App\Twig\TwigUrlExtension:
+        arguments:
+            $uploaderHelper: '@Vich\UploaderBundle\Templating\Helper\UploaderHelper'
 
     # Setting
     app.setting:

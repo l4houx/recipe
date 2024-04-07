@@ -63,3 +63,18 @@ vich_uploader:
             inject_on_load: false
             delete_on_update: true
             delete_on_remove: true
+
+        audience_image:
+            uri_prefix: '%audience_image%'
+            upload_destination: '%kernel.project_dir%/public%audience_image%'
+            namer: vich_uploader.namer_uniqid
+
+        venue_image:
+            uri_prefix: '%venue_image%'
+            upload_destination: '%kernel.project_dir%/public%venue_image%'
+            namer: vich_uploader.namer_uniqid
+
+        user_avatar:
+            uri_prefix: '%user_avatar%'
+            upload_destination: '%kernel.project_dir%/public%user_avatar%'
+            namer: vich_uploader.namer_uniqid

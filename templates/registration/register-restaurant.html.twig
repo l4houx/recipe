@@ -4,7 +4,7 @@
 
 {% form_theme registrationForm '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %}
 
-{% set pagetitle = 'Sign up'|trans %}
+{% set pagetitle = 'Take your recipes to the next level'|trans %}
 {% block title pagetitle %}
 
 {% block content %}
@@ -31,6 +31,9 @@
         </div>
     {% endif %}
     {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+        <div class="mb-3">
+            {{ form_row(registrationForm.restaurant.name) }}
+        </div>
         <div class="mb-3">
             {{ form_row(registrationForm.firstname) }}
         </div>

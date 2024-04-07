@@ -1,9 +1,22 @@
-<img src="{{ user.gravatarUrl }}" class="avatar-{{ type }} rounded-circle {{ class is defined ? class : '' }}" alt="avatar">
+<img src="{{ user.gravatarUrl | default(asset('images/user/default.png')) }}" class="avatar-{{ type }} rounded-circle {{ class is defined ? class : '' }}" alt="avatar">
+
 
 {#
-<span class="avatar avatar-{{ type }} rounded-circle"{% if user.avatarName %}  style="background: url('{{ asset(user.getAvatarPath) }}');"{% elseif user.facebookProfilePicture %} style="background: url('{{ user.facebookProfilePicture }}');"{% endif %} {% if showusernametooltip is defined %}data-toggle="tooltip" title="{{ user.username }}" data-container="body"{% endif %} >
+<span class="avatar avatar-{{ type }} rounded-circle {{ class is defined ? class : '' }}"{% if user.avatarName %}  style="background: url('{{ asset(user.getAvatarPath) }}');"{% elseif user.facebookProfilePicture %} style="background: url('{{ user.facebookProfilePicture }}');"{% endif %} {% if showusernametooltip is defined %}data-toggle="tooltip" title="{{ user.username }}" data-container="body"{% endif %} >
     {% if not user.avatarName and not user.facebookProfilePicture %}
         <i class="bi bi-person-circle fs-4"></i>
     {% endif %}
 </span>
+#}
+
+{#  
+{% if user.hasRole('ROLE_CREATOR') %}
+
+{% elseif user.hasRole('ROLE_RESTAURANT') %}
+
+{% elseif user.hasRole('ROLE_POINTOFSALE') %}
+
+{% elseif user.hasRole('ROLE_SCANNER') %}
+
+{% endif %}
 #}

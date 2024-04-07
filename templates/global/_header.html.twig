@@ -106,19 +106,32 @@
             <ul class="navbar-nav navbar-right-wrap ms-2 flex-row d-none d-md-block">
 				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 					{% if is_granted('ROLE_CREATOR') %}
-						{% include "global/_notification.html.twig" %}
+						{% include "global/_cart.html.twig" %}
+                        {% include "global/_notification.html.twig" %}
 					{% endif %}
                     <li class="dropdown ms-2 d-inline-block position-static">
                         <a class="rounded-circle" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                             <div class="avatar avatar-md avatar-indicators avatar-online">
-                                <img alt="avatar" src="{{ app.user.gravatarUrl }}" class="rounded-circle">
+                                {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                    <span class="avatar rounded-circle">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                {% else %}
+                                    <img alt="avatar" src="{{ app.user.gravatarUrl }}" class="rounded-circle">
+                                {% endif %}
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end position-absolute mx-3 my-5">
                             <div class="dropdown-item">
                                 <div class="d-flex">
                                     <div class="avatar avatar-md avatar-indicators avatar-online">
-                                        <img alt="avatar" src="{{ app.user.gravatarUrl }}" class="rounded-circle">
+                                        {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                            <span class="avatar rounded-circle">
+                                                <i class="bi bi-person"></i>
+                                            </span>
+                                        {% else %}
+                                            <img alt="avatar" src="{{ app.user.gravatarUrl }}" class="rounded-circle">
+                                        {% endif %}
                                     </div>
                                     <div class="ms-3 lh-1">
                                         <h5 class="mb-1">{{ app.user.username }}</h5>
@@ -177,7 +190,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ path('dashboard_creator_account_dashboard') }}">
                                         <i class="bi bi-person me-2"></i>
-                                        {{ 'My account'|trans }}
+                                        {{ 'My dashboard'|trans }}
                                     </a>
                                 </li>
                                 <li>
@@ -186,12 +199,14 @@
                                         {{ 'Subscription'|trans }}
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" href="#!">
-                                        <i class="bi bi-gear me-2"></i>
-                                        {{ 'Settings'|trans }}
-                                    </a>
-                                </li>
+                                {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_setting_layout') }}">
+                                            <i class="bi bi-gear me-2"></i>
+                                            {{ 'Settings'|trans }}
+                                        </a>
+                                    </li>
+                                {% endif %}
                             </ul>
                             <div class="dropdown-divider"></div>
                             <ul class="list-unstyled">
@@ -217,12 +232,9 @@
                         </div>
                     </li>
                 {% else %}
-                    <a href="{{ path('login', {redirect: app.request.pathInfo}) }}" class="btn btn-outline-primary shadow-sm me-2 d-none d-md-block">
-                        {{ 'Sign in'|trans }}
-                    </a>
-                    <a href="{{ path('register') }}" class="btn btn-primary d-none d-md-block me-2 me-lg-0">
-                        {{ 'Sign up'|trans }}
-                    </a>
+                    <div class="dropdown">
+                        {% include "global/_login-register.html.twig" %}
+                    </div>
                 {% endif %}
             </ul>
         </div>

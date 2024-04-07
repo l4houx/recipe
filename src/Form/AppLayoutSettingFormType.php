@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -66,7 +66,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('App Debugging'),
-                'choices' => ['Enable' => '1', 'Disable' => '0'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'help' => t('Enable to display stacktraces on error pages or if cache files should be dynamically rebuilt on each request'),
                 'constraints' => [
@@ -74,7 +74,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('app_secret', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => t('App Secret'),
@@ -97,13 +97,13 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('maintenance_mode_custom_message', TextareaType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Maintenance mode custom message'),
             ])
             ->add('date_format', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => t('Date and time format'),
@@ -113,7 +113,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'help' => t('Project wide date and time format, follow this link for a list of supported characters: https://unicode-org.github.io/icu/userguide/format_parse/datetime/ . Please make sure to keep the double quotes " " around the format string'),
             ])
             ->add('date_format_simple', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => t('Alternative date and time format'),
@@ -214,7 +214,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_description_en', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -223,7 +223,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_description_fr', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -232,7 +232,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_description_es', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -241,7 +241,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_description_ar', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -250,7 +250,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_description_de', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -259,7 +259,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_description_pt', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -268,7 +268,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_keywords_en', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => t('SEO keywords'),
@@ -277,7 +277,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_keywords_fr', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -286,7 +286,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_keywords_es', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -295,7 +295,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_keywords_ar', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -304,7 +304,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_keywords_de', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -313,7 +313,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_keywords_pt', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => false,
@@ -322,61 +322,90 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('website_contact_email', EmailType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Contact email'),
             ])
             ->add('website_sav', EmailType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Contact sav'),
             ])
             ->add('website_no_reply_email', EmailType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Contact no reply email'),
             ])
             ->add('website_contact_phone', TelType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Contact phone'),
             ])
             ->add('website_contact_fax', TelType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Contact fax'),
             ])
             ->add('website_contact_address', TextareaType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Contact address'),
             ])
+            ->add('website_contact_name', TextType::class, [
+                'purify_html' => true,
+                'mapped' => false,
+                'required' => false,
+                'label' => t('Contact name'),
+            ])
+            ->add('website_company', TextareaType::class, [
+                'purify_html' => true,
+                'mapped' => false,
+                'required' => false,
+                'label' => t('Company'),
+            ])
+            ->add('website_siret', NumberType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => t('Company siret'),
+            ])
+            ->add('website_ape', TextType::class, [
+                'purify_html' => true,
+                'mapped' => false,
+                'required' => false,
+                'label' => t('Company ape'),
+            ])
+            ->add('website_vat', TextType::class, [
+                'purify_html' => true,
+                'mapped' => false,
+                'required' => false,
+                'label' => t('Company vat'),
+            ])
             ->add('facebook_url', UrlType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Facebook url'),
             ])
             ->add('instagram_url', UrlType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Instagram url'),
             ])
             ->add('youtube_url', UrlType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Youtube url'),
             ])
             ->add('twitter_url', UrlType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => false,
                 'label' => t('Twitter url'),
@@ -407,7 +436,7 @@ class AppLayoutSettingFormType extends AbstractType
                 ],
             ])
             ->add('primary_color', TextType::class, [
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
                 'label' => t('Primary color code'),
@@ -455,7 +484,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the back to top button'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -467,7 +496,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the terms of service page link'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -491,7 +520,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the privacy policy page link'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -515,7 +544,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the cookie policy page link'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -539,7 +568,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the cookie policy bar at the bottom'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -551,7 +580,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Show the GDPR compliance page link'),
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -569,6 +598,54 @@ class AppLayoutSettingFormType extends AbstractType
                     new NotNull(),
                 ],
             ])
+            ->add('show_feedback_page', ChoiceType::class, [
+                'mapped' => false,
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => t('Show the Feedback page link'),
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('feedback_page_slug', ChoiceType::class, [
+                'mapped' => false,
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'label' => t('Feedback page slug'),
+                'choices' => $pages,
+                'attr' => ['class' => 'select2', 'data-sort-options' => '1'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_support_page', ChoiceType::class, [
+                'mapped' => false,
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => t('Show the Support page link'),
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('support_page_slug', ChoiceType::class, [
+                'mapped' => false,
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'label' => t('Support page slug'),
+                'choices' => $pages,
+                'attr' => ['class' => 'select2', 'data-sort-options' => '1'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
             ->add('custom_css', TextareaType::class, [
                 'purify_html' => true,
                 'mapped' => false,
@@ -576,7 +653,7 @@ class AppLayoutSettingFormType extends AbstractType
                 'label' => t('Custom css'),
                 'attr' => ['rows' => '15'],
             ])
-            ->add('footer_about', TextareaType::class, [
+            ->add('website_about', TextareaType::class, [
                 'purify_html' => true,
                 'mapped' => false,
                 'required' => true,
@@ -599,15 +676,11 @@ class AppLayoutSettingFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Everyone can register'),
-                'choices' => ['Enable' => '1', 'Disable' => '0'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
                 ],
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => t('Save'),
-                'attr' => ['class' => 'btn btn-primary'],
             ])
         ;
     }

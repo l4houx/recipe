@@ -26,7 +26,7 @@
                 </div>
                 <div class="card-body">
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
-
+                        {{ form_widget(form) }}
 
 
 
@@ -44,6 +44,7 @@
     </div>
 {% endblock %}
 
+{#  
 {% block javascripts %}
     <script>
         $(document).ready(function () {
@@ -94,3 +95,4 @@
         });
     </script>
 {% endblock %}
+#}

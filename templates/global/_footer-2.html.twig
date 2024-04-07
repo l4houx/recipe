@@ -5,19 +5,27 @@
                 <div class="d-lg-flex align-items-center">
                     <div class="me-4">
                         <span>
-                            ©
-                            <span id="copyright2">
-                                <script>
-                                    document.getElementById("copyright2").appendChild(document.createTextNode(new Date().getFullYear()));
-                                </script>-2020
-                            </span>
+                            © 2020 - {{ "now"|date('Y') }}
                             {{ website_name }}-{{ 'UI, Inc. All rights reserved.'|trans }}
                         </span>
                     </div>
                     <div>
                         <nav class="nav nav-footer">
-                            <a class="nav-link active ps-0" href="#!">{{ 'Privacy'|trans }}</a>
-                            <a class="nav-link" href="#!">{{ 'Terms'|trans }}</a>
+                            {% if '1' == settings['show_privacy_policy_page'] %}
+                                <a class="nav-link ps-0" href="{{ path('page', { slug : settings['privacy_policy_page_slug'] }) }}">
+                                    {{ 'Privacy'|trans }}
+                                </a>
+                            {% endif %}
+                            {% if '1' == settings['show_terms_of_service_page'] %}
+                                <a class="nav-link" href="{{ path('page', { slug : settings['terms_of_service_page_slug'] }) }}">
+                                    {{ 'Terms'|trans }}
+                                </a>
+                            {% endif %}
+							{% if '1' == settings['show_cookie_policy_page'] %}
+                                <a class="nav-link px-2 px-md-3" href="{{ path('page', { slug : settings['cookie_policy_page_slug'] }) }}">
+                                    {{ 'Cookie Notice'|trans }}
+                                </a>
+							{% endif %}
                             <a class="nav-link" href="{{ path('testimonial') }}">{{ 'Feedback'|trans }}</a>
                             <a class="nav-link" href="{{ path('help_center') }}">{{ 'Support'|trans }}</a>
                         </nav>
@@ -32,8 +40,10 @@
     </div>
 </footer>
 
-<div class="btn-scroll-top">
-    <svg class="progress-square svg-content" width="100%" height="100%" viewBox="0 0 40 40">
-        <path d="M8 1H32C35.866 1 39 4.13401 39 8V32C39 35.866 35.866 39 32 39H8C4.13401 39 1 35.866 1 32V8C1 4.13401 4.13401 1 8 1Z" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 139.988px, 139.988px; stroke-dashoffset: 139.988px;"></path>
-    </svg>
-</div>
+{% if settings["show_back_to_top_button"] == "yes" %}
+    <div class="btn-scroll-top">
+        <svg class="progress-square svg-content" width="100%" height="100%" viewBox="0 0 40 40">
+            <path d="M8 1H32C35.866 1 39 4.13401 39 8V32C39 35.866 35.866 39 32 39H8C4.13401 39 1 35.866 1 32V8C1 4.13401 4.13401 1 8 1Z" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 139.988px, 139.988px; stroke-dashoffset: 139.988px;"></path>
+        </svg>
+    </div>
+{% endif %}

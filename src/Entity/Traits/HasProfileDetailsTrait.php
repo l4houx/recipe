@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait HasProfileDetailsTrait
 {
-    // use HasAvatarVichTrait;
+    use HasAvatarVichTrait;
     use HasIsTeamTrait;
     use HasIdentifyTrait;
     // use HasSocialMediaTrait;

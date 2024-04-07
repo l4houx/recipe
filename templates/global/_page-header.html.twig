@@ -13,30 +13,7 @@
         </div>
         <div class="ms-auto d-flex">
             <div class="dropdown">
-                <button class="btn btn-light btn-icon rounded-circle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="{{ "Toggle theme (auto)"|trans }}">
-                    <i class="bi theme-icon-active"><i class="bi theme-icon bi-moon-stars-fill"></i></i>
-                    <span class="visually-hidden bs-theme-text">{{ 'Toggle theme'|trans }}</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bs-theme-text">
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                            <i class="bi theme-icon bi-sun-fill"></i>
-                            <span class="ms-2">{{ 'Light'|trans }}</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="dark" aria-pressed="true">
-                            <i class="bi theme-icon bi-moon-stars-fill"></i>
-                            <span class="ms-2">{{ 'Dark'|trans }}</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="false">
-                            <i class="bi theme-icon bi-circle-half"></i>
-                            <span class="ms-2">{{ 'Auto'|trans }}</span>
-                        </button>
-                    </li>
-                </ul>
+                {% include "global/_bs-theme-text.html.twig" %}
             </div>
             <ul class="navbar-nav navbar-right-wrap ms-2 d-flex nav-top-wrap">
                 {#  
@@ -230,19 +207,7 @@
                             <li>
                                 <a class="dropdown-item" href="{{ path('dashboard_creator_account_dashboard') }}">
                                     <i class="bi bi-person me-2"></i>
-                                    {{ 'My account'|trans }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#!">
-                                    <i class="bi bi-star me-2"></i>
-                                    {{ 'Subscription'|trans }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#!">
-                                    <i class="bi bi-gear me-2"></i>
-                                    {{ 'Settings'|trans }}
+                                    {{ 'My dashboard'|trans }}
                                 </a>
                             </li>
                         </ul>

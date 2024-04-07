@@ -108,6 +108,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('restaurant', RestaurantRegistrationFormType::class)
             ->add('recaptcha', EWZRecaptchaType::class, [
                 'attr' => [
                     'options' => [
