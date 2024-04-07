@@ -2,45 +2,41 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Entity\User;
-use App\Entity\Traits\HasRoles;
 use App\Controller\BaseController;
+use App\Entity\Traits\HasRoles;
+use App\Entity\User;
+use App\Repository\ApplicationRepository;
 use App\Repository\LevelRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
-use App\Repository\ApplicationRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/** MyProfile */
-#[IsGranted(HasRoles::DEFAULT)]
+/** My Profile Creator */
+#[Route(path: '/%website_dashboard_path%/creator', name: 'dashboard_creator_')]
+#[IsGranted(HasRoles::CREATOR)]
 class MainController extends BaseController
 {
-    public function __construct(private readonly Security $security)
-    {
-    }
-
-    #[Route(path: '/%website_dashboard_path%/account', name: 'dashboard_account_index', methods: ['GET'])]
-    public function index(
-        //#[CurrentUser] ?User $user,
+    #[Route(path: '/account-dashboard', name: 'account_dashboard', methods: ['GET'])]
+    public function dashboard(
+        #[CurrentUser] ?User $user,
+        Security $security,
         TicketRepository $ticketRepository,
         LevelRepository $levelRepository,
         StatusRepository $statusRepository,
         ApplicationRepository $applicationRepository
     ): Response {
-        $user = $this->getUserOrThrow();
-
         $levels = $levelRepository->findAll();
         $statuses = $statusRepository->findAll();
 
-        if ($user === null) {
+        if (null === $user) {
             return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
-        if ($this->security->isGranted(HasRoles::ADMIN)) {
+        if ($security->isGranted(HasRoles::ADMIN)) {
             $tickets = $ticketRepository->findAll();
         } else {
             $applications = $applicationRepository->findBy(['user' => $user->getId()]);
@@ -52,6 +48,6 @@ class MainController extends BaseController
             $tickets = array_merge($ticketsApp, $ticketsUser);
         }
 
-        return $this->render('dashboard/shared/index.html.twig', compact('user', 'tickets', 'statuses', 'levels'));
+        return $this->render('dashboard/shared/dashboard.html.twig', compact('user', 'tickets', 'statuses', 'levels'));
     }
 }

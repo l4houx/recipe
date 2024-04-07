@@ -12,7 +12,7 @@
 					<div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content">
 						<div class="simplebar-content">
 							<a class="navbar-brand" href="{{ path('home') }}">
-								{# <img src="images/brand/logo/logo-inverse.svg" alt="{{ website_name }}"> #}
+								{# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}"> #}
 								{{ website_name }}
 							</a>
 							<ul class="navbar-nav flex-column" id="sideNavbar">
@@ -103,10 +103,10 @@
 										<i class="nav-icon bi bi-gear me-2"></i>
 										{{'Setting' | trans}}
 									</a>
-									<div id="settings-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_setting_homepage" or routename == "dashboard_admin_setting_payment" or routename == "dashboard_admin_setting_newsletter" or routename == "dashboard_admin_setting_layout" or routename == "dashboard_admin_setting_payment_gateways_new" or routename == "dashboard_admin_setting_payment_gateways_edit" or routename == "dashboard_admin_setting_checkout" or routename == "dashboard_admin_setting_blog" or routename == "dashboard_admin_setting_mail_server" or routename == "dashboard_admin_setting_google_recaptcha" or routename == "dashboard_admin_setting_google_maps" or routename == "dashboard_admin_setting_social_login" or routename == "dashboard_admin_setting_menus" or routename == "dashboard_admin_setting_menus_edit" or routename == "dashboard_admin_setting_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" %}show{% endif %}" data-bs-parent="#sideNavbar" style="">
+									<div id="settings-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_setting_homepage" or routename == "dashboard_admin_setting_payment" or routename == "dashboard_admin_setting_newsletter" or routename == "dashboard_admin_setting_layout" or routename == "dashboard_admin_setting_payment_gateways_new" or routename == "dashboard_admin_setting_payment_gateways_edit" or routename == "dashboard_admin_setting_checkout" or routename == "dashboard_admin_setting_blog" or routename == "dashboard_admin_setting_mail_server" or routename == "dashboard_admin_setting_google_recaptcha" or routename == "dashboard_admin_setting_google_maps" or routename == "dashboard_admin_setting_social_login" or routename == "dashboard_admin_setting_menus" or routename == "dashboard_admin_setting_menus_edit" or routename == "dashboard_admin_setting_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" or routename == "dashboard_admin_setting_recipes_list_page" or routename == "dashboard_admin_setting_venue_page" %}show{% endif %}" data-bs-parent="#sideNavbar" style="">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_layout" %}active{% endif %}" href="{{ path('dashboard_admin_setting_layout') }}">
 													{{ 'Layout'|trans }}
 												</a>
 											</li>
@@ -116,7 +116,7 @@
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_homepage" %}active{% endif %}" href="{{ path('dashboard_admin_setting_homepage') }}">
 													{{ 'Homepage'|trans }}
 												</a>
 											</li>
@@ -125,8 +125,8 @@
 													{{ 'Payments'|trans }}
 												</a>
 											</li>
-											<li class="nav-item {% if routename == "dashboard_admin_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" %}active{% endif %}">
-												<a class="nav-link" href="{{ path('dashboard_admin_setting_currency_index') }}">
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" %}active{% endif %}" href="{{ path('dashboard_admin_setting_currency_index') }}">
 													{{ 'Currencies'|trans }}
 												</a>
 											</li>
@@ -141,32 +141,42 @@
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_google_recaptcha" %}active{% endif %}" href="{{ path('dashboard_admin_setting_google_recaptcha') }}">
 													{{ 'Google Recaptcha'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_google_maps" %}active{% endif %}" href="{{ path('dashboard_admin_setting_google_maps') }}">
 													{{ 'Google Maps'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_social_login" %}active{% endif %}" href="{{ path('dashboard_admin_setting_social_login') }}">
 													{{ 'Social Login'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_blog" %}active{% endif %}" href="{{ path('dashboard_admin_setting_blog') }}">
 													{{ 'Blog settings'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_newsletter" %}active{% endif %}" href="{{ path('dashboard_admin_setting_newsletter') }}">
 													{{ 'Newsletter'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_recipes_list_page" %}active{% endif %}" href="{{ path('dashboard_admin_setting_recipes_list_page') }}">
+													{{ 'Recipes list page'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_venue_page" %}active{% endif %}" href="{{ path('dashboard_admin_setting_venue_page') }}">
+													{{ 'Venue page'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="{{ path('PrestaSitemapBundle_section', {'_format': 'xml', 'name': 'default'}) }}" target="_blank">
 													{{ 'Sitemap'|trans }}
 												</a>
 											</li>

@@ -13,11 +13,9 @@
 				<tr>
                     <td>
                         {{ currency.ccy }}
-                        {#  
                         {% if currency.ccy == settings["currency_ccy"] %}
                             <span class="badge bg-success-soft">{{ "Currenctly active" }}</span>
                         {% endif %}
-                        #}
                     </td>
 					<td>{{ currency.symbol }}</td>
 					<td>
@@ -46,4 +44,7 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	<div class="card-footer">
+		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+	</div>
 </div>

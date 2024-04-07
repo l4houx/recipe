@@ -149,6 +149,6 @@ class TicketController extends BaseController
 
         $em->flush();
 
-        return $this->redirectToRoute('dashboard_account_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('dashboard_creator_account_dashboard', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -219,7 +219,7 @@
             {% else %}
                 <a href="#" days="5" onclick="event.preventDefault(); confirm({{ 'Are you sure you want to delete your account?'|trans }}) && document.getElementById('js-account-deleted-form').submit();" class="btn btn-danger">{{ 'Close my account'|trans }}</a>
 
-                <form id="js-account-deleted-form" action="{{ path('dashboard_account_index') }}" method="post" class="">
+                <form id="js-account-deleted-form" action="{{ path('dashboard_creator_account_dashboard') }}" method="post" class="">
                     <input type="hidden" name="_token" value="{{ csrf_token('account_deleted_' ~ user.id) }}">
                     <input type="hidden" name="_method" value="DELETE">
                 </form>

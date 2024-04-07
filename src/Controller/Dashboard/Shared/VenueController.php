@@ -17,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-#[Route(path: '/%website_dashboard_path%/')]
+#[Route(path: '/%website_dashboard_path%')]
 #[IsGranted(HasRoles::DEFAULT)]
 class VenueController extends BaseController
 {

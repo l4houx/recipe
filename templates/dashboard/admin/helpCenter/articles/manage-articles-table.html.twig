@@ -51,12 +51,11 @@
 						{{ article.updatedAt ? article.updatedAt | format_date('long') : '' }}
 					</td>
 					<td>
-						{% if article.isFeatured == false %}
+						{% if article.isFeatured %}
 							<span class="badge bg-info-soft">
 								<i class="bi bi-star"></i>
 								{{ "Featured"|trans }}
 							</span>
-							<br><br>
 						{% endif %}
 						{% if article.isOnline == false %}
 							<span class="badge bg-danger-soft">
@@ -70,8 +69,6 @@
 							</span>
 						{% endif %}
 						{% if article.deletedAt %}
-							<br>
-							<br>
 							<span class="badge bg-danger-soft">
 								<i class="bi bi-alarm"></i>
 								{{ "Deleted"|trans }}

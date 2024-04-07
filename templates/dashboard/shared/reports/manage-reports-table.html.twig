@@ -1,0 +1,69 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th>{{ 'Reference'|trans }}</th>
+				<th>{{ 'Recipe date'|trans }}</th>
+                {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                    <th>{{'Restaurant'|trans}}</th>
+                {% endif %}
+				<th>{{ 'Subscriptions sold'|trans }}</th>
+				<th>{{ 'Net sales'|trans }}</th>
+                {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                    <th>{{'Subscription fees'|trans}}</th>
+                {% endif %}
+				<th>{{ 'Percentage cut'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for recipeDate in rows %}
+
+				<tr>
+					<td>{{ recipeDate.reference }}</td>
+                    <td>{{ recipeDate.recipe.name }} {{ recipeDate.startdate|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}</td>
+                    {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                        <td>
+                            {{ recipeDate.recipe.restaurant.name }}
+                        </td>
+                    {% endif %}
+					<td>{{ recipeDate.getOrderElementsQuantitySum }}</td>
+                    <td>
+                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getRestaurantPayoutAmount() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                    </td>
+                    {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                        <td>
+                            {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getTotalTicketFees() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                        </td>
+                    {% endif %}
+                    <td>
+                        <b>{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getTicketPricePercentageCutSum() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</b>
+                    </td>
+					<td>
+                        <span class="badge bg-{{ recipeDate.stringifyStatusClass }}-soft">
+                            {{ recipeDate.stringifyStatus|trans }}
+                        </span>
+					</td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+								<a class="dropdown-item" href="">
+									<i class="bi bi-eye dropdown-item-icon"></i>
+									{{ 'Show'|trans }}
+								</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="card-footer">
+		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+	</div>
+</div>

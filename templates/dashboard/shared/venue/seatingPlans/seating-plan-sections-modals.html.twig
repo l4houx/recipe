@@ -1,25 +1,25 @@
 {% for section in seatingPlan.design['sections'] %}
 
-    {% set relatifTicket = eventDate.getTicketBySectionName(section['name']) %}
+    {% set relatifSubscription = recipeDate.getSubscriptionBySectionName(section['name']) %}
 
-    {% if relatifTicket and relatifTicket.active == true and relatifTicket.isOnSale %}
-        <div class="modal fade seating-plan-preview-modal-wrapper" data-section-id="{{ section['randomId'] }}" data-section-name="{{ section['name'] }}" data-ticket-reference="{{ relatifTicket.reference }}" id="section{{ section['randomId'] }}-rows-modal" data-assigned-to-ticket-id="{{ relatifTicket.id }}" style="z-index:1111112;">
+    {% if relatifSubscription and relatifSubscription.active == true and relatifSubscription.isOnSale %}
+        <div class="modal fade seating-plan-preview-modal-wrapper" data-section-id="{{ section['randomId'] }}" data-section-name="{{ section['name'] }}" data-subscription-reference="{{ relatifSubscription.reference }}" id="section{{ section['randomId'] }}-rows-modal" data-assigned-to-subscription-id="{{ relatifSubscription.id }}" style="z-index:1111112;">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title"><i class="fas fa-ticket-alt"></i> {{ section['name'] }}</h4>
+                        <h4 class="modal-title"><i class="fas fa-subscription-alt"></i> {{ section['name'] }}</h4>
                     </div>
                     <div class="modal-body">
 
-                        {% set currentUserRelatifTicketCartElements = relatifTicket.getEventTicketCartElementsByUserAndSection(app.user, section) %}
+                        {% set currentUserRelatifSubscriptionCartElements = relatifSubscription.getRecipeSubscriptionCartElementsByUserAndSection(app.user, section) %}
 
                         {% for row in section['rows'] %}
                             <div class="seating-plan-preview-section-row" data-row-id="{{ row['randomId'] }}" data-row-label="{{ row['label'] }}" data-row-prefix="{{ row['prefix'] }}">
                                 {% for seat in services.getRowSeats(row) %}
-                                    {% set isSeatInCart = relatifTicket.isSeatInCart(app.user, section, row, seat) %}
-                                    {% set isSeatAlreadyReserved = relatifTicket.isSeatAlreadyReserved(section, row, seat) %}
-                                    {% set isSeatIsInTicketReservation = relatifTicket.checkIfSeatIsInTicketReservation(section, row, seat) %}
-                                    <span class="seating-plan-preview-section-row-seat {% if seat['hidden'] %}d-none{% endif %}" data-seat-number="{{ seat['number'] }}" {% if disallowSeatsSelection is defined and isSeatAlreadyReserved %}data-is-reserved-for-preview="true"{% endif %} data-choosen="no" {% if isSeatInCart %}data-in-cart="yes"{% endif %} data-toggle="tooltip" title="{{ seat['label'] }}" style="background: {{ row['seatsColor'] }}; {% if seat['disabled'] or isSeatAlreadyReserved or isSeatIsInTicketReservation %}pointer-events: none; background: #ddd !important;{% endif %}{% if disallowSeatsSelection is defined %}pointer-events: none;{% endif %}{% if disallowSeatsSelection is defined and isSeatAlreadyReserved %}background: red !important;{% endif %}">&nbsp;</span>
+                                    {% set isSeatInCart = relatifSubscription.isSeatInCart(app.user, section, row, seat) %}
+                                    {% set isSeatAlreadyReserved = relatifSubscription.isSeatAlreadyReserved(section, row, seat) %}
+                                    {% set isSeatIsInSubscriptionReservation = relatifSubscription.checkIfSeatIsInSubscriptionReservation(section, row, seat) %}
+                                    <span class="seating-plan-preview-section-row-seat {% if seat['hidden'] %}d-none{% endif %}" data-seat-number="{{ seat['number'] }}" {% if disallowSeatsSelection is defined and isSeatAlreadyReserved %}data-is-reserved-for-preview="true"{% endif %} data-choosen="no" {% if isSeatInCart %}data-in-cart="yes"{% endif %} data-toggle="tooltip" title="{{ seat['label'] }}" style="background: {{ row['seatsColor'] }}; {% if seat['disabled'] or isSeatAlreadyReserved or isSeatIsInSubscriptionReservation %}pointer-recipes: none; background: #ddd !important;{% endif %}{% if disallowSeatsSelection is defined %}pointer-recipes: none;{% endif %}{% if disallowSeatsSelection is defined and isSeatAlreadyReserved %}background: red !important;{% endif %}">&nbsp;</span>
                                 {% endfor %}
                             </div>
                         {% endfor %}

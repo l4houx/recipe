@@ -28,24 +28,92 @@
                     </a>
                 </li>
             {% endif %}
-            <li class="nav-item {% if routename == "dashboard_account_index" %}active{% endif %}">
-                <a class="nav-link" href="{{ path('dashboard_account_index') }}">
-                    <i class="bi bi-person nav-icon"></i>
-                    {{ 'My account'|trans }}
-                </a>
-            </li>
-            <li class="nav-item {% if routename == "dashboard_restaurant_recipe_index" or routename == "dashboard_restaurant_recipe_new"  or routename == "dashboard_restaurant_recipe_edit" %}active{% endif %}">
-                <a class="nav-link" href="{{ path('dashboard_restaurant_recipe_index') }}">
-                    <i class="bi bi-book nav-icon"></i>
-                    {{ 'My recipes'|trans }}
-                </a>
-            </li>
-            <li class="nav-item {% if routename == "dashboard_creator_favorites_index" or routename == "dashboard_creator_favorites_create"  or routename == "dashboard_creator_favorites_remove" %}active{% endif %}">
-                <a class="nav-link" href="{{ path('dashboard_creator_favorites_index') }}">
-                    <i class="bi bi-heart nav-icon"></i>
-                    {{ 'My favorites'|trans }}
-                </a>
-            </li>
+            {% if is_granted('ROLE_CREATOR') %}
+                <li class="nav-item {% if routename == "dashboard_creator_account_dashboard" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_creator_account_dashboard') }}">
+                        <i class="bi bi-speedometer nav-icon"></i>
+                        {{ 'Dashboard'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {% if routename == "dashboard_creator_favorites_index" or routename == "dashboard_creator_favorites_create"  or routename == "dashboard_creator_favorites_remove" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_creator_favorites_index') }}">
+                        <i class="bi bi-heart nav-icon"></i>
+                        {{ 'My favorites'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {% if routename == "dashboard_creator_review_index" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_creator_review_index') }}">
+                        <i class="bi bi-star nav-icon"></i>
+                        {{ 'My reviews'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {% if routename == "dashboard_creator_following_index" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_creator_following_index') }}">
+                        <i class="bi bi-folder nav-icon"></i>
+                        {{ 'Following'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if routename == "dashboard_creator_orders" %}active{% endif %}" href="{{ path('dashboard_creator_orders') }}">
+                        <i class="bi bi-basket nav-icon"></i>
+                        {{ 'My orders'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if routename == "dashboard_creator_cart" %}active{% endif %}" href="{{ path('dashboard_creator_cart') }}">
+                        <i class="bi bi-cart nav-icon"></i>
+                        {{ 'My cart'|trans }}
+                        <span class="badge bg-info-soft float-start ms-2">{{ app.user.getSubscriptionsInCartQuantitySum }}</span>
+                    </a>
+                </li>
+            {% elseif is_granted('ROLE_RESTAURANT') %}
+                <li class="nav-item {% if routename == "dashboard_restaurant_profile" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_restaurant_profile') }}">
+                        <i class="bi bi-person-badge nav-icon"></i>
+                        {{ 'My restaurant profile'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">
+                        <i class="bi bi-person-badge nav-icon"></i>
+                        {{ 'Change password'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {% if routename == "dashboard_restaurant_recipe_index" or routename == "dashboard_restaurant_recipe_new"  or routename == "dashboard_restaurant_recipe_edit" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_restaurant_recipe_index') }}">
+                        <i class="bi bi-book nav-icon"></i>
+                        {{ 'My recipes'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {% if routename == "dashboard_restaurant_review_index" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_creator_review_index') }}">
+                        <i class="bi bi-star nav-icon"></i>
+                        {{ 'Reviews'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {% if routename == "dashboard_restaurant_reports_index" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_restaurant_reports_index') }}">
+                        <i class="bi bi-funnel nav-icon"></i>
+                        {{ 'Reports'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {% if routename == "dashboard_restaurant_pointofsale_index" or routename == "dashboard_restaurant_pointofsale_new" or routename == "dashboard_restaurant_pointofsale_edit" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_restaurant_pointofsale_index') }}">
+                        <i class="bi bi-printer nav-icon"></i>
+                        {{ 'My points of sale'|trans }}
+                    </a>
+                </li>
+            {% elseif is_granted('ROLE_POINTOFSALE') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="">
+                        <i class="bi bi-basket nav-icon"></i>
+                        {{ 'My orders'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+
+
+
             <li class="nav-item {% if routename == "dashboard_ticket_index" or routename == "dashboard_ticket_new"  or routename == "dashboard_ticket_edit" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_ticket_index') }}">
                     <i class="bi bi-ticket nav-icon"></i>
@@ -56,12 +124,6 @@
                 <a class="nav-link" href="{{ path('dashboard_application_index') }}">
                     <i class="bi bi-app nav-icon"></i>
                     {{ 'My applications'|trans }}
-                </a>
-            </li>
-            <li class="nav-item {% if routename == "dashboard_restaurant_review_index" or routename == "dashboard_admin_review_index"  or routename == "dashboard_creator_review_index" %}active{% endif %}">
-                <a class="nav-link" href="{{ path('dashboard_creator_review_index') }}">
-                    <i class="bi bi-star nav-icon"></i>
-                    {{ 'My reviews'|trans }}
                 </a>
             </li>
             <li class="nav-item {% if routename == "dashboard_testimonial_index" or routename == "dashboard_testimonial_new"  or routename == "dashboard_testimonial_edit" %}active{% endif %}">
@@ -85,6 +147,23 @@
         </ul>
         <span class="navbar-header">{{ 'Account settings'|trans }}</span>
         <ul class="list-unstyled ms-n2 mb-0">
+            {% if is_granted('ROLE_CREATOR') %}
+                {% if app.user.facebookId is null and app.user.googleId is null %}
+                    <li class="nav-item {% if routename == "dashboard_creator_account_index" %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('dashboard_creator_account_index') }}">
+                            <i class="bi bi-person nav-icon"></i>
+                            {{ 'My profile'|trans }}
+                        </a>
+                    </li>
+                    <li class="nav-item {% if routename == "dashboard_creator_account_change_password" %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('dashboard_creator_account_change_password') }}">
+                            <i class="bi bi-person-badge nav-icon"></i>
+                            {{ 'Change password'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+            {#  
             <li class="nav-item {% if routename == "dashboard_account_profile" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_account_profile') }}">
                     <i class="bi bi-person nav-icon"></i>
@@ -97,6 +176,7 @@
                     {{ 'Edit my profile'|trans }}
                 </a>
             </li>
+            #}
             <li class="nav-item">
                 <a class="nav-link" href="">
                     <i class="bi bi-bell nav-icon"></i>
@@ -113,7 +193,7 @@
                 <li class="nav-item">
                     <a href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();" class="nav-link">
                         <i class="bi bi-power nav-icon"></i>
-                        {{ 'Logout'|trans }}
+                        {{ 'Sign out'|trans }}
                     </a>
                     <form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
@@ -123,7 +203,7 @@
                 <li class="nav-item">
                     <a href="{{ impersonation_exit_path(path('home')) }}" class="nav-link">
                         <i class="bi bi-power nav-icon"></i>
-                        {{ 'Logout'|trans }}
+                        {{ 'Sign out'|trans }}
                     </a>
                 </li>
             {% endif %}

@@ -42,7 +42,7 @@ class SettingController extends AdminBaseController
     #[Route(path: '/layout', name: 'layout', methods: ['GET', 'POST'])]
     public function layout(Request $request): Response
     {
-        $appLayoutSetting = $this->em->getRepository("App\Entity\AppLayoutSetting")->find(1);
+        $appLayoutSetting = $this->em->getRepository("App\Entity\Setting\AppLayoutSetting")->find(1);
         if (!$appLayoutSetting) {
             $this->addFlash('danger', $this->translator->trans('The layout settings could not be loaded'));
 
@@ -227,10 +227,6 @@ class SettingController extends AdminBaseController
                 'label' => t('Disqus subdomain'),
                 'help' => t('Go to the documentation to get help about setting up Disqus'),
             ])
-            ->add('save', SubmitType::class, [
-                'label' => t('Save'),
-                'attr' => ['class' => 'btn btn-primary'],
-            ])
             ->getForm()
         ;
         $form->handleRequest($request);
@@ -254,7 +250,7 @@ class SettingController extends AdminBaseController
             $form->get('disqus_subdomain')->setData($this->settingervice->getSettings('disqus_subdomain'));
         }
 
-        return $this->render('dashboard/admin/setting/blog.html.twig', compact('form', 'services'));
+        return $this->render('dashboard/admin/setting/blog.html.twig', compact('form'));
     }
 
     #[Route(path: '/google-recaptcha', name: 'google_recaptcha', methods: ['GET', 'POST'])]
@@ -279,10 +275,6 @@ class SettingController extends AdminBaseController
             ->add('google_recaptcha_secret_key', TextType::class, [
                 'required' => false,
                 'label' => t('Secret key'),
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => t('Save'),
-                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -309,7 +301,7 @@ class SettingController extends AdminBaseController
             $form->get('google_recaptcha_secret_key')->setData($this->settingervice->getSettings('google_recaptcha_secret_key'));
         }
 
-        return $this->render('dashboard/admin/setting/google-recaptcha.html.twig', compact('form', 'services'));
+        return $this->render('dashboard/admin/setting/google-recaptcha.html.twig', compact('form'));
     }
 
     #[Route(path: '/google-maps', name: 'google_maps', methods: ['GET', 'POST'])]
@@ -320,10 +312,6 @@ class SettingController extends AdminBaseController
                 'required' => false,
                 'label' => t('Google Maps Api Key'),
                 'help' => t('Leave api key empty to disable google maps project wide'),
-            ])
-            ->add('save', SubmitType::class, [
-                'label' => t('Save'),
-                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -541,10 +529,6 @@ class SettingController extends AdminBaseController
                 'required' => false,
                 'help' => t('Go to the documentation to get help about getting a list id'),
             ])
-            ->add('save', SubmitType::class, [
-                'label' => t('Save'),
-                'attr' => ['class' => 'btn btn-primary'],
-            ])
             ->getForm()
         ;
 
@@ -572,49 +556,6 @@ class SettingController extends AdminBaseController
 
         return $this->render('dashboard/admin/setting/newsletter.html.twig', compact('form'));
     }
-
-    /*
-    #[Route(path: '/menus', name: 'menus', methods: ['GET'])]
-    public function menus(Request $request): Response
-    {
-        /** @var Menu $menu /
-        $menu = $this->settingervice->getMenus([])->getQuery()->getResult();
-
-        return $this->render('dashboard/admin/setting/menus.html.twig', compact('menus'));
-    }
-
-    #[Route(path: '/menus/{slug}/edit', name: 'menus_edit', methods: ['GET', 'POST'])]
-    public function menuEdit(Request $request, string $slug): Response
-    {
-        /** @var Menu $menu /
-        $menu = $this->settingervice->getMenus(['slug' => $slug])->getQuery()->getOneOrNullResult();
-
-        if (!$menu) {
-            $this->addFlash('danger', $this->translator->trans('The menu can not be found'));
-
-            return $this->redirectToRoute('dashboard_admin_setting_menus', [], Response::HTTP_SEE_OTHER);
-        }
-
-        $form = $this->createForm(MenuFormType::class, $menu)->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                foreach ($menu->getMenuElements() as $menuElement) {
-                    $menuElement->setMenu($menu);
-                }
-                $this->em->persist($menu);
-                $this->em->flush();
-
-                $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
-
-                return $this->redirectToRoute('dashboard_administrator_settings_menus');
-            }
-            $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
-        }
-
-        return $this->render('dashboard/admin/setting/menu-edit.html.twig', compact('form', 'menu'));
-    }
-    */
 
     #[Route(path: '/homepage-hero', name: 'homepage', methods: ['GET', 'POST'])]
     public function homepagehero(Request $request): Response
@@ -660,7 +601,7 @@ class SettingController extends AdminBaseController
 
                 $setting = $request->request->all()['homepage_hero_settings'];
                 $this->settingervice->setSettings('homepage_show_search_box', $setting['homepage_show_search_box']);
-                $this->settingervice->setSettings('homepage_ads_number', $setting['homepage_ads_number']);
+                $this->settingervice->setSettings('homepage_recipes_number', $setting['homepage_recipes_number']);
                 $this->settingervice->setSettings('homepage_categories_number', $setting['homepage_categories_number']);
                 $this->settingervice->setSettings('homepage_posts_number', $setting['homepage_posts_number']);
                 $this->settingervice->setSettings('homepage_show_call_to_action', $setting['homepage_show_call_to_action']);
@@ -672,12 +613,276 @@ class SettingController extends AdminBaseController
             $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         } else {
             $form->get('homepage_show_search_box')->setData($this->settingervice->getSettings('homepage_show_search_box'));
-            $form->get('homepage_ads_number')->setData($this->settingervice->getSettings('homepage_ads_number'));
+            $form->get('homepage_recipes_number')->setData($this->settingervice->getSettings('homepage_recipes_number'));
             $form->get('homepage_categories_number')->setData($this->settingervice->getSettings('homepage_categories_number'));
             $form->get('homepage_posts_number')->setData($this->settingervice->getSettings('homepage_posts_number'));
             $form->get('homepage_show_call_to_action')->setData($this->settingervice->getSettings('homepage_show_call_to_action'));
         }
 
         return $this->render('dashboard/admin/setting/homepage.html.twig', compact('form'));
+    }
+
+    #[Route(path: '/recipes-list-page', name: 'recipes_list_page', methods: ['GET', 'POST'])]
+    public function recipesListPage(Request $request): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('recipes_per_page', TextType::class, [
+                'required' => true,
+                'label' => 'Number of recipes per page',
+                'attr' => ['class' => 'touchspin-integer'],
+            ])
+            ->add('show_map_button', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show map button',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_calendar_button', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show calendar button',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_rss_feed_button', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show RSS feed button',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_category_filter', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show category filter',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_location_filter', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show location filter',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_date_filter', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show date filter',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_subscription_price_filter', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show subscription price filter',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('show_audience_filter', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show audience filter',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->getForm()
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Setting $setting */
+                $setting = $form->getData();
+                $this->settingervice->setSettings('recipes_per_page', $setting['recipes_per_page']);
+                $this->settingervice->setSettings('show_map_button', $setting['show_map_button']);
+                $this->settingervice->setSettings('show_calendar_button', $setting['show_calendar_button']);
+                $this->settingervice->setSettings('show_rss_feed_button', $setting['show_rss_feed_button']);
+                $this->settingervice->setSettings('show_category_filter', $setting['show_category_filter']);
+                $this->settingervice->setSettings('show_location_filter', $setting['show_location_filter']);
+                $this->settingervice->setSettings('show_date_filter', $setting['show_date_filter']);
+                $this->settingervice->setSettings('show_subscription_price_filter', $setting['show_subscription_price_filter']);
+                $this->settingervice->setSettings('show_audience_filter', $setting['show_audience_filter']);
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        } else {
+            $form->get('recipes_per_page')->setData($this->settingervice->getSettings('recipes_per_page'));
+            $form->get('show_map_button')->setData($this->settingervice->getSettings('show_map_button'));
+            $form->get('show_calendar_button')->setData($this->settingervice->getSettings('show_calendar_button'));
+            $form->get('show_rss_feed_button')->setData($this->settingervice->getSettings('show_rss_feed_button'));
+            $form->get('show_category_filter')->setData($this->settingervice->getSettings('show_category_filter'));
+            $form->get('show_location_filter')->setData($this->settingervice->getSettings('show_location_filter'));
+            $form->get('show_date_filter')->setData($this->settingervice->getSettings('show_date_filter'));
+            $form->get('show_subscription_price_filter')->setData($this->settingervice->getSettings('show_subscription_price_filter'));
+            $form->get('show_audience_filter')->setData($this->settingervice->getSettings('show_audience_filter'));
+        }
+
+        return $this->render('dashboard/admin/setting/recipes-list-page.html.twig', compact('form'));
+    }
+
+    #[Route(path: '/venue-page', name: 'venue_page', methods: ['GET', 'POST'])]
+    public function venuePage(Request $request): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('venue_comments_enabled', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Enable comments',
+                // 'choices' => ['No' => 'no', 'Native comments' => 'native', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
+                'choices' => ['No' => 'no', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('facebook_app_id', TextType::class, [
+                'required' => false,
+                'label' => 'Facebook app id',
+                'help' => 'Go to the documentation to get help about getting an app ID',
+            ])
+            ->add('disqus_subdomain', TextType::class, [
+                'required' => false,
+                'label' => 'Disqus subdomain',
+                'help' => 'Go to the documentation to get help about setting up Disqus',
+            ])
+            ->getForm()
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Setting $setting */
+                $setting = $form->getData();
+                $this->settingervice->setSettings('venue_comments_enabled', $setting['venue_comments_enabled']);
+                $this->settingervice->setSettings('facebook_app_id', $setting['facebook_app_id']);
+                $this->settingervice->setSettings('disqus_subdomain', $setting['disqus_subdomain']);
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        } else {
+            $form->get('venue_comments_enabled')->setData($this->settingervice->getSettings('venue_comments_enabled'));
+            $form->get('facebook_app_id')->setData($this->settingervice->getSettings('facebook_app_id'));
+            $form->get('disqus_subdomain')->setData($this->settingervice->getSettings('disqus_subdomain'));
+        }
+
+        return $this->render('dashboard/admin/setting/venue.html.twig', compact('form'));
+    }
+
+    #[Route(path: '/social-login', name: 'social_login', methods: ['GET', 'POST'])]
+    public function socialLogin(Request $request): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('social_login_facebook_enabled', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Enable Facebook Social Login',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('social_login_facebook_id', TextType::class, [
+                'required' => false,
+                'label' => 'Facebook Id',
+            ])
+            ->add('social_login_facebook_secret', TextType::class, [
+                'required' => false,
+                'label' => 'Facebook Secret',
+            ])
+            ->add('social_login_google_enabled', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Enable Google Social Login',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('social_login_google_id', TextType::class, [
+                'required' => false,
+                'label' => 'Google Id',
+            ])
+            ->add('social_login_google_secret', TextType::class, [
+                'required' => false,
+                'label' => 'Google Secret',
+            ])
+            ->getForm()
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Setting $setting */
+                $setting = $form->getData();
+                $this->settingervice->setSettings('social_login_facebook_enabled', $setting['social_login_facebook_enabled']);
+                $this->settingervice->setSettings('social_login_facebook_id', $setting['social_login_facebook_id']);
+                $this->settingervice->setSettings('social_login_facebook_secret', $setting['social_login_facebook_secret']);
+                $this->settingervice->setSettings('social_login_google_enabled', $setting['social_login_google_enabled']);
+                $this->settingervice->setSettings('social_login_google_id', $setting['social_login_google_id']);
+                $this->settingervice->setSettings('social_login_google_secret', $setting['social_login_google_secret']);
+
+                $this->settingervice->updateEnv('FB_ID', $setting['social_login_facebook_id']);
+                $this->settingervice->updateEnv('FB_SECRET', $setting['social_login_facebook_secret']);
+                $this->settingervice->updateEnv('GOOGLE_ID', $setting['social_login_google_id']);
+                $this->settingervice->updateEnv('GOOGLE_SECRET', $setting['social_login_google_secret']);
+
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        } else {
+            $form->get('social_login_facebook_enabled')->setData($this->settingervice->getSettings('social_login_facebook_enabled'));
+            $form->get('social_login_facebook_id')->setData($this->settingervice->getSettings('social_login_facebook_id'));
+            $form->get('social_login_facebook_secret')->setData($this->settingervice->getSettings('social_login_facebook_secret'));
+            $form->get('social_login_google_enabled')->setData($this->settingervice->getSettings('social_login_google_enabled'));
+            $form->get('social_login_google_id')->setData($this->settingervice->getSettings('social_login_google_id'));
+            $form->get('social_login_google_secret')->setData($this->settingervice->getSettings('social_login_google_secret'));
+        }
+
+        return $this->render('dashboard/admin/setting/social-login.html.twig', compact('form'));
     }
 }

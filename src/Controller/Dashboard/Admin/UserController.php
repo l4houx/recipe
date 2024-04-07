@@ -33,7 +33,7 @@ class UserController extends AdminBaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
         // $page = $request->query->getInt('page', 1);

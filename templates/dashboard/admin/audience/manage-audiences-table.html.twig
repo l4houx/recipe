@@ -1,0 +1,102 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th>{{ 'Name'|trans }}</th>
+				<th>{{ 'Recipes count'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for audience in rows %}
+				{% set link = path('dashboard_admin_audience_edit', { slug : audience.slug }) %}
+				<tr>
+					<td>
+						<a href="{{ link }}" class="text-inherit">
+							<div class="d-flex align-items-center">
+								<div>
+									<img src="{{ audience.imageName ? asset(audience.getImagePath) : audience.getImagePlaceholder }}" alt="{{ audience.title }}" class="img-4by3-lg rounded">
+								</div>
+								<div class="ms-3">
+									<h4 class="mb-1 text-primary-hover">{{ audience.name }}</h4>
+									<span>
+										{{ 'Published the'|trans }}
+										{{ audience.createdAt ? audience.createdAt | format_date('long') : '' }}
+									</span>
+								</div>
+							</div>
+						</a>
+					</td>
+					<td>{{ audience.recipes|length }}</td>
+					<td>
+						{% if audience.isOnline == false %}
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-eye-slash"></i>
+								{{ "Offline"|trans }}
+							</span>
+						{% else %}
+							<span class="badge bg-success-soft">
+								<i class="bi bi-eye"></i>
+								{{ "Online"|trans }}
+							</span>
+						{% endif %}
+						{% if audience.deletedAt %}
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-alarm"></i>
+								{{ "Deleted"|trans }}
+							</span>
+						{% endif %}
+					</td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+								<a class="dropdown-item" href="{{ link }}">
+									<i class="bi bi-pencil dropdown-item-icon"></i>
+									{{ 'Edit'|trans }}
+								</a>
+								{% if audience.isOnline %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_audience_show', { slug : audience.slug }) }}">
+										<i class="bi bi-eye dropdown-item-icon"></i>
+										{{ "Online"|trans }}
+									</a>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_audience_hide', { slug : audience.slug }) }}">
+										<i class="bi bi-eye-slash dropdown-item-icon"></i>
+										{{ "Offline"|trans }}
+									</a>
+								{% endif %}
+								{% if audience.deletedAt %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_audience_restore', { slug : audience.slug }) }}">
+										<i class="bi bi-trash-fill dropdown-item-icon"></i>
+										{{ 'Restore'|trans }}
+									</a>
+									<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-audience-delete-form').submit();" class="dropdown-item">
+										<i class="bi bi-trash dropdown-item-icon"></i>
+										{{ 'Delete permanently'|trans }}
+									</a>
+									<form id="js-audience-delete-form" action="{{ path('dashboard_admin_audience_delete', {slug: audience.slug}) }}" method="audience" class="">
+										<input type="hidden" name="_token" value="{{ csrf_token('audience_deletion_' ~ audience.slug) }}">
+										<input type="hidden" name="_method" value="DELETE">
+									</form>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_audience_disable', { slug : audience.slug }) }}">
+										<i class="bi bi-alarm dropdown-item-icon"></i>
+										{{ 'Delete'|trans }}
+									</a>
+								{% endif %}
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    <div class="card-footer">
+        {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+    </div>
+</div>

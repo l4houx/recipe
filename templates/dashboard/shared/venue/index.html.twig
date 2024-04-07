@@ -1,216 +1,82 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'dashboard.html.twig' %}
 
-{% if is_granted('ROLE_ADMINISTRATOR') %}
+{% if is_granted('ROLE_ADMIN_APPLICATION') %}
     {% set pagetitle = 'Manage venues' | trans %}
 {% else %}
     {% set pagetitle = 'My venues' | trans %}
 {% endif %}
-
-{% block title %}{{pagetitle}}{% endblock %}
+{% block title pagetitle %}
 
 {% block content %}
-
-    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
-    <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
-            <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
-                <div class="col-lg-9 mt-4 mt-lg-0">
-
-                    <div class="box shadow-none bg-gray mb-4">
-                        <div class="row">
-                            <div class="col-sm-12 col-lg-2 text-center text-lg-left mb-3 mb-lg-0">
-                                <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': venues.getTotalItemCount}) }}</span>
-                            </div>
-                            <div class="col-sm-12 col-lg-4 text-center mb-3 mb-lg-0">
-                                <form>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ "Search"|trans }}</a>
-                                            <div class="dropdown-menu dropdown-menu-arrow p-3" style="min-width:300px;max-width:500px;">
-                                                <label for="keyword">{{ "Keyword"|trans }}</label>
-                                                <input id="keyword" name="keyword" type="text" class="form-control" value="{{ app.request.get('keyword') }}">
-                                            </div>
-                                        </li>
-                                        {% if is_granted('ROLE_ADMINISTRATOR') %}
-                                            <li class="list-inline-item dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ "Listed on directory"|trans }}</a>
-                                                <div class="dropdown-menu dropdown-menu-arrow p-3" style="min-width:450px;max-width:550px;">
-                                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                                        <input type="radio" class="custom-control-input" id="directory-all" name="directory" value="all">
-                                                        <label class="custom-control-label" for="directory-all">{{ 'All'|trans }}</label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                                        <input type="radio" class="custom-control-input" id="directory-yes" name="directory" value="1">
-                                                        <label class="custom-control-label" for="directory-yes">{{ 'Yes'|trans }}</label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                                        <input type="radio" class="custom-control-input" id="directory-no" name="directory" value="0">
-                                                        <label class="custom-control-label" for="directory-no">{{ 'No'|trans }}</label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        {% endif %}
-                                        <li class="list-inline-item ml-3"><button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button></li>
-                                    </ul>
-                                </form>
-                            </div>
-                            <div class="col-sm-12 col-lg-6 text-center text-lg-right">
-                                <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
-                                    <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
-                                        {{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}
-                                        {{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}
-                                    </select>
-                                </label>
-                                {% if is_granted('ROLE_ADMINISTRATOR') %}
-                                    <a href="{{ path('dashboard_administrator_venue_add') }}" class="btn btn-primary ml-3" data-toggle="tooltip" title="{{'Add a new venue' | trans}}"><i class="fas fa-plus"></i></a>
-                                    {% elseif is_granted('ROLE_ORGANIZER')  %}
-                                    <a href="{{ path('dashboard_organizer_venue_add') }}" class="btn btn-primary ml-3" data-toggle="tooltip" title="{{'Add a new venue' | trans}}"><i class="fas fa-plus"></i></a>
-                                    {% endif %}
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if venues.getTotalItemCount > 0 %}
-
-                        <div class="row">
-
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-vcenter text-nowrap">
-                                            <thead>
-                                                <tr>
-                                                    <th>{{'Name' | trans}}</th>
-                                                    <th>{{'Image' | trans}}</th>
-                                                        {% if is_granted('ROLE_ADMINISTRATOR') %}
-                                                        <th>{{'Organizer' | trans}}</th>
-                                                        {% endif %}
-                                                    <th>{{'Events count' | trans}}</th>
-                                                    <th>{{'Seating plans' | trans}}</th>
-                                                    <th>{{'Status' | trans}}</th>
-                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                {% for venue in venues %}
-
-                                                    <tr>
-                                                        <td>
-                                                            <a href="{{ path("venue", {slug: venue.slug}) }}">{{ venue.name }}</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="fancybox" href="{{ venue.images|length > 0 ? asset(venue.getFirstImageOrPlaceholder) : venue.getFirstImageOrPlaceholder }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
-                                                                <img src="{{ venue.images|length > 0 ? asset(venue.getFirstImageOrPlaceholder) : venue.getFirstImageOrPlaceholder }}" class="img-thumbnail img-50-50" />
-                                                            </a>
-                                                        </td>
-                                                        {% if is_granted('ROLE_ADMINISTRATOR') %}
-                                                            <td>
-                                                                {{ venue.organizer ? venue.organizer.name : "Added by administrator" }}
-                                                            </td>
-                                                        {% endif %}
-                                                        <td>
-                                                            {{ venue.eventdates|length }}
-                                                        </td>
-                                                        <td>
-                                                            {{ venue.seatingPlans|length }}
-                                                        </td>
-                                                        <td>
-                                                            {% if venue.hidden %}
-                                                                <span class="badge badge-danger"><i class="fas fa-eye-slash fa-fw"></i> {{ "Hidden"|trans }}</span>
-                                                            {% else %}
-                                                                <span class="badge badge-success"><i class="fas fa-eye fa-fw"></i> {{ "Visible"|trans }}</span>
-                                                            {% endif %}
-                                                            <br>
-                                                            <br>
-                                                            {% if venue.listedondirectory %}
-                                                                <span class="badge badge-success"><i class="fas fa-eye fa-fw"></i> {{ "Listed on the directory"|trans }}</span>
-                                                            {% else %}
-                                                                <span class="badge badge-danger"><i class="fas fa-eye-slash fa-fw"></i> {{ "Not listed on the directory"|trans }}</span>
-                                                            {% endif %}
-                                                            {% if venue.deletedAt %}
-                                                                <br>
-                                                                <br>
-                                                                <span class="badge badge-danger"><i class="fas fa-times fa-fw"></i> {{ "Deleted"|trans }}</span>
-                                                            {% endif %}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <div class="item-action dropdown">
-                                                                <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    {% if is_granted('ROLE_ADMINISTRATOR') %}
-                                                                        <a href="{{ path('dashboard_administrator_venue_edit', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
-                                                                        {% if venue.hidden %}
-                                                                            <a href="{{ path('dashboard_administrator_venue_show', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye fa-fw text-muted"></i> {{ "Show"|trans }}</a>
-                                                                        {% else %}
-                                                                            <a href="{{ path('dashboard_administrator_venue_hide', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye-slash fa-fw text-muted"></i> {{ "Hide"|trans }} </a>
-                                                                        {% endif %}
-                                                                        {% if venue.listedondirectory %}
-                                                                            <a href="{{ path('dashboard_administrator_venue_hidefromdirectory', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-minus-square fa-fw text-muted"></i> {{ "Hide from public directory"|trans }} </a>
-                                                                        {% else %}
-                                                                            <a href="{{ path('dashboard_administrator_venue_listondirectory', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-plus-square fa-fw text-muted"></i> {{ "List on public directory"|trans }}</a>
-                                                                        {% endif %}
-                                                                        {% if venue.deletedAt %}
-                                                                            <a href="{{ path('dashboard_administrator_venue_restore', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-trash-restore fa-fw text-muted"></i> {{ "Restore"|trans }}</a>
-                                                                            <span data-target="{{ path('dashboard_administrator_venue_delete', { slug : venue.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the venue PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-trash fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
-                                                                        {% else %}
-                                                                            <a href="{{ path('dashboard_administrator_venue_disable', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-times fa-fw text-muted"></i> {{ "Delete"|trans }} </a>
-                                                                        {% endif %}
-                                                                    {% elseif is_granted('ROLE_ORGANIZER') %}
-                                                                        <a href="{{ path('dashboard_organizer_venue_edit', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
-                                                                        <a href="{{ path('dashboard_organizer_venue_seating_plans', { venueSlug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-circle fa-fw text-muted"></i> {{ "Seating plans"|trans }}</a>
-                                                                        {% if venue.hidden %}
-                                                                            <a href="{{ path('dashboard_organizer_venue_show', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye fa-fw text-muted"></i> {{ "Show"|trans }}</a>
-                                                                        {% else %}
-                                                                            <a href="{{ path('dashboard_organizer_venue_hide', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye-slash fa-fw text-muted"></i> {{ "Hide"|trans }} </a>
-                                                                        {% endif %}
-                                                                        {% if venue.deletedAt %}
-                                                                            <span data-target="{{ path('dashboard_organizer_venue_delete', { slug : venue.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the venue PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-trash fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
-                                                                        {% else %}
-                                                                            <a href="{{ path('dashboard_organizer_venue_disable', { slug : venue.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-times fa-fw text-muted"></i> {{ "Delete"|trans }} </a>
-                                                                        {% endif %}
-                                                                    {% endif %}
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                {{ knp_pagination_render(venues, null, {}, {'align': 'center'}) }}
-                            </div>
-
-                        </div>
-
-                    {% else %}
-
-                        {% include "Global/message.html.twig" with { type: "info", message: ('No venues found'|trans), icon: "fas fa-exclamation-circle" } %}
-
+    <div class="card mb-4">
+        <div class="d-lg-flex justify-content-between align-items-center card-header">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
+            </div>
+            {% if is_granted('ROLE_VERIFIED') %}
+                <div>
+                    {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                        <a href="{{ path('dashboard_admin_venue_new') }}" class="btn btn-outline-primary btn-sm">
+                            {{ 'Create'|trans }}
+                        </a>
+                    {% elseif is_granted('ROLE_RESTAURANT')  %}
+                        <a href="{{ path('dashboard_restaurant_venue_new') }}" class="btn btn-outline-primary btn-sm">
+                            {{ 'Create'|trans }}
+                        </a>
                     {% endif %}
                 </div>
-            </div>
-
+            {% endif %}
         </div>
-    </section>
-
+        {% if rows.getTotalItemCount %}
+            <div class="card-body">
+				<form class="row mb-4 gx-2">
+                    <div class="col-xl-5 col-lg-7 col-md-3 col-12 mb-2 mb-lg-0">
+                        <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control" placeholder="{{ 'Search...'|trans }}">
+                    </div>
+                    {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                        <div class="col-xl-3 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
+                            <select class="form-select">
+                                <option value="all" name="directory">{{ 'All'|trans }}</option>
+                                <option value="1" name="directory">{{ 'Yes'|trans }}</option>
+                                <option value="0" name="directory">{{ 'No'|trans }}</option>
+                            </select>
+                        </div>
+                    {% endif %}
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
+                        <select class="form-select">
+                            <option value="">Rating</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
+                        <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
+                            <option value="">{{ "Sort by"|trans }}</option>
+                            {{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}
+                            {{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}
+                        </select>
+                    </div>
+				</form>
+            </div>
+            {% include "dashboard/shared/venue/manage-venues-table.html.twig" with {rows: rows} %}
+        {% else %}
+            <div class="card-footer">
+                {% include "global/message.html.twig" with { type: "dark", message: ('No venues found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
-
     <script>
-
         $(document).ready(function () {
             if (getURLParameter('directory') != "null") {
                 $('input[type="radio"][name="directory"][value="' + getURLParameter('directory') + '"]').attr("checked", "checked");
             }
         });
-
     </script>
-
 {% endblock %}

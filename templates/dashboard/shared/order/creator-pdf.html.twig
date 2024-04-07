@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ event.name }}: {{ "Attendees list"|trans({}, "messages", locale) }}</title>
+        <title>{{ recipe.name }}: {{ "Creators list"|trans({}, "messages", locale) }}</title>
         <style>
             table, th, td {
                 padding: 10px;
@@ -18,12 +18,10 @@
     </head>
     <body>
 
-        <h2 style="text-align: center;">{{ event.translate(locale).name }}</h2>
+        <h2 style="text-align: center;">{{ recipe.translate(locale).name }}</h2>
 
-        {% for eventDate in event.eventdates %}
-
-            <p style="text-align: center;">{{ eventDate.startdate|localizeddate('none', 'none', locale, date_timezone, date_format) }}{% if eventDate.venue %} - {{ eventDate.venue.translate(locale).name }}{% endif %}</p>
-
+        {% for recipeDate in recipe.recipedates %}
+            <p style="text-align: center;">{{ recipeDate.startdate|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}{% if recipeDate.venue %} - {{ recipeDate.venue.translate(locale).name }}{% endif %}</p>
             <table width="100%">
                 <thead>
                     <tr>
@@ -31,27 +29,25 @@
                         <th>{{ "Last name"|trans({}, "messages", locale) }}</th>
                         <th>{{ "First name"|trans({}, "messages", locale) }}</th>
                         <th>{{ "Quantity"|trans({}, "messages", locale) }}</th>
-                        <th>{{ "Ticket"|trans({}, "messages", locale) }}</th>
+                        <th>{{ "Subscription"|trans({}, "messages", locale) }}</th>
                         <th>{{ "Payment"|trans({}, "messages", locale) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for order in orders %}
-                        {% for orderElement in order.orderelements if (orderElement.eventticket.eventdate == eventDate)%}
+                        {% for orderElement in order.orderelements if (orderElement.recipesubscription.recipedate == recipeDate)%}
                             <tr>
                                 <td><input type="radio"/></td>
                                 <td>{{ orderElement.order.user.lastname }}</td>
                                 <td>{{ orderElement.order.user.firstname }}</td>
                                 <td>{{ orderElement.quantity }}</td>
-                                <td>{{ orderElement.eventticket.name }}</td>
+                                <td>{{ orderElement.recipesubscription.name }}</td>
                                 <td>{{ "#" ~ orderElement.order.reference }}</td>
                             </tr>
                         {% endfor %}
                     {% endfor %}
                 </tbody>
             </table>
-
         {% endfor %}
-
     </body>
 </html>

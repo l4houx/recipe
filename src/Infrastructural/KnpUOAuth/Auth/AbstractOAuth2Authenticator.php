@@ -108,7 +108,7 @@ abstract class AbstractOAuth2Authenticator extends OAuth2Authenticator
         }
 
         if ($exception instanceof AccountAuthenticatedException) {
-            return new RedirectResponse($this->router->generate('dashboard_account_index'));
+            return new RedirectResponse($this->router->generate('dashboard_creator_account_dashboard'));
         }
 
         if ($request->hasSession()) {

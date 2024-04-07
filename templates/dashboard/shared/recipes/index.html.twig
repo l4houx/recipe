@@ -1,9 +1,9 @@
 {% extends 'dashboard.html.twig' %}
 
 {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-    {% set pagetitle = 'Manage recipes' | trans %}
+    {% set pagetitle = 'Manage recipes'|trans %}
 {% elseif is_granted('ROLE_RESTAURANT') %}
-    {% set pagetitle = 'My recipes' | trans %}
+    {% set pagetitle = 'My recipes'|trans %}
 {% endif %}
 {% block title pagetitle %}
 

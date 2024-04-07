@@ -19,7 +19,7 @@ class RestaurantController extends BaseController
         if (!$user) {
             $this->addFlash('danger', $translator->trans('The restaurant not be found'));
 
-            return $this->redirectToRoute('recipe_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('recipes', [], Response::HTTP_SEE_OTHER);
         }
 
         $user->getRestaurant()->viewed();

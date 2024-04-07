@@ -95,7 +95,7 @@
                                 <i class="bi bi-eye"></i> {{ "Online"|trans }}
                             </span>
                         {% endif %}
-                        <span class="badge bg-danger-{{ recipe.stringifyStatusClass }}-soft">{{ recipe.stringifyStatus|trans }}</span>
+                        <span class="badge bg-{{ recipe.stringifyStatusClass }}-soft">{{ recipe.stringifyStatus|trans }}</span>
                         {% if recipe.deletedAt %}
                             <span class="badge bg-danger-soft">
                                 <i class="bi bi-alarm"></i> {{ "Deleted"|trans }}
@@ -109,7 +109,7 @@
                             </a>
                             <span class="dropdown-menu" aria-labelledby="Dropdown1" style="">
                                 <span class="dropdown-header">{{ 'Settings'|trans }}</span>
-                                <a class="dropdown-item" href="{{ path('recipe_show', {slug : recipe.slug, id : recipe.id}) }}">
+                                <a class="dropdown-item" href="{{ path('recipe', {slug : recipe.slug, id : recipe.id}) }}">
                                     <i class="bi bi-eye dropdown-item-icon"></i>
                                     {{ 'Show'|trans }}
                                 </a>
@@ -117,7 +117,6 @@
                                     <i class="bi bi-pencil dropdown-item-icon"></i>
                                     {{ 'Edit'|trans }}
                                 </a>
-                                {{ include('dashboard/shared/recipe/_delete_form.html.twig', {recipe: recipe}, with_context = false) }}
                             </span>
                         </span>
                     </td>

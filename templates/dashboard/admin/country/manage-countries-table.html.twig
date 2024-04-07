@@ -1,0 +1,89 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th>{{ 'Name'|trans }}</th>
+				<th>{{ 'Venues count'|trans }}</th>
+				<th>{{ 'Flag'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for country in rows %}
+				{% set link = path('dashboard_admin_country_edit', { slug : country.slug }) %}
+				<tr>
+					<td>{{ country.name }}</td>
+					<td>{{ country.venues|length }}</td>
+					<td><span class="flag flag-{{country.code|lower}}"></td>
+					<td>
+						{% if country.isOnline == false %}
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-eye-slash"></i>
+								{{ "Offline"|trans }}
+							</span>
+						{% else %}
+							<span class="badge bg-success-soft">
+								<i class="bi bi-eye"></i>
+								{{ "Online"|trans }}
+							</span>
+						{% endif %}
+						{% if country.deletedAt %}
+							<span class="badge bg-danger-soft">
+								<i class="bi bi-alarm"></i>
+								{{ "Deleted"|trans }}
+							</span>
+						{% endif %}
+					</td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+								<a class="dropdown-item" href="{{ link }}">
+									<i class="bi bi-pencil dropdown-item-icon"></i>
+									{{ 'Edit'|trans }}
+								</a>
+								{% if country.isOnline %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_country_show', { slug : country.slug }) }}">
+										<i class="bi bi-eye dropdown-item-icon"></i>
+										{{ "Online"|trans }}
+									</a>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_country_hide', { slug : country.slug }) }}">
+										<i class="bi bi-eye-slash dropdown-item-icon"></i>
+										{{ "Offline"|trans }}
+									</a>
+								{% endif %}
+								{% if country.deletedAt %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_country_restore', { slug : country.slug }) }}">
+										<i class="bi bi-trash-fill dropdown-item-icon"></i>
+										{{ 'Restore'|trans }}
+									</a>
+									<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-country-delete-form').submit();" class="dropdown-item">
+										<i class="bi bi-trash dropdown-item-icon"></i>
+										{{ 'Delete permanently'|trans }}
+									</a>
+									<form id="js-country-delete-form" action="{{ path('dashboard_admin_country_delete', {slug: country.slug}) }}" method="post" class="">
+										<input type="hidden" name="_token" value="{{ csrf_token('country_deletion_' ~ country.slug) }}">
+										<input type="hidden" name="_method" value="DELETE">
+									</form>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_country_disable', { slug : country.slug }) }}">
+										<i class="bi bi-alarm dropdown-item-icon"></i>
+										{{ 'Delete'|trans }}
+									</a>
+								{% endif %}
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    <div class="card-footer">
+        {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+    </div>
+</div>

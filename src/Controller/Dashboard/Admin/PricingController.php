@@ -25,7 +25,7 @@ class PricingController extends AdminBaseController
     ) {
     }
 
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
         $rows = $this->pricingRepository->findAll();

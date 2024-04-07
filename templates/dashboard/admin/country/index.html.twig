@@ -1,0 +1,65 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Manage countries'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="{{ path('dashboard_admin_country_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="p-4 row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+            <form class="d-flex align-items-center">
+                <span class="position-absolute ps-3 search-icon">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
+            </form>
+        </div>
+        <div class="col-6 col-lg-3">
+            <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
+                <option selected="">{{ "Sort by"|trans }}</option>
+                {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "c.createdAt", {"direction": "desc", "criteria": "c.createdAt"}) }}
+                {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "c.createdAt", {"direction": "asc", "criteria": "c.createdAt"}) }}
+            </select>
+        </div>
+        <div class="col-6 col-lg-3">
+            <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
+                <option selected="">{{ "Sort by"|trans }}</option>
+                <option value="1">Shipped</option>
+                <option value="2">Cancelled</option>
+                <option value="3">Processing</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-1">
+                        {{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}
+                    </h4>
+                    <p class="mb-0"></p>
+                </div>
+                {% if rows.getTotalItemCount > 0 %}
+                    {% include "dashboard/admin/country/manage-countries-table.html.twig" with {rows: rows} %}
+                {% else %}
+                    <div class="card-footer">
+                        {% include "global/message.html.twig" with { type: "dark", message: ('No countries found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

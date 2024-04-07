@@ -1,0 +1,74 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Homepage settings'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">{{ pagetitle }}</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                        {{ form_errors(form) }}
+                        {{ form_row(form.content) }}
+                        <div id="recipes">
+                            {{ form_row(form.recipes) }}
+                        </div>
+                        <div id="restaurants">
+                            {{ form_row(form.restaurants) }}
+                        </div>
+                        <div id="custom">
+                            {{ form_row(form.customBackgroundFile) }}
+                            {{ form_row(form.show_search_box) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $("input[name='homepage_hero_settings[content]']").change(function () {
+                if ($('#homepage_hero_settings_content_1').is(':checked')) {
+                    $('#recipes').show();
+                    $('#restaurants').hide();
+                    $('#custom').hide();
+                } else if ($('#homepage_hero_settings_content_2').is(':checked')) {
+                    $('#recipes').hide();
+                    $('#restaurants').show();
+                    $('#custom').hide();
+                } else if ($('#homepage_hero_settings_content_3').is(':checked')) {
+                    $('#recipes').hide();
+                    $('#restaurants').hide();
+                    $('#custom').show();
+                } else {
+                    $('#recipes').hide();
+                    $('#restaurants').hide();
+                    $('#custom').hide();
+                }
+            });
+            $("input[name='homepage_hero_settings[content]']").trigger('change');
+        });
+    </script>
+{% endblock %}

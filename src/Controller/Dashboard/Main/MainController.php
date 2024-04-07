@@ -18,7 +18,7 @@ class MainController extends AbstractController
         } elseif ($authChecker->isGranted(HasRoles::MODERATOR)) {
             return $this->redirectToRoute('dashboard_admin_index');
         } elseif ($authChecker->isGranted(HasRoles::DEFAULT)) {
-            return $this->redirectToRoute('dashboard_account_index');
+            return $this->redirectToRoute('dashboard_creator_account_dashboard');
         } elseif ($authChecker->isGranted(HasRoles::RESTAURANT)) {
             return $this->redirectToRoute("dashboard_restaurant_index");
         } elseif ($authChecker->isGranted(HasRoles::CREATOR)) {

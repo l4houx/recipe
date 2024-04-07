@@ -1,85 +1,66 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'dashboard.html.twig' %}
 
-{% form_theme form 'Global/jquery.collection.html.twig' %}
+{# {% form_theme form 'form/jquery.collection.html.twig' %} #}
 
-{% set pagetitle = 'Add a new venue' | trans %}
+{% set pagetitle = 'Add a new venue'|trans %}
+{% if venue.id %}{% set pagetitle = 'Update the venue'|trans %}{% endif %}
+{% block title pagetitle %}
 
-{% if venue.id %}{% set pagetitle = 'Update the venue' | trans %}{% endif %}
-
-{% block title %}{{pagetitle}}{% endblock %}
+{% block breadcrumb %}
+    {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+        {% set breadcrumb = [{ "dashboard_admin_venue_index": ('Manage venues'|trans), "current":(pagetitle) }] %}
+    {% elseif is_granted('ROLE_RESTAURANT')  %}
+        {% set breadcrumb = [{ "dashboard_restaurant_venue_index": ('My venues'|trans), "current":(pagetitle) }] %}
+    {% endif %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
-
-    {% if is_granted('ROLE_ADMINISTRATOR') %}
-        {% set navigation = [{ "dashboard_index": ('Dashboard' | trans),  "dashboard_administrator_venue": ('Manage venues' | trans), "current":(pagetitle) }] %}
-    {% elseif is_granted('ROLE_ORGANIZER') %}
-        {% set navigation = [{ "dashboard_index": ('Dashboard' | trans),  "dashboard_organizer_venue": ('my venues' | trans), "current":(pagetitle) }] %}
-    {% endif %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
-    <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
-            <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
-                <div class="col-lg-9 mt-4 mt-lg-0">
-                    <div class="card box">
-                        <div class="card-body">
-                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                            {{ form_errors(form) }}
-                            {{ form_row(form.translations) }}
-                            {{ form_row(form.type) }}
-                            {{ form_row(form.amenities) }}
-                            {{ form_row(form.seatedguests) }}
-                            {{ form_row(form.standingguests) }}
-                            {{ form_row(form.neighborhoods) }}
-                            {{ form_row(form.pricing) }}
-                            {{ form_row(form.availibility) }}
-                            {{ form_row(form.foodbeverage) }}
-                            {{ form_row(form.quoteform) }}
-                            {{ form_row(form.contactemail) }}
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    {{ form_row(form.street) }}
-                                    {{ form_row(form.street2) }}
-                                    {{ form_row(form.city) }}
-                                    {{ form_row(form.postalcode) }}
-                                    {{ form_row(form.state) }}
-                                    {{ form_row(form.country) }}
-                                    {{ form_row(form.showmap) }}
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="sticky-top sticky-sidebar pt-0">
-                                        <iframe width="100%" height="300" class="venue-map" src="{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q=university%20of%20san%20francisco&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{ form_row(form.images) }}
-                            {{ form_row(form.save) }}
-                            {{ form_end(form) }}
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">{{ pagetitle }}</h3>
+            <p class="mb-0">{{ ''|trans }}</p>
         </div>
-    </section>
+        <div class="card-body">
+            <div>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                    {{ form_errors(form) }}
 
+                    {{ form_row(form.type) }}
+                    {{ form_row(form.amenities) }}
+                    {{ form_row(form.seatedguests) }}
+                    {{ form_row(form.standingguests) }}
+                    {{ form_row(form.neighborhoods) }}
+                    {{ form_row(form.pricing) }}
+                    {{ form_row(form.availibility) }}
+                    {{ form_row(form.foodbeverage) }}
+                    {{ form_row(form.quoteform) }}
+                    {{ form_row(form.contactemail) }}
+
+                    {{ form_row(form.street) }}
+                    {{ form_row(form.street2) }}
+                    {{ form_row(form.city) }}
+                    {{ form_row(form.postalcode) }}
+                    {{ form_row(form.state) }}
+                    {{ form_row(form.country) }}
+                    {{ form_row(form.showmap) }}
+
+                    {{ form_row(form.images) }}
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
-
     {% if google_maps_api_key != "" %}
         <script type="text/javascript" src="{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps/api/js?sensor=false&key={{google_maps_api_key}}"></script>
     {% endif %}
     <script>
-
         $(document).ready(function () {
-            
             $('.venue-map').hide();
             function getVenueAddress() {
                 var address = '';
@@ -99,7 +80,6 @@
                     address = address + ' ' + $('#venue_country option:selected').text();
                 return address;
             }
-
             $('#venue_street, #venue_street2, #venue_city, #venue_postalcode, #venue_state').blur(function () {
                 if (getVenueAddress() != "") {
                     $('.venue-map').attr('src', '{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q=' + getVenueAddress() + '&t=&z=13&ie=UTF8&iwloc=&output=embed');
@@ -112,11 +92,9 @@
                     $('.venue-map').show();
                 }
             });
-
         {% if venue.id %}
-                $('#venue_country').trigger('blur');
+            $('#venue_country').trigger('blur');
         {% endif %}
-
         {% if google_maps_api_key != "" %}
                 $('#venue_save').click(function (e) {
                     if (getVenueAddress() != "") {
@@ -132,10 +110,6 @@
                     }
                 });
         {% endif %}
-
             });
-
     </script>
-
-
 {% endblock %}

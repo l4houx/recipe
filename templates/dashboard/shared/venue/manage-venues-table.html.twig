@@ -1,0 +1,175 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th>{{ 'Name'|trans }}</th>
+                {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                    <th>{{'Restaurant'|trans}}</th>
+                {% endif %}
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for venue in rows %}
+                {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                    {% set link = path('dashboard_admin_venue_edit', { slug : venue.slug }) %}
+                {% elseif is_granted('ROLE_RESTAURANT') %}
+                    {% set link = path('dashboard_restaurant_venue_edit', { slug : venue.slug }) %}
+                {% endif %}
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <a href="{{ path('venue', { slug : venue.slug }) }}" target="_blank">
+                                    <img src="{{ venue.images|length > 0 ? asset(venue.getFirstImageOrPlaceholder) : venue.getFirstImageOrPlaceholder }}" alt="{{ venue.name }}" class="rounded img-4by3-lg">
+                                </a>
+                            </div>
+                            <div class="ms-3">
+                                <h4 class="mb-1 h5">
+                                    <a href="{{ path('venue', { slug : venue.slug }) }}" target="_blank" class="text-inherit">
+                                        {{ venue.name }}
+                                    </a>
+                                </h4>
+                                <ul class="list-inline fs-6 mb-0">
+                                    <li class="list-inline-item">
+                                        <span class="align-text-bottom">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-clock" viewbox="0 0 16 16">
+                                                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
+                                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
+                                            </svg>
+                                        </span>
+                                        <span>{{ 'Recipes count'|trans }} {{ venue.recipedates|length }}</span>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <svg class="me-1 mt-n1" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="3" y="8" width="2" height="6" rx="1" fill="#754FFE"></rect>
+                                            <rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
+                                            <rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
+                                        </svg>
+                                        {{ 'Seating plans'|trans }} {{ venue.seatingPlans|length }}
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <svg class="me-1 mt-n1" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="3" y="8" width="2" height="6" rx="1" fill="#754FFE"></rect>
+                                            <rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
+                                            <rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
+                                        </svg>
+                                        Beginner
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                    {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                        <td>
+                            {{ venue.restaurant ? venue.restaurant.name : "Added by administrator" }}
+                        </td>
+                    {% endif %}
+                    <td>
+                        {% if venue.isOnline == false %}
+                            <span class="badge bg-danger-soft">
+                                <i class="bi bi-eye-slash"></i> {{ "Offline"|trans }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success-soft">
+                                <i class="bi bi-eye"></i> {{ "Online"|trans }}
+                            </span>
+                        {% endif %}
+                        {% if venue.listedondirectory %}
+                            <span class="badge bg-success-soft">
+                                <i class="bi bi-eye"></i> {{ "Listed on the directory"|trans }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger-soft">
+                                <i class="bi bi-eye-slash"></i> {{ "Not listed on the directory"|trans }}
+                            </span>
+                        {% endif %}
+                        {% if venue.deletedAt %}
+                            <span class="badge bg-danger-soft">
+                                <i class="bi bi-alarm"></i> {{ "Deleted"|trans }}
+                            </span>
+                        {% endif %}
+                    </td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+                                {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                    {% if venue.isOnline == false %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_venue_hide', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye-slash dropdown-item-icon"></i>
+                                            {{ 'Hide'|trans }}
+                                        </a>
+                                    {% else %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_venue_show', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye dropdown-item-icon"></i>
+                                            {{ 'Show'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    {% if venue.listedondirectory %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_venue_hidefromdirectory', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye-slash dropdown-item-icon"></i>
+                                            {{ 'Hide from public directory'|trans }}
+                                        </a>
+                                    {% else %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_venue_listondirectory', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye-slash dropdown-item-icon"></i>
+                                            {{ 'List on public directory'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    {% if venue.deletedAt %}
+
+                                    {% else %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_venue_disable', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye-slash dropdown-item-icon"></i>
+                                            {{ 'Delete'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    <a class="dropdown-item" href="{{ link }}">
+                                        <i class="bi bi-pencil dropdown-item-icon"></i>
+                                        {{ 'Edit'|trans }}
+                                    </a>
+                                {% elseif is_granted('ROLE_RESTAURANT') %}
+                                    {% if venue.isOnline == false %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_restaurant_venue_hide', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye-slash dropdown-item-icon"></i>
+                                            {{ 'Hide'|trans }}
+                                        </a>
+                                    {% else %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_restaurant_venue_show', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye dropdown-item-icon"></i>
+                                            {{ 'Show'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    {% if venue.deletedAt %}
+
+                                    {% else %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_restaurant_venue_disable', { slug : venue.slug }) }}">
+                                            <i class="bi bi-eye-slash dropdown-item-icon"></i>
+                                            {{ 'Delete'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    <a class="dropdown-item" href="{{ link }}">
+                                        <i class="bi bi-pencil dropdown-item-icon"></i>
+                                        {{ 'Edit'|trans }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ path('dashboard_restaurant_venue_seating_plans', { venueSlug : venue.slug }) }}">
+                                        <i class="bi bi-pencil dropdown-item-icon"></i>
+                                        {{ 'Seating plans'|trans }}
+                                    </a>
+                                {% endif %}
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="card-footer">
+		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+	</div>
+</div>

@@ -1,0 +1,96 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Layout settings'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">{{ pagetitle }}</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+
+
+
+
+
+
+
+
+
+
+                        <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $('input[name="app_layout_settings[app_theme]"]').change(function () {
+                if ($(this).is(':checked')) {
+                    switch ($(this).val()) {
+                        case 'orange':
+                            $('#app_layout_settings_primary_color').val('#f67611');
+                            $('#appThemeColorPreview').css('background-color', '#f67611');
+                            break;
+                        case 'lightblue':
+                            $('#app_layout_settings_primary_color').val('#90ccf4');
+                            $('#appThemeColorPreview').css('background-color', '#90ccf4');
+                            break;
+                        case 'darkblue':
+                            $('#app_layout_settings_primary_color').val('#3500d3');
+                            $('#appThemeColorPreview').css('background-color', '#3500d3');
+                            break;
+                        case 'yellow':
+                            $('#app_layout_settings_primary_color').val('#ffbd54');
+                            $('#appThemeColorPreview').css('background-color', '#ffbd54');
+                            break;
+                        case 'purple':
+                            $('#app_layout_settings_primary_color').val('#44318d');
+                            $('#appThemeColorPreview').css('background-color', '#44318d');
+                            break;
+                        case 'pink':
+                            $('#app_layout_settings_primary_color').val('#d83f87');
+                            $('#appThemeColorPreview').css('background-color', '#d83f87');
+                            break;
+                        case 'red':
+                            $('#app_layout_settings_primary_color').val('#c3073f');
+                            $('#appThemeColorPreview').css('background-color', '#c3073f');
+                            break;
+                        case 'green':
+                            $('#app_layout_settings_primary_color').val('#35CE8D');
+                            $('#appThemeColorPreview').css('background-color', '#35CE8D');
+                            break;
+                        case 'dark':
+                            $('#app_layout_settings_primary_color').val('#1a1a1d');
+                            $('#appThemeColorPreview').css('background-color', '#1a1a1d');
+                            break;
+                        default:
+                    }
+                }
+            });
+            $('input[name="app_layout_settings[app_theme]"]').trigger('change');
+        });
+    </script>
+{% endblock %}

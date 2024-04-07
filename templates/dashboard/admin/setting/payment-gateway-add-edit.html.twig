@@ -1,0 +1,87 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Add a new payment gateway'|trans %}
+{% if paymentgateway.id %}{% set pagetitle = 'Update the payment gateway'|trans %}{% endif %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">{{ pagetitle }}</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                        {{ form_widget(form) }}
+                        <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $("#payment_gateway_factoryName").change(function () {
+                var selectedGatewayFactoryName = $(this).val();
+                $(".payment_config_field").each(function () {
+                    if ($(this).hasClass(selectedGatewayFactoryName)) {
+                        $(this).closest(".form-group").show();
+                        $(this).closest(".form-group").find("input[type=text]").prop("disabled", false);
+                        $(this).closest(".form-group").find("input[type=radio]").prop("disabled", false);
+                    } else {
+                        $(this).closest(".form-group").hide();
+                        $(this).closest(".form-group").find("input[type=text]").prop("disabled", true);
+                        $(this).closest(".form-group").find("input[type=radio]").prop("disabled", true);
+                    }
+                });
+            });
+            $("#payment_gateway_factoryName").trigger("change");
+
+            $("#payment_gateway_save").click(function (e) {
+                e.preventDefault();
+                var error = false;
+                var factoryName = $("#payment_gateway_factoryName").val();
+                if (factoryName == "paypal_express_checkout") {
+                    if ($("input[name='payment_gateway[config][sandbox]']:checked").val() == undefined || $("#payment_gateway_config_username").val() == "" || $("#payment_gateway_config_password").val() == "" || $("#payment_gateway_config_signature").val() == "") {
+                        error = true;
+                    }
+                } else if (factoryName == "stripe_checkout") {
+                    if ($("#payment_gateway_config_publishable_key").val() == "" || $("#payment_gateway_config_secret_key").val() == "") {
+                        error = true;
+                    }
+                } else if (factoryName == "flutterwave") {
+                    if ($("#payment_gateway_config_flutterwave_public_key").val() == "" || $("#payment_gateway_config_flutterwave_secret_key").val() == "" || $("#payment_gateway_config_flutterwave_checkout_url").val() == "" || $("#payment_gateway_config_flutterwave_transaction_verification_url").val() == "") {
+                        error = true;
+                    }
+                } else if (factoryName == "mercadopago") {
+                    if ($("#payment_gateway_config_mercadopago_public_key").val() == "" || $("#payment_gateway_config_mercadopago_access_token").val() == "") {
+                        error = true;
+                    }
+                }
+                if (error) {
+                    showStackBarTop('error', '', '{{ "Please enter the selected payment gateway details"|trans }}');
+                } else {
+                    $("#payment_gateway_save").closest("form").submit();
+                }
+            });
+        });
+    </script>
+{% endblock %}

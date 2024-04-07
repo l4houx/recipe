@@ -49,7 +49,7 @@ class SocialLoginController extends BaseController
 
         $this->addFlash('success', $translator->trans('Your account has been successfully unlinked from '.$service));
 
-        return $this->redirectToRoute('dashboard_account_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('dashboard_creator_account_dashboard', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route(path: '/oauth/check/{service}', name: 'oauth_check', methods: ['GET'])]

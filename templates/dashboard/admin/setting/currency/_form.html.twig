@@ -3,7 +3,7 @@
         <h4 class="mb-0">
             {{ pagetitle }} 
             {% if app.request.attributes.get('_route') == 'dashboard_admin_setting_currency_edit' %}
-                "{{ currency.title }}"
+                "{{ currency.ccy ~ ' ' ~ currency.symbol }}"
             {% endif %}
         </h4>
     </div>

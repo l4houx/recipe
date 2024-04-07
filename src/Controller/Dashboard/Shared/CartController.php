@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route(path: '/%website_dashboard_path%/')]
+#[Route(path: '/%website_dashboard_path%')]
 #[IsGranted(HasRoles::DEFAULT)]
 class CartController extends BaseController
 {

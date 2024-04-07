@@ -17,7 +17,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {% include "global/message.html.twig" with { type: "info", message: ('No review found'|trans), icon: "bi bi-exclamation-circle" } %}
+                {% include "global/message.html.twig" with { type: "dark", message: ('No review found'|trans), icon: "bi bi-exclamation-circle" } %}
             {% endif %}
             {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
         </div>

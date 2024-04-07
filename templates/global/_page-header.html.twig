@@ -228,7 +228,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ path('dashboard_account_index') }}">
+                                <a class="dropdown-item" href="{{ path('dashboard_creator_account_dashboard') }}">
                                     <i class="bi bi-person me-2"></i>
                                     {{ 'My account'|trans }}
                                 </a>
@@ -252,7 +252,7 @@
                                 <li>
                                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();">
                                         <i class="bi bi-power me-2"></i>
-                                        {{ 'Logout'|trans }}
+                                        {{ 'Sign out'|trans }}
                                     </a>
                                     <form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
                                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
@@ -262,7 +262,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ impersonation_exit_path(path('home')) }}">
                                         <i class="bi bi-power me-2"></i>
-                                        {{ 'Logout'|trans }}
+                                        {{ 'Sign out'|trans }}
                                     </a>
                                 </li>
                             {% endif %}
