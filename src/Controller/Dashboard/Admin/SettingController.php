@@ -2,7 +2,9 @@
 
 namespace App\Controller\Dashboard\Admin;
 
+use App\Entity\PaymentGateway;
 use App\Entity\Recipe;
+use App\Entity\Setting\Currency;
 use App\Entity\Setting\HomepageHeroSetting;
 use App\Entity\Setting\Setting;
 use App\Entity\Traits\HasRoles;
@@ -11,6 +13,7 @@ use App\Form\AppLayoutSettingFormType;
 use App\Form\HomepageHeroSettingFormType;
 use App\Service\SettingService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -887,5 +891,210 @@ class SettingController extends AdminBaseController
         }
 
         return $this->render('dashboard/admin/setting/social-login.html.twig', compact('form'));
+    }
+
+    #[Route(path: '/payment', name: 'payment', methods: ['GET', 'POST'])]
+    public function payment(Request $request): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('currency', EntityType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
+                'class' => Currency::class,
+                'choice_label' => 'ccy',
+                'label' => 'Currency',
+                'attr' => ['class' => 'select2'],
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
+            ->add('position', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Currency symbol position',
+                'choices' => ['Left' => 'left', 'Right' => 'right'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('subscription_fee_online', TextType::class, [
+                'required' => true,
+                'label' => 'Subscription fee (Online)',
+                'help' => 'This fee will be added to the subscription sale price which are bought online, put 0 to disable additional fees for subscriptions which are bought online, does not apply for free subscriptions, will be applied to future orders',
+                'attr' => ['class' => 'touchspin-decimal', 'data-min' => 0, 'data-max' => 1000000],
+            ])
+            ->add('subscription_fee_pos', TextType::class, [
+                'required' => true,
+                'label' => 'Subscription fee (Point Of Sale)',
+                'help' => 'This fee will be added to the subscription sale price which are bought from a point of sale, put 0 to disable additional fees for subscriptions which are bought from a point of sale, does not apply for free subscriptions, will be applied to future orders',
+                'attr' => ['class' => 'touchspin-decimal', 'data-min' => 0, 'data-max' => 1000000],
+            ])
+            ->add('online_subscription_price_percentage_cut', TextType::class, [
+                'required' => true,
+                'label' => 'Subscription price percentage cut (Online)',
+                'help' => 'This percentage will be deducted from each subscription sold online, upon restaurant payout request, this percentage will be taken from each subscription sold online, will be applied to future orders',
+                'attr' => ['class' => 'touchspin-integer', 'data-min' => 0, 'data-max' => 100],
+            ])
+            ->add('pos_subscription_price_percentage_cut', TextType::class, [
+                'required' => true,
+                'label' => 'Subscription price percentage cut (Point of sale)',
+                'help' => 'This percentage will be deducted from each subscription sold on a point of sale, upon restaurant payout request, this percentage will be taken from each subscription sold on a point of sale, will be applied to future orders',
+                'attr' => ['class' => 'touchspin-integer', 'data-min' => 0, 'data-max' => 100],
+            ])
+            ->add('restaurant_payout_paypal_enabled', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Allow Paypal as a payout method for the restaurants to receive their revenue',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->add('restaurant_payout_stripe_enabled', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Allow Stripe as a payout method for the restaurants to receive their revenue',
+                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->getForm()
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Setting $setting */
+                $setting = $form->getData();
+                $this->settingervice->getSettings('currency_ccy', $setting['currency']->getCcy());
+                $this->settingervice->getSettings('currency_symbol', $setting['currency']->getSymbol());
+                $this->settingervice->getSettings('currency_position', $setting['position']);
+                $this->settingervice->getSettings('subscription_fee_online', $setting['subscription_fee_online']);
+                $this->settingervice->getSettings('subscription_fee_pos', $setting['subscription_fee_pos']);
+                $this->settingervice->getSettings('restaurant_payout_paypal_enabled', $setting['restaurant_payout_paypal_enabled']);
+                $this->settingervice->getSettings('restaurant_payout_stripe_enabled', $setting['restaurant_payout_stripe_enabled']);
+                $this->settingervice->getSettings('online_subscription_price_percentage_cut', $setting['online_subscription_price_percentage_cut']);
+                $this->settingervice->getSettings('pos_subscription_price_percentage_cut', $setting['pos_subscription_price_percentage_cut']);
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        } else {
+            $form->get('currency')->setData($this->em->getRepository("App\Entity\Setting\Currency")->findOneByCcy($this->settingervice->getSettings('currency_ccy')));
+            $form->get('position')->setData($this->settingervice->getSettings('currency_position'));
+            $form->get('subscription_fee_online')->setData($this->settingervice->getSettings('subscription_fee_online'));
+            $form->get('subscription_fee_pos')->setData($this->settingervice->getSettings('subscription_fee_pos'));
+            $form->get('restaurant_payout_paypal_enabled')->setData($this->settingervice->getSettings('restaurant_payout_paypal_enabled'));
+            $form->get('restaurant_payout_stripe_enabled')->setData($this->settingervice->getSettings('restaurant_payout_stripe_enabled'));
+            $form->get('online_subscription_price_percentage_cut')->setData($this->settingervice->getSettings('online_subscription_price_percentage_cut'));
+            $form->get('pos_subscription_price_percentage_cut')->setData($this->settingervice->getSettings('pos_subscription_price_percentage_cut'));
+        }
+
+        return $this->render('dashboard/admin/setting/payment.html.twig', compact('form'));
+    }
+
+    /*
+    #[Route(path: '/payment/gateways/new', name: 'payment_gateways_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/payment/gateways/{slug}/edit', name: 'payment_gateways_edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function paymentgatewaysaddedit(Request $request, ?string $slug = null): Response {
+
+        if (!$slug) {
+            $paymentgateway = new PaymentGateway();
+            $form = $this->createForm(PaymentGatewayFormType::class, $paymentgateway, array('validation_groups' => 'create'));
+        } else {
+            /** @var PaymentGateway $paymentgateway /
+            $paymentgateway = $this->settingervice->getPaymentGateways(array('isOnline' => 'all', 'slug' => $slug))->getQuery()->getOneOrNullResult();
+            $form = $this->createForm(PaymentGatewayFormType::class, $paymentgateway, array('validation_groups' => 'update'));
+            if (!$paymentgateway) {
+                $this->addFlash('danger', $this->translator->trans('The payment gateway can not be found'));
+                return $this->redirectToRoute("dashboard_admin_setting_payment");
+            }
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $paymentgateway->setGatewayName($paymentgateway->getFactoryName());
+
+            if (!$slug) {
+                $checkIfAnotherPGIsAddedWithSameFactoryName = $services->getPaymentGateways(array("gatewayFactoryName" => $paymentgateway->getFactoryName()))->getQuery()->getOneOrNullResult();
+                if ($checkIfAnotherPGIsAddedWithSameFactoryName) {
+                    $form->get('factoryName')->addError(new \Symfony\Component\Form\FormError($this->translator->trans('This payment gateway has already been added')));
+                }
+            }
+
+            if ($form->isValid()) {
+                $this->em->persist($paymentgateway);
+                $this->em->flush();
+                if (!$slug) {
+                    $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
+                } else {
+                    $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+                }
+
+                return $this->redirectToRoute("dashboard_admin_setting_payment");
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        }
+
+        return $this->render('dashboard/admin/setting/payment-gateway-new-edit.html.twig', compact('form', 'paymentgateway'));
+    }
+    */
+
+    #[Route(path: '/checkout', name: 'checkout', methods: ['GET', 'POST'])]
+    public function checkout(Request $request): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('checkout_timeleft', TextType::class, [
+                'required' => true,
+                'label' => 'Timeleft',
+                'constraints' => [
+                    new NotBlank(),
+                ],
+                'attr' => ['class' => 'touchspin-integer', 'data-min' => 100, 'data-max' => 3600],
+                'help' => 'Number of seconds before the reserved subscriptions are released if the order is still awaiting payment',
+            ])
+            ->add('show_subscriptions_left_on_cart_modal', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => 'Show subscriptions left count on cart modal',
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
+            ->getForm()
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Setting $setting */
+                $setting = $form->getData();
+                $this->settingervice->getSettings('checkout_timeleft', $setting['checkout_timeleft']);
+                $this->settingervice->getSettings('show_subscriptions_left_on_cart_modal', $setting['show_subscriptions_left_on_cart_modal']);
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        } else {
+            $form->get('checkout_timeleft')->setData($this->settingervice->getSettings('checkout_timeleft'));
+            $form->get('show_subscriptions_left_on_cart_modal')->setData($this->settingervice->getSettings('show_subscriptions_left_on_cart_modal'));
+        }
+
+        return $this->render('dashboard/admin/setting/checkout.html.twig', compact('form'));
     }
 }

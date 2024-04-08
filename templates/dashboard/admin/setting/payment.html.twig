@@ -1,0 +1,74 @@
+{% set pagetitle = 'Payment settings'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "current":(pagetitle) }] %}
+                {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="d-lg-flex justify-content-between align-items-center card-header">
+                    <div class="mb-3 mb-lg-0">
+                        <h3 class="mb-0">{{ "Global payment settings"|trans }}</h3>
+                        <span></span>
+                    </div>
+                    <div>
+                        <a href="{{ path('dashboard_admin_setting_currency_index') }}" class="btn btn-outline-primary btn-sm">
+                            {{ 'Manage currencies'|trans }}
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation', 'name': 'payment_settings'} }) }}
+                        {{ form_widget(form) }}
+                        <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="d-lg-flex justify-content-between align-items-center card-header">
+                    <div class="mb-3 mb-lg-0">
+                        <h3 class="mb-0">{{ "Payment gateways"|trans }}</h3>
+                        <span></span>
+                    </div>
+                    <div>
+                        <a href="{{ path('dashboard_admin_setting_payment_gateways_new') }}" class="btn btn-outline-primary btn-sm">
+                            {{ 'Create'|trans }}
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% set rows = setting.getPaymentGateways({"isOnline": "all"}).getQuery().getResult() %}
+                    {% if rows | length %}
+                        {% include "dashboard/admin/setting/manage-paymentgateways-table.html.twig" with {rows: rows} %}
+                    {% else %}
+                        <div class="card-footer">
+                            {% include "global/message.html.twig" with { type: "dark", message: ('No payment gateways found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $('#form_subscription_fee_pos').closest('.form-group').hide();
+            $('#form_pos_subscription_price_percentage_cut').closest('.form-group').hide();
+        });
+    </script>
+{% endblock %}

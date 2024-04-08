@@ -41,11 +41,8 @@
                     </div>
                     <div class="col-lg-3 col-md-5 col-12">
                         <select class="form-select">
-                            <option value="">Date Created</option>
-                            <option value="Newest">Newest</option>
-                            <option value="High Rated">High Rated</option>
-                            <option value="Law Rated">Law Rated</option>
-                            <option value="High Earned">High Earned</option>
+                            {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "o.createdAt", {"direction": "desc", "criteria": "o.createdAt"}) }}
+                            {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "o.createdAt", {"direction": "asc", "criteria": "o.createdAt"}) }}
                         </select>
                     </div>
                 </form>
@@ -69,7 +66,7 @@
             }
 
             if (getURLParameter("recipe")) {
-                var url = "{{ path('get_recipe', { slug : "recipeslug", published: "all", elapsed: "all" }) }}";
+                var url = "{{ path('get_recipe', { slug : "recipeslug", isOnline: "all", elapsed: "all" }) }}";
                 url = url.replace("recipeslug", getURLParameter("recipe"));
                 $.ajax({
                     type: 'GET',
@@ -92,15 +89,15 @@
                 });
             }
 
-            if (getURLParameter("organizer")) {
-                var url = "{{ path('get_organizer', { slug : "slug" }) }}";
-                url = url.replace("slug", getURLParameter("organizer"));
+            if (getURLParameter("restaurant")) {
+                var url = "{{ path('get_restaurant', { slug : "slug" }) }}";
+                url = url.replace("slug", getURLParameter("restaurant"));
                 $.ajax({
                     type: 'GET',
                     url: url
                 }).then(function (data) {
-                    $('#fake_organizer').select2('data', {id: data.slug, text: data.text});
-                    $('#organizer').val(data.slug).change();
+                    $('#fake_restaurant').select2('data', {id: data.slug, text: data.text});
+                    $('#restaurant').val(data.slug).change();
                 });
             }
 

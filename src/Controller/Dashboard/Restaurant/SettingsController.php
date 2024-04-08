@@ -58,10 +58,6 @@ class SettingsController extends BaseController
                     new NotNull(),
                 ],
             ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Save',
-                'attr' => ['class' => 'btn btn-primary'],
-            ])
             ->getForm()
         ;
 
@@ -75,7 +71,7 @@ class SettingsController extends BaseController
 
                 $this->em->persist($this->getUser()->getRestaurant());
                 $this->em->flush();
-                $this->addFlash('success', $this->translator->trans('The settings have been updated'));
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
             } else {
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }

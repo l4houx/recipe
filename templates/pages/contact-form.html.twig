@@ -15,7 +15,10 @@
             <div class="offset-xl-1 col-xl-5 col-lg-6 col-md-12 col-12">
                 <div class="py-8 me-xl-8 pe-xl-8">
                     <div class="d-flex justify-content-between mb-7 align-items-center">
-                        <a href="{{ path('home') }}"><img src="{{ asset('images/brand/logo/logo.svg') }}" alt="logo" class="logo-inverse"></a>
+                        <a href="{{ path('home') }}">
+                            <img src="{{ asset('images/brand/logo/logo.svg') }}" alt="logo" class="logo-inverse">
+                            {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="logo-inverse"> #}
+                        </a>
                         <div class="form-check form-switch theme-switch d-none">
                             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                             <label class="form-check-label" for="flexSwitchCheckDefault"></label>
@@ -42,7 +45,7 @@
                             </p>
                             <p class="d-flex">
                                 <i class="bi bi-geo-alt text-primary me-2"></i>
-                                {{ address | raw }}
+                                {{ address | raw | nl2br }}
                             </p>
                         </div>
                         <div class="mt-8">

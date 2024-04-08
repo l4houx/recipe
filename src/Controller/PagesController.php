@@ -36,24 +36,6 @@ class PagesController extends AbstractController
         return $this->render('pages/pricing-detail.html.twig', compact('pricings'));
     }
 
-    #[Route(path: '/terms-condition', name: 'terms_condition', methods: ['GET'])]
-    public function termsCondition(): Response
-    {
-        return $this->render('pages/terms-condition-detail.html.twig');
-    }
-
-    #[Route(path: '/privacy-policy', name: 'privacy_policy', methods: ['GET'])]
-    public function privacyPolicy(): Response
-    {
-        return $this->render('pages/privacy-policy-detail.html.twig');
-    }
-
-    #[Route(path: '/rgpd', name: 'rgpd', methods: ['GET'])]
-    public function rgpd(): Response
-    {
-        return $this->render('pages/rgpd-detail.html.twig');
-    }
-
     #[Route(path: '/team', name: 'team', methods: ['GET'])]
     public function team(UserRepository $userRepository): Response
     {

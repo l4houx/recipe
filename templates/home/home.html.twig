@@ -117,15 +117,61 @@
     {% endif %}
 
     {% if setting.getSettings('homepage_recipes_number') %}
-
+        {% set homepageRecipes = setting.getRecipes({"limit": setting.getSettings('homepage_recipes_number')}).getQuery().getResult() %}
+        {% if homepageRecipes | length > 0 %}
+            
+        {% endif %}
     {% endif %}
 
     {% if setting.getSettings('homepage_categories_number') > 0 %}
-
         {% for category in setting.getCategories({ "isFeatured": true, "limit": setting.getSettings('homepage_categories_number') }).getQuery().getResult() %}
-
+            <section class="bg-light py-8">
+                <div class="container">
+                    <div class="row">
+                        <div class="offset-xl-1 col-xl-10 col-md-12 col-12">
+                            <div class="row text-center">
+                                <div class="col-md-12 px-lg-8 mb-8 mt-6">
+                                    <span class="text-uppercase text-primary fw-semibold ls-md">{{ 'Browse Category'|trans }}</span>
+                                    <h2 class="h1 fw-bold mt-3">{{ 'Featured categories'|trans }}</h2>
+                                    <p class="mb-0 fs-4"></p>
+                                </div>
+                            </div>
+                            <div class="row gy-4">
+                                {% for category in setting.getCategories({ "isFeatured": true, "limit": setting.getSettings('homepage_categories_number') }).getQuery().getResult() %}
+                                    <div class="col-lg-3 col-md-4 col-12">
+                                        <div class="card border-top border-4 card-hover-with-icon">
+                                            <div class="card-body">
+                                                <div class="icon-shape icon-lg rounded-circle bg-light mb-3 card-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-activity" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.33L10 12.036l1.53-4.208A.5.5 0 0 1 12 7.5h3.5a.5.5 0 0 1 0 1h-3.15l-1.88 5.17a.5.5 0 0 1-.94 0L6 3.964 4.47 8.171A.5.5 0 0 1 4 8.5H.5a.5.5 0 0 1 0-1h3.15l1.88-5.17A.5.5 0 0 1 6 2Z">
+                                                    </path></svg>
+                                                </div>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <h4 class="mb-0">{{ category.name }}</h4>
+                                                        <p class="mb-0"></p>
+                                                    </div>
+                                                    <a href="{{ path('recipes', { category: category.slug }) }}" class="text-inherit">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                                                        </path></svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <div class="col-12 mt-8 text-center">
+                                    <a href="#" class="btn btn-outline-primary">
+                                        {{ 'View All Category'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         {% endfor %}
-
     {% endif %}
 
     {% if setting.getSettings('homepage_posts_number') > 0 %}

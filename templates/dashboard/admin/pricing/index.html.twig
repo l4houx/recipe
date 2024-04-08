@@ -21,11 +21,14 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-1">
+                        {{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows | length}) }}
+                    </h4>
+                    <p class="mb-0"></p>
+                </div>
                 {% if rows | length > 0 %}
                     {% include "dashboard/admin/pricing/manage-pricings-table.html.twig" with {rows: rows} %}
-                    <div class="card-footer">
-                        {# {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }} #}
-                    </div>
                 {% else %}
                     <div class="card-footer">
                         {% include "global/message.html.twig" with { type: "dark", message: ('No pricings found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}

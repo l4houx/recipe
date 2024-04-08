@@ -12,19 +12,14 @@
             {% if app.request.attributes.get('_route') == 'dashboard_admin_pricing_edit' %}
                 <div>
                     <h5 class="mb-3">{{ 'Icon'|trans }}</h5>
-                    <img src="{{ pricing.thumbnail ? asset(pricing.getThumbnailPath) : pricing.getThumbnailPlaceholder }}" alt="{{ pricing.title }}" class="img-4by3-lg rounded">
+                    <img src="{{ pricing.imageName ? asset(pricing.getImagePath) : pricing.getImagePlaceholder }}" alt="{{ pricing.title }}" class="img-4by3-lg rounded">
                 </div>
             {% endif %}
             {{ form_widget(form) }}
             <div class="col-12 pt-2">
-                <button type="submit" class="{{ button_css|default("btn btn-primary") }} me-4">
-                    {{ button_label|default('Save'|trans) }}
+                <button type="submit" class="{% if pricing.id %}btn btn-warning{% else %}btn btn-primary{% endif %} me-4">
+                    {% if pricing.id %}{{ 'Update'|trans }}{% else %}{{ 'Save'|trans }}{% endif %}
                 </button>
-                {% if include_back_to_home_link|default(false) %}
-                    <a href="{{ path('dashboard_admin_pricing_index') }}" class="btn btn-outline-secondary">
-                        {{ 'Return to list'|trans }}
-                    </a>
-                {% endif %}
             </div>
         </div>
     {{ form_end(form) }}

@@ -87,7 +87,7 @@ class AppSettingsFixtures extends Fixture
         // Number
         $settings[] = new Setting('Number of posts on the homepage', 'homepage_posts_number', 3, NumberType::class);
         $settings[] = new Setting('Number of testimonials on the homepage', 'homepage_testimonials_number', 2, NumberType::class);
-        $settings[] = new Setting('Number of categories on the homepage', 'homepage_categories_number', 12, NumberType::class);
+        $settings[] = new Setting('Number of categories on the homepage', 'homepage_categories_number', 8, NumberType::class);
         $settings[] = new Setting('Number of recipes on the homepage', 'homepage_recipes_number', 12, NumberType::class);
 
         // Pages Show Action
