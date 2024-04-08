@@ -244,10 +244,23 @@ class SettingService
         $keyword = \array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $id = array_key_exists('id', $criterias) ? $criterias['id'] : 'all';
         $limit = \array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
-        $order = \array_key_exists('order', $criterias) ? $criterias['order'] : 'l.name';
-        $sort = \array_key_exists('sort', $criterias) ? $criterias['sort'] : 'ASC';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'name';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
 
         return $this->em->getRepository("App\Entity\Level")->getLevels($keyword, $id, $limit, $order, $sort);
+    }
+
+    // Returns the status after applying the specified search criterias
+    public function getStatus($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        $keyword = \array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $id = array_key_exists('id', $criterias) ? $criterias['id'] : 'all';
+        $limit = \array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'name';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
+
+        return $this->em->getRepository("App\Entity\Status")->getStatus($keyword, $id, $limit, $order, $sort);
     }
 
     // Returns the audiences after applying the specified search criterias

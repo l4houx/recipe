@@ -1,13 +1,14 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Edit level'|trans %}
+{% set pagetitle = 'Add a new level'|trans %}
+{% if level.id %}{% set pagetitle = 'Edit level'|trans %}{% endif %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
     <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
-                {% set breadcrumb = [{ "dashboard_admin_level_index": 'Manage level'|trans, "current":(pagetitle) }] %}
+                {% set breadcrumb = [{ "dashboard_admin_level_index": 'Manage levels'|trans, "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
                     <a href="{{ path('dashboard_admin_level_index') }}" class="btn btn-outline-secondary me-2">
@@ -21,14 +22,7 @@
 
 {% block content %}
     <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-        {{ include('dashboard/admin/level/_form.html.twig', {
-            pagetitle: pagetitle,
-            level: level,
-            form: form,
-            button_css: 'btn btn-warning',
-            button_label: 'Update'|trans,
-            include_back_to_home_link: true,
-        }, with_context = false) }}
+        {{ include('dashboard/admin/level/_form.html.twig') }}
     </div>
     <div class="col-xl-3 col-lg-4 col-md-12 col-12"></div>
 {% endblock %}

@@ -40,7 +40,7 @@ class LevelRepository extends ServiceEntityRepository
         $qb->select('l');
 
         if ('all' !== $keyword) {
-            $qb->andWhere('l.name LIKE :keyword or :keyword LIKE l.name')->setParameter('keyword', '%'.$keyword.'%');
+            $qb->andWhere('l.name LIKE :keyword or :keyword LIKE l.name or :keyword LIKE l.color or l.color LIKE :keyword')->setParameter('keyword', '%'.$keyword.'%');
         }
 
         if ('all' !== $id) {

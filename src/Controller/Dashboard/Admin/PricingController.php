@@ -70,38 +70,6 @@ class PricingController extends AdminBaseController
         return $this->render('dashboard/admin/pricing/new-edit.html.twig', compact('pricing', 'form'));
     }
 
-    public function new(Request $request): Response
-    {
-        $pricing = new Pricing();
-        $form = $this->createForm(PricingFormType::class, $pricing)->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($pricing);
-            $this->em->flush();
-
-            $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
-
-            return $this->redirectToRoute('dashboard_admin_pricing_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('dashboard/admin/pricing/new.html.twig', compact('pricing', 'form'));
-    }
-
-    public function edit(Request $request, Pricing $pricing): Response
-    {
-        $form = $this->createForm(PricingFormType::class, $pricing)->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
-
-            $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
-
-            return $this->redirectToRoute('dashboard_admin_pricing_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('dashboard/admin/pricing/edit.html.twig', compact('pricing', 'form'));
-    }
-
     #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Pricing $pricing): Response
     {

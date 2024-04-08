@@ -3,16 +3,17 @@
 namespace App\Controller\Dashboard\Admin;
 
 use App\Entity\Status;
-use App\Entity\Traits\HasRoles;
 use App\Form\StatusFormType;
+use App\Entity\Traits\HasRoles;
+use App\Service\SettingService;
 use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/%website_dashboard_path%/admin/manage-status', name: 'dashboard_admin_status_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
@@ -22,6 +23,7 @@ class StatusController extends AdminBaseController
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
         private readonly StatusRepository $statusRepository,
+        private readonly SettingService $settingService
     ) {
     }
 
@@ -34,37 +36,39 @@ class StatusController extends AdminBaseController
     }
 
     #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
-    {
-        $status = new Status();
-        $form = $this->createForm(StatusFormType::class, $status)->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($status);
-            $this->em->flush();
-
-            $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
-
-            return $this->redirectToRoute('dashboard_admin_status_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('dashboard/admin/status/new.html.twig', compact('status', 'form'));
-    }
-
     #[Route(path: '/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
-    public function edit(Request $request, Status $status): Response
+    public function newedit(Request $request, ?int $id = null): Response
     {
-        $form = $this->createForm(StatusFormType::class, $status)->handleRequest($request);
+        if (!$id) {
+            $status = new Status();
+        } else {
+            //$status = $this->statusRepository->find($id);
+            $status = $this->settingService->getStatus(['id' => $id])->getQuery()->getOneOrNullResult();
+            if (!$status) {
+                $this->addFlash('danger', $this->translator->trans('The status can not be found'));
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
-
-            $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
-
-            return $this->redirectToRoute('dashboard_admin_status_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('dashboard_admin_status_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
-        return $this->render('dashboard/admin/status/edit.html.twig', compact('status', 'form'));
+        $form = $this->createForm(StatusFormType::class, $status)->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->em->persist($status);
+                $this->em->flush();
+                if (!$id) {
+                    $this->addFlash('success', $this->translator->trans('Content was created successfully.'));
+                } else {
+                    $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
+                }
+
+                return $this->redirectToRoute('dashboard_admin_status_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        }
+
+        return $this->render('dashboard/admin/status/new-edit.html.twig', compact('status', 'form'));
     }
 
     #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]

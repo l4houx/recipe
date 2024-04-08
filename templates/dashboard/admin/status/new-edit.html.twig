@@ -1,6 +1,7 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Edit status'|trans %}
+{% set pagetitle = 'Add a new status'|trans %}
+{% if status.id %}{% set pagetitle = 'Edit status'|trans %}{% endif %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -21,14 +22,7 @@
 
 {% block content %}
     <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-        {{ include('dashboard/admin/status/_form.html.twig', {
-            pagetitle: pagetitle,
-            status: status,
-            form: form,
-            button_css: 'btn btn-warning',
-            button_label: 'Update'|trans,
-            include_back_to_home_link: true,
-        }, with_context = false) }}
+        {{ include('dashboard/admin/status/_form.html.twig') }}
     </div>
     <div class="col-xl-3 col-lg-4 col-md-12 col-12"></div>
 {% endblock %}
