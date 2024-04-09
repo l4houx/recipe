@@ -18,7 +18,7 @@ class AppPricingFixtures extends Fixture
         $pricings = [
             1 => [
                 'btn' => 'outline-primary',
-                'thumbnail' => 'starter.svg',
+                'imageName' => 'starter.svg',
                 'title' => 'Starter',
                 'subtitle' => 'Starter account 1 month',
                 'symbol' => '$',
@@ -29,7 +29,7 @@ class AppPricingFixtures extends Fixture
             ],
             2 => [
                 'btn' => 'primary',
-                'thumbnail' => 'premium.svg',
+                'imageName' => 'premium.svg',
                 'title' => 'Premium',
                 'subtitle' => 'Premium account 12 months',
                 'symbol' => '$',
@@ -43,7 +43,7 @@ class AppPricingFixtures extends Fixture
         foreach ($pricings as $key => $value) {
             $pricing = (new Pricing())
                 ->setBtn($value['btn'])
-                ->setThumbnail($value['thumbnail'])
+                ->setImageName($value['imageName'])
                 ->setTitle($value['title'])
                 ->setSubTitle($value['subtitle'])
                 ->setSymbol($value['symbol'])

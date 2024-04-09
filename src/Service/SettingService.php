@@ -619,7 +619,6 @@ class SettingService
     public function getBlogPostCategories($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $parent = \array_key_exists('parent', $criterias) ? $criterias['parent'] : 'all';
         $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
@@ -627,7 +626,7 @@ class SettingService
         $order = \array_key_exists('order', $criterias) ? $criterias['order'] : 'c.name';
         $sort = \array_key_exists('sort', $criterias) ? $criterias['sort'] : 'ASC';
 
-        return $this->em->getRepository("App\Entity\PostCategory")->getBlogPostCategories($parent, $isOnline, $keyword, $slug, $limit, $order, $sort);
+        return $this->em->getRepository("App\Entity\PostCategory")->getBlogPostCategories($isOnline, $keyword, $slug, $limit, $order, $sort);
     }
 
     // Removes all the specified user cart elements

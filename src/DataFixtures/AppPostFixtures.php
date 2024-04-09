@@ -35,14 +35,12 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
         $author = (new User());
         $author
             ->setRoles([HasRoles::ADMIN])
-            ->setAvatar($this->faker()->unique()->userName())
-            ->setCountry('FR')
             ->setLastname('Tom')
             ->setFirstname('Doe')
             ->setUsername('tom-admin')
             ->setSlug('tom-admin')
             ->setEmail('tom-admin@yourdomain.com')
-            //->setPhone($this->faker()->phoneNumber())
+            ->setPhone($this->faker()->phoneNumber())
             ->setIsTeam(true)
             ->setIsVerified(true)
             ->setAbout($this->faker()->realText(254))
@@ -59,56 +57,44 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
         $authors[] = $author;
 
         /** @var array<array-key, PostCategory> $categories */
-        $categories = $manager->getRepository(PostCategory::class)->findAll();
-
-        /** @var array<array-key, Keyword> $keywords */
-        $keywords = $manager->getRepository(Keyword::class)->findAll();
+        $categories = $manager->getRepository(PostCategory::class)->findBy(['isOnline' => false], ['createdAt' => 'DESC']);
 
         // Create 10 Posts
         $posts = [];
-        for ($i = 0; $i <= 10; ++$i) {
-            shuffle($categories);
-            shuffle($keywords);
-            $post = new Post();
-            $post
-                ->setTitle($this->faker()->unique()->sentence())
-                ->setSlug($this->slugger->slug($post->getTitle())->lower())
-                ->setContent($this->faker()->paragraphs(10, true))
-                ->setReadtime(rand(10, 160))
-                ->setViews(rand(10, 160))
-                //->setAuthor($this->faker()->boolean(50) ? $customer : $admin)
-                ->setAuthor($author)
-                ->setIsOnline($this->faker()->numberBetween(0, 1))
-            ;
-
-            foreach (array_slice($categories, 0, 1) as $category) {
-                $post->getPostcategories()->add($category);
-            }
-
-            foreach (array_slice($keywords, 0, 2) as $keyword) {
-                $post->getKeywords()->add($keyword);
-            }
-
-            $manager->persist($post);
-
-            $posts[] = $post;
-
-            // Create Comments
-            for ($k = 1; $k <= $this->faker()->numberBetween(1, 5); ++$k) {
-                $comment = new Comment();
-                $comment
-                    //->setAuthor($this->faker()->boolean(50) ? $customer : $admin)
-                    ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
-                    ->setContent($this->faker()->paragraph())
-                    ->setIsApproved($this->faker()->numberBetween(0, 1))
-                    //->setIsReply()
-                    //->setIsRGPD(true)
-                    ->setIp($this->faker()->ipv4)
-                    ->setPost($post)
-                    ->setPublishedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+        foreach ($categories as $category) {
+            for ($i = 0; $i <= 10; ++$i) {
+                $post = new Post();
+                $post
+                    ->setTitle($this->faker()->unique()->sentence())
+                    ->setSlug($this->slugger->slug($post->getTitle())->lower())
+                    ->setContent($this->faker()->paragraphs(10, true))
+                    ->setReadtime(rand(10, 160))
+                    ->setViews(rand(10, 160))
+                    ->setAuthor($author)
+                    ->setIsOnline($this->faker()->numberBetween(0, 1))
+                    ->setCategory($category)
+                    ->setTags($this->faker()->unique()->word())
                 ;
 
-                $manager->persist($comment);
+                $manager->persist($post);
+                $posts[] = $post;
+
+                // Create Comments
+                for ($k = 1; $k <= $this->faker()->numberBetween(1, 5); ++$k) {
+                    $comment = new Comment();
+                    $comment
+                        ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                        ->setContent($this->faker()->paragraph())
+                        ->setIsApproved($this->faker()->numberBetween(0, 1))
+                        //->setIsReply()
+                        ->setIsRGPD(true)
+                        ->setIp($this->faker()->ipv4)
+                        ->setPost($post)
+                        ->setPublishedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                    ;
+
+                    $manager->persist($comment);
+                }
             }
         }
 
@@ -122,8 +108,7 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             AppAdminTeamUserFixtures::class,
-            AppPostCategoryFixtures::class,
-            AppKeywordFixtures::class
+            AppPostCategoryFixtures::class
         ];
     }
 }

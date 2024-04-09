@@ -47,6 +47,9 @@ class Category
     #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
     private ?string $imageName = null;
 
+    /**
+     * @var Collection<int, Recipe>
+     */
     #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'category')]
     private Collection $recipes;
 

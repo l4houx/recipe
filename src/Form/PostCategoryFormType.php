@@ -48,24 +48,6 @@ class PostCategoryFormType extends AbstractType
                 'required' => false,
             ])
             ->add('isOnline', SwitchType::class, ['label' => t('Online')])
-            /*
-            ->add('parent', EntityType::class, [
-                'required' => false,
-                'multiple' => false,
-                'class' => PostCategory::class,
-                'choice_label' => 'name',
-                'label' => t('Parent'),
-                'help' => t('Select the parent category to add a sub category'),
-                'query_builder' => function() {
-                    return $this->settingService->getBlogPostCategories(["parent" => "none"]);
-                }
-            ])
-            ->add('posts', EntityType::class, [
-                'class' => Post::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            */
         ;
     }
 

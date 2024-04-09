@@ -61,6 +61,7 @@ class HelpCenterArticleType extends AbstractType
                 'autocomplete' => true,
                 'empty_data' => '',
                 'attr' => [
+                    'class' => 'form-select',
                     'data-limit' => 1,
                 ],
                 'help' => t('Make sure to select right category to let the users find it quickly'),

@@ -15,7 +15,7 @@
 				{% set link = path('dashboard_admin_post_edit', { slug : post.slug }) %}
 				<tr>
 					<td>
-						<a href="{# {{ path('post_article', {slug: post.slug}) }} #}" target="_blank" class="text-inherit">
+						<a href="{{ path('post_article', {slug: post.slug}) }}" target="_blank" class="text-inherit">
 							<div class="d-flex align-items-center">
 								<div>
 									<img src="{{ post.imageName ? asset(post.getImagePath) : post.getImagePlaceholder }}" alt="{{ post.title }}" class="img-4by3-lg rounded">
@@ -31,8 +31,8 @@
 						</a>
 					</td>
                     <td>
-						<span class="text-decoration-none" style="color: {{ post.postcategories[0].color }}">
-                            {{ post.postcategories[0].name  }}
+						<span class="text-decoration-none" style="color: {{ post.category.color }}">
+                            {{ post.category.name  }}
                         </span>
 					</td>
 					<td>

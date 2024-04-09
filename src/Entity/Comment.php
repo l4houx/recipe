@@ -6,6 +6,7 @@ use App\Entity\Traits\HasContentTrait;
 use App\Entity\Traits\HasIdTrait;
 use App\Entity\Traits\HasIPTrait;
 use App\Entity\Traits\HasIsApprovedTrait;
+use App\Entity\Traits\HasIsRGPDTrait;
 use App\Entity\Traits\HasLimit;
 use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +23,7 @@ class Comment
     use HasIdTrait;
     use HasIPTrait;
     use HasIsApprovedTrait;
+    use HasIsRGPDTrait;
     use HasContentTrait;
 
     public const COMMENT_LIMIT = HasLimit::COMMENT_LIMIT;

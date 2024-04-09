@@ -10,7 +10,7 @@
 		</div>
 		<div class="card-footer {{ testimonial.id is odd ? 'bg-primary' : 'bg-info' }} text-center border-top-0">
 			<div class="mt-n8">
-				{% include "global/user-avatar.html.twig" with { user: app.user, type: "xl", class: testimonial.id is odd ? 'border-primary' : 'border-info' } %}
+				{% include "global/user-avatar.html.twig" with { user: testimonial.author, type: "xl", class: testimonial.id is odd ? 'border-primary' : 'border-info' } %}
 			</div>
 			<div class="mt-2 text-white">
 				<h3 class="text-white mb-0">{{ testimonial.author.getFullName | lower | capitalize }}</h3>

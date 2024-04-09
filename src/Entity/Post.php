@@ -2,24 +2,24 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use App\Entity\Traits\HasLimit;
-use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Traits\HasTagTrait;
-use App\Repository\PostRepository;
-use App\Entity\Traits\HasViewsTrait;
 use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasIsOnlineTrait;
 use App\Entity\Traits\HasDeletedAtTrait;
-use Doctrine\Common\Collections\Collection;
 use App\Entity\Traits\HasGedmoTimestampTrait;
-use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasLimit;
+use App\Entity\Traits\HasTagTrait;
+use App\Entity\Traits\HasViewsTrait;
+use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[Vich\Uploadable]
@@ -31,7 +31,7 @@ class Post
     use HasContentTrait;
     use HasIsOnlineTrait;
     use HasViewsTrait;
-    //use HasTagTrait;
+    use HasTagTrait;
     use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
 
@@ -56,21 +56,9 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    /**
-     * @var collection<int, PostCategory>
-     */
-    #[ORM\ManyToMany(targetEntity: PostCategory::class, inversedBy: 'posts')]
-    #[Assert\NotBlank]
-    #[Assert\Count(min: 1, max: 3)]
-    private Collection $postcategories;
-
-    /**
-     * @var collection<int, Keyword>
-     */
-    #[ORM\ManyToMany(targetEntity: Keyword::class, inversedBy: 'posts')]
-    #[Assert\NotBlank]
-    #[Assert\Count(min: 1, max: 3)]
-    private Collection $keywords;
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?PostCategory $category = null;
 
     /**
      * @var collection<int, Comment>
@@ -86,8 +74,6 @@ class Post
 
     public function __construct()
     {
-        $this->postcategories = new ArrayCollection();
-        $this->keywords = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
 
@@ -164,50 +150,14 @@ class Post
         return $this;
     }
 
-    /**
-     * @return Collection<int, PostCategory>
-     */
-    public function getPostcategories(): Collection
+    public function getCategory(): ?PostCategory
     {
-        return $this->postcategories;
+        return $this->category;
     }
 
-    public function addPostcategory(PostCategory $postcategory): static
+    public function setCategory(?PostCategory $category): static
     {
-        if (!$this->postcategories->contains($postcategory)) {
-            $this->postcategories->add($postcategory);
-        }
-
-        return $this;
-    }
-
-    public function removePostcategory(PostCategory $postcategory): static
-    {
-        $this->postcategories->removeElement($postcategory);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Keyword>
-     */
-    public function getKeywords(): Collection
-    {
-        return $this->keywords;
-    }
-
-    public function addKeyword(Keyword $keyword): static
-    {
-        if (!$this->keywords->contains($keyword)) {
-            $this->keywords->add($keyword);
-        }
-
-        return $this;
-    }
-
-    public function removeKeyword(Keyword $keyword): static
-    {
-        $this->keywords->removeElement($keyword);
+        $this->category = $category;
 
         return $this;
     }
@@ -240,5 +190,14 @@ class Post
         }
 
         return $this;
+    }
+
+    public function hasVideo(): bool
+    {
+        if (null !== $this->getContent()) {
+            return 1 === preg_match('/^[^\s]*youtube.com/mi', $this->getContent());
+        }
+
+        return false;
     }
 }

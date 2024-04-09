@@ -19,14 +19,6 @@
 							<div class="d-flex align-items-center">
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">
-										{% if postcategory.parent is not  null %}
-											{{ postcategory.parent.name }}
-											<i class="bi bi-chevron-right"></i>
-											{% if postcategory.parent.parent is not  null %}
-												{{ postcategory.parent.parent.name }}
-												<i class="bi bi-chevron-right"></i>
-											{% endif %}
-										{% endif %}
                                         {{ postcategory.name }}
                                     </h4>
 									<span>

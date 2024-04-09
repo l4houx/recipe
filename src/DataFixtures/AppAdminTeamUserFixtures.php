@@ -2,12 +2,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
 use App\Entity\Traits\HasRoles;
-use Doctrine\Persistence\ObjectManager;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\String\Slugger\SluggerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppAdminTeamUserFixtures extends Fixture
 {
@@ -31,7 +31,6 @@ class AppAdminTeamUserFixtures extends Fixture
         $superadmin
             ->setId(1)
             ->setRoles([HasRoles::ADMINAPPLICATION])
-            ->setCountry('US')
             ->setLastname('Cameron')
             ->setFirstname('Williamson')
             ->setUsername('superadmin')
@@ -60,7 +59,6 @@ class AppAdminTeamUserFixtures extends Fixture
         $admin
             ->setId(2)
             ->setRoles([HasRoles::ADMIN])
-            ->setCountry('BE')
             ->setLastname('Wade')
             ->setFirstname('Warren')
             ->setUsername('admin')
@@ -89,7 +87,6 @@ class AppAdminTeamUserFixtures extends Fixture
         $moderator
             ->setId(3)
             ->setRoles([HasRoles::MODERATOR])
-            ->setCountry('DE')
             ->setLastname('Jane')
             ->setFirstname('Cooper')
             ->setUsername('moderator')
@@ -113,12 +110,12 @@ class AppAdminTeamUserFixtures extends Fixture
         );
 
         // User Restaurant
-        /** @var User $restaurant */
+        /* @var User $restaurant */
+        /*
         $restaurant = (new User());
         $restaurant
             ->setId(4)
-            ->addRole(HasRoles::RESTAURANT)
-            ->setCountry('FR')
+            ->setRoles([HasRoles::RESTAURANT])
             ->setLastname('Bob')
             ->setFirstname('Cooper')
             ->setUsername('restaurant')
@@ -136,6 +133,7 @@ class AppAdminTeamUserFixtures extends Fixture
                 $this->hasher->hashPassword($restaurant, 'restaurant')
             )
         );
+        */
 
         // Create 10 Users
         $genres = ['male', 'female'];
@@ -144,7 +142,6 @@ class AppAdminTeamUserFixtures extends Fixture
             /** @var User $user */
             $user = (new User());
             $user
-                ->setCountry($this->faker()->countryCode())
                 ->setLastname($this->faker()->lastName)
                 ->setFirstname($this->faker()->firstName($genre))
                 ->setUsername($this->faker()->unique()->userName())
@@ -164,7 +161,7 @@ class AppAdminTeamUserFixtures extends Fixture
                 $user->setIsVerified(true);
             }
 
-            $this->addReference('user-' . $i, $user);
+            $this->addReference('user-'.$i, $user);
 
             $manager->persist(
                 $user->setPassword(

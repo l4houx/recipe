@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasLimit;
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\PostCategoryRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Traits\HasKeywordPostCategoryTrait;
+use App\Entity\Traits\HasLimit;
+use App\Repository\PostCategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: PostCategoryRepository::class)]
@@ -19,65 +20,28 @@ class PostCategory
 
     public const POSTCATEGORY_LIMIT = HasLimit::POSTCATEGORY_LIMIT;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'postcategories')]
-    private ?self $parent = null;
-
-    /**
-     * @var collection<int, self>
-     */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    private Collection $postcategories;
+    #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true])]
+    private int $postsCount = 0;
 
     /**
      * @var collection<int, Post>
      */
-    #[ORM\ManyToMany(targetEntity: Post::class, mappedBy: 'postcategories')]
+    #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'category')]
     private Collection $posts;
 
     public function __construct()
     {
-        $this->postcategories = new ArrayCollection();
         $this->posts = new ArrayCollection();
     }
 
-    public function getParent(): ?self
+    public function getPostsCount(): int
     {
-        return $this->parent;
+        return $this->postsCount;
     }
 
-    public function setParent(?self $parent): static
+    public function setPostsCount(int $postsCount): static
     {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getPostcategories(): Collection
-    {
-        return $this->postcategories;
-    }
-
-    public function addPostcategory(self $postcategory): static
-    {
-        if (!$this->postcategories->contains($postcategory)) {
-            $this->postcategories->add($postcategory);
-            $postcategory->setParent($this);
-        }
-
-        return $this;
-    }
-
-    public function removePostcategory(self $postcategory): static
-    {
-        if ($this->postcategories->removeElement($postcategory)) {
-            // set the owning side to null (unless already changed)
-            if ($postcategory->getParent() === $this) {
-                $postcategory->setParent(null);
-            }
-        }
+        $this->postsCount = $postsCount;
 
         return $this;
     }
@@ -94,7 +58,7 @@ class PostCategory
     {
         if (!$this->posts->contains($post)) {
             $this->posts->add($post);
-            $post->addPostcategory($this);
+            $post->setCategory($this);
         }
 
         return $this;
@@ -103,7 +67,10 @@ class PostCategory
     public function removePost(Post $post): static
     {
         if ($this->posts->removeElement($post)) {
-            $post->removePostcategory($this);
+            // set the owning side to null (unless already changed)
+            if ($post->getCategory() === $this) {
+                $post->setCategory(null);
+            }
         }
 
         return $this;

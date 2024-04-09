@@ -34,7 +34,7 @@ class RecipeController extends BaseController
     #[Route(path: '/restaurant/my-recipes', name: 'dashboard_restaurant_recipe_index', methods: ['GET'])]
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        $user = $this->getUserOrThrow();
+        //$user = $this->getUserOrThrow();
 
         $slug = '' == $request->query->get('slug') ? 'all' : $request->query->get('slug');
         $category = '' == $request->query->get('category') ? 'all' : $request->query->get('category');
@@ -49,7 +49,7 @@ class RecipeController extends BaseController
 
         $rows = $paginator->paginate($this->settingService->getRecipes(['slug' => $slug, 'category' => $category, 'venue' => $venue, 'elapsed' => $elapsed, 'isOnline' => $isOnline, 'restaurant' => $restaurant, 'sort' => 'startdate', 'restaurantEnabled' => 'all', 'sort' => 'r.createdAt', 'order' => 'DESC'])->getQuery(), $request->query->getInt('page', 1), HasLimit::RECIPE_LIMIT, ['wrap-queries' => true]);
 
-        return $this->render('dashboard/shared/recipes/index.html.twig', compact('user', 'rows'));
+        return $this->render('dashboard/shared/recipes/index.html.twig', compact('rows'));
     }
 
     #[Route(path: '/restaurant/my-recipes/new', name: 'dashboard_restaurant_recipe_new', methods: ['GET', 'POST'])]

@@ -32,11 +32,6 @@ class PostFormType extends AbstractType
         parent::buildForm($builder, $options);
 
         $builder
-            /*
-            ->add('imageFile', VichFileType::class, [
-                'label' => t('Image :'),
-            ])
-            */
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => true,
@@ -69,36 +64,31 @@ class PostFormType extends AbstractType
                 'help' => t(''),
             ])
             ->add('author', UserAutocompleteField::class, ['label' => t('Author :')])
-            /*
-            ->add('author', EntityType::class, [
-                'label' => t('Author :'),
-                'class' => User::class,
-                'choice_label' => 'username',
-                'autocomplete' => true,
-                'empty_data' => '',
-            ])
-            */
-            ->add('postcategories', EntityType::class, [
+            ->add('category', EntityType::class, [
                 'label' => t('Category :'),
                 'class' => PostCategory::class,
                 'choice_label' => 'name',
                 'required' => true,
-                'multiple' => true,
-                // 'expanded' => false,
-                // 'by_reference' => false,
                 'empty_data' => '',
+                'multiple' => false,
+                'autocomplete' => true,
+                'attr' => [
+                    'class' => 'form-select',
+                    'data-limit' => 1,
+                ],
                 'help' => t('Make sure you select the correct category to allow users to find it quickly.'),
+                /*
                 'query_builder' => function () {
                     return $this->settingService->getBlogPostCategories([]);
                 },
+                */
             ])
-            ->add('keywords', EntityType::class, [
-                'label' => t('Keywords :'),
-                'class' => Keyword::class,
-                'choice_label' => 'name',
-                'multiple' => true,
+            ->add('tags', TextType::class, [
+                'label' => t('Tags :'),
+                'purify_html' => true,
                 'empty_data' => '',
                 'attr' => [
+                    'class' => 'tags-input',
                     'data-limit' => 1,
                 ],
                 'help' => t('Make sure you select the correct keyword to allow users to find it quickly.'),

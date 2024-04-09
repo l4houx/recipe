@@ -316,6 +316,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
             return 'Scanner';
         } elseif ($this->hasRole(HasRoles::SUPERADMIN) || $this->hasRole(HasRoles::ADMINAPPLICATION)) {
             return 'Administrator';
+        } elseif ($this->hasRole(HasRoles::ADMIN)) {
+            return 'Admin';
+        } elseif ($this->hasRole(HasRoles::MODERATOR)) {
+            return 'Moderator';
         } else {
             return 'N/A';
         }
@@ -331,6 +335,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
             return $this->pointofsale->getName();
         } elseif ($this->hasRole(HasRoles::SCANNER) && $this->scanner) {
             return $this->scanner->getName();
+        } elseif ($this->hasRole(HasRoles::ADMIN)) {
+            return $this->getFullName();
+        } elseif ($this->hasRole(HasRoles::MODERATOR)) {
+            return $this->getFullName();
         } else {
             return 'N/A';
         }

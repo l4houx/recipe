@@ -30,11 +30,11 @@
                     </div>
                     <div class="col-lg-3 col-md-5 col-12">
                         <select class="form-select">
-                            <option value="">Date Created</option>
-                            <option value="Newest">Newest</option>
-                            <option value="High Rated">High Rated</option>
-                            <option value="Law Rated">Law Rated</option>
-                            <option value="High Earned">High Earned</option>
+                            <option value="">{{ "Select an option"|trans }}</option>
+                            {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.createdAt", {"direction": "desc", "criteria": "r.createdAt"}) }}
+                            {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.createdAt", {"direction": "asc", "criteria": "r.createdAt"}) }}
+                            {{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.views", {"direction": "desc", "criteria": "r.views"}) }}
+                            {{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.views", {"direction": "asc", "criteria": "r.views"}) }}
                         </select>
                     </div>
                 </form>

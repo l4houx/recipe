@@ -116,19 +116,6 @@
                     {% endif %}
                 </td>
             </tr>
-            {#
-            <tr>
-                <td width="30%">{{ "Reviews"|trans }}</td>
-                <td>
-                    {{ user.reviews | length }}
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Favorites"|trans }}</td>
-                <td>
-                    {{ user.favorites | length }}
-                </td>
-            </tr>
             {% if user.phone %}
                 <tr>
                     <td width="30%">{{ "Phone number"|trans }}</td>
@@ -137,6 +124,7 @@
                     </td>
                 </tr>
             {% endif %}
+            {#
             {% if user.avatarName %}
                 <tr>
                     <td width="30%">{{ "Avatar"|trans }}</td>
@@ -146,7 +134,6 @@
                 </tr>
             {% endif %}
             #}
-
             {% if user.facebookId %}
                 <tr>
                     <td width="30%">{{ "Registered using Facebook"|trans }} <i class="fab fa-facebook-f fa-sm btn-facebook ml-2 p-2"></i></td>
@@ -172,16 +159,16 @@
                         </a>
                     </td>
                 </tr>
-            {% endif %}
-            {#  
+            {% endif %} 
             {% if user.birthdate %}
                 <tr>
                     <td width="30%">{{ "Birthdate"|trans }}</td>
                     <td>
-                        {{ user.birthdate|date(date_format_date_only) }}
+                        {{ user.birthdate | date(date_format_date_only) }}
                     </td>
                 </tr>
             {% endif %}
+            {#  
             {% if user.stringifyAddress %}
                 <tr>
                     <td width="30%">{{ "Address"|trans }}</td>
@@ -205,26 +192,26 @@
                 </tr>
             </thead>
             <tbody>
+                {#  
                 <tr>
                     <td width="30%">{{ "Avatar"|trans }}</td>
                     <td>
-                        <img src="{{ user.avatar }}" class="avatar-xl rounded-circle" />
+                        {% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
                     </td>
                 </tr>
-                {#  
-                    <tr>
-                        <td width="30%">{{ "Cart elements"|trans }}</td>
-                        <td>
-                            {{ user.cartelements|length }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="30%">{{ "Bought tickets"|trans }}</td>
-                        <td>
-                            {{ user.getOrdersQuantitySum }}
-                        </td>
-                    </tr>
                 #}
+                <tr>
+                    <td width="30%">{{ "Cart elements"|trans }}</td>
+                    <td>
+                        {{ user.cartelements | length }}
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%">{{ "Bought subscriptions"|trans }}</td>
+                    <td>
+                        {{ user.getOrdersQuantitySum }}
+                    </td>
+                </tr>
                 <tr>
                     <td width="30%">{{ "Reviews"|trans }}</td>
                     <td>

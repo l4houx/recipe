@@ -34,11 +34,11 @@
                                         <a href="{{ path('dashboard_creator_account_dashboard') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'My dashboard'|trans }}
                                         </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_edit' %}
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_creator_account_index' %}
                                         <a href="{{ path('dashboard_creator_account_dashboard') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'My dashboard'|trans }}
                                         </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_avatar' %}
+                                    {% elseif app.request.attributes.get('_route') == 'dashboard_creator_account_change_password' %}
                                         <a href="{{ path('dashboard_creator_account_dashboard') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'My dashboard'|trans }}
                                         </a>
@@ -47,7 +47,7 @@
                                             {{ 'New recipe'|trans }}
                                         </a>
                                     {% elseif app.request.attributes.get('_route') == 'dashboard_creator_account_dashboard' %}
-                                        <a href="{{ path('dashboard_account_edit') }}" class="btn btn-primary btn-sm d-none d-md-block">
+                                        <a href="{{ path('dashboard_creator_account_index') }}" class="btn btn-primary btn-sm d-none d-md-block">
                                             {{ 'Account Setting'|trans }}
                                         </a>
                                     {% endif %}

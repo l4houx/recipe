@@ -138,7 +138,9 @@ class AccountCreatorFormType extends AbstractType
                 'class' => Country::class,
                 'choice_label' => 'name',
                 'label' => t('Country :'),
-                'attr' => ['class' => 'select2'],
+                'multiple' => false,
+                'autocomplete' => true,
+                'attr' => ['class' => 'form-select'],
                 'placeholder' => t('Select an option'),
                 'query_builder' => function () {
                     return $this->settingService->getCountries([]);
