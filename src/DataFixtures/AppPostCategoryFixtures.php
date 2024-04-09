@@ -20,14 +20,15 @@ class AppPostCategoryFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Create of 4 Categories
-        $this->createCategory('Plat chaud', '#3f7fca', true, $manager);
-        $this->createCategory('Entrée', '#1e81b0', true, $manager);
-        $this->createCategory('Dessert', '#9141ac', false, $manager);
-        $this->createCategory('Goûter', '#21130d', true, $manager);
-        // $this->createCategory('', '#063970', $manager);
-        // $this->createCategory('', '#154c79', $manager);
-        // $this->createCategory('', '#e07b39', $manager);
+        // Create of 8 Categories
+        $this->createCategory('Plats', '#3f7fca', true, $manager);
+        $this->createCategory('Entrees', '#1e81b0', true, $manager);
+        $this->createCategory('Desserts', '#9141ac', false, $manager);
+        $this->createCategory('Goûters', '#21130d', true, $manager);
+        $this->createCategory('Bases', '#063970', true, $manager);
+        $this->createCategory('Boissons', '#154c79', false, $manager);
+        $this->createCategory('Apéritif', '#e07b39', true, $manager);
+        $this->createCategory('Autres', '#154c79', true, $manager);
 
         $manager->flush();
     }
@@ -46,6 +47,9 @@ class AppPostCategoryFixtures extends Fixture
             ->setIsOnline($isOnline)
         ;
         $manager->persist($category);
+
+        $this->addReference('category-' . $this->counter, $category);
+        ++$this->counter;
 
         return $category;
     }

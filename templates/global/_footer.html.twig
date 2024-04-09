@@ -17,7 +17,7 @@
                 <div class="mb-4">
                     <h3 class="fw-bold mb-3">{{ 'Company'|trans }}</h3>
                     <ul class="list-unstyled nav nav-footer flex-column nav-x-0">
-                        {% if '1' == settings['show_gdpr_compliance_page'] %}
+                        {% if '1' == settings['show_about_page'] %}
                             <li>
                                 <a href="{{ path('page', { slug : settings['about_page_slug'] }) }}" class="nav-link">
                                     {{ 'About'|trans }}

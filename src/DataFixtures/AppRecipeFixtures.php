@@ -88,7 +88,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 ->setIsOnline($this->faker()->numberBetween(0, 1))
             ;
 
-            $category = $this->getReference('cat-' . $this->faker()->numberBetween(1, 4));
+            $category = $this->getReference('cat-' . $this->faker()->numberBetween(1, 8));
             $recipe->setCategory($category);
 
             foreach ($this->faker()->randomElements($ingredients, $this->faker()->numberBetween(2, 5)) as $ingredient) {

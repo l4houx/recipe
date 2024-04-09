@@ -48,7 +48,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {% include "global/message.html.twig" with { type: "info", message: ('No faqs found'|trans), icon: "bi bi-exclamation-circle" } %}
+                        {% include "global/message.html.twig" with { type: "dark", message: ('No faqs found'|trans), icon: "bi bi-exclamation-circle" } %}
                     {% endif %}
                 </div>
             </div>

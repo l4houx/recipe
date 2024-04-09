@@ -56,13 +56,13 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
         );
         $authors[] = $author;
 
-        /** @var array<array-key, PostCategory> $categories */
-        $categories = $manager->getRepository(PostCategory::class)->findBy(['isOnline' => false], ['createdAt' => 'DESC']);
+        ///** @var array<array-key, PostCategory> $categories */
+        //$categories = $manager->getRepository(PostCategory::class)->findBy(['isOnline' => true], ['createdAt' => 'DESC']);
 
-        // Create 10 Posts
+        // Create 20 Posts
         $posts = [];
-        foreach ($categories as $category) {
-            for ($i = 0; $i <= 10; ++$i) {
+        /*foreach ($categories as $category) {*/
+            for ($i = 0; $i <= 20; ++$i) {
                 $post = new Post();
                 $post
                     ->setTitle($this->faker()->unique()->sentence())
@@ -72,9 +72,12 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
                     ->setViews(rand(10, 160))
                     ->setAuthor($author)
                     ->setIsOnline($this->faker()->numberBetween(0, 1))
-                    ->setCategory($category)
+                    //->setCategory($category)
                     ->setTags($this->faker()->unique()->word())
                 ;
+
+                $category = $this->getReference('category-' . $this->faker()->numberBetween(1, 8));
+                $post->setCategory($category);
 
                 $manager->persist($post);
                 $posts[] = $post;
@@ -96,7 +99,7 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
                     $manager->persist($comment);
                 }
             }
-        }
+        /*}*/
 
         $manager->flush();
     }
@@ -108,7 +111,7 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             AppAdminTeamUserFixtures::class,
-            AppPostCategoryFixtures::class
+            //AppPostCategoryFixtures::class
         ];
     }
 }

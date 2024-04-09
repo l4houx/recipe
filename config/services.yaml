@@ -181,13 +181,13 @@ services:
         arguments: ['%resize_picture_key%']
 
     # Sitemap
-    sitemap.subscriber:
-        class: App\EventListener\SitemapSubscriber
-        arguments:
-            - "@router"
-            - "@app.setting"
-        tags:
-            - { name: "kernel.event_subscriber", priority: 100 }
+    #sitemap.subscriber:
+    #    class: App\EventListener\SitemapSubscriber
+    #    arguments:
+    #        - "@router"
+    #        - "@app.setting"
+    #    tags:
+    #        - { name: "kernel.event_subscriber", priority: 100 }
 
     # RSS
     debril.rss_atom.provider:

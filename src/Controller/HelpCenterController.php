@@ -50,17 +50,6 @@ class HelpCenterController extends AbstractController
         /** @var HelpCenterCategory $category */
         $category = $this->settingService->getHelpCenterCategories(['slug' => $slug])->getQuery()->getOneOrNullResult();
 
-        /*
-        $category = $this->helpCenterCategoryRepository->find($id);
-
-        if ($category->getSlug() !== $slug) {
-            return $this->redirectToRoute('help_center_category', [
-                'id' => $category->getId(),
-                'slug' => $category->getSlug(),
-            ], 301);
-        }
-        */
-
         if (!$category) {
             $this->addFlash('danger', $this->translator->trans('The category not be found'));
 
@@ -75,17 +64,6 @@ class HelpCenterController extends AbstractController
     {
         /** @var HelpCenterArticle $article */
         $article = $this->settingService->getHelpCenterArticles(['slug' => $slug])->getQuery()->getOneOrNullResult();
-
-        /*
-        $article = $this->helpCenterArticleRepository->find($id);
-
-        if ($article->getSlug() !== $slug) {
-            return $this->redirectToRoute('help_center_article', [
-                'id' => $article->getId(),
-                'slug' => $article->getSlug(),
-            ], 301);
-        }
-        */
 
         if (!$article) {
             $this->addFlash('danger', $this->translator->trans('The article not be found'));
@@ -111,7 +89,13 @@ class HelpCenterController extends AbstractController
             $data->email = $user->getEmail();
         }
 
-        $form = $this->createForm(HelpCenterSupportFormType::class, $data)->handleRequest($request);
+        $form = $this->createForm(HelpCenterSupportFormType::class, $data);
+
+        if (0 == $this->settingService->getSettings('google_recaptcha_enabled')) {
+            $form->remove('recaptcha');
+        }
+
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $eventDispatcher->dispatch(new HelpCenterSupportRequestEvent($data));
