@@ -22,11 +22,11 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class BlogCommentController extends AbstractController
+class PostCommentController extends AbstractController
 {
-    #[Route(path: '/blog-comment/comment/{slug}/add', name: 'blog_comment_add', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['POST'])]
+    #[Route(path: '/post-comment/comment/{slug}/add', name: 'post_comment_add', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED')]
-    public function blogcommentAdd(
+    public function postcommentAdd(
         Request $request,
         // #[CurrentUser] User $user,
         // #[MapEntity(mapping: ['slug' => 'slug'])] Post $post,
@@ -49,22 +49,22 @@ class BlogCommentController extends AbstractController
 
             // $this->addFlash('success', $translator->trans('Your comment has been sent, thank you. It will be published after validation by a moderator.'));
 
-            return $this->redirectToRoute('blog_article', ['slug' => $post->getSlug()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('post_article', ['slug' => $post->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('blog/comment_form_error.html.twig', compact('post', 'form'));
+        return $this->render('post/post-comment-form-error.html.twig', compact('post', 'form'));
     }
 
     public function form(Post $post): Response
     {
         $form = $this->createForm(CommentFormType::class);
 
-        return $this->render('blog/_comment_form.html.twig', compact('post', 'form'));
+        return $this->render('post/post-comment-form.html.twig', compact('post', 'form'));
     }
 
-    #[Route(path: '/blog-comment/comment/{id<[0-9]+>}', name: 'blog_comment_delete', methods: ['POST'])]
+    #[Route(path: '/post-comment/comment/{id<[0-9]+>}', name: 'post_comment_delete', methods: ['POST'])]
     #[Security("is_granted('ROLE_USER') and user === comment.getAuthor()")]
-    public function blogcommentDeleted(
+    public function postcommentDeleted(
         Request $request,
         CommentService $commentService,
         Comment $comment,
@@ -77,6 +77,6 @@ class BlogCommentController extends AbstractController
             // $this->addFlash('success', $translator->trans('Your comment has been successfully deleted.'));
         }
 
-        return $this->redirectToRoute('blog_article', $params);
+        return $this->redirectToRoute('post_article', $params);
     }
 }

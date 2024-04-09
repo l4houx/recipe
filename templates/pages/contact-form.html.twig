@@ -75,10 +75,12 @@
                             <div class="mb-3 col-12">
                                 {{ form_row(form.message) }}
                             </div>
-                            <div class="mb-3 col-12">
-                                {{ form_widget(form.recaptcha) }}
-                                {{ form_errors(form.recaptcha) }}
-                            </div>
+                            {% if '1' == settings['google_recaptcha_enabled'] %}
+                                <div class="mb-3 col-12">
+                                    {{ form_widget(form.recaptcha) }}
+                                    {{ form_errors(form.recaptcha) }}
+                                </div>
+                            {% endif %}
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">{{ 'Send'|trans }}</button>
                             </div>

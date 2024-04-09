@@ -79,22 +79,21 @@
                             {% include "global/post-share.html.twig" %}
                         </div>
                     </div>
-                    {#  
                     <hr class="mt-8 mb-5 ">
                     <div class="d-flex justify-content-between align-items-center mb-5">
                         <div>
                             <span class="ms-2">{{ 'Tags'|trans }}</span>
-                            {% if post.tags %}
+                            {# {% if post.tags %}
                                 {% for tag in post.tags|split(',') %}
                                     <a href="{{ path('post', { keyword: tag }) }}" class="btn btn-light btn-xs mb-2">
                                         {{ tag }}
                                     </a>
                                 {% endfor %}
                             {% endif %}
+                            #}
                         </div>
                         <div></div>
                     </div>
-                    #}
                     {% include "global/newsletter-box.html.twig" %}
                     {% set post_comments_enabled = setting.getSettings("post_comments_enabled") %}
                     {% if '0' != settings["post_comments_enabled"] %}
