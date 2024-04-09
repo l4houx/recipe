@@ -1,0 +1,39 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Blog'|trans %}
+{% block title pagetitle %}
+
+{% block content %}
+    <div class="py-8">
+        <div class="container">
+            <div class="row">
+                <div class="offset-xl-2 col-xl-8 offset-lg-1 col-lg-10 col-md-12 col-12">
+                    <div class="text-center mb-5">
+                        <h1 class="display-2 fw-bold">{{ pagetitle }}</h1>
+                        <p class="lead">{{ "%resultsCount% post(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
+                    </div>
+                    <form class="row px-md-8 mx-md-8 needs-validation" novalidate="">
+                        <div class="mb-3 col ps-0 ms-2 ms-md-0">
+                            <input type="search" name="keyword" class="form-control relay-email-input-with-button-hovered" placeholder="{{ "Search posts"|trans }}" value="{{ app.request.get('keyword') }}">
+                        </div>
+                        <div class="mb-3 col-auto ps-0">
+                            <button class="btn btn-primary" type="submit">{{ 'Search'|trans }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="pb-8">
+        <div class="container">
+            <div class="row">
+                {% for post in rows %}
+                    {% include "global/posts-card.html.twig" with {post: post, thumbnailsize: [397, 397], showdate: 1} %}
+                {% endfor %}
+                <div class="col-xl-12 col-lg-12 col-md-12 col-12 my-4">
+                    {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

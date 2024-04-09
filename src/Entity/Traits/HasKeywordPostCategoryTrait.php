@@ -8,6 +8,7 @@ trait HasKeywordPostCategoryTrait
     use HasBackgroundColorTrait;
     use HasIsOnlineTrait;
     use HasGedmoTimestampTrait;
+    use HasDeletedAtTrait;
 
     public function __toString(): string
     {

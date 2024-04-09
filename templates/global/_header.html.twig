@@ -257,6 +257,9 @@
 					<a class="nav-link {% if routename == "blog" or routename == "blog_article" or routename == "blog_shared" %}active{% endif %}" href="{{ path('blog') }}">{{ 'Blog'|trans }}</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link {% if routename == "post" or routename == "post_article" %}active{% endif %}" href="{{ path('post') }}">{{ 'Blog'|trans }}</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link {% if routename == "help_center" %}active{% endif %}" href="{{ path('help_center') }}">
 						{{ 'Help Center'|trans }}
 					</a>

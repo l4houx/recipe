@@ -2,22 +2,24 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
-use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
-use App\Entity\Traits\HasIsOnlineTrait;
-use App\Entity\Traits\HasLimit;
-use App\Entity\Traits\HasViewsTrait;
-use App\Repository\PostRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Entity\Traits\HasTagTrait;
+use App\Repository\PostRepository;
+use App\Entity\Traits\HasViewsTrait;
+use App\Entity\Traits\HasContentTrait;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[Vich\Uploadable]
@@ -29,7 +31,9 @@ class Post
     use HasContentTrait;
     use HasIsOnlineTrait;
     use HasViewsTrait;
+    //use HasTagTrait;
     use HasGedmoTimestampTrait;
+    use HasDeletedAtTrait;
 
     public const POST_LIMIT = HasLimit::POST_LIMIT;
 

@@ -168,6 +168,11 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Google login', 'social_login_google_id', '', TextType::class);
         $settings[] = new Setting('Google enabled', 'social_login_google_enabled', 1, CheckboxType::class);
 
+        // Comment
+        $settings[] = new Setting('Post Comments enabled', 'post_comments_enabled', 0, CheckboxType::class);
+        $settings[] = new Setting('Post Comments Enabled Facebook', 'facebook_app_id', '', TextType::class);
+        $settings[] = new Setting('Post Comments Enabled Disqus', 'disqus_subdomain', '', TextType::class);
+
         foreach ($settings as $setting) {
             $manager->persist($setting);
         }

@@ -56,8 +56,24 @@
 										<i class="nav-icon bi bi-newspaper me-2"></i>
 										{{ 'Blog'|trans }}
 									</a>
-									<div id="blog-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_blog_index" or routename == "dashboard_admin_blog_new" or routename == "dashboard_admin_blog_edit" or routename == "dashboard_admin_blog_category_index" or routename == "dashboard_admin_blog_category_new" or routename == "dashboard_admin_blog_category_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
+									<div id="blog-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_post_index" or routename == "dashboard_admin_post_new" or routename == "dashboard_admin_post_edit" or routename == "dashboard_admin_post_category_index" or routename == "dashboard_admin_post_category_new" or routename == "dashboard_admin_post_category_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_post_index" or routename == "dashboard_admin_post_new" or routename == "dashboard_admin_post_edit" %}active{% endif %}" href="{{ path('dashboard_admin_post_index') }}">
+													{{ 'Articles'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_post_category_index" or routename == "dashboard_admin_post_category_new" or routename == "dashboard_admin_post_category_edit" %}active{% endif %}" href="{{ path('dashboard_admin_post_category_index') }}">
+													{{ 'Categories'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="">
+													{{ 'Comments'|trans }}
+												</a>
+											</li>
+											{#
 											<li class="nav-item">
 												<a class="nav-link {% if routename == "dashboard_admin_blog_index" or routename == "dashboard_admin_blog_new" or routename == "dashboard_admin_blog_edit" %}active{% endif %}" href="{{ path('dashboard_admin_blog_index') }}">
 													{{ 'Articles'|trans }}
@@ -68,7 +84,6 @@
 													{{ 'Categories'|trans }}
 												</a>
 											</li>
-											{#
 											<li class="nav-item">
 												<a class="nav-link" href="">
 													{{ 'Keyword'|trans }}
