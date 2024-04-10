@@ -3,7 +3,7 @@
 {% form_theme form '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %}
 
 {% set bodyClass = 'bg-white' %}
-{% set pagetitle = 'Share an article with a friend'|trans %}
+{% set pagetitle = 'There was an error publishing your comment'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -41,28 +41,7 @@
                     <div>
                         <div class="card border">
                             <div class="card-body p-5">
-                                <h2 class="mb-4 fw-semibold">{{ 'Submit a Request'|trans }}</h2>
-                                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
-                                    <div class="mb-3">
-                                        {{ form_row(form.sender_name) }}
-                                    </div>
-                                    <div class="mb-3">
-                                        {{ form_row(form.sender_email) }}
-                                    </div>
-                                    <div class="mb-3">
-                                        {{ form_row(form.receiver_email) }}
-                                    </div>
-                                    <div class="mb-3">
-                                        {{ form_row(form.sender_comments) }}
-                                    </div>
-                                    {% if '1' == settings['google_recaptcha_enabled'] %}
-                                        <div class="mb-3">
-                                            {{ form_widget(form.recaptcha) }}
-                                            {{ form_errors(form.recaptcha) }}
-                                        </div>
-                                    {% endif %}
-                                    <button class="btn btn-primary" type="submit">{{ 'Send'|trans }}</button>
-                                {{ form_end(form) }}
+                                {% include "post/post-comment-form.html.twig" %}
                             </div>
                         </div>
                     </div>

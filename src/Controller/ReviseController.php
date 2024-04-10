@@ -2,44 +2,43 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Entity\Revise;
 use App\Entity\Content;
-use App\Form\ReviseFormType;
-use App\Service\ReviseService;
+use App\Entity\Post;
+use App\Entity\Revise;
 use App\Entity\Traits\HasRoles;
-use App\Security\Voter\ReviseVoter;
+use App\Entity\User;
+use App\Form\ReviseFormType;
 use App\Repository\ReviseRepository;
+use App\Security\Voter\ReviseVoter;
+use App\Service\ReviseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @method User getUser()
  */
 class ReviseController extends BaseController
 {
-    #[Route(path: '/%website_dashboard_path%/account/my-revises', name: 'dashboard_account_revise_index')]
+    #[Route(path: '/%website_dashboard_path%/my-revises', name: 'dashboard_revise_index')]
     #[IsGranted(HasRoles::DEFAULT)]
-    public function index(
-        ReviseRepository $reviseRepository,
-        PaginatorInterface $paginator
-    ): Response {
+    public function index(ReviseRepository $reviseRepository, PaginatorInterface $paginator): Response
+    {
         $query = $reviseRepository->queryAllForUser($this->getUserOrThrow());
-        $revises = $paginator->paginate($query->getQuery());
+        $rows = $paginator->paginate($query->getQuery());
 
-        return $this->render('dashboard/shared/account/post/revises.html.twig', compact('revises'));
+        return $this->render('dashboard/shared/content/revises.html.twig', compact('rows'));
     }
 
     #[Route(path: '/revise/{id<\d+>}', name: 'revise', methods: ['GET', 'POST'])]
-    #[IsGranted(ReviseVoter::ADD, subject: 'content')]
-    public function show(Request $request, TranslatorInterface $translator, Content $content, ReviseService $reviseService): Response
+    #[IsGranted(ReviseVoter::ADD, subject: 'post')]
+    public function show(Request $request, TranslatorInterface $translator, Post $post, ReviseService $reviseService): Response
     {
-        $revise = $reviseService->reviseFor($this->getUser(), $content);
+        $revise = $reviseService->reviseFor($this->getUser(), $post);
 
         $form = $this->createForm(ReviseFormType::class, $revise)->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -49,7 +48,7 @@ class ReviseController extends BaseController
                 $reviseService->submitRevise($revise);
                 $this->addFlash(
                     'success',
-                    $translator->trans("Your modification has been saved, you can revert your changes as long as they have not been validated")
+                    $translator->trans('Your modification has been saved, you can revert your changes as long as they have not been validated')
                 );
             }
         }

@@ -16,10 +16,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class NotificationsController extends BaseController
 {
     #[Route(path: '/notifications', name: 'notifications')]
-    public function index(NotificationService $service): Response
+    public function index(NotificationService $notificationService): Response
     {
-        $notifications = $service->forUser($this->getUser());
+        $rows = $notificationService->forUser($this->getUser());
 
-        return $this->render('notifications/index.html.twig', compact('notifications'));
+        return $this->render('notifications/index.html.twig', compact('rows'));
     }
 }

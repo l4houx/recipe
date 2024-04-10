@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\Content;
+use App\Entity\Post;
 use App\Entity\Revise;
 use App\Entity\User;
 use App\Event\Post\ReviseSubmittedEvent;
@@ -41,18 +41,18 @@ class ReviseService
     }
 
     /**
-     * Returns the current revise for the content/user or generates a new revise.
+     * Returns the current revise for the post/user or generates a new revise.
      */
-    public function reviseFor(User $user, Content $content): Revise
+    public function reviseFor(User $user, Post $post): Revise
     {
-        $revise = $this->reviseRepository->findFor($user, $content);
+        $revise = $this->reviseRepository->findFor($user, $post);
         if (null !== $revise) {
             return $revise;
         }
 
         return (new Revise())
-            ->setContent($content->getContent() ?: '')
-            ->setTarget($content)
+            ->setContent($post->getContent() ?: '')
+            ->setTarget($post)
             ->setAuthor($user)
         ;
     }

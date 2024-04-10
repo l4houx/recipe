@@ -3,25 +3,22 @@
 {% set pagetitle = 'My notifications'|trans %}
 {% block title pagetitle %}
 
-
-
 {% block content %}
-  <div class="page-header container">
-    <h1 class="h1">
-      Mes notifications
-    </h1>
-  </div>
-
-  <div class="container py5">
-      <div class="stack-separated">
-        {% for notification in notifications %}
-          <div>
-            <p>
-              <a class="formatted ignore-br" href="{{ notification.url }}">{{ notification.message | raw }}</a>
-            </p>
-            <div class="text-muted text-small">{{ notification.createdAt | ago }}</div>
-          </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">{{ pagetitle }}</h3>
+            <span></span>
+        </div>
+        {% for notification in rows %}
+            <div class="card-body">
+                <div class="mb-5">
+                    <h4 class="mb-0">{{ 'Notification'|trans }}</h4>
+                    <a href="{{ notification.url }}" class="text-danger mb-2 d-block">
+                        <u>{{ notification.message | raw }}</u>
+                    </a>
+                    <p>{{ notification.createdAt | ago }}</p>
+                </div>
+            </div>
         {% endfor %}
-      </div>
     </div>
 {% endblock %}

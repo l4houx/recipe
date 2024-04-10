@@ -27,7 +27,7 @@ class ResetPasswordController extends AbstractController
 
     public function __construct(
         private ResetPasswordHelperInterface $resetPasswordHelper,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $em
     ) {
     }
 
@@ -38,7 +38,7 @@ class ResetPasswordController extends AbstractController
     public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
         if ($this->getUser()) {
-            $this->addFlash('secondary', $translator->trans('Already logged in'));
+            $this->addFlash('danger', $translator->trans('Already logged in'));
 
             return $this->redirectToRoute('home');
         }
@@ -121,7 +121,7 @@ class ResetPasswordController extends AbstractController
             );
 
             $user->setPassword($encodedPassword);
-            $this->entityManager->flush();
+            $this->em->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -136,7 +136,7 @@ class ResetPasswordController extends AbstractController
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
     {
-        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+        $user = $this->em->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
 

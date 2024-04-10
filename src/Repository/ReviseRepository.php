@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Revise;
 use App\Entity\Content;
@@ -24,7 +25,7 @@ class ReviseRepository extends ServiceEntityRepository
         parent::__construct($registry, Revise::class);
     }
 
-    public function findFor(User $user, Content $content): ?Revise
+    public function findFor(User $user, Post $post): ?Revise
     {
         return $this->createQueryBuilder('r')
             ->where('r.author = :author')
@@ -32,7 +33,7 @@ class ReviseRepository extends ServiceEntityRepository
             ->andWhere('r.status != :status')
             ->setParameters([
                 'author' => $user,
-                'target' => $content,
+                'target' => $post,
                 'status' => Revise::ACCEPTED,
             ])
             ->getQuery()

@@ -38,7 +38,7 @@ class NotificationCommentsSubscriber implements EventSubscriberInterface
         $comment = $event->getComment();
 
         /** @var Post $post */
-        $post = $comment->getPost();
+        $post = $comment->getTarget();
 
         /** @var User $author */
         $author = $post->getAuthor();
@@ -46,7 +46,7 @@ class NotificationCommentsSubscriber implements EventSubscriberInterface
         /** @var string $emailAddress */
         $emailAddress = $author->getEmail();
 
-        $UrlToPost = $this->urlGenerator->generate('blog_article', [
+        $UrlToPost = $this->urlGenerator->generate('post_article', [
             'slug' => $post->getSlug(),
             '_fragment' => 'comment_'.$comment->getId(),
         ], UrlGeneratorInterface::ABSOLUTE_URL);

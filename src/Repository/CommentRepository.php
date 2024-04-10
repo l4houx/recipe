@@ -11,6 +11,9 @@ use Doctrine\ORM\QueryBuilder;
 use App\Entity\Traits\HasLimit;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -23,54 +26,46 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly PaginatorInterface $paginator
+    ) {
         parent::__construct($registry, Comment::class);
     }
 
-    public function findRecentComments($value) // (BlogController)
+    public function getIsActiveComments(): array // (PostCommentController)
     {
-        if ($value instanceof Post) {
-            $object = 'post';
-        }
-
-        if ($value instanceof Recipe) {
-            $object = 'recipe';
-        }
-
         return $this->createQueryBuilder('c')
-            ->andWhere('c.'.$object.' = :val')
             ->andWhere('c.isApproved = true')
-            ->setParameter('val', $value->getId())
-            ->orderBy('c.id', 'DESC')
+            ->orderBy('c.publishedAt', 'ASC')
+            ->join('c.target', 't')
+            ->leftJoin('c.author', 'a')
             ->getQuery()
             ->getResult()
         ;
     }
 
-    /**
-     * @return array<array-key, Comment>
-     */
-    public function getCommentsByEntityAndPage($value, int $page): array
+    public function findForPagination(int $page): PaginationInterface // (PostCommentController)
     {
-        if ($value instanceof Post) {
-            $object = 'post';
-        }
-
-        if ($value instanceof Recipe) {
-            $object = 'recipe';
-        }
-
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.'.$object.' = :val')
+        $builder = $this->createQueryBuilder('c')
             ->andWhere('c.isApproved = true')
-            ->setParameter('val', $value->getId())
-            ->orderBy('c.id', 'DESC')
-            ->setMaxResults(HasLimit::COMMENT_LIMIT)
-            ->setFirstResult(($page - 1) * HasLimit::COMMENT_LIMIT)
-            ->getQuery()
-            ->getResult()
+            ->orderBy('c.publishedAt', 'DESC')
+            ->join('c.target', 't')
+            ->leftJoin('c.author', 'a')
         ;
+
+        return $this->paginator->paginate(
+            $builder->getQuery()->setHint(
+                Query::HINT_CUSTOM_OUTPUT_WALKER,
+                TranslationWalker::class
+            ),
+            $page,
+            HasLimit::COMMENT_LIMIT,
+            [
+                'distinct' => false,
+                'sortFieldAllowList' => ['c.id'],
+            ]
+        );
     }
 
     /**
@@ -93,17 +88,10 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
 
-    public static function createIsActiveCriteria(): Criteria
-    {
-        return Criteria::create()
-            ->andWhere(Criteria::expr()->eq('isApproved', true))
-            ->orderBy(['publishedAt' => 'ASC']);
-    }
-
     public function queryLatest(int $maxResults): Query
     {
         return $this->createQueryBuilder('c')
-            ->orderBy('c.createdAt', 'DESC')
+            ->orderBy('c.publishedAt', 'DESC')
             ->join('c.target', 't')
             ->leftJoin('c.author', 'a')
             ->addSelect('t', 'a')

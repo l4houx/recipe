@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Repository\KeywordRepository;
-use App\Repository\PostCategoryRepository;
-use App\Repository\PostRepository;
+use App\Repository\CommentRepository;
 use App\Service\SettingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -21,6 +19,7 @@ class PostController extends AbstractController
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
+        private readonly CommentRepository $commentRepository,
         private readonly SettingService $settingService
     ) {
     }
@@ -35,7 +34,7 @@ class PostController extends AbstractController
     }
 
     #[Route(path: '/post-article/{slug}', name: 'post_article', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
-    public function postArticle(string $slug): Response
+    public function postArticle(Request $request, string $slug): Response
     {
         /** @var Post $post */
         $post = $this->settingService->getBlogPosts(['slug' => $slug])->getQuery()->getOneOrNullResult();
@@ -45,35 +44,14 @@ class PostController extends AbstractController
             return $this->redirectToRoute('post', [], Response::HTTP_SEE_OTHER);
         }
 
+        $page = $request->query->getInt('page', 1);
+        $comments = $this->commentRepository->findForPagination($page);
+
         $post->viewed();
 
         $this->em->persist($post);
         $this->em->flush();
 
-        return $this->render('post/post-article.html.twig', compact('post'));
-    }
-
-    #[Route('/featured-content', name: 'post_featured_content', methods: ['GET'], priority: 10)]
-    public function featuredContent(
-        PostRepository $postRepository,
-        PostCategoryRepository $postCategoryRepository,
-        KeywordRepository $keywordRepository,
-        int $maxResults = 4
-    ): Response {
-        // Total
-        $totalPosts = $postRepository->count([]);
-        // Post
-        $latestPosts = $postRepository->findBy(['isOnline' => true], ['createdAt' => 'DESC'], $maxResults);
-        // Comment
-        $mostCommentedPosts = $postRepository->findMostCommented($maxResults);
-        // Category
-        $postCategories = $postCategoryRepository->findBy([], ['createdAt' => 'DESC'], $maxResults);
-        // Keyword
-        $postKeywords = $keywordRepository->findBy([], ['createdAt' => 'DESC'], $maxResults);
-
-        return $this->render(
-            'widget/_featured_content.html.twig',
-            compact('totalPosts', 'latestPosts', 'mostCommentedPosts', 'postCategories', 'postKeywords')
-        )->setSharedMaxAge(50);
+        return $this->render('post/post-article.html.twig', compact('comments', 'post'));
     }
 }

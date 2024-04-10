@@ -61,45 +61,42 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
 
         // Create 20 Posts
         $posts = [];
-        /*foreach ($categories as $category) {*/
-            for ($i = 0; $i <= 20; ++$i) {
-                $post = new Post();
-                $post
-                    ->setTitle($this->faker()->unique()->sentence())
-                    ->setSlug($this->slugger->slug($post->getTitle())->lower())
-                    ->setContent($this->faker()->paragraphs(10, true))
-                    ->setReadtime(rand(10, 160))
-                    ->setViews(rand(10, 160))
-                    ->setAuthor($author)
-                    ->setIsOnline($this->faker()->numberBetween(0, 1))
-                    //->setCategory($category)
-                    ->setTags($this->faker()->unique()->word())
+        for ($i = 0; $i <= 20; ++$i) {
+            $post = new Post();
+            $post
+                ->setTitle($this->faker()->unique()->sentence())
+                ->setSlug($this->slugger->slug($post->getTitle())->lower())
+                ->setContent($this->faker()->paragraphs(10, true))
+                ->setReadtime(rand(10, 160))
+                ->setViews(rand(10, 160))
+                ->setAuthor($author)
+                ->setIsOnline($this->faker()->numberBetween(0, 1))
+                ->setTags($this->faker()->unique()->word())
+            ;
+
+            $category = $this->getReference('category-' . $this->faker()->numberBetween(1, 8));
+            $post->setCategory($category);
+
+            $manager->persist($post);
+            $posts[] = $post;
+
+            // Create Comments
+            for ($k = 1; $k <= $this->faker()->numberBetween(1, 5); ++$k) {
+                $comment = (new Comment())
+                    ->setIp($this->faker()->ipv4)
+                    //->setUsername()
+                    ->setContent($this->faker()->paragraph())
+                    ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                    ->setTarget($post)
+                    //->setParent()
+                    ->setIsApproved($this->faker()->numberBetween(0, 1))
+                    ->setIsRGPD(true)
+                    ->setPublishedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
                 ;
 
-                $category = $this->getReference('category-' . $this->faker()->numberBetween(1, 8));
-                $post->setCategory($category);
-
-                $manager->persist($post);
-                $posts[] = $post;
-
-                // Create Comments
-                for ($k = 1; $k <= $this->faker()->numberBetween(1, 5); ++$k) {
-                    $comment = new Comment();
-                    $comment
-                        ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
-                        ->setContent($this->faker()->paragraph())
-                        ->setIsApproved($this->faker()->numberBetween(0, 1))
-                        //->setIsReply()
-                        ->setIsRGPD(true)
-                        ->setIp($this->faker()->ipv4)
-                        ->setPost($post)
-                        ->setPublishedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-                    ;
-
-                    $manager->persist($comment);
-                }
+                $manager->persist($comment);
             }
-        /*}*/
+        }
 
         $manager->flush();
     }

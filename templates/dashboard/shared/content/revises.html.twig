@@ -5,7 +5,7 @@
 
 {% block content %}
     <div class="card mb-4">
-        {% if revises is empty %}
+        {% if rows is empty %}
             <div class="card-header">
                 {% include "global/message.html.twig" with { type: "dark", message: ("You haven't proposed any changes ye"|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
             </div>
@@ -30,7 +30,7 @@
                     </div>
                 </form>
             </div>
-            {% include 'global/revise-card.html.twig' %}
+            {% include "dashboard/shared/content/manage-revises-table.html.twig" with {rows: rows} %}
         {% endif %}
     </div>
 {% endblock %}

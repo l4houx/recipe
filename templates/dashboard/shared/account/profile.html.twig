@@ -126,11 +126,11 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h3 class="mb-0">{{ 'My suggested changes'|trans }}</h3>
-                    <a href="{{ path('dashboard_account_revise_index') }}" class="text-inherit">
+                    <a href="{{ path('dashboard_revise_index') }}" class="text-inherit">
                         {{ 'View all my suggestions'|trans }}
                     </a>
                 </div>
-                {% include 'global/revise-card.html.twig' with {header: false} %}
+                {% include "dashboard/shared/content/manage-revises-table.html.twig" with {rows: revises, header: false} %}
             </div>
         {% endif %}
     {% else %}

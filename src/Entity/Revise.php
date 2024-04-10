@@ -31,13 +31,13 @@ class Revise
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $author;
 
-    #[ORM\ManyToOne(targetEntity: Content::class)]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private Content $target;
+    private Post $target;
 
     public function getStatus(): int
     {
@@ -87,12 +87,12 @@ class Revise
         return $this;
     }
 
-    public function getTarget(): Content
+    public function getTarget(): Post
     {
         return $this->target;
     }
 
-    public function setTarget(Content $target): static
+    public function setTarget(Post $target): static
     {
         $this->target = $target;
 

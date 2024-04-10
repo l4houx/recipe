@@ -62,7 +62,8 @@
                 <div class="col-xl-8 col-lg-8 col-md-12 col-12 mb-2">
                     <div>
                         <div class="mb-4">
-                            <p>{{ post.content | raw | nl2br }}</p>
+                            <p class="lead text-dark">{{ post.content | html_markdown_excerpt(160) }}</p>
+                            <p>{{ post.content | html_markdown | nl2br }}</p>
                         </div>
                     </div>
                     <hr class="mt-8 mb-5 ">
@@ -91,23 +92,50 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-                        <div></div>
+                        <div>
+                            <div>
+                                <span class="ms-2">{{ 'Suggest a correction'|trans }}</span>
+                                <a href="{{ path('revise', {id: post.id}) }}" class="fs-5 fw-semibold mb-4 text-primary">
+                                    {{ 'Send'|trans }}
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    {% include "global/newsletter-box.html.twig" %}
                     {% set post_comments_enabled = setting.getSettings("post_comments_enabled") %}
                     {% if '0' != settings["post_comments_enabled"] %}
-                        <div class="my-8">
-                            <div class="card bg-light shadow-none">
-                                <div class="card-body p-md-8">
-                                    {% if 'native' == settings["post_comments_enabled"] %}
-                                        Form Comments Native
-                                    {% elseif 'native' == settings["post_comments_enabled"] and 'native' == settings["facebook_app_id"] %}
-                                        Form Comments Facebook
-                                    {% elseif 'disqus' == settings["post_comments_enabled"] and 'native' == settings["disqus_subdomain"] %}
-                                        Form Comments Disqus
-                                    {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            <div class="mb-5">
+                                <div class="card border">
+                                    <div class="card-body p-5">
+                                        {{ render(controller('App\\Controller\\PostCommentController::form', {'id': post.id})) }}
+                                    </div>
                                 </div>
                             </div>
+                        {% else %}
+                            <div class="d-flex justify-content-between align-items-center mb-5">
+                                <div>
+                                    <span class="ms-2">{{ 'To publish a comment'|trans }}</span>
+                                    <a href="{{ path('login', {'redirect_to': app.request.pathInfo}) }}" class="fs-5 fw-semibold mb-4 text-primary">{{ 'Sign in'|trans }}</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="mb-3">
+                            <div class="d-lg-flex align-items-center justify-content-between mb-5">
+                                <div class="mb-3 mb-lg-0">
+                                    <h3 class="mb-0">
+                                        {{ comments.getTotalItemCount }} {{ comments.getTotalItemCount > 1 ? "comments"|trans : "comment"|trans }}
+                                    </h3>
+                                </div>
+                                <div></div>
+                            </div>
+                            {% if comments.getTotalItemCount > 0 %}
+                                {% for comment in comments %}
+                                    {% include 'post/_post-comment.html.twig' %}
+                                {% endfor %}
+                                {{ knp_pagination_render(comments, null, {}, {'align': 'center'}) }}
+                            {% else %}
+                                {% include "global/message.html.twig" with { type: "dark", message: ('Be the first to comment on this article.'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>

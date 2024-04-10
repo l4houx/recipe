@@ -12,7 +12,7 @@
 			</thead>
 		{% endif %}
 		<tbody>
-			{% for revise in revises %}
+			{% for revise in rows %}
 				<tr>
 					<td>
 						{% if revise.status == 1 %}
@@ -69,11 +69,11 @@
 					</td>
 					<td>
 						{% if revise.status == -1 %}
-							<span class="badge bg-danger">{{ 'Rejected'|trans }}</span>
+							<span class="badge bg-danger-soft">{{ 'Rejected'|trans }}</span>
 						{% elseif revise.status == 0%}
-							<span class="badge bg-danger">{{ 'Pending'|trans }}</span>
+							<span class="badge bg-danger-soft">{{ 'Pending'|trans }}</span>
 						{% else %}
-							<span class="badge bg-success">{{ 'Accepted'|trans }}</span>
+							<span class="badge bg-success-soft">{{ 'Accepted'|trans }}</span>
 						{% endif %}
 					</td>
 					<td>
@@ -94,7 +94,7 @@
 										<i class="bi bi-pencil dropdown-item-icon"></i>
 										{{ 'Edit'|trans }}
 									</a>
-									{{ include('dashboard/shared/account/post/_delete_form.html.twig', {revise: revise}) }}
+									{{ include('dashboard/shared/content/_delete_form.html.twig', {revise: revise}) }}
 								</span>
 							</span>
 						{% endif %}
@@ -103,7 +103,7 @@
 			{% endfor %}
 		</tbody>
 	</table>
-</div>
-<div class="card-footer">
-    {{ knp_pagination_render(revises, null, {}, {'align': 'center'}) }}
+    <div class="card-footer">
+        {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+    </div>
 </div>

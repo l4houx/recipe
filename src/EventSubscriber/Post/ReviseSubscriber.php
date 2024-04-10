@@ -3,10 +3,10 @@
 namespace App\EventSubscriber\Post;
 
 use App\Entity\Revise;
-use App\Event\Post\ReviseRefusedEvent;
+use App\Event\Post\PostUpdatedEvent;
 use App\Event\Post\ReviseAcceptedEvent;
+use App\Event\Post\ReviseRefusedEvent;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Event\Content\ContentUpdatedEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -40,14 +40,14 @@ class ReviseSubscriber implements EventSubscriberInterface
 
     public function onReviseAccepted(ReviseAcceptedEvent $event): void
     {
-        $content = $event->getRevise()->getTarget();
-        $previous = clone $content;
+        $post = $event->getRevise()->getTarget();
+        $previous = clone $post;
 
-        $content->setContent($event->getRevise()->getContent());
+        $post->setContent($event->getRevise()->getContent());
         $event->getRevise()->setStatus(Revise::ACCEPTED);
         $event->getRevise()->setContent('');
 
         $this->em->flush();
-        $this->dispatcher->dispatch(new ContentUpdatedEvent($content, $previous));
+        $this->dispatcher->dispatch(new PostUpdatedEvent($post, $previous));
     }
 }

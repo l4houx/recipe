@@ -20,7 +20,7 @@ final class HasLimit
 
     public const POSTCATEGORY_LIMIT = 10;
 
-    public const COMMENT_LIMIT = 10;
+    public const COMMENT_LIMIT = 4;
 
     public const CONTACT_LIMIT = 10;
 

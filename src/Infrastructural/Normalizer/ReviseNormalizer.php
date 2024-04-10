@@ -12,7 +12,7 @@ class ReviseNormalizer extends Normalizer
     {
         if ($object instanceof Revise) {
             return [
-                'path' => 'dashboard_account_revise_index',
+                'path' => 'dashboard_revise_index',
             ];
         }
 

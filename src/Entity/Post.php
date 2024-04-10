@@ -2,24 +2,25 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasDeletedAtTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
-use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
-use App\Entity\Traits\HasIsOnlineTrait;
-use App\Entity\Traits\HasLimit;
-use App\Entity\Traits\HasTagTrait;
-use App\Entity\Traits\HasViewsTrait;
-use App\Repository\PostRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\HasLimit;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Entity\Traits\HasTagTrait;
+use App\Repository\PostRepository;
+use App\Entity\Traits\HasViewsTrait;
+use App\Repository\CommentRepository;
+use App\Entity\Traits\HasContentTrait;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasGedmoTimestampTrait;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Entity\Traits\HasIdGedmoTitleSlugAssertTrait;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[Vich\Uploadable]
@@ -61,21 +62,25 @@ class Post
     private ?PostCategory $category = null;
 
     /**
-     * @var collection<int, Comment>
+     * //@var collection<int, Comment>
      */
+    /*
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true, cascade: ['persist'])]
     #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $comments;
+    */
 
     public function __toString(): string
     {
         return sprintf('#%d %s', $this->getId(), $this->getTitle());
     }
 
+    /*
     public function __construct()
     {
         $this->comments = new ArrayCollection();
     }
+    */
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -163,8 +168,9 @@ class Post
     }
 
     /**
-     * @return Collection<int, Comment>
+     * //@return Collection<int, Comment>
      */
+    /*
     public function getComments(): Collection
     {
         return $this->comments;
@@ -174,7 +180,7 @@ class Post
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setPost($this);
+            $comment->setTarget($this);
         }
 
         return $this;
@@ -184,13 +190,19 @@ class Post
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getPost() === $this) {
-                $comment->setPost(null);
+            if ($comment->getTarget() === $this) {
+                $comment->setTarget(null);
             }
         }
 
         return $this;
     }
+
+    public function getActiveComments(): Collection
+    {
+        return $this->getComments()->matching(CommentRepository::createIsActiveCriteria());
+    }
+    */
 
     public function hasVideo(): bool
     {

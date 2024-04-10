@@ -5,15 +5,15 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
-use App\Event\Post\CommentCreatedEvent;
 use App\Form\CommentFormType;
 use App\Repository\CommentRepository;
 use App\Service\CommentService;
+use App\Service\PostCommentService;
+use App\Service\SettingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,23 +29,20 @@ class PostCommentController extends AbstractController
     public function postcommentAdd(
         Request $request,
         // #[CurrentUser] User $user,
-        // #[MapEntity(mapping: ['slug' => 'slug'])] Post $post,
-        Post $post,
-        CommentService $commentService,
-        CommentRepository $repository,
+        #[MapEntity(mapping: ['slug' => 'slug'])] Post $post,
+        //Post $post,
+        PostCommentService $postCommentService,
+        CommentRepository $commentRepository,
         EntityManagerInterface $em,
-        EventDispatcherInterface $eventDispatcher,
         TranslatorInterface $translator
     ): Response {
-        $comments = $repository->findRecentComments($post);
         $comment = new Comment();
 
         $form = $this->createForm(CommentFormType::class, $comment)->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $comment = $form->getData();
-            $commentService->createdComment($comment, $post, null);
-
-            $eventDispatcher->dispatch(new CommentCreatedEvent($comment));
+            $postCommentService->createdComment($comment);
 
             // $this->addFlash('success', $translator->trans('Your comment has been sent, thank you. It will be published after validation by a moderator.'));
 
@@ -59,7 +56,7 @@ class PostCommentController extends AbstractController
     {
         $form = $this->createForm(CommentFormType::class);
 
-        return $this->render('post/post-comment-form.html.twig', compact('post', 'form'));
+        return $this->render('post/post-comment-form.html.twig', compact('post', 'form' ));
     }
 
     #[Route(path: '/post-comment/comment/{id<[0-9]+>}', name: 'post_comment_delete', methods: ['POST'])]
@@ -70,7 +67,7 @@ class PostCommentController extends AbstractController
         Comment $comment,
         TranslatorInterface $translator
     ): Response {
-        $params = ['slug' => $comment->getPost()->getSlug()];
+        $params = ['slug' => $comment->getTarget()->getSlug()];
 
         if ($this->isCsrfTokenValid('comment_deletion_'.$comment->getId(), $request->request->get('csrf_token'))) {
             $commentService->deletedComment($comment);

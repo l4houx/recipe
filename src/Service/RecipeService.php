@@ -21,8 +21,8 @@ class RecipeService
      */
     public function createRecipe(Recipe $recipe): void
     {
-        $recipe->setCreatedAt(new \DateTimeImmutable());
-        $recipe->setUpdatedAt(new \DateTimeImmutable());
+        $recipe->setCreatedAt(new \DateTime());
+        $recipe->setUpdatedAt(new \DateTime());
 
         $this->dispatcher->dispatch(new PreRecipeCreatedEvent($recipe));
 
@@ -37,7 +37,7 @@ class RecipeService
      */
     public function updateRecipe(Recipe $recipe): void
     {
-        $recipe->setUpdatedAt(new \DateTimeImmutable());
+        $recipe->setUpdatedAt(new \DateTime());
 
         $this->em->flush();
     }

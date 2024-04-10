@@ -12,7 +12,7 @@ class PostNormalizer extends Normalizer
     {
         if ($object instanceof Post) {
             return [
-                'path' => 'blog_article',
+                'path' => 'post_article',
                 'params' => ['slug' => $object->getSlug()],
             ];
         }

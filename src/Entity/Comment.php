@@ -28,26 +28,33 @@ class Comment
 
     public const COMMENT_LIMIT = HasLimit::COMMENT_LIMIT;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private \DateTimeImmutable $publishedAt;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $email = null;
 
-    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
-    #[Assert\NotNull]
-    private bool $isReply = false;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    private ?string $username = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    //#[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE', nullable: true)]
     private ?User $author = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
-    // #[ORM\JoinColumn(nullable: false)]
-    private ?Post $post = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false, name: 'post_id')]
+    private Post $target;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]
-    private ?self $comment = null;
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'replies')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    private ?self $parent = null;
 
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'comment')]
-    private Collection $comments;
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    private Collection $replies;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private \DateTimeImmutable $publishedAt;
 
     #[Assert\IsTrue(message: 'The content of this comment is considered spam.')]
     public function isLegitComment(): bool
@@ -65,34 +72,31 @@ class Comment
     public function __construct()
     {
         $this->publishedAt = new \DateTimeImmutable();
-        $this->comments = new ArrayCollection();
+        $this->replies = new ArrayCollection();
     }
 
-    public function getPublishedAt(): \DateTimeImmutable
+    public function getEmail(): ?string
     {
-        return $this->publishedAt;
+        return $this->email;
     }
 
-    public function setPublishedAt(\DateTimeImmutable $publishedAt): static
+    public function setEmail(?string $email): void
     {
-        $this->publishedAt = $publishedAt;
-
-        return $this;
+        $this->email = $email;
     }
 
-    public function isReply(): bool
+    public function getUsername(): string
     {
-        return $this->isReply;
+        if (null !== $this->author) {
+            return $this->author->getUsername();
+        }
+
+        return $this->username ?: '';
     }
 
-    public function getIsReply(): bool
+    public function setUsername(?string $username): static
     {
-        return $this->isReply;
-    }
-
-    public function setIsReply(bool $isReply): static
-    {
-        $this->isReply = $isReply;
+        $this->username = $username;
 
         return $this;
     }
@@ -109,26 +113,26 @@ class Comment
         return $this;
     }
 
-    public function getPost(): ?Post
+    public function getTarget(): ?Post
     {
-        return $this->post;
+        return $this->target;
     }
 
-    public function setPost(?Post $post): static
+    public function setTarget(?Post $target): static
     {
-        $this->post = $post;
+        $this->target = $target;
 
         return $this;
     }
 
-    public function getComment(): ?self
+    public function getParent(): ?self
     {
-        return $this->comment;
+        return $this->parent;
     }
 
-    public function setComment(?self $comment): static
+    public function setParent(?self $parent): static
     {
-        $this->comment = $comment;
+        $this->parent = $parent;
 
         return $this;
     }
@@ -136,29 +140,29 @@ class Comment
     /**
      * @return Collection<int, self>
      */
-    public function getComments(): Collection
+    public function getReplies(): Collection
     {
-        return $this->comments;
+        return $this->replies;
     }
 
-    public function addComment(self $comment): static
+    public function addReply(self $comment): static
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setComment($this);
+        if (!$this->replies->contains($comment)) {
+            $this->replies->add($comment);
+            $comment->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeComment(self $comment): static
+    public function getPublishedAt(): \DateTimeImmutable
     {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getComment() === $this) {
-                $comment->setComment(null);
-            }
-        }
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(\DateTimeImmutable $publishedAt): static
+    {
+        $this->publishedAt = $publishedAt;
 
         return $this;
     }
