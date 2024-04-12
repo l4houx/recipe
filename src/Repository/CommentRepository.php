@@ -9,6 +9,7 @@ use App\Entity\Comment;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use App\Entity\Traits\HasLimit;
+use App\Service\SettingService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
@@ -28,6 +29,7 @@ class CommentRepository extends ServiceEntityRepository
 {
     public function __construct(
         ManagerRegistry $registry,
+        private readonly SettingService $settingService,
         private readonly PaginatorInterface $paginator
     ) {
         parent::__construct($registry, Comment::class);
@@ -60,7 +62,7 @@ class CommentRepository extends ServiceEntityRepository
                 TranslationWalker::class
             ),
             $page,
-            HasLimit::COMMENT_LIMIT,
+            $this->settingService->getSettings('comments_per_page'),
             [
                 'distinct' => false,
                 'sortFieldAllowList' => ['c.id'],

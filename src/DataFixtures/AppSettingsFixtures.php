@@ -25,11 +25,21 @@ class AppSettingsFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        // Meta
-        $settings[] = new Setting('Description fr', 'website_description_fr', 'Achat et vente en ligne parmi des millions de produits en stock. Livraison gratuite à partir de 25€. Vos articles à petits prix : culture, high-tech, mode, jouets, sport, maison et bien plus !', TextareaType::class);
-        $settings[] = new Setting('Keywords fr', 'website_keywords_fr', $this->params->get('website_name').', livres, achats en ligne, librairie, magazine, abonnement, musique, Cds, DVD, vidéo, électronique, jeux vidéo, ordinateurs, téléphones portables, jouets, jeux, vêtements, accessoires, chaussures, bijoux, montres, produits de bureau, sports en plein air, articles de sport, produits pour bébés, santé, soins personnels, maison, jardin, lit et de bain, meubles, outils, matériel, aspirateurs, vie en plein air, pièces pour véhicules automobiles, fournitures pour animaux de compagnie, à large bande, dsl', TextareaType::class);
-        $settings[] = new Setting('Description en', 'website_description_en', 'Buy and sell online from millions of products in stock. Free delivery from 25€. Your articles at low prices: culture, high-tech, fashion, toys, sport, home and much more!', TextareaType::class);
-        $settings[] = new Setting('Keywords en', 'website_keywords_en', $this->params->get('website_name').', books, online shopping, bookstore, magazine, subscription, music, Cds, DVD, video, electronics, video games, computers, cell phones, toys, games, clothing, accessories, shoes, jewelry, watches, office products, sports outdoors, sporting goods, baby products, health, personal care, home, garden, bed and bath, furniture, tools, equipment, vacuum cleaners, outdoor living, automotive parts, pet supplies, to broadband, dsl', TextareaType::class);
+        // Meta FR
+        $settings[] = new Setting('Description fr', 'website_description_fr', "Gestion des recettes et vente d'abonnements", TextareaType::class);
+        $settings[] = new Setting('Keywords fr', 'website_keywords_fr', $this->params->get('website_name').', restaurant ma recette, abonnements en ligne, acheter des abonnements', TextareaType::class);
+
+        // Meta EN
+        $settings[] = new Setting('Description en', 'website_description_en', 'Recipe Management And Subscription Sales', TextareaType::class);
+        $settings[] = new Setting('Keywords en', 'website_keywords_en', $this->params->get('website_name').', restaurant my recipe, subscriptions online, buy subscriptions', TextareaType::class);
+
+        // Meta DE
+        $settings[] = new Setting('Description de', 'website_description_de', "Revenue Management und Abonnementverkauf", TextareaType::class);
+        $settings[] = new Setting('Keywords de', 'website_keywords_de', $this->params->get('website_name').', Restaurant mein Rezept, Online-Abonnements, Abonnements kaufen', TextareaType::class);
+
+        // Meta ES
+        $settings[] = new Setting('Description es', 'website_description_es', "Gestión de ingresos y venta de suscripciones", TextareaType::class);
+        $settings[] = new Setting('Keywords es', 'website_keywords_es', $this->params->get('website_name').', restaurante mi receta, suscripciones online, comprar suscripciones', TextareaType::class);
 
         // URLS and Name
         $settings[] = new Setting('Dashboard Path', 'website_dashboard_path', $this->params->get('website_dashboard_path'), TextType::class);
@@ -68,27 +78,30 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Copyright', 'website_copyright', '© 2020 '.$this->params->get('website_name').', Inc. All rights reserved.', TextType::class);
         $settings[] = new Setting('Everyone can sign up', 'users_can_register', true, CheckboxType::class);
         $settings[] = new Setting('About Footer', 'website_about', 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore est repellendus adipisci voluptates, earum excepturi ut iusto quas alias, voluptatibus modi autem libero, ea delectus ex soluta quaerat aperiam atque!', TextareaType::class);
-        // $settings[] = new Setting('Primary color', 'primary_color', '#9a6ee2', TextType::class);
-        $settings[] = new Setting('Back to top', 'show_back_to_top_button', true, CheckboxType::class);
+        $settings[] = new Setting('Primary color', 'primary_color', '#9a6ee2', TextType::class);
+        $settings[] = new Setting('Back to top', 'show_back_to_top_button', 1, CheckboxType::class);
         $settings[] = new Setting('Custom CSS', 'custom_css', '', TextareaType::class);
-        $settings[] = new Setting('Google Analytics', 'google_analytics_code', '', TextareaType::class);
         $settings[] = new Setting('App Env', 'app_environment', 'dev', TextType::class);
-        // $settings[] = new Setting('App Theme', 'app_theme', 'violet', TextType::class);
-        // $settings[] = new Setting('App Layout', 'app_layout', 'container', TextType::class);
+        $settings[] = new Setting('App Theme', 'app_theme', 'dark', TextType::class);
+        $settings[] = new Setting('App Layout', 'app_layout', 'container', TextType::class);
         $settings[] = new Setting('Maintenance mode', 'maintenance_mode', $this->params->get('maintenance_mode'), CheckboxType::class);
         $settings[] = new Setting('Custom maintenance mode message', 'maintenance_mode_custom_message', '', TextareaType::class);
+        $settings[] = new Setting('Img Loader', 'img_loader', 'images/placeholders/img-404.jpg', TextareaType::class);
 
         // Limit
-        $settings[] = new Setting('Limit of posts search per page', 'website_posts_search_limit', 10, NumberType::class);
-        $settings[] = new Setting('Limit of recipes per page', 'website_recipes_limit', 5, NumberType::class);
-        $settings[] = new Setting('Limit of posts per page', 'website_posts_limit', 9, NumberType::class);
-        $settings[] = new Setting('Limit of comments per page', 'website_comments_limit', 4, NumberType::class);
+        $settings[] = new Setting('Limit Of Posts Search Per Page', 'website_posts_search_limit', 10, NumberType::class);
+
+        // Limit Per Page
+        $settings[] = new Setting('Limit Of Recipes Per Page', 'recipes_per_page', 9, NumberType::class);
+        $settings[] = new Setting('Limit Of Posts Per Page', 'posts_per_page', 9, NumberType::class);
+        $settings[] = new Setting('Limit Of Comments Per Page', 'comments_per_page', 4, NumberType::class);
+        $settings[] = new Setting('Limit Of Reviews Per Page', 'reviews_per_page', 10, NumberType::class);
 
         // Number
-        $settings[] = new Setting('Number of posts on the homepage', 'homepage_posts_number', 3, NumberType::class);
-        $settings[] = new Setting('Number of testimonials on the homepage', 'homepage_testimonials_number', 2, NumberType::class);
-        $settings[] = new Setting('Number of categories on the homepage', 'homepage_categories_number', 8, NumberType::class);
-        $settings[] = new Setting('Number of recipes on the homepage', 'homepage_recipes_number', 12, NumberType::class);
+        $settings[] = new Setting('Number Of Posts On The homepage', 'homepage_posts_number', 3, NumberType::class);
+        $settings[] = new Setting('Number Of Testimonials On The homepage', 'homepage_testimonials_number', 2, NumberType::class);
+        $settings[] = new Setting('Number Of Categories On The homepage', 'homepage_categories_number', 8, NumberType::class);
+        $settings[] = new Setting('Number Of Recipes On The homepage', 'homepage_recipes_number', 12, NumberType::class);
 
         // Pages Show Action
         $settings[] = new Setting('Show Search Box On Home page', 'homepage_show_search_box', 0, CheckboxType::class);
@@ -106,6 +119,30 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Show Affiliates page', 'show_affiliates_page', true, CheckboxType::class);
         $settings[] = new Setting('Show Feedbacks page', 'show_feedbacks_page', true, CheckboxType::class);
         $settings[] = new Setting('Show Supports page', 'show_supports_page', true, CheckboxType::class);
+
+        // Filter
+        $settings[] = new Setting('Filter Category', 'show_category_filter', 1, CheckboxType::class);
+        $settings[] = new Setting('Filter Location', 'show_location_filter', 1, CheckboxType::class);
+        $settings[] = new Setting('Filter Date', 'show_date_filter', 1, CheckboxType::class);
+        $settings[] = new Setting('Filter Subscription', 'show_subscription_price_filter', 1, CheckboxType::class);
+        $settings[] = new Setting('Filter Audience', 'show_audience_filter', 1, CheckboxType::class);
+
+        // Button
+        $settings[] = new Setting('Show Map', 'show_map_button', 0, CheckboxType::class);
+        $settings[] = new Setting('Show Calendar', 'show_calendar_button', 1, CheckboxType::class);
+        $settings[] = new Setting('Show RSS Feed', 'show_rss_feed_button', 1, CheckboxType::class);
+
+        // Modal
+        $settings[] = new Setting('Show Cart Modal', 'show_subscriptions_left_on_cart_modal', 1, CheckboxType::class);
+
+        // Restaurant
+        $settings[] = new Setting('Payout Paypal', 'restaurant_payout_paypal_enabled', 1, CheckboxType::class);
+        $settings[] = new Setting('Payout Stripe', 'restaurant_payout_stripe_enabled', 1, CheckboxType::class);
+        $settings[] = new Setting('Subscription Fee Online', 'subscription_fee_online', '0.00', TextType::class);
+        $settings[] = new Setting('Subscription Fee Pos', 'subscription_fee_pos', '0.00', TextType::class);
+        $settings[] = new Setting('Pos Subscription Price', 'pos_subscription_price_percentage_cut', '0.00', TextType::class);
+        $settings[] = new Setting('Online Subscription Price', 'online_subscription_price_percentage_cut', '0.00', TextType::class);
+        $settings[] = new Setting('Checkout Timeleft', 'checkout_timeleft', '1800', TextType::class);
 
         // Pages Content
         $settings[] = new Setting('Cookie policy page content', 'cookie_policy_page_content', 'cookie_policy_page_content', TextareaType::class);
@@ -132,46 +169,51 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Supports Page Slug', 'support_page_slug', 'support', TextType::class);
 
         // Newsletter
-        $settings[] = new Setting('Show GDPR compliance page', 'mailchimp_api_key', '', TextType::class);
-        $settings[] = new Setting('Show GDPR compliance page', 'mailchimp_list_id', '', TextType::class);
-        $settings[] = new Setting('Newsletter enabled', 'newsletter_enabled', 1, CheckboxType::class);
+        $settings[] = new Setting('Mailchimp API Key', 'mailchimp_api_key', '', TextType::class);
+        $settings[] = new Setting('Mailchimp List ID', 'mailchimp_list_id', '', TextType::class);
+        $settings[] = new Setting('Newsletter Enabled', 'newsletter_enabled', 1, CheckboxType::class);
 
         // Currency
-        $settings[] = new Setting('Currency to currency', 'currency_ccy', 'USD', TextType::class);
-        $settings[] = new Setting('Currency symbol', 'currency_symbol', '$', TextType::class);
-        $settings[] = new Setting('Currency position', 'currency_position', 'right', TextType::class);
+        $settings[] = new Setting('Currency To Currency', 'currency_ccy', 'USD', TextType::class);
+        $settings[] = new Setting('Currency Symbol', 'currency_symbol', '$', TextType::class);
+        $settings[] = new Setting('Currency Position', 'currency_position', 'right', TextType::class);
 
         // Rss
-        $settings[] = new Setting('Name', 'feed_name', 'Recipe RSS feed', TextType::class);
-        $settings[] = new Setting('Description', 'feed_description', 'Latest recipes', TextareaType::class);
+        $settings[] = new Setting('Name', 'feed_name', 'Recipe RSS Feed', TextType::class);
+        $settings[] = new Setting('Description', 'feed_description', 'Latest Recipes', TextareaType::class);
         $settings[] = new Setting('Limit', 'feed_recipes_limit', 100, NumberType::class);
 
         // Mail
         $settings[] = new Setting('Mail Server Transport', 'mail_server_transport', '', TextType::class);
         $settings[] = new Setting('Mail Server Host', 'mail_server_host', '', TextType::class);
-        $settings[] = new Setting('Mail server port', 'mail_server_port', 'NULL', TextType::class);
-        $settings[] = new Setting('Mail server encryption', 'mail_server_encryption', 'NULL', TextType::class);
-        $settings[] = new Setting('Mail server authentication mode', 'mail_server_auth_mode', 'NULL', TextType::class);
-        $settings[] = new Setting('Mail server username', 'mail_server_username', '', TextType::class);
-        $settings[] = new Setting('Mail server password', 'mail_server_password', '', TextType::class);
+        $settings[] = new Setting('Mail Server Port', 'mail_server_port', 'NULL', TextType::class);
+        $settings[] = new Setting('Mail Server Encryption', 'mail_server_encryption', 'NULL', TextType::class);
+        $settings[] = new Setting('Mail Server Authentication mode', 'mail_server_auth_mode', 'NULL', TextType::class);
+        $settings[] = new Setting('Mail Server Username', 'mail_server_username', '', TextType::class);
+        $settings[] = new Setting('Mail Server Password', 'mail_server_password', '', TextType::class);
 
         // Google
-        $settings[] = new Setting('google recaptcha secret key', 'google_recaptcha_secret_key', '', TextType::class);
-        $settings[] = new Setting('google recaptcha site key', 'google_recaptcha_site_key', '', TextType::class);
-        $settings[] = new Setting('Google recaptcha enabled', 'google_recaptcha_enabled', 1, CheckboxType::class);
+        $settings[] = new Setting('Google Recaptcha Secret Key', 'google_recaptcha_secret_key', '', TextType::class);
+        $settings[] = new Setting('Google Recaptcha Site Key', 'google_recaptcha_site_key', '', TextType::class);
+        $settings[] = new Setting('Google Recaptcha Enabled', 'google_recaptcha_enabled', 0, CheckboxType::class);
+        $settings[] = new Setting('Google Map API Key', 'google_maps_api_key', '', TextType::class);
+        $settings[] = new Setting('Google Analytics', 'google_analytics_code', '', TextareaType::class);
 
-        // Social login
-        $settings[] = new Setting('Facebook secret key', 'social_login_facebook_secret', '', TextType::class);
-        $settings[] = new Setting('Facebook login', 'social_login_facebook_id', '', TextType::class);
-        $settings[] = new Setting('Facebook enabled', 'social_login_facebook_enabled', 1, CheckboxType::class);
-        $settings[] = new Setting('Google secret key', 'social_login_google_secret', '', TextType::class);
-        $settings[] = new Setting('Google login', 'social_login_google_id', '', TextType::class);
-        $settings[] = new Setting('Google enabled', 'social_login_google_enabled', 1, CheckboxType::class);
+        // Social login Google
+        $settings[] = new Setting('Google Secret Key', 'social_login_google_secret', '', TextType::class);
+        $settings[] = new Setting('Google Login', 'social_login_google_id', '', TextType::class);
+        $settings[] = new Setting('Google Enabled', 'social_login_google_enabled', 0, CheckboxType::class);
+
+        // Social login Facebook
+        $settings[] = new Setting('Facebook Secret Key', 'social_login_facebook_secret', '', TextType::class);
+        $settings[] = new Setting('Facebook Login', 'social_login_facebook_id', '', TextType::class);
+        $settings[] = new Setting('Facebook Enabled', 'social_login_facebook_enabled', 0, CheckboxType::class);
 
         // Comment
-        $settings[] = new Setting('Post Comments enabled', 'post_comments_enabled', 0, CheckboxType::class);
-        $settings[] = new Setting('Post Comments Enabled Facebook', 'facebook_app_id', '', TextType::class);
-        $settings[] = new Setting('Post Comments Enabled Disqus', 'disqus_subdomain', '', TextType::class);
+        $settings[] = new Setting('Venue Comments Enabled', 'venue_comments_enabled', 0, CheckboxType::class);
+        $settings[] = new Setting('Post Comments Enabledd', 'post_comments_enabled', 0, CheckboxType::class);
+        $settings[] = new Setting('Facebook Comments Enabled', 'facebook_app_id', '', TextType::class);
+        $settings[] = new Setting('Disqus Comments Enabled', 'disqus_subdomain', '', TextType::class);
 
         foreach ($settings as $setting) {
             $manager->persist($setting);

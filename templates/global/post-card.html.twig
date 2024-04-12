@@ -26,9 +26,9 @@
                     {% include "global/user-avatar.html.twig" with { user: post.author, type: "sm", class: "me-2" } %}
                 </div>
                 <div class="col lh-1">
-                    <h5 class="mb-1">{{ post.author.username }}</h5>
+                    <h5 class="mb-1">{{ 'Author'|trans }} {{ post.author.username }}</h5>
                     {% if showdate is defined %}
-                        <p class="fs-6 mb-0">{{ post.createdAt | ago() }}</p>
+                        <p class="fs-6 mb-0">{{ post.createdAt | format_date('long') }}</p>
                     {% endif %}
                 </div>
                 {% if post.readtime %}

@@ -1,25 +1,346 @@
 {% extends 'page.html.twig' %}
 
+{% set bodyClass = 'bg-white' %}
 {% set pagetitle = 'Reviews for %recipetitle%'|trans({'%recipetitle%': recipe.title}) %}
 {% block title pagetitle %}
 
 {% block pageheader %}
-    {% include "global/pageheader.html.twig" %}
+	<section class="py-8 bg-light">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-10 col-12">
+					<div>
+						<div class="mb-4">
+							<h1 class="fw-bold mb-1">{{ pagetitle }}</h1>
+							<p>{{ "%resultsCount% reviews(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
+						</div>
+						<div class="bg-white rounded-md-pill me-lg-8 shadow rounded-3">
+							<div class="p-md-2 p-4">
+								<form class="row g-1">
+									<div class="col-12 col-md-5">
+										<div class="input-group mb-2 mb-md-0 border-md-0 border rounded-pill">
+											<span class="input-group-text bg-transparent border-0 pe-0 ps-md-3 ps-md-0" id="searchJob">
+												<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewbox="0 0 16 16">
+													<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+												</svg>
+											</span>
+											<label for="keyword" class="visually-hidden"></label>
+											<input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control rounded-pill border-0 ps-3 form-focus-none" placeholder="{{ "Search in reviews"|trans }}" aria-label="{{ "Search in reviews"|trans }}" aria-describedby="keyword" id="keyword">
+										</div>
+									</div>
+									<div class="col-12 col-md-4">
+										<div class="input-group mb-3 mb-md-0 border-md-0 border rounded-pill">
+											<span class="input-group-text bg-transparent border-0 pe-0 ps-md-0" id="location">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewbox="0 0 16 16">
+													<path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
+													<path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+												</svg>
+											</span>
+											<!-- search -->
+											<label for="JobLocation" class="visually-hidden"></label>
+											<input type="search" class="form-control rounded-pill border-0 ps-3 form-focus-none" placeholder="Location" aria-label="Search Job" aria-describedby="location" id="JobLocation">
+										</div>
+									</div>
+									<div class="col-12 col-md-3 text-end d-grid">
+										<button type="submit" class="btn btn-primary rounded-pill">{{ 'Search'|trans }}</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "recipes": "Recipes"|trans, (path('recipe', { slug : recipe.title })): (recipe.title), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
 {% endblock %}
 
 {% block content %}
-    <section class="py-7">
-        <div class="container">
-            {% if rows.getTotalItemCount > 0 %}
-                <div class="row">
-                    {% for review in rows %}
-                        {% include "global/user-review.html.twig" with {review: review, showuser: 1} %}
-                    {% endfor %}
+	<section class="py-6">
+		<div class="container">
+            <div class="row align-items-center mb-4">
+                <div class="col">
+                    <p class="mb-0">{{ "%resultsCount% reviews(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
                 </div>
-            {% else %}
-                {% include "global/message.html.twig" with { type: "dark", message: ('No review found'|trans), icon: "bi bi-exclamation-circle" } %}
-            {% endif %}
-            {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-        </div>
-    </section>
+                <div class="col-auto">
+                    <div class="d-flex">
+                        <div class="ms-3">
+                            <select class="form-select">
+                                <option value="">{{ "Sort by"|trans }}</option>
+                                {{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.rating", {"direction": "desc", "criteria": "r.rating"}) }}
+                                {{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.rating", {"direction": "asc", "criteria": "r.rating"}) }}
+                                {{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.createdAt", {"direction": "desc", "criteria": "r.createdAt"}) }}
+                                {{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.createdAt", {"direction": "asc", "criteria": "r.createdAt"}) }}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <ul class="nav nav-line-bottom">
+                            <li class="nav-item">
+                                <a href="" class="nav-link active">
+                                    {{ 'Review'|trans }} <span class="text-inherit">(11.7k)</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+			<div class="row mt-6">
+				<div class="col-md-12 mb-8">
+					<div class="d-md-flex justify-content-between align-items-center">
+						<div>
+							<h2 class="mb-0">Company Reviews
+								<span class="ms-2 fs-5 fw-normal">based on 11.7k Reviews</span>
+							</h2>
+						</div>
+						<div class="mt-3">
+							<a href="#" class="btn btn-outline-primary">
+								Write a Review
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-8 col-12">
+					<div class="mb-4 mb-lg-0">
+						<h2 class="h3 mb-6">Overall Rating</h2>
+						<div class="row align-items-center">
+							<div class="col-md-4 text-md-center mb-4 mb-md-0">
+								<h3 class="display-2 fw-bold">4.5</h3>
+								<span class="fs-6">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+								</span>
+								<p class="mb-0">11.7k Reviews</p>
+							</div>
+							<div
+								class="offset-lg-1 col-lg-7 col-md-8">
+								<!-- progress -->
+								<div class="d-flex align-items-center mb-2">
+									<div class="text-nowrap me-3 ">
+										<span class="d-inline-block align-middle  me-1">5</span>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+									</div>
+									<div class="w-100">
+										<div class="progress" style="height: 6px;">
+											<div class="progress-bar bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+									</div>
+									<span class="ms-3">6.6k</span>
+								</div>
+								<!-- progress -->
+								<div class="d-flex align-items-center mb-2">
+									<div class="text-nowrap me-3 ">
+										<span class="d-inline-block align-middle  me-1">4</span>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+									</div>
+									<div class="w-100">
+										<div class="progress" style="height: 6px;">
+											<div class="progress-bar bg-warning" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50"></div>
+										</div>
+									</div>
+									<span class=" ms-3">2.9k</span>
+								</div>
+								<!-- progress -->
+								<div class="d-flex align-items-center mb-2">
+									<div class="text-nowrap me-3">
+										<span class="d-inline-block align-middle  me-1">3</span>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+									</div>
+									<div class="w-100">
+										<div class="progress" style="height: 6px;">
+											<div class="progress-bar bg-warning" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="35"></div>
+										</div>
+									</div>
+									<span class=" ms-3">3k</span>
+								</div>
+								<!-- progress -->
+								<div class="d-flex align-items-center mb-2">
+									<div class="text-nowrap me-3 ">
+										<span class="d-inline-block align-middle  me-1">2</span>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+									</div>
+									<div class="w-100">
+										<div class="progress" style="height: 6px;">
+											<div class="progress-bar bg-warning" role="progressbar" style="width: 22%;" aria-valuenow="22" aria-valuemin="0" aria-valuemax="22"></div>
+										</div>
+									</div>
+									<span class=" ms-3">479</span>
+								</div>
+								<!-- progress -->
+								<div class="d-flex align-items-center mb-2">
+									<div class="text-nowrap me-3 ">
+										<span class="d-inline-block align-middle  me-1">1</span>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+									</div>
+									<div class="w-100">
+										<div class="progress" style="height: 6px;">
+											<div class="progress-bar bg-warning" role="progressbar" style="width: 14%;" aria-valuenow="14" aria-valuemin="0" aria-valuemax="14"></div>
+										</div>
+									</div>
+									<span class=" ms-3">865</span>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="offset-lg-1 col-lg-3 col-12 col-md-4">
+					<div>
+						<h2 class="h3 mb-6">Category Ratings</h2>
+						<div class="mb-2">
+							<span class="fw-semibold text-dark">
+								<span class="me-1 align-baseline">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+								</span>
+								4.1
+							</span>
+							<span class="ms-3">Job Security</span>
+						</div>
+						<div class="mb-2">
+							<span class="fw-semibold text-dark">
+								<span class="me-1 align-baseline">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+								</span>
+								3.8
+							</span>
+							<span class="ms-3">Skill Development</span>
+						</div>
+						<div
+							class="mb-2">
+							<!-- star -->
+							<span class="fw-semibold text-dark">
+								<span class="me-1 align-baseline">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+								</span>
+								3.8
+							</span>
+							<span class="ms-3">Company Culture</span>
+
+						</div>
+						<div
+							class="mb-2">
+							<!-- star -->
+							<span class="fw-semibold text-dark">
+								<span class="me-1 align-baseline">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+								</span>
+
+								3.7
+							</span>
+							<span class="ms-3">Work-Life Balance</span>
+
+						</div>
+						<div
+							class="mb-2">
+							<!-- star -->
+							<span class="fw-semibold text-dark">
+								<span class="me-1 align-baseline">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+									</svg>
+								</span>
+								3.5</span>
+
+							<span class="ms-3">Career Growth</span>
+						</div>
+					</div>
+				</div>
+			</div>
+            {% if rows.getTotalItemCount > 0 %}
+                <div class="row mt-8">
+                    <div class="col-lg-9 col-md-8 col-12">
+                        {% for review in rows %}
+                            <div class="d-flex mb-4">
+                                <img src="../../assets/images/avatar/avatar-2.jpg" alt="" class="rounded-circle avatar-lg">
+                                <div class="ms-3">
+                                    <div class="fs-6 mb-3 mt-1">
+                                        <h4 class="mb-1">
+                                            Max Hawkins
+                                        </h4>
+                                        <span class="align-text-top">
+                                            <span class="text-dark fw-semibold">5.0</span>
+                                            <span class="lh-1 align-text-top">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                        <span class="ms-2 ">posted on 03 Jun 2022
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h5>Good work environment and culture.</h5>
+                                        <p>Good work environment and culture. There are a lot of trainings you can go through and
+                                                                learn. You ll get a good work life balance. Good gyms and trainers are also available.
+                                                                You ll have Job Security. Teammates were supportive.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% include "global/user-review.html.twig" with {review: review, showuser: 1} %}
+                        {% endfor %}
+                        <div class="mt-8">
+                            {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-12">
+                        <div class="card bg-light shadow-none mt-4 mt-md-0">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <img src="../../assets/images/job/job-graphics.svg" alt="">
+                                </div>
+                                <h3>HelpScout is HIRING</h3>
+                                <p>We know a thing or two about what a
+                                                    best place to work should be. Come
+                                                    join us</p>
+                                <a href="#" class="btn btn-primary">
+                                    View all openings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			{% else %}
+				{% include "global/message.html.twig" with { type: "dark", message: ('No review found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+			{% endif %}
+		</div>
+	</section>
 {% endblock %}

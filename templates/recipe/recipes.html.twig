@@ -1,4 +1,364 @@
+{#  
 {% include "recipe.html.twig" with {
     pagetitle: 'All Recipes'|trans({}, 'messages'),
     rows: rows
 } %}
+#}
+
+{% extends 'page.html.twig' %}
+
+{% if category != "all" %}
+	{% set pagetitle = category.name %}
+{% else %}
+	{% set pagetitle = 'Recipes'|trans %}
+{% endif %}
+{% block title pagetitle %}
+
+{% block pageheader %}
+	<section class="bg-primary py-4 py-lg-6">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+					<div>
+						<h1 class="mb-0 text-white display-4">{{ pagetitle }}</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block breadcrumb %}
+	{% if category != "all" %}
+		{% set breadcrumb = [{ "recipes": ("Recipes"|trans), "current":(pagetitle) }] %}
+	{% else %}
+		{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% endif %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+	<section class="py-6">
+		<div class="container">
+
+			{% set recipesoncalendar = [] %}
+			{% set recipesonmap = [] %}
+
+			{% for recipe in rows %}
+				{% for recipedate in recipe.recipedates %}
+					{% if recipedate.isOnSale %}
+						{% if recipedate.venue and setting.getSettings("show_map_button") == "1" %}
+							{% if recipedate.venue.lat and recipedate.venue.lng %}
+								{% if recipesonmap | length == 0 %}
+									{% set recipesonmap = recipesonmap|merge([{"name": recipe.name, "image": recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder, "address": (recipedate.venue.name ~ ": " ~recipedate.venue.stringifyAddress),"date": (recipedate.startdate | format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone)), "price": (recipedate.isFree ? "Free"|trans : recipedate.getCheapestSubscription.getSalePrice), "lat":recipedate.venue.lat, "lng":recipedate.venue.lng, "link": (path('recipe', { slug: recipe.slug })) }]) %}
+								{% else %}
+									{% for recipeonmap in recipesonmap %}
+										{% if recipeonmap.lat != recipedate.venue.lat and recipeonmap.lng != recipedate.venue.lng %}
+											{% set recipesonmap = recipesonmap|merge([{"name": recipe.name, "image": recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder, "address": (recipedate.venue.name ~ ": " ~recipedate.venue.stringifyAddress),"date": (recipedate.startdate | format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone)), "price": (recipedate.isFree ? "Free"|trans : recipedate.getCheapestSubscription.getSalePrice), "lat":recipedate.venue.lat, "lng":recipedate.venue.lng, "link": (path('recipe', { slug: recipe.slug })) }]) %}
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+							{% endif %}
+						{% endif %}
+
+						{% if setting.getSettings("show_calendar_button") == "1" %}
+							{% set recipesoncalendar = recipesoncalendar|merge([{"title": recipe.title, "start":recipedate.startdate | date('Y-m-d H:i'), "end": (recipedate.enddate ? recipedate.enddate | date('Y-m-d H:i') : ''), "url": (path('recipe', {slug : recipe.slug})) }]) %}
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+
+			{% if recipesonmap | length > 0 and setting.getSettings("show_map_button") == "1" and google_maps_api_key != "" %}
+				<div class="collapse show mb-4 vh-90" id="collapseEventsMap" data-pin-path="{{ asset('assets/images/icons/pin.png') }}" data-recipes="{{ recipesonmap|json_encode() }}"></div>
+			{% endif %}
+
+			{% if recipesoncalendar | length > 0 and setting.getSettings("show_calendar_button") == "1" %}
+				<div class="collapse show mb-4" id="collapseEventsCalendar" data-default-date="{{ "now"|date('Y-m-d') }}" data-recipes="{{ recipesoncalendar|json_encode() }}"></div>
+			{% endif %}
+
+			<div class="row">
+				<div class="col-md-4 col-xl-3">
+					<div class="card border mb-6 mb-md-0 shadow-none">
+                        <form method="get">
+                            <div class="card-header">
+                                <h4 class="mb-0 fs-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter me-2" viewBox="0 0 16 16">
+                                        <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z">
+                                    </path></svg>
+                                    {{ "All Filters"|trans }}
+                                </h4>
+                            </div>
+                            <div class="card-body py-3">
+                                <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterKeyword" role="button" aria-expanded="false" aria-controls="collapseFilterKeyword">
+                                    {{ "Keyword"|trans }}
+                                    <span class="float-end">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z">
+                                        </path></svg>
+                                    </span>
+                                </a>
+                                <div class="collapse show" id="collapseFilterKeyword">
+                                    <div class="mt-3">
+                                        <label for="keyword" class="visually-hidden">{{ "Keyword"|trans }}</label>
+                                        <input id="keyword" name="keyword" type="text" class="form-control" value="{{ app.request.get('keyword') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            {% if setting.getSettings("show_category_filter") == "1" %}
+                                <div class="card-body border-top py-3">
+                                    <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterCategory" role="button" aria-expanded="false" aria-controls="collapseFilterCategory">
+                                        {{ "Category"|trans }}
+                                        <span class="float-end">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z">
+                                            </path></svg>
+                                        </span>
+                                    </a>
+                                    <div class="collapse show" id="collapseFilterCategory">
+                                        <div class="mt-3">
+                                            <label for="category" class="visually-hidden">{{ "Category"|trans }}</label>
+                                            <select class="form-select" id="category" name="category" data-sort-options="1">
+                                                <option value="">&nbsp;</option>
+												{% for category in setting.getCategories({}).getQuery().getResult() %}
+													<option value="{{ category.slug }}">{{ category.name }}</option>
+												{% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if setting.getSettings("show_location_filter") == "1" %}
+                                <div class="card-body border-top py-3">
+                                    <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterLocation" role="button" aria-expanded="false" aria-controls="collapseFilterLocation">
+                                        {{ "Location"|trans }}
+                                        <span class="float-end">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z">
+                                            </path></svg>
+                                        </span>
+                                    </a>
+                                    <div class="collapse show" id="collapseFilterLocation">
+                                        <div class="mt-3">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="onlineonly" value="1" id="filter-online-only">
+                                                <label class="form-check-label" for="filter-online-only">
+                                                    {{ "Online recipes only"|trans }}
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div> 
+                                        {% set userLocation = setting.locateUser() %}
+                                        {% if userLocation %}
+                                            <div class="mt-3">
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" name="localonly" value="1" id="filter-local-only">
+                                                    <label class="form-check-label" for="filter-local-only">
+                                                        {{ "Local recipes only"|trans }}
+                                                    </label>
+                                                </div>
+                                                <p id="user-country" class="text-muted">
+                                                    {{ "Recipes in %countryname%"|trans({"%countryname%" : userLocation['country'].name}) }}
+                                                    <span class="flag flag-{{userLocation['country'].code|lower}} ms-2"></span>
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                        <div id="filter-country-container" class="mt-3">
+                                            <label for="country" class="visually-hidden">{{ "Country"|trans }}</label>
+                                            <select class="form-select" id="country" name="country" data-sort-options="1">
+                                                <option value="">&nbsp;</option>
+                                                {% for country in setting.getCountries({}).getQuery().getResult() %}
+                                                    <option value="{{ country.slug }}">{{ country.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div id="filter-location-container" class="mt-3">
+                                            <label for="location" class="visually-hidden">{{ "State / City"|trans }}</label>
+                                            <input id="location" name="location" type="text" class="form-control" value="{{ app.request.get('location') }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if setting.getSettings("show_date_filter") == "1" %}
+                                <div class="card-body border-top py-3">
+                                    <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterDate" role="button" aria-expanded="false" aria-controls="collapseFilterDate">
+                                        {{ "Date"|trans }}
+                                        <span class="float-end">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z">
+                                            </path></svg>
+                                        </span>
+                                    </a>
+                                    <div class="collapse show" id="collapseFilterDate">
+                                        <div class="mt-3">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="startdate" value="today" id="date-today" checked="">
+                                                <label class="form-check-label" for="date-today">{{ "Today"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ setting.getRecipes({"count": true, "startdate" : ("now"|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}
+                                                    </span>
+												</span>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="startdate" value="tomorrow" id="date-tomorrow">
+                                                <label class="form-check-label" for="date-tomorrow">{{ "Tomorrow"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ setting.getRecipes({"count": true, "startdate" : ("now"|date_modify("+1 day")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}
+                                                    </span>
+												</span>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="startdate" value="thisweekend" id="date-thisweekend">
+                                                <label class="form-check-label" for="date-thisweekend">{{ "This weekend"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ setting.getRecipes({"count": true, "startdatemin" : ("now"|date_modify("saturday this week")|date("Y-m-d")), "startdatemax" : ("now"|date_modify("sunday this week")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}
+                                                    </span>
+												</span>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="startdate" value="thisweek" id="date-thisweek">
+                                                <label class="form-check-label" for="date-thisweek">{{ "This week"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ setting.getRecipes({"count": true, "startdatemin" : ("now"|date_modify("monday this week")|date("Y-m-d")), "startdatemax" : ("now"|date_modify("sunday this week")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}
+                                                    </span>
+												</span>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="startdate" value="nextweek" id="date-nextweek">
+                                                <label class="form-check-label" for="date-nextweek">{{ "Next week"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ setting.getRecipes({"count": true, "startdatemin" : ("now"|date_modify("monday next week")|date("Y-m-d")), "startdatemax" : ("now"|date_modify("sunday next week")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}
+                                                    </span>
+												</span>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="startdate" value="thismonth" id="date-thismonth">
+                                                <label class="form-check-label" for="date-thismonth">{{ "This month"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ setting.getRecipes({"count": true, "startdatemin" : ("now"|date("Y-m-01")), "startdatemax" : ("now"|date("Y-m-t"))}).getQuery().getSingleScalarResult() }}
+                                                    </span>
+												</span>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="startdate" value="nextmonth" id="date-nextmonth">
+                                                <label class="form-check-label" for="date-nextmonth">{{ "Next month"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ setting.getRecipes({"count": true, "startdatemin" : ("now"|date_modify("+1 month")|date("Y-m-01")), "startdatemax" : ("now"|date_modify("+1 month")|date("Y-m-t"))}).getQuery().getSingleScalarResult() }}
+                                                    </span>
+												</span>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input datepicker" type="checkbox" name="startdate" value="pickadate" id="date-pickadate">
+                                                <label class="form-check-label" for="date-pickadate">{{ "Pick a date"|trans }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if setting.getSettings("show_subscription_price_filter") == "1" %}
+                                <div class="card-body border-top py-3">
+                                    <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterSubscription" role="button" aria-expanded="false" aria-controls="collapseFilterSubscription">
+                                        {{ "Subscription price"|trans }}
+                                        <span class="float-end">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z">
+                                            </path></svg>
+                                        </span>
+                                    </a>
+                                    <div class="collapse show" id="collapseFilterSubscription">
+                                        <div class="mt-3">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if setting.getSettings("show_audience_filter") == "1" %}
+                                <div class="card-body border-top py-3">
+                                    <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterAudience" role="button" aria-expanded="false" aria-controls="collapseFilterAudience">
+                                        {{ "Audience"|trans }}
+                                        <span class="float-end">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z">
+                                            </path></svg>
+                                        </span>
+                                    </a>
+                                    <div class="collapse show" id="collapseFilterAudience">
+                                        <div class="mt-3">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="card-body pb-3 pt-0 d-grid">
+                                <button class="btn btn-outline-secondary">{{ "Search"|trans }}</button>
+                            </div>
+                        </form>
+					</div>
+				</div>
+				<div class="col-xl-9 col-md-8 mb-6 mb-md-0">
+                    <div class="row align-items-center mb-4">
+                        <div class="col">
+                            <p class="mb-0">{{ "%resultsCount% recipe(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
+                        </div>
+                        <div class="col-auto">
+                            <div class="d-flex">
+                                {% if rows.getTotalItemCount > 0 %}
+                                    <div class="nav btn-group flex-nowrap" role="tablist">
+                                        <button class="btn btn-outline-secondary active btn-icon d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#tabPaneGrid" role="tab" aria-controls="tabPaneGrid" aria-selected="true">
+                                            <span class="bi bi-grid"></span>
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-icon d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#tabPaneList" role="tab" aria-controls="tabPaneList" aria-selected="false" tabindex="-1">
+                                            <span class="bi bi-list"></span>
+                                        </button>
+                                    </div>
+                                    <div class="ms-3 nav btn-group flex-nowrap">
+                                        {% if recipesonmap | length > 0 and setting.getSettings("show_map_button") == "1" and google_maps_api_key != "" %}
+                                            <a class="btn btn-outline-primary active btn-icon d-flex align-items-center" data-bs-toggle="collapse" href="#collapseEventsMap" role="button" aria-expanded="false" aria-controls="collapseEventsMap" title="{{ "Show recipes on map"|trans }}">
+                                                <span class="bi bi-pin-map-fill"></span>
+                                            </a>
+                                        {% endif %}
+                                        {% if recipesoncalendar | length > 0 and setting.getSettings("show_calendar_button") == "1" %}
+                                            <a class="btn btn-outline-primary btn-icon d-flex align-items-center" data-bs-toggle="collapse" href="#collapseEventsCalendar" role="button" aria-expanded="false" aria-controls="collapseEventsCalendar" title="{{ "Show recipes calendar"|trans }}">
+                                                <span class="bi bi-calendar"></span>
+                                            </a>
+                                        {% endif %}
+                                        {% if setting.getSettings("show_rss_feed_button") == "1" %}
+                                            <a href="{{ setting.getSettings("website_url")~"/rss" }}" class="btn btn-outline-primary btn-icon d-flex align-items-center" bs-data-toggle="tooltip" title="{{ "Recipes RSS feed"|trans }}" target="_blank">
+                                                <span class="bi bi-rss"></span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+					<div class="tab-content">
+						{% if rows.getTotalItemCount > 0 %}
+							<div class="tab-pane fade show active pb-4" id="tabPaneGrid" role="tabpanel" aria-labelledby="tabPaneGrid">
+								<div class="row">
+									{% for recipe in rows %}
+										{% include "global/recipe-card.html.twig" with {recipe: recipe} %}
+									{% endfor %}
+								</div>
+							</div>
+							<div class="tab-pane fade pb-4" id="tabPaneList" role="tabpanel" aria-labelledby="tabPaneList">
+								{% for recipe in rows %}
+									{% include "global/recipe-card-list.html.twig" with {recipe: recipe} %}
+								{% endfor %}
+							</div>
+							{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+						{% else %}
+							{% include "global/message.html.twig" with { type: "dark", message: ('No recipes found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

@@ -27,18 +27,16 @@ class ReviewController extends BaseController
         if (!$recipe) {
             $this->addFlash('danger', $translator->trans('The recipe not be found'));
 
-            $referer = $request->headers->get('referer');
-
-            return $this->redirect($referer); // return to previous page
+            return $this->redirectToRoute('recipes', [], Response::HTTP_SEE_OTHER);
         }
 
-        $reviews = $paginator->paginate(
+        $rows = $paginator->paginate(
             $settingService->getReviews(['recipe' => $recipe->getSlug(), 'keyword' => $keyword])->getQuery(),
             $request->query->getInt('page', 1),
-            HasLimit::REVIEW_LIMIT,
+            $settingService->getSettings('reviews_per_page'),
             ['wrap-queries' => true]
         );
 
-        return $this->render('recipe/review.html.twig', compact('recipe', 'reviews'));
+        return $this->render('recipe/review.html.twig', compact('recipe', 'rows'));
     }
 }

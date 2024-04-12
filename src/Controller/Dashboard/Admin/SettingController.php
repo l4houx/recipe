@@ -220,12 +220,17 @@ class SettingController extends AdminBaseController
     public function blog(Request $request): Response
     {
         $form = $this->createFormBuilder()
-            ->add('blog_posts_per_page', TextType::class, [
+            ->add('posts_per_page', TextType::class, [
                 'required' => true,
-                'label' => t('Number of blog posts per page'),
+                'label' => t('Number of posts per page'),
                 'attr' => ['class' => 'touchspin-integer'],
             ])
-            ->add('blog_comments_enabled', ChoiceType::class, [
+            ->add('comments_per_page', TextType::class, [
+                'required' => true,
+                'label' => t('Number of comments per page'),
+                'attr' => ['class' => 'touchspin-integer'],
+            ])
+            ->add('post_comments_enabled', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
@@ -254,8 +259,9 @@ class SettingController extends AdminBaseController
             if ($form->isValid()) {
                 /** @var Setting $setting */
                 $setting = $form->getData();
-                $this->settingervice->setSettings('blog_posts_per_page', $setting['blog_posts_per_page']);
-                $this->settingervice->setSettings('blog_comments_enabled', $setting['blog_comments_enabled']);
+                $this->settingervice->setSettings('posts_per_page', $setting['posts_per_page']);
+                $this->settingervice->setSettings('comments_per_page', $setting['comments_per_page']);
+                $this->settingervice->setSettings('post_comments_enabled', $setting['post_comments_enabled']);
                 $this->settingervice->setSettings('facebook_app_id', $setting['facebook_app_id']);
                 $this->settingervice->setSettings('disqus_subdomain', $setting['disqus_subdomain']);
                 $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
@@ -263,8 +269,9 @@ class SettingController extends AdminBaseController
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
         } else {
-            $form->get('blog_posts_per_page')->setData($this->settingervice->getSettings('blog_posts_per_page'));
-            $form->get('blog_comments_enabled')->setData($this->settingervice->getSettings('blog_comments_enabled'));
+            $form->get('posts_per_page')->setData($this->settingervice->getSettings('posts_per_page'));
+            $form->get('comments_per_page')->setData($this->settingervice->getSettings('comments_per_page'));
+            $form->get('post_comments_enabled')->setData($this->settingervice->getSettings('post_comments_enabled'));
             $form->get('facebook_app_id')->setData($this->settingervice->getSettings('facebook_app_id'));
             $form->get('disqus_subdomain')->setData($this->settingervice->getSettings('disqus_subdomain'));
         }
@@ -630,6 +637,36 @@ class SettingController extends AdminBaseController
         return $this->render('dashboard/admin/setting/homepage.html.twig', compact('form'));
     }
 
+    #[Route(path: '/reviews-list-page', name: 'reviews_list_page', methods: ['GET', 'POST'])]
+    public function reviewsListPage(Request $request): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('reviews_per_page', TextType::class, [
+                'required' => true,
+                'label' => 'Number of reviews per page',
+                'attr' => ['class' => 'touchspin-integer'],
+            ])
+            ->getForm()
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Setting $setting */
+                $setting = $form->getData();
+                $this->settingervice->setSettings('reviews_per_page', $setting['reviews_per_page']);
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        } else {
+            $form->get('reviews_per_page')->setData($this->settingervice->getSettings('reviews_per_page'));
+        }
+
+        return $this->render('dashboard/admin/setting/reviews-list-page.html.twig', compact('form'));
+    }
+
     #[Route(path: '/recipes-list-page', name: 'recipes_list_page', methods: ['GET', 'POST'])]
     public function recipesListPage(Request $request): Response
     {
@@ -949,7 +986,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Allow Paypal as a payout method for the restaurants to receive their revenue',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
@@ -960,7 +997,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => 'Allow Stripe as a payout method for the restaurants to receive their revenue',
-                'choices' => ['Yes' => 'yes', 'No' => 'no'],
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),

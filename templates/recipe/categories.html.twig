@@ -1,0 +1,22 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Recipe categories'|trans %}
+{% block title pagetitle %}
+
+{% block pageheader %}
+    {% include "global/pageheader.html.twig" %}
+{% endblock %}
+
+{% block content %}
+    <section class="py-7">
+        <div class="container">
+            <div class="row">
+                {% for category in setting.getCategories({"sort": "name", "order": "DESC"}).getQuery().getResult() %}
+                    <div class="col-lg-3 col-md-6 col-12">
+                        {% include "global/category-card.html.twig" with {category: category} %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

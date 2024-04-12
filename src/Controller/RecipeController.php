@@ -19,6 +19,7 @@ class RecipeController extends BaseController
 {
     public function __construct(
         private readonly RecipeRepository $recipeRepository,
+        private readonly TranslatorInterface $translator,
         private readonly SettingService $settingService
     ) {
     }
@@ -26,53 +27,55 @@ class RecipeController extends BaseController
     #[Route(path: '/recipes', name: 'recipes', methods: ['GET'])]
     public function recipes(Request $request, PaginatorInterface $paginator): Response
     {
+        $category = 'all';
+        $categorySlug = '' == $request->query->get('category') ? 'all' : $request->query->get('category');
+        $keyword = '' == $request->query->get('keyword') ? 'all' : $request->query->get('keyword');
+        $localonly = '' == $request->query->get('localonly') ? 'all' : $request->query->get('localonly');
+        $country = '' == $request->query->get('country') ? 'all' : $request->query->get('country');
+        $location = '' == $request->query->get('location') ? 'all' : $request->query->get('location');
+        $startdate = '' == $request->query->get('startdate') ? 'all' : $request->query->get('startdate');
+        $freeonly = '' == $request->query->get('freeonly') ? 'all' : $request->query->get('freeonly');
+        $pricemin = '' == $request->query->get('pricemin') || '0' == $request->query->get('pricemin') ? 'all' : $request->query->get('pricemin');
+        $pricemax = '' == $request->query->get('pricemax') || '10000' == $request->query->get('pricemax') ? 'all' : $request->query->get('pricemax');
+        $audience = '' == $request->query->get('audience') ? 'all' : $request->query->get('audience');
+        $restaurant = '' == $request->query->get('restaurant') ? 'all' : $request->query->get('restaurant');
+        $onlineonly = '' == $request->query->get('onlineonly') ? 'all' : $request->query->get('onlineonly');
+
+        if ('all' != $categorySlug) {
+            $category = $this->settingService->getCategories(['slug' => $categorySlug])->getQuery()->getOneOrNullresult();
+            if (!$category) {
+                $this->addFlash('danger', $this->translator->trans('The category can not be found'));
+
+                return $this->redirectToRoute('recipes', [], Response::HTTP_SEE_OTHER);
+            }
+        }
+
+        /*
+        $rows = $paginator->paginate($this->settingService->getRecipes(['category' => $categorySlug, 'keyword' => $keyword, 'localonly' => $localonly, 'country' => $country, 'location' => $location, 'startdate' => $startdate, 'pricemin' => $pricemin, 'pricemax' => $pricemax, 'audience' => $audience, 'restaurant' => $restaurant, 'freeonly' => $freeonly, 'onlineonly' => $onlineonly])->getQuery(), $request->query->getInt('page', 1), $this->settingService->getSettings('recipes_per_page'), ['wrap-queries' => true]);
+        */
+
         $query = $this->recipeRepository->findBy(['isOnline' => true], ['createdAt' => 'DESC']);
         $page = $request->query->getInt('page', 1);
 
         $rows = $paginator->paginate(
             $query,
             $page,
-            HasLimit::RECIPE_LIMIT
+            $this->settingService->getSettings('recipes_per_page'),
+            ['wrap-queries' => true]
         );
 
-        return $this->render('recipe/recipes.html.twig', compact('rows'));
+        return $this->render('recipe/recipes.html.twig', compact('rows', 'category'));
     }
-
-    /*
-    #[Route(path: '/recipes/{slug}-{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT, 'slug' => Requirement::ASCII_SLUG])]
-    public function show(Request $request, string $slug, int $id, EntityManagerInterface $em, TranslatorInterface $translator): Response
-    {
-        $recipe = $this->recipeRepository->find($id);
-
-        if ($recipe->getSlug() !== $slug) {
-            return $this->redirectToRoute('recipe_show', [
-                'id' => $recipe->getId(),
-                'slug' => $recipe->getSlug(),
-            ], 301);
-        }
-
-        if (!$recipe) {
-            $this->addFlash('secondary', $translator->trans('The recipe not be found'));
-            return $this->redirectToRoute('recipe_index');
-        }
-
-        $recipe->viewed();
-        $em->persist($recipe);
-        $em->flush();
-
-        return $this->render('recipe/show.html.twig', compact('recipe'));
-    }
-    */
 
     #[Route(path: '/recipe/{slug}', name: 'recipe', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function recipe(Request $request, string $slug, EntityManagerInterface $em, TranslatorInterface $translator): Response
+    public function recipe(Request $request, string $slug, EntityManagerInterface $em): Response
     {
-        if ($this->isGranted(HasRoles::APPLICATION)) {
+        if ($this->isGranted(HasRoles::ADMINAPPLICATION)) {
             /** @var Recipe $recipe */
             $recipe = $this->settingService->getRecipes(['slug' => $slug, 'elapsed' => 'all', 'isOnline' => 'all'])->getQuery()->getOneOrNullResult();
         } elseif ($this->isGranted(HasRoles::RESTAURANT)) {
             /** @var Recipe $recipe */
-            $recipe = $this->settingService->getRecipes(['slug' => $slug, 'elapsed' => 'all', 'published' => 'all'])->getQuery()->getOneOrNullResult();
+            $recipe = $this->settingService->getRecipes(['slug' => $slug, 'elapsed' => 'all', 'isOnline' => 'all'])->getQuery()->getOneOrNullResult();
 
             if ($recipe) {
                 if ($recipe->getRestaurant() != $this->getUser()->getRestaurant() && false == $recipe->getIsOnline()) {
@@ -85,7 +88,7 @@ class RecipeController extends BaseController
         }
 
         if (!$recipe) {
-            $this->addFlash('danger', $translator->trans('The recipe not be found'));
+            $this->addFlash('danger', $this->translator->trans('The recipe not be found'));
 
             return $this->redirectToRoute('recipes', [], Response::HTTP_SEE_OTHER);
         }

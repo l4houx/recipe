@@ -1,10 +1,14 @@
 {% if comment.isApproved %}
-    <div class="d-flex align-items-start border-bottom pb-4 mb-4">
+    <div class="d-flex align-items-start border-bottom pb-4 mb-4" id="c{{ comment.id }}">
         {% include "global/user-avatar.html.twig" with { user: comment.author, type: "lg" } %}
         <div class="ms-3">
             <h4 class="mb-1">
                 {{ comment.author.username }}
-                <span class="ms-1 fs-6">{{ comment.publishedAt | ago }}</span>
+                <span class="ms-1 fs-6">
+                    <a href="#c{{ comment.id }}" class="text-inherit">
+                        {{ comment.publishedAt | ago }}
+                    </a>
+                </span>
             </h4>
             <div class="mb-2">
                 <span class="fs-6">
@@ -25,12 +29,82 @@
                     </svg>
                 </span>
             </div>
-            <p>{{ comment.content | html_markdown }}</p>
+            <p>{{ comment.content | markdown_to_html | sanitize_html }}</p>
             <div class="d-lg-flex">
-                <p class="mb-0">Was this comment helpful?</p>
-                <a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
-                <a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+                {# <p class="mb-0">Was this comment helpful?</p> #}
+                {% if app.user == comment.author %}
+                    <form name="comment_delete" method="POST" action="{{ path('post_comment_delete', {'id': comment.id}) }}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                        <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
+                            {{ 'Delete'|trans }}
+                        </button>
+                    </form>
+                {% endif %}
+                {% if is_granted('ROLE_USER') %}
+                    <a href="#add-comment" class="btn btn-xs btn-outline-secondary ms-1" type="button" data-reply data-id="{{comment.id}}">
+                        {{ 'Reply'|trans }}
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
+    {% for reply in comment.replies %}
+        <div class="d-flex align-items-start border-bottom pb-4 mb-4" id="c{{ reply.comment.id }}">
+            {% include "global/user-avatar.html.twig" with { user: reply.author, type: "lg" } %}
+            <div class="ms-3">
+                <h4 class="mb-1">
+                    @{{ reply.author.username }}
+                    <span class="ms-1 fs-6">
+                        <a href="#c{{ reply.id }}" class="text-inherit">
+                            {{ reply.publishedAt | ago }}
+                        </a>
+                    </span>
+                </h4>
+                <div class="mb-2">
+                    <span class="fs-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                        </svg>
+                    </span>
+                </div>
+                <p>{{ reply.content | markdown_to_html | sanitize_html }}</p>
+                <div class="d-lg-flex">
+                    {% if app.user == reply.author %}
+                        <form name="comment_delete" method="POST" action="{{ path('post_comment_delete', {'id': reply.id}) }}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reply.id) }}">
+                            <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
+                                {{ 'Delete'|trans }}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endif %}
+
+{% block javascripts %}
+	<script>
+		window.onload = () => {
+			document.querySelectorAll("[data-reply]").forEach(element => {
+				element.addEventListener("click", function(){
+					document.querySelector("#comments_parentid").value = this.dataset.id;
+				});
+			});
+		}
+	</script>
+{% endblock %}

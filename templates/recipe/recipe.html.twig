@@ -3,14 +3,1829 @@
 {% set pagetitle = recipe.title %}
 {% block title pagetitle %}
 
+{% block meta_dynamic_seo %}
+	<meta name="description" content="{{ recipe.content | raw | nl2br | striptags | slice(0, 200) | raw }}..."/>
+	{% if recipe.tags %}
+		<meta name="keywords" content="{{ recipe.title }}, {{ recipe.category.name }}, {% for tag in recipe.tags %} {{ tag }} {{ not loop.last ? ', ' : '' }}{% endfor %}"/>
+	{% else %}
+		<meta name="keywords" content="{{ settings['website_keywords_' ~ app.request.locale] }}"/>
+	{% endif %}
+	<meta property="og:title" content="{{ recipe.title }}"/>
+	<meta property="og:image" content="{{ app.request.getSchemeAndHttpHost() }}{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}"/>
+	<meta property="og:description" content="{{ recipe.content | raw | nl2br | striptags | slice(0, 200) | raw }}..."/>
+	<meta property="og:created_time" content="{{ recipe.createdAt | date('c') }}"/>
+	<meta name="twitter:title" content="{{ recipe.title }}"/>
+	<meta name="twitter:image" content="{{ app.request.getSchemeAndHttpHost() }}{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}"/>
+	<meta name="twitter:image:alt" content="{{ recipe.title }}"/>
+	<meta name="twitter:description" content="{{ recipe.content | raw | nl2br | striptags | slice(0, 200) | raw }}..."/>
+{% endblock %}
+
 {% block pageheader %}
-    {% include "global/pageheader.html.twig" %}
+	<section class="pt-lg-8 pb-8 bg-primary">
+		<div class="container pb-lg-8">
+			<div class="row align-items-center">
+				<div class="col-xl-7 col-lg-7 col-md-12">
+					<div>
+						<h1 class="text-white display-4 fw-semibold">{{ pagetitle }}</h1>
+						<p class="text-white mb-6 lead"></p>
+						<div class="d-flex align-items-center">
+							<a href="#" class="bookmark text-white">
+								<i class="fe fe-bookmark fs-4 me-2"></i>
+								Bookmark
+							</a>
+							<span class="text-white ms-3">
+								<i class="fe fe-user"></i>
+								1200 Enrolled
+							</span>
+							{% set reviewscount = setting.getReviews({"count": true, "recipe": recipe.slug}).getQuery().getSingleScalarResult() %}
+							{% if recipe.enablereviews %}
+								<div>
+									<span class="fs-6 ms-4 align-text-top" style="width:{{ recipe.getRatingPercentage }}%">
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+										</svg>
+									</span>
+									<span class="text-white">
+                                        ({{ reviewscount }}) {{ "Review(s)"|trans|lower }}
+                                    </span>
+								</div>
+							{% endif %}
+							<span class="text-white ms-4 d-none d-md-block">
+								<svg width="16" height="16" viewbox="0 0 16
+																		                                16" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect x="3" y="8" width="2" height="6" rx="1" fill="#DBD8E9"></rect>
+									<rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
+									<rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
+								</svg>
+								<span class="align-middle">Intermediate</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "recipes": "Recipes"|trans, "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
 {% endblock %}
 
 {% block content %}
-    <section class="py-7">
-        <div class="container">
-        
-        </div>
-    </section>
+	{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+		{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('<a href="'~ path('dashboard_admin_recipe', {slug: recipe.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage this recipe'|trans) } %}
+	{% endif %}
+	{% if is_granted('ROLE_RESTAURANT') %}
+		{% if recipe.restaurant == app.user.restaurant %}
+			{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('<a href="'~ path('dashboard_restaurant_recipe', {slug: recipe.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage your recipe'|trans) } %}
+		{% endif %}
+	{% endif %}
+	{% if is_granted('ROLE_CREATOR') %}
+		{% if app.user.hasBoughtASubscriptionForRecipe(recipe) %}
+			{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-cart', message: ('You are going to this recipe'|trans ~ ' ' ~ '<a href="'~ path('dashboard_creator_orders', {recipe: recipe.slug}) ~'">' ~ 'My subscriptions'|trans ~ '</a>') } %}
+		{% endif %}
+	{% endif %}
+
+	<section class="pb-8">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12 col-12 mt-n8 mb-4 mb-lg-0">
+					<div class="card rounded-3">
+						<div class="card-header border-bottom-0 p-0">
+							<div>
+								<ul class="nav nav-lb-tab" id="tab" role="tablist">
+									<li class="nav-item" role="presentation">
+										<a class="nav-link" id="table-tab" data-bs-toggle="pill" href="#table" role="tab" aria-controls="table" aria-selected="false" tabindex="-1">Contents</a>
+									</li>
+									<li class="nav-item" role="presentation">
+										<a class="nav-link active" id="content-tab" data-bs-toggle="pill" href="#content" role="tab" aria-controls="content" aria-selected="true">
+											{{ "Content"|trans }}
+										</a>
+									</li>
+									{% if recipe.enablereviews %}
+										<li class="nav-item" role="presentation">
+											<a class="nav-link" id="review-tab" data-bs-toggle="pill" href="#review" role="tab" aria-controls="review" aria-selected="false" tabindex="-1">{{ "Reviews"|trans }}</a>
+										</li>
+									{% endif %}
+								</ul>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="tab-content" id="tabContent">
+								<div class="tab-pane fade" id="table" role="tabpanel" aria-labelledby="table-tab">
+									<div class="accordion" id="courseAccordion">
+										<div>
+											<ul class="list-group list-group-flush">
+												<li
+													class="list-group-item px-0 pt-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center active" data-bs-toggle="collapse" href="#courseTwo" aria-expanded="true" aria-controls="courseTwo">
+														<div class="me-auto">Introduction to JavaScript</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse show" id="courseTwo" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 7s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Installing Development Software</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 11s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Hello World Project from GitHub</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 33s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Our Sample Website</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 15s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseThree" aria-expanded="false" aria-controls="courseThree">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															JavaScript Beginning
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseThree" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 41s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Adding JavaScript Code to a Web
+																																				                                                                            Page</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 39s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Working with JavaScript Files</span>
+																</div>
+																<div class="text-truncate">
+																	<span>6m 18s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Formatting Code</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 18s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Detecting and Fixing Errors</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 14s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Case Sensitivity</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 48s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Commenting Code</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 24s</span>
+																</div>
+															</a>
+															<a href="course-resume.html" class="mb-0 d-flex justify-content-between align-items-center text-inherit">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
+																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+																		</svg>
+																	</span>
+																	<span>Summary</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 14s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseFour" aria-expanded="false" aria-controls="courseFour">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Variables and Constants
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseFour" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 19s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>What Is a Variable?</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 11s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Declaring Variables</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 30s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Using let to Declare Variables</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 28s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Naming Variables</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 14s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Common Errors Using Variables</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 30s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Changing Variable Values</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 4s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Constants</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 15s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>The var Keyword</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 20s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Summary</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 49s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseFive" aria-expanded="false" aria-controls="courseFive">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Types and Operators
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseFive" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 55s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Numbers</span>
+																</div>
+																<div class="text-truncate">
+																	<span>6m 14s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Operator Precedence</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 58s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Number Precision</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 22s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Negative Numbers</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 35s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Strings</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 7s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Manipulating Strings</span>
+																</div>
+																<div class="text-truncate">
+																	<span>5m 8s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Converting Strings and Numbers</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 55s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Boolean Variables</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 39s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseSix" aria-expanded="false" aria-controls="courseSix">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Program Flow
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseSix" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 52s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Clip Watched</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 27s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Conditionals Using if()</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 25s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Truthy and Falsy</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 30s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>if ... else</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 30s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Comparing === and ==</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 52s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>The Ternary Operator</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 47s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Block Scope Using let</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 21s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Looping with for()</span>
+																</div>
+																<div class="text-truncate">
+																	<span>5m 30s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Looping with do ... while()</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 58s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Summary</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 21s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseSeven" aria-expanded="false" aria-controls="courseSeven">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Functions
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseSeven" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 52s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Function Basics</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 46s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Function Expressions</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 32s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Passing Information to Functions</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 19s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Function Return Values</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 13s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Function Scope</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 20s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Using Functions to Modify Web Pages</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 42s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Summary</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 3s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseEight" aria-expanded="false" aria-controls="courseEight">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Objects and the DOM
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseEight" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 48s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Object Properties</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 28s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Object Methods</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 3s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Passing Objects to Functions</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 27s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Standard Built-in Objects</span>
+																</div>
+																<div class="text-truncate">
+																	<span>6m 55s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>The Document Object Model (DOM)</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 29s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Styling DOM Elements</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 42s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Detecting Button Clicks</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 3s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Showing and Hiding DOM Elements</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 37s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Summary</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 47s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseNine" aria-expanded="false" aria-controls="courseNine">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Arrays
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseNine" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 48s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Creating and Initializing Arrays</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 7s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Accessing Array Items</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 4s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Manipulating Arrays</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 3s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>slice() and splice()</span>
+																</div>
+																<div class="text-truncate">
+																	<span>5m 54s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Array Searching and Looping</span>
+																</div>
+																<div class="text-truncate">
+																	<span>7m 32s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Arrays in the DOM</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 11s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Summary</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 28s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseTen" aria-expanded="false" aria-controls="courseTen">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Scope and Hoisting
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseTen" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Introduction</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 20s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Global Scope</span>
+																</div>
+																<div class="text-truncate">
+																	<span>4m 7s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Clip Watched</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 14s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Function Scope</span>
+																</div>
+																<div class="text-truncate">
+																	<span>3m 45s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Var and Hoisting</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 21s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Undeclared Variables and Strict
+																																				                                                                            Mode</span>
+																</div>
+																<div class="text-truncate">
+																	<span>2m 16s</span>
+																</div>
+															</a>
+															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
+																<div class="text-truncate">
+																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
+																		<i class="fe fe-lock"></i>
+																	</span>
+																	<span>Summary</span>
+																</div>
+																<div class="text-truncate">
+																	<span>1m 33s</span>
+																</div>
+															</a>
+														</div>
+													</div>
+												</li>
+												<!-- List group item -->
+												<li
+													class="list-group-item px-0 pb-0">
+													<!-- Toggle -->
+													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseEleven" aria-expanded="false" aria-controls="courseEleven">
+														<div
+															class="me-auto">
+															<!-- Title -->
+															Summary
+														</div>
+														<!-- Chevron -->
+														<span class="chevron-arrow ms-4">
+															<i class="fe fe-chevron-down fs-4"></i>
+														</span>
+													</a>
+													<!-- Row -->
+													<!-- Collapse -->
+													<div class="collapse" id="courseEleven" data-bs-parent="#courseAccordion">
+														<div class="pt-3 pb-2">
+															<p>
+																Lorem ipsum dolor sit amet consectetur adipisicing
+																																                                                                    elit. Repudiandae esse velit eos sunt ab inventore
+																																                                                                    est tenetur blanditiis?
+																																                                                                    Voluptas eius molestiae ad itaque tempora nobis
+																																                                                                    minima eveniet aperiam molestias, maiores natus
+																																                                                                    expedita dolores ea non possimus
+																																                                                                    magnam corrupt i quas rem unde quo enim porro culpa!
+																																                                                                    Quaerat veritatis veniam corrupti iusto.
+															</p>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade active show" id="content" role="tabpanel" aria-labelledby="content-tab">
+									{% if recipe.content %}
+										<div class="mb-4">
+											<h3 class="mb-2">{{ "Content"|trans }}</h3>
+											<p>{{ recipe.content |raw | nl2br }}</p>
+										</div>
+									{% endif %}
+									<h4 class="mb-3">
+                                        {{ "Category & Country & Languages & Subtitles & Authors & Year & Audience"|trans }}
+                                    </h4>
+									<div class="row mb-3">
+										<div class="col-12 col-md-6">
+											<ul class="list-unstyled">
+												{% if recipe.category %}
+													<li class="d-flex mb-2">
+														<span class="me-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+															</svg>
+														</span>
+														<span>{{ recipe.category.name }}</span>
+													</li>
+												{% endif %}
+												{% if recipe.country %}
+													<li class="d-flex mb-2">
+														<span class="me-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+															</svg>
+														</span>
+														<span class="flag flag-{{ recipe.country.code|lower }}"></span>
+														{{ recipe.country.name }}
+													</li>
+												{% endif %}
+												{% if recipe.languages | length > 0 %}
+													<li class="d-flex mb-2">
+														<span class="me-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+															</svg>
+														</span>
+														<span>{{ recipe.displayLanguages }}</span>
+													</li>
+												{% endif %}
+											</ul>
+										</div>
+										<div class="col-12 col-md-6">
+											<ul class="list-unstyled">
+												{% if recipe.subtitles | length > 0 %}
+													<li class="d-flex mb-2">
+														<span class="me-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+															</svg>
+														</span>
+														<span>{{ recipe.displaySubtitles }}</span>
+													</li>
+												{% endif %}
+												{% if recipe.authors %}
+													<li class="d-flex mb-2">
+														<span class="me-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+															</svg>
+														</span>
+														<span>{{ recipe.authors }}</span>
+													</li>
+												{% endif %}
+												{% if recipe.year %}
+													<li class="d-flex mb-2">
+														<span class="me-2">
+															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+															</svg>
+														</span>
+														<span>{{ recipe.year }}</span>
+													</li>
+												{% endif %}
+												{% if recipe.audiences | length > 0 %}
+													<li class="d-flex mb-2"></li>
+												{% endif %}
+											</ul>
+										</div>
+									</div>
+									{% if recipe.images | length > 0 %}
+                                        <h4 class="mb-3">
+                                            {{ "Photos"|trans }}
+                                        </h4>
+                                        <div class="row mb-3">
+                                            {% for image in recipe.images %}
+                                                <div class="col-lg-3 col-md-4 col-12">
+                                                    <div class="mb-4">
+                                                        <a href="{{ asset(image.getImagePath) }}" data-size="{{ image.imageDimensions[0] }}x{{ image.imageDimensions[1] }}" class="glightbox" data-gallery="gallery1">
+                                                            <img src="{{ image.getImagePath | imagine_filter('thumbnail') }}" alt="{{ recipe.title }}" class="rounded-3 img-fluid">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+									{% if recipe.hasContactAndSocialMedia %}
+										<h4 class="mb-3">{{ 'Contact & Social media'|trans }}</h4>
+										<div class="row mb-3">
+											<div class="col-12 col-md-6">
+												<ul class="list-unstyled">
+                                                    {% if recipe.externallink %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="{% if 'http://' not in recipe.externallink and 'https://' not in recipe.externallink %}http://{% endif %}{{ recipe.externallink }}" class="pl-4" target="_blank">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span>{{ recipe.externallink }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if recipe.email %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="mailto:{{ recipe.email }}" class="pl-4">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span>{{ recipe.email }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if recipe.phonenumber %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="tel:{{ recipe.phonenumber }}" class="pl-4">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span></span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+												</ul>
+											</div>
+											<div class="col-12 col-md-6">
+												<ul class="list-unstyled">
+                                                    {% if recipe.facebook %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="{% if 'http://' not in recipe.facebook and 'https://' not in recipe.facebook %}http://{% endif %}{{ recipe.facebook }}" class="pl-4" target="_blank">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span>{{ recipe.facebook }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if recipe.twitter %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="{% if 'http://' not in recipe.twitter and 'https://' not in recipe.twitter %}http://{% endif %}{{ recipe.twitter }}" class="pl-4" target="_blank">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span>{{ recipe.twitter }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if recipe.googleplus %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="{% if 'http://' not in recipe.googleplus and 'https://' not in recipe.googleplus %}http://{% endif %}{{ recipe.googleplus }}" class="pl-4" target="_blank">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span>{{ recipe.googleplus }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if recipe.instagram %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="{% if 'http://' not in recipe.instagram and 'https://' not in recipe.instagram %}http://{% endif %}{{ recipe.instagram }}" class="pl-4" target="_blank">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span>{{ recipe.instagram }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if recipe.linkedin %}
+                                                        <li class="d-flex mb-2">
+                                                            <a href="{% if 'http://' not in recipe.linkedin and 'https://' not in recipe.linkedin %}http://{% endif %}{{ recipe.linkedin }}" class="pl-4" target="_blank">
+                                                                <span class="me-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
+                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
+                                                                    </svg>
+                                                                </span>
+                                                                <span>{{ recipe.linkedin }}</span>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+												</ul>
+											</div>
+										</div>
+									{% endif %}
+									<hr class="my-5">
+									<div class="d-flex justify-content-between align-items-center mb-5">
+										<div>
+											{% if recipe.tags %}
+												<span class="ms-2">{{ 'Tags'|trans }}</span>
+												{% for tag in recipe.tags|split(',') %}
+													<a href="{{ path('recipes', { keyword : tag }) }}" class="btn btn-light btn-xs mb-2">
+														{{ tag }}
+													</a>
+												{% endfor %}
+											{% endif %}
+										</div>
+										<div>
+											<div>
+												<span class="ms-2">{{ 'Share'|trans }}</span>
+
+											</div>
+										</div>
+									</div>
+								</div>
+								{% if recipe.enablereviews %}
+									<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+										<div class="mb-3">
+                                            <div class="d-md-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h3 class="mb-4">
+                                                        ({{ reviewscount }})
+                                                        {{ "review"|trans|lower }}
+                                                    </h3>
+                                                </div>
+                                                <div class="mt-3">
+                                                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                                        {% if is_granted('ROLE_CREATOR') %}
+                                                            {% if recipe.isRatedBy(app.user) %}
+                                                                <a href="{{ path('dashboard_creator_reviews_index', { slug: recipe.isRatedBy(app.user).slug }) }}" class="btn btn-outline-primary">
+                                                                    {{ "My review"|trans }}
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{{ path('dashboard_creator_reviews_new', { slug: recipe.slug }) }}" class="btn btn-outline-primary">
+                                                                    {{ "Add your review"|trans }}
+                                                                </a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a href="{{ path('login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-outline-primary">
+                                                            {{ "Add your review"|trans }}
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+											<div class="row align-items-center">
+												<div class="col-auto text-center">
+													<h3 class="display-2 fw-bold">4.5</h3>
+													<span class="fs-6" style="width:{{ recipe.getRatingPercentage }}%">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+														</svg>
+													</span>
+													<p class="mb-0 fs-6">
+                                                        ({{ recipe.getRatingAvg }} {{ "out of 5 stars"|trans|lower }})
+                                                    </p>
+												</div>
+												<div class="col order-3 order-md-2">
+													<div class="progress mb-3" style="height: 6px">
+														<div class="progress-bar bg-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
+													<div class="progress mb-3" style="height: 6px">
+														<div class="progress-bar bg-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
+													<div class="progress mb-3" style="height: 6px">
+														<div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
+													<div class="progress mb-3" style="height: 6px">
+														<div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
+													<div class="progress mb-0" style="height: 6px">
+														<div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
+												</div>
+												<div class="col-md-auto col-6 order-2 order-md-3">
+                                                    <div>
+                                                        <span class="fs-6">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                                            </svg>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                                            </svg>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                                            </svg>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                                            </svg>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <span class="ms-1">53%</span>
+                                                    </div>
+													<div>
+														<span class="fs-6">
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+														</span>
+														<span class="ms-1">36%</span>
+													</div>
+													<div>
+														<span class="fs-6">
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+														</span>
+														<span class="ms-1">9%</span>
+													</div>
+													<div>
+														<span class="fs-6">
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+														</span>
+														<span class="ms-1">3%</span>
+													</div>
+													<div>
+														<span class="fs-6">
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
+																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+															</svg>
+														</span>
+														<span class="ms-1">2%</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<hr class="my-5">
+										<div id="reviews" class="mb-3">
+											<div class="d-lg-flex align-items-center justify-content-between mb-5">
+												<div class="mb-3 mb-lg-0">
+													<h3 class="mb-0">{{ 'Reviews'|trans }}</h3>
+												</div>
+												<div>
+													<form class="form-inline">
+														<div class="d-flex align-items-center me-2">
+															<span class="position-absolute ps-3">
+																<i class="fe fe-search"></i>
+															</span>
+															<input type="search" class="form-control ps-6" placeholder="Search Review">
+														</div>
+													</form>
+												</div>
+											</div>
+                                            {% if reviewscount | length %}
+                                                {% for review in setting.getReviews({"recipe": recipe.slug, "limit": 8}).getQuery().getResult() %}
+                                                    {% include "global/user-review.html.twig" with { review : review, showuser: 1 } %}
+                                                {% endfor %}
+                                                {% if reviewscount > 8 %}
+                                                    <div class="d-flex align-items-start">
+                                                        <a href="{{ path('recipe_reviews') }}" class="btn btn-outline-primary mx-auto">
+                                                            <i class="bi bi-star-half"></i>
+                                                            {{ "See all %reviewscount% reviews"|trans({'%reviewscount%': reviewscount}) }}
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+										</div>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-12 col-12 mt-lg-n8">
+					<div class="card mb-3 mb-4">
+						{% if recipe.youtubeurl %}
+							<div class="p-1">
+								<div class="d-flex justify-content-center align-items-center rounded border-white border rounded-3 bg-cover" style="background-image: url(../assets/images/course/course-javascript.jpg); height: 210px">
+									<a class="glightbox icon-shape rounded-circle btn-play icon-xl" href="https://www.youtube.com/watch?v=Nfzi7034Kbg">
+										<i class="bi bi-play"></i>
+									</a>
+								</div>
+							</div>
+						{% endif %}
+						<div class="card-body">
+							<div class="mb-3">
+								<span class="text-dark fw-bold h2">$600</span>
+								<del class="fs-4">$750</del>
+							</div>
+							<div class="d-grid">
+								<a href="#" class="btn btn-primary mb-2">Start Free Month</a>
+								<a href="pricing.html" class="btn btn-outline-primary">Get Full Access</a>
+							</div>
+						</div>
+					</div>
+					<div class="card mb-4">
+						<div>
+							<div class="card-header">
+								<h4 class="mb-0">{{ pagetitle }}</h4>
+							</div>
+							{% if recipe.enablereviews %}
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item bg-transparent" style="width:{{ recipe.getRatingPercentage }}%">
+										<i class="bi bi-star align-middle me-2 text-warning"></i>
+										<i class="bi bi-star align-middle me-2 text-warning"></i>
+										<i class="bi bi-star align-middle me-2 text-warning"></i>
+										<i class="bi bi-star align-middle me-2 text-warning"></i>
+										<i class="bi bi-star align-middle me-2 text-warning"></i>
+									</li>
+									<li class="list-group-item bg-transparent">
+										<i class="bi bi-star me-2 align-middle text-warning"></i>
+										<i class="bi bi-star me-2 align-middle text-warning"></i>
+										<i class="bi bi-star me-2 align-middle text-warning"></i>
+										<i class="bi bi-star me-2 align-middle text-warning"></i>
+										<i class="bi bi-star me-2 align-middle text-warning"></i>
+									</li>
+								</ul>
+							{% endif %}
+							<span class="text-dark fw-bold h2">{{ reviewscount }}
+								{{"Reviews"|trans|lower}}</span>
+						</div>
+					</div>
+					<div class="card mb-4">
+						<div>
+							<div class="card-header">
+								<h4 class="mb-0">What’s included</h4>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item bg-transparent">
+									<i class="fe fe-play-circle align-middle me-2 text-primary"></i>
+									12 hours video
+								</li>
+								<li class="list-group-item bg-transparent">
+									<i class="fe fe-award me-2 align-middle text-success"></i>
+									Certificate
+								</li>
+								<li class="list-group-item bg-transparent">
+									<i class="fe fe-calendar align-middle me-2 text-info"></i>
+									12 Article
+								</li>
+								<li class="list-group-item bg-transparent">
+									<i class="fe fe-video align-middle me-2 text-secondary"></i>
+									Watch Offline
+								</li>
+								<li class="list-group-item bg-transparent border-bottom-0">
+									<i class="fe fe-clock align-middle me-2 text-warning"></i>
+									Lifetime access
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<div class="d-flex align-items-center">
+								<div class="position-relative">
+									<img src="../assets/images/avatar/avatar-1.jpg" alt="avatar" class="rounded-circle avatar-xl">
+									<a href="#" class="position-absolute mt-2 ms-n3" data-bs-toggle="tooltip" data-placement="top" aria-label="Verifed" data-bs-original-title="Verifed">
+										<img src="../assets/images/svg/checked-mark.svg" alt="checked-mark" height="30" width="30">
+									</a>
+								</div>
+								<div class="ms-4">
+									<h4 class="mb-0">Jenny Wilson</h4>
+									<p class="mb-1 fs-6">Front-end Developer, Designer</p>
+									<p class="fs-6 mb-1 d-flex align-items-center">
+										<span class="text-warning">4.5</span>
+										<span class="mx-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+												<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+											</svg>
+										</span>
+										Instructor Rating
+									</p>
+								</div>
+							</div>
+							<div class="border-top row mt-3 border-bottom mb-3 g-0">
+								<div class="col">
+									<div class="pe-1 ps-2 py-3">
+										<h5 class="mb-0">11,604</h5>
+										<span>Students</span>
+									</div>
+								</div>
+								<div class="col border-start">
+									<div class="pe-1 ps-3 py-3">
+										<h5 class="mb-0">32</h5>
+										<span>Courses</span>
+									</div>
+								</div>
+								<div class="col border-start">
+									<div class="pe-1 ps-3 py-3">
+										<h5 class="mb-0">12,230</h5>
+										<span>Reviews</span>
+									</div>
+								</div>
+							</div>
+							<p>I am an Innovation designer focussing on UX/UI based in Berlin. As a creative
+																                                    resident at Figma explored the city of the future and how new technologies.</p>
+							<a href="instructor-profile.html" class="btn btn-outline-secondary btn-sm">View Details</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{% set otherrecipesbythisrestaurants = setting.getRecipes({"limit": 3, "restaurant": recipe.restaurant.slug, "notId": recipe.id}).getQuery().getResult() %}
+			{% if otherrecipesbythisrestaurants | length > 0 %}
+				<div class="pt-8 pb-3">
+					<div class="row d-md-flex align-items-center mb-4">
+						<div class="col-12">
+							<h2 class="mb-0">
+								{{ "Other recipes by %restaurantname%"|trans({'%restaurantname%' : recipe.restaurant.name}) }}
+							</h2>
+						</div>
+					</div>
+					<div class="row">
+						{% for otherrecipesbythisrestaurant in otherrecipesbythisrestaurants %}
+							{% include "global/recipe-card.html.twig" with {recipe: otherrecipesbythisrestaurant} %}
+						{% endfor %}
+					</div>
+				</div>
+			{% endif %}
+
+			{% set similarrecipes = setting.getRecipes({"limit": 3, "category": recipe.category.slug, "notId": recipe.id}).getQuery().getResult() %}
+			{% if similarrecipes | length > 0 %}
+				<div class="pt-8 pb-3">
+					<div class="row d-md-flex align-items-center mb-4">
+						<div class="col-12">
+							<h2 class="mb-0">{{ 'Similar recipes'|trans }}</h2>
+						</div>
+					</div>
+					<div class="row">
+						{% for similarrecipe in similarrecipes %}
+							{% include "global/recipe-card.html.twig" with {recipe: similarrecipe} %}
+						{% endfor %}
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</section>
 {% endblock %}

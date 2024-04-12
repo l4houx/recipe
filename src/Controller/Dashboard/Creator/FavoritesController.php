@@ -42,9 +42,9 @@ class FavoritesController extends BaseController
         return $this->render('dashboard/creator/favorites.html.twig', compact('user', 'rows'));
     }
 
-    #[Route(path: '/create/{slug}', name: 'create', methods: ['GET', 'POST'], condition: 'request.isXmlHttpRequest()', requirements: ['slug' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/new/{slug}', name: 'new', methods: ['GET'], condition: 'request.isXmlHttpRequest()', requirements: ['slug' => Requirement::ASCII_SLUG])]
     #[Route(path: '/remove/{slug}', name: 'remove', methods: ['POST'], condition: 'request.isXmlHttpRequest()', requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function createRemove(string $slug): JsonResponse
+    public function newRemove(string $slug): JsonResponse
     {
         /** @var Recipe $recipe */
         $recipe = $this->settingService->getRecipes(['slug' => $slug])->getQuery()->getOneOrNullResult();

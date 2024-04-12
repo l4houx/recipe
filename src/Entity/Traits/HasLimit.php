@@ -12,7 +12,7 @@ final class HasLimit
 
     public const TESTIMONIAL_LIMIT = 10;
 
-    public const RECIPE_LIMIT = 10;
+    public const RECIPE_LIMIT = 9;
 
     public const CATEGORY_LIMIT = 10;
 

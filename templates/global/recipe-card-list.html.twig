@@ -1,0 +1,172 @@
+{% if recipeDate is defined %}
+    {% set displayedRecipeDate = recipeDate %}
+{% else %}
+    {% set displayedRecipeDate = recipe.getFirstOnSaleRecipeDate %}
+{% endif %}
+
+{% if customLink is defined %}
+    {% set link = customLink %}
+{% else %}
+    {% set link = path('recipe', { slug : recipe.slug }) %}
+{% endif %}
+
+<div class="card mb-4 card-hover">
+	<div class="row g-0">
+		{% if noLazyLoad is defined %}
+			<div class="col-12 col-md-12 col-xl-3 col-lg-3 bg-cover img-left-rounded" style="background-image: url('{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}')" href="{{ link }}">
+				<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" alt="{{ recipe.title }}" class="img-fluid d-lg-none invisible">
+			</div>
+		{% else %}
+			<a class="col-12 col-md-12 col-xl-3 col-lg-3 bg-cover img-left-rounded" href="{{ link }}">
+				<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" alt="{{ recipe.title }}" class="img-fluid visible">
+			</a>
+		{% endif %}
+		<div class="col-lg-9 col-md-12 col-12">
+			<div class="card-body">
+				<h3 class="mb-2 text-truncate-line-2">
+					<a href="{{ link }}" class="text-inherit">{{ recipe.title }}</a>
+				</h3>
+				<ul class="mb-5 list-inline">
+					<li class="list-inline-item">
+						<span>
+							<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock align-baseline" viewbox="0 0 16 16">
+								<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
+								<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
+							</svg>
+						</span>
+						<span>{{ recipe.duration }}</span>
+					</li>
+					<li class="list-inline-item">
+						<svg class="me-1 mt-n1" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect x="3" y="8" width="2" height="6" rx="1" fill="#754FFE"></rect>
+							<rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
+							<rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
+						</svg>
+						Beginner
+					</li>
+                    {% if orderReference is defined %}
+                        <li class="list-inline-item">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-hash align-baseline" viewBox="0 0 16 16">
+                                    <path d="M8.39 12.648a1 1 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1 1 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.51.51 0 0 0-.523-.516.54.54 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532s.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531s.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"/>
+                                </svg>
+                            </span>
+                            <a href="{{ path('dashboard_creator_order_details', {reference: orderReference}) }}">
+                                <span>{{ "Order"|trans }} #{{ orderReference }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if hidePrice is not defined %}
+                        <li class="list-inline-item">
+                            {% if recipe.isFree %}
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-currency-exchange align-baseline" viewBox="0 0 16 16">
+                                        <path d="M0 5a5 5 0 0 0 4.027 4.905 6.5 6.5 0 0 1 .544-2.073C3.695 7.536 3.132 6.864 3 5.91h-.5v-.426h.466V5.05q-.001-.07.004-.135H2.5v-.427h.511C3.236 3.24 4.213 2.5 5.681 2.5c.316 0 .59.031.819.085v.733a3.5 3.5 0 0 0-.815-.082c-.919 0-1.538.466-1.734 1.252h1.917v.427h-1.98q-.004.07-.003.147v.422h1.983v.427H3.93c.118.602.468 1.03 1.005 1.229a6.5 6.5 0 0 1 4.97-3.113A5.002 5.002 0 0 0 0 5m16 5.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0m-7.75 1.322c.069.835.746 1.485 1.964 1.562V14h.54v-.62c1.259-.086 1.996-.74 1.996-1.69 0-.865-.563-1.31-1.57-1.54l-.426-.1V8.374c.54.06.884.347.966.745h.948c-.07-.804-.779-1.433-1.914-1.502V7h-.54v.629c-1.076.103-1.808.732-1.808 1.622 0 .787.544 1.288 1.45 1.493l.358.085v1.78c-.554-.08-.92-.376-1.003-.787zm1.96-1.895c-.532-.12-.82-.364-.82-.732 0-.41.311-.719.824-.809v1.54h-.005zm.622 1.044c.645.145.943.38.943.796 0 .474-.37.8-1.02.86v-1.674z"/>
+                                    </svg>
+                                </span>
+                                <span>{{ "Free"|trans }}</span>
+                            {% else %}
+                                {% if displayedRecipeDate %}
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-currency-exchange align-baseline" viewBox="0 0 16 16">
+                                            <path d="M0 5a5 5 0 0 0 4.027 4.905 6.5 6.5 0 0 1 .544-2.073C3.695 7.536 3.132 6.864 3 5.91h-.5v-.426h.466V5.05q-.001-.07.004-.135H2.5v-.427h.511C3.236 3.24 4.213 2.5 5.681 2.5c.316 0 .59.031.819.085v.733a3.5 3.5 0 0 0-.815-.082c-.919 0-1.538.466-1.734 1.252h1.917v.427h-1.98q-.004.07-.003.147v.422h1.983v.427H3.93c.118.602.468 1.03 1.005 1.229a6.5 6.5 0 0 1 4.97-3.113A5.002 5.002 0 0 0 0 5m16 5.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0m-7.75 1.322c.069.835.746 1.485 1.964 1.562V14h.54v-.62c1.259-.086 1.996-.74 1.996-1.69 0-.865-.563-1.31-1.57-1.54l-.426-.1V8.374c.54.06.884.347.966.745h.948c-.07-.804-.779-1.433-1.914-1.502V7h-.54v.629c-1.076.103-1.808.732-1.808 1.622 0 .787.544 1.288 1.45 1.493l.358.085v1.78c-.554-.08-.92-.376-1.003-.787zm1.96-1.895c-.532-.12-.82-.364-.82-.732 0-.41.311-.719.824-.809v1.54h-.005zm.622 1.044c.645.145.943.38.943.796 0 .474-.37.8-1.02.86v-1.674z"/>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}
+                                        {{ recipe.getCheapestSubscription.getSalePrice }}
+                                        {{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                    <li class="list-inline-item">
+                        {% if subscriptionName is defined %}
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-cart align-baseline" viewBox="0 0 16 16">
+                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                </svg>
+                            </span>
+                            <span>{{ subscriptionName }}</span>
+                        {% endif %}
+                        {% if subscriptionsCount is defined %}
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-cart-plus align-baseline" viewBox="0 0 16 16">
+                                    <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9z"/>
+                                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                </svg>
+                            </span>
+                            <span>
+                                {{ subscriptionsCount }}
+                                {{ subscriptionsCount > 1 ? "subscriptions"|trans : "subscription"|trans }}
+                            </span>
+                        {% else %}
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-list align-baseline" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                                </svg>
+                            </span>
+                            <span>{{ recipe.category.name }}</span>
+                        {% endif %}
+                    </li>
+					<li class="list-inline-item">
+						<span class="align-text-top lh-1">
+							<span class="fs-6">
+								<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
+									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+								</svg>
+							</span>
+						</span>
+
+						<span class="text-warning">4.5</span>
+						<span class="fs-6">(9,300)</span>
+					</li>
+				</ul>
+				<div class="row align-items-center g-0">
+					<div class="col-auto">
+						<img src="{{ asset('images/user/default.png') }}" class="rounded-circle avatar-xs" alt="">
+					</div>
+					<div class="col ms-2">
+                        <span>
+                            {{ 'Author'|trans }}
+                            Claire Robertson
+                        </span>
+					</div>
+                    {% if (not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_CREATOR')) and hideFavoriteButton is not defined %}
+                        <div class="col-auto">
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                {% if recipe.isAddedToFavoritesBy(app.user) %}
+                                    <a href="{{ path('dashboard_creator_favorites_remove', { slug : recipe.slug }) }}" class="text-reset bookmark" bs-data-toggle="tooltip" title="{{ "Remove from favorites"|trans }}">
+                                        <i class="bi bi-heart-fill fs-4"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('dashboard_creator_favorites_new', { slug : recipe.slug }) }}" class="text-reset bookmark" bs-data-toggle="tooltip" title="{{ "Add to favorites"|trans }}">
+                                        <i class="bi bi-heart fs-4"></i>
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ path('login')~'?_target_path='~app.request.getPathInfo }}" class="text-reset bookmark" bs-data-toggle="tooltip" title="{{ "Add to favorites"|trans }}">
+                                    <i class="bi bi-heart fs-4"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+				</div>
+				<div></div>
+			</div>
+		</div>
+	</div>
+</div>

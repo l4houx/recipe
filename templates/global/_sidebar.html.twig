@@ -101,7 +101,7 @@
 										<i class="nav-icon bi bi-gear me-2"></i>
 										{{'Setting' | trans}}
 									</a>
-									<div id="settings-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_setting_homepage" or routename == "dashboard_admin_setting_payment" or routename == "dashboard_admin_setting_newsletter" or routename == "dashboard_admin_setting_layout" or routename == "dashboard_admin_setting_payment_gateways_new" or routename == "dashboard_admin_setting_payment_gateways_edit" or routename == "dashboard_admin_setting_checkout" or routename == "dashboard_admin_setting_blog" or routename == "dashboard_admin_setting_mail_server" or routename == "dashboard_admin_setting_google_recaptcha" or routename == "dashboard_admin_setting_google_maps" or routename == "dashboard_admin_setting_social_login" or routename == "dashboard_admin_setting_menus" or routename == "dashboard_admin_setting_menus_edit" or routename == "dashboard_admin_setting_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" or routename == "dashboard_admin_setting_recipes_list_page" or routename == "dashboard_admin_setting_venue_page" %}show{% endif %}" data-bs-parent="#sideNavbar" style="">
+									<div id="settings-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_setting_homepage" or routename == "dashboard_admin_setting_payment" or routename == "dashboard_admin_setting_newsletter" or routename == "dashboard_admin_setting_layout" or routename == "dashboard_admin_setting_payment_gateways_new" or routename == "dashboard_admin_setting_payment_gateways_edit" or routename == "dashboard_admin_setting_checkout" or routename == "dashboard_admin_setting_blog" or routename == "dashboard_admin_setting_mail_server" or routename == "dashboard_admin_setting_google_recaptcha" or routename == "dashboard_admin_setting_google_maps" or routename == "dashboard_admin_setting_social_login" or routename == "dashboard_admin_setting_menus" or routename == "dashboard_admin_setting_menus_edit" or routename == "dashboard_admin_setting_currency_index" or routename == "dashboard_admin_setting_currency_new" or routename == "dashboard_admin_setting_currency_edit" or routename == "dashboard_admin_setting_recipes_list_page" or routename == "dashboard_admin_setting_reviews_list_page" or routename == "dashboard_admin_setting_venue_page" %}show{% endif %}" data-bs-parent="#sideNavbar" style="">
 										<ul class="nav flex-column">
 											<li class="nav-item">
 												<a class="nav-link {% if routename == "dashboard_admin_setting_layout" %}active{% endif %}" href="{{ path('dashboard_admin_setting_layout') }}">
@@ -119,7 +119,7 @@
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_payment" %}active{% endif %}" href="{{ path('dashboard_admin_setting_payment') }}">
 													{{ 'Payments'|trans }}
 												</a>
 											</li>
@@ -129,12 +129,12 @@
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_checkout" %}active{% endif %}" href="{{ path('dashboard_admin_setting_checkout') }}">
 													{{ 'Checkout'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_mail_server" %}active{% endif %}" href="{{ path('dashboard_admin_setting_mail_server') }}">
 													{{ 'Mail server'|trans }}
 												</a>
 											</li>
@@ -166,6 +166,11 @@
 											<li class="nav-item">
 												<a class="nav-link {% if routename == "dashboard_admin_setting_recipes_list_page" %}active{% endif %}" href="{{ path('dashboard_admin_setting_recipes_list_page') }}">
 													{{ 'Recipes list page'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_reviews_list_page" %}active{% endif %}" href="{{ path('dashboard_admin_setting_reviews_list_page') }}">
+													{{ 'Reviews list page'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">

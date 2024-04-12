@@ -25,6 +25,8 @@ class Provider implements FeedProviderInterface
     }
 
     /**
+     * @param array $options
+     * @return FeedInterface
      * @throws FeedNotFoundException
      */
     public function getFeed(Request $request): FeedInterface
@@ -55,15 +57,12 @@ class Provider implements FeedProviderInterface
             // Item
             $item = new Item();
             $item->setTitle($recipe->getTitle());
-            $item->getAuthor($recipe->getAuthor()->getUsername());
-            $item->setLink($this->router->generate('recipe_show', [
-                'slug' => $recipe->getSlug(),
-                'id' => $recipe->getId(),
-            ], UrlGeneratorInterface::ABSOLUTE_URL));
+            $item->getAuthor($recipe->getRestaurant()->getName());
+            $item->setLink($this->router->generate('recipe', ['slug' => $recipe->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL));
 
             // Media
             $media = new Media();
-            $media->setUrl($this->settingService->getSettings('website_url').$this->packages->getUrl($recipe->getThumbnailPath()));
+            $media->setUrl($this->settingService->getSettings('website_url').$this->packages->getUrl($recipe->getImagePath()));
             $item->addMedia($media);
 
             // Category

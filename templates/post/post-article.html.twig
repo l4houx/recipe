@@ -3,6 +3,23 @@
 {% set pagetitle = post.title %}
 {% block title pagetitle %}
 
+{% block meta_dynamic_seo %}
+	<meta name="description" content="{{ post.content | raw | nl2br | striptags | slice(0, 200) | raw }}..."/>
+	{% if post.tags %}
+		<meta name="keywords" content="{{ post.title }}, {% for tag in post.tags %} {{ tag }} {{ not loop.last ? ', ' : '' }}{% endfor %}"/>
+	{% else %}
+		<meta name="keywords" content="{{ settings['website_keywords_' ~ app.request.locale] }}"/>
+	{% endif %}
+	<meta property="og:title" content="{{ post.title }}"/>
+	{# <meta property="og:image" content="{{ app.request.getUriForPath() }}"/> #}
+	<meta property="og:description" content="{{ post.content | raw | nl2br | striptags | slice(0, 200) | raw }}..."/>
+	<meta property="og:created_time" content="{{ post.createdAt | date('c') }}"/>
+	<meta name="twitter:title" content="{{ post.title }}"/>
+	{# <meta name="twitter:image" content="{{ app.request.getUriForPath() }}" /> #}
+	<meta name="twitter:image:alt" content="{{ post.title }}"/>
+	<meta name="twitter:description" content="{{ post.content | raw | nl2br | striptags | slice(0, 200) | raw }}..."/>
+{% endblock %}
+
 {% block content %}
     <div class="py-7">
         <div class="container">
@@ -42,7 +59,7 @@
                         <div class="d-flex align-items-center">
                             {% include "global/user-avatar.html.twig" with { user: post.author, type: "md" } %}
                             <div class="ms-2 lh-1">
-                                <h5 class="mb-1">{{ post.author.username }}</h5>
+                                <h5 class="mb-1">{{ 'Author'|trans }} {{ post.author.username }}</h5>
                                 <span class="text-primary">{{ post.author.getRole|trans }}</span>
                             </div>
                         </div>
@@ -65,13 +82,16 @@
                             <p class="lead text-dark">{{ post.content | html_markdown_excerpt(160) }}</p>
                             <p>{{ post.content | html_markdown | nl2br }}</p>
                         </div>
+                        <div class="mb-4">
+                            <p class="mb-0">{{ 'Published the'|trans }} {{ post.createdAt | format_date('long') }}</p>
+                        </div>
                     </div>
                     <hr class="mt-8 mb-5 ">
                     <div class="d-flex justify-content-between align-items-center mb-5">
                         <div class="d-flex align-items-center">
                             {% include "global/user-avatar.html.twig" with { user: post.author, type: "md" } %}
                             <div class="ms-2 lh-1">
-                                <h5 class="mb-1">{{ post.author.username }}</h5>
+                                <h5 class="mb-1">{{ 'Author'|trans }} {{ post.author.username }}</h5>
                                 <span class="text-primary">{{ post.author.getRole|trans }}</span>
                             </div>
                         </div>
@@ -130,7 +150,9 @@
                             </div>
                             {% if comments.getTotalItemCount > 0 %}
                                 {% for comment in comments %}
-                                    {% include 'post/_post-comment.html.twig' %}
+                                    {% if comment.parent == null %}
+                                        {% include 'post/_post-comment.html.twig' %}
+                                    {% endif %}
                                 {% endfor %}
                                 {{ knp_pagination_render(comments, null, {}, {'align': 'center'}) }}
                             {% else %}
@@ -147,15 +169,13 @@
                     <div class="my-5">
                         <h2>{{ 'Related posts'|trans }}</h2>
                     </div>
-                </div>
-                {#  
-                {% set similarposts = settings.getBlogPosts({"limit": 3, "category": post.category.slug, "otherthan": post.id}).getQuery().getResult() %}
+                </div> 
+                {% set similarposts = setting.getBlogPosts({"limit": 3, "category": post.category.slug, "otherthan": post.id}).getQuery().getResult() %}
                 {% if similarposts | length %}
                     {% for similarpost in similarposts %}
-                        {% include "global/posts-card.html.twig" with {post: similarpost, thumbnailsize: [241, 241], showdate: 1} %}
+                        {% include "global/post-card.html.twig" with {post: similarpost, thumbnailsize: [241, 241], showdate: 1} %}
                     {% endfor %}
                 {% endif %}
-                #}
             </div>
         </div>
 	</section>

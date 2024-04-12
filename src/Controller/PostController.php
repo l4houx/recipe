@@ -28,7 +28,7 @@ class PostController extends AbstractController
     public function post(Request $request, PaginatorInterface $paginator, string $category = 'all'): Response
     {
         $keyword = '' == $request->query->get('keyword') ? 'all' : $request->query->get('keyword');
-        $rows = $paginator->paginate($this->settingService->getBlogPosts(['category' => $category, 'keyword' => $keyword])->getQuery(), $request->query->getInt('page', 1), $this->settingService->getSettings('website_posts_limit'), ['wrap-queries' => true]);
+        $rows = $paginator->paginate($this->settingService->getBlogPosts(['category' => $category, 'keyword' => $keyword])->getQuery(), $request->query->getInt('page', 1), $this->settingService->getSettings('posts_per_page'), ['wrap-queries' => true]);
 
         return $this->render('post/post.html.twig', compact('rows'));
     }
