@@ -21,24 +21,25 @@ class AppCategoryFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // Create of 8 Categories
-        $this->createCategory('Plats', '#3f7fca', 'bi bi-book', true, true, $manager);
-        $this->createCategory('Entrées', '#1e81b0', 'bi bi-book', true, true, $manager);
-        $this->createCategory('Desserts', '#9141ac', 'bi bi-book', true, true, $manager);
-        $this->createCategory('Goûters', '#21130d', 'bi bi-book', true, true, $manager);
-        $this->createCategory('Bases', '#063970', 'bi bi-book', true, false, $manager);
-        $this->createCategory('Boissons', '#154c79', 'bi bi-book', false, false, $manager);
-        $this->createCategory('Apéritifs', '#e07b39', 'bi bi-book', false, false, $manager);
-        $this->createCategory('Autres', '#154c79', 'bi bi-book', true, true, $manager);
+        $this->createCategory('Food', '#3f7fca', '', true, true, 1, $manager);
+        $this->createCategory('Starters', '#f6b93b', '', true, true, 2, $manager);
+        $this->createCategory('Desserts', '#9141ac', '', true, true, 3, $manager);
+        $this->createCategory('Snacks', '#eb2f06', '', true, true, 4, $manager);
+        $this->createCategory('Bases', '#063970', '', true, false, 5, $manager);
+        $this->createCategory('Drinks', '#4a69bd', '', true, false, 6, $manager);
+        $this->createCategory('Appetizers', '#e07b39', '', true, false, 7, $manager);
+        $this->createCategory('Other', '#78e08f', 'fas fa-folder-open', true, true, 8, $manager);
 
         $manager->flush();
     }
 
     public function createCategory(
         string $name,
-        string $color = null,
-        string $icon = null,
+        ?string $color,
+        ?string $icon,
         bool $isOnline,
         bool $isFeatured,
+        ?int $featuredorder,
         ObjectManager $manager
     ) {
         $category = (new Category());
@@ -49,6 +50,7 @@ class AppCategoryFixtures extends Fixture
             ->setIcon($icon)
             ->setIsOnline($isOnline)
             ->setIsFeatured($isFeatured)
+            ->setFeaturedorder($featuredorder)
         ;
         $manager->persist($category);
 

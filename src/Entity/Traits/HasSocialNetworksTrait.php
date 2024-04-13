@@ -47,40 +47,40 @@ trait HasSocialNetworksTrait
     )]
     private ?string $youtubeurl = null;
 
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    #[Assert\Length(max: 100)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     #[Assert\Url(
         message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     private ?string $twitterurl = null;
 
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    #[Assert\Length(max: 100)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     #[Assert\Url(
         message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     private ?string $instagramurl = null;
 
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    #[Assert\Length(max: 100)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     #[Assert\Url(
         message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     private ?string $facebookurl = null;
 
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    #[Assert\Length(max: 100)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     #[Assert\Url(
         message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],
     )]
     private ?string $googleplusurl = null;
 
-    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    #[Assert\Length(max: 100)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     #[Assert\Url(
         message: "This value is not a valid URL.", 
         protocols: ['http', 'https'],

@@ -85,8 +85,8 @@
                     <div>
                         <ul class="nav nav-line-bottom">
                             <li class="nav-item">
-                                <a href="" class="nav-link active">
-                                    {{ 'Review'|trans }} <span class="text-inherit">(11.7k)</span>
+                                <a href="{{ path('recipe', { slug: recipe.slug }) }}" class="nav-link active">
+                                    {{ 'Recipe'|trans }} <span class="text-inherit">{{ recipe.title }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -133,9 +133,7 @@
 								</span>
 								<p class="mb-0">11.7k Reviews</p>
 							</div>
-							<div
-								class="offset-lg-1 col-lg-7 col-md-8">
-								<!-- progress -->
+							<div class="offset-lg-1 col-lg-7 col-md-8">
 								<div class="d-flex align-items-center mb-2">
 									<div class="text-nowrap me-3 ">
 										<span class="d-inline-block align-middle  me-1">5</span>

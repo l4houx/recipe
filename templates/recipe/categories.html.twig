@@ -4,15 +4,30 @@
 {% block title pagetitle %}
 
 {% block pageheader %}
-    {% include "global/pageheader.html.twig" %}
+	<section class="bg-primary py-4 py-lg-6">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+					<div>
+						<h1 class="mb-0 text-white display-4">{{ pagetitle }}</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
 {% endblock %}
 
 {% block content %}
-    <section class="py-7">
+    <section class="py-6">
         <div class="container">
             <div class="row">
-                {% for category in setting.getCategories({"sort": "name", "order": "DESC"}).getQuery().getResult() %}
-                    <div class="col-lg-3 col-md-6 col-12">
+                {% for category in setting.getCategories({"sort": "c.name", "order": "DESC"}).getQuery().getResult() %}
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-12">
                         {% include "global/category-card.html.twig" with {category: category} %}
                     </div>
                 {% endfor %}

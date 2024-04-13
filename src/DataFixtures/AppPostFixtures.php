@@ -67,14 +67,14 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
                 ->setTitle($this->faker()->unique()->sentence())
                 ->setSlug($this->slugger->slug($post->getTitle())->lower())
                 ->setContent($this->faker()->paragraphs(10, true))
-                ->setReadtime(rand(10, 160))
+                ->setReadtime(mt_rand(0, 1) === 1 ? rand(10, 160) : null)
                 ->setViews(rand(10, 160))
                 ->setAuthor($author)
                 ->setIsOnline($this->faker()->numberBetween(0, 1))
-                ->setTags($this->faker()->unique()->word())
+                ->setTags(mt_rand(0, 1) === 1 ? $this->faker()->unique()->word() : null)
             ;
 
-            $category = $this->getReference('category-' . $this->faker()->numberBetween(1, 8));
+            $category = $this->getReference('category-' . $this->faker()->numberBetween(1, 16));
             $post->setCategory($category);
 
             $manager->persist($post);
