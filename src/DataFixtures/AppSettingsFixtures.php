@@ -2,23 +2,27 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Setting\AppLayoutSetting;
-use App\Entity\Setting\Currency;
-use App\Entity\Setting\HomepageHeroSetting;
+use App\Entity\Setting\Menu;
 use App\Entity\Setting\Setting;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\Setting\Currency;
+use App\Entity\Setting\MenuElement;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use App\Entity\Setting\AppLayoutSetting;
+use App\Entity\Setting\HomepageHeroSetting;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class AppSettingsFixtures extends Fixture
 {
+    use FakerTrait;
+
     public function __construct(protected readonly ParameterBagInterface $params)
     {
     }
@@ -431,6 +435,240 @@ class AppSettingsFixtures extends Fixture
             ;
 
             $manager->persist($currency);
+        }
+
+        // Menu
+        /** @var array<Menu> $menus */
+        $menus = [
+            1 => [
+                'name' => 'Header menu',
+                'slug' => 'header-menu',
+                'header' => NULL,
+            ],
+            2 => [
+                'name' => 'First Footer Section Menu',
+                'slug' => 'first-footer-section-menu',
+                'header' => 'Useful Links',
+            ],
+            3 => [
+                'name' => 'Second Footer Section Menu',
+                'slug' => 'second-footer-section-menu',
+                'header' => 'My Account',
+            ],
+            4 => [
+                'name' => 'Third Footer Section Menu',
+                'slug' => 'third-footer-section-menu',
+                'header' => 'Recipe Categories',
+            ],
+        ];
+
+        foreach ($menus as $key => $value) {
+            $menu = (new Menu())
+                ->setName($value['name'])
+                ->setSlug($value['slug'])
+                ->setHeader($value['header'])
+            ;
+
+            $manager->persist($menu);
+        }
+
+        // Menu element
+        /** @var array<MenuElement> $menuelements */
+        $menuelements = [
+            1 => [
+                //'menu_id' => 1,
+                'label' => 'Home',
+                'slug' => 'home',
+                'icon' => 'fas fa-home',
+                'link' => '/en',
+                'custom_link' => NULL,
+                'position' => 0,
+            ],
+            2 => [
+                //'menu_id' => 1,
+                'label' => 'Browse Recipes',
+                'slug' => 'browse-recipes',
+                'icon' => 'fas fa-book',
+                'link' => '/en/recipes',
+                'custom_link' => NULL,
+                'position' => 1,
+            ],
+            3 => [
+                //'menu_id' => 1,
+                'label' => 'Explore',
+                'slug' => 'explore',
+                'icon' => 'fas fa-stream',
+                'link' => 'categories_dropdown',
+                'custom_link' => NULL,
+                'position' => 2,
+            ],
+            4 => [
+                //'menu_id' => 1,
+                'label' => 'Venues',
+                'slug' => 'venues',
+                'icon' => 'fas fa-compass',
+                'link' => '/en/venues',
+                'custom_link' => NULL,
+                'position' => 3,
+            ],
+            5 => [
+                //'menu_id' => 1,
+                'label' => 'How It works?',
+                'slug' => 'how-it-works',
+                'icon' => 'fas fa-question-circle',
+                'link' => '/en/help-center',
+                'custom_link' => NULL,
+                'position' => 4,
+            ],
+            6 => [
+                //'menu_id' => 1,
+                'label' => 'Blog',
+                'slug' => 'blog',
+                'icon' => 'fas fa-newspaper',
+                'link' => '/en/blog',
+                'custom_link' => NULL,
+                'position' => 5,
+            ],
+            7 => [
+                //'menu_id' => 1,
+                'label' => 'My subscriptions',
+                'slug' => 'my-subscriptions',
+                'icon' => 'fas fa-ticket-alt',
+                'link' => '/en/dashboard/creator/my-subscriptions',
+                'custom_link' => NULL,
+                'position' => 6,
+            ],
+            8 => [
+                //'menu_id' => 1,
+                'label' => 'Add my recipe',
+                'slug' => 'add-my-recipe',
+                'icon' => 'fas fa-calendar-plus',
+                'link' => '/en/dashboard/restaurant/my-recipes/add',
+                'custom_link' => NULL,
+                'position' => 7,
+            ],
+            9 => [
+                //'menu_id' => 2,
+                'label' => 'About us',
+                'slug' => 'about-us',
+                'icon' => NULL,
+                'link' => '/en/page/about-us',
+                'custom_link' => NULL,
+                'position' => 0,
+            ],
+            10 => [
+                //'menu_id' => 2,
+                'label' => 'Help center',
+                'slug' => 'help-center',
+                'icon' => NULL,
+                'link' => '/en/help-center',
+                'custom_link' => NULL,
+                'position' => 1,
+            ],
+            11 => [
+                //'menu_id' => 2,
+                'label' => 'Blog',
+                'slug' => 'blog-2',
+                'icon' => NULL,
+                'link' => '/en/blog',
+                'custom_link' => NULL,
+                'position' => 2,
+            ],
+            12 => [
+                //'menu_id' => 2,
+                'label' => 'Venues',
+                'slug' => 'venues-1',
+                'icon' => NULL,
+                'link' => '/en/venues',
+                'custom_link' => NULL,
+                'position' => 3,
+            ],
+            13 => [
+                //'menu_id' => 2,
+                'label' => 'Send us an email',
+                'slug' => 'send-us-an-email',
+                'icon' => NULL,
+                'link' => '/en/contact',
+                'custom_link' => NULL,
+                'position' => 4,
+            ],
+            14 => [
+                //'menu_id' => 3,
+                'label' => 'Create an account',
+                'slug' => 'create-an-account',
+                'icon' => NULL,
+                'link' => '/en/signup',
+                'custom_link' => NULL,
+                'position' => 0,
+            ],
+            15 => [
+                //'menu_id' => 3,
+                'label' => 'Create an account',
+                'slug' => 'create-an-account',
+                'icon' => NULL,
+                'link' => '/en/signup/restaurant',
+                'custom_link' => NULL,
+                'position' => 1,
+            ],
+            16 => [
+                //'menu_id' => 3,
+                'label' => 'Sell subscriptions online',
+                'slug' => 'sell-subscriptions-online',
+                'icon' => NULL,
+                'link' => '/en/dashboard/creator/my-subscriptions',
+                'custom_link' => NULL,
+                'position' => 2,
+            ],
+            17 => [
+                //'menu_id' => 3,
+                'label' => 'Forgot your password ?',
+                'slug' => 'forgot-your-password',
+                'icon' => NULL,
+                'link' => '/en/reset-password',
+                'custom_link' => NULL,
+                'position' => 3,
+            ],
+            18 => [
+                //'menu_id' => 3,
+                'label' => 'Pricing and fees',
+                'slug' => 'pricing-and-fees',
+                'icon' => NULL,
+                'link' => '/en/page/pricing-and-fees',
+                'custom_link' => NULL,
+                'position' => 4,
+            ],
+            19 => [
+                //'menu_id' => 4,
+                'label' => 'All categories',
+                'slug' => 'all-categories',
+                'icon' => NULL,
+                'link' => 'footer_categories_section',
+                'custom_link' => NULL,
+                'position' => 0,
+            ],
+            20 => [
+                //'menu_id' => 4,
+                'label' => 'All categories',
+                'slug' => 'all-categories',
+                'icon' => NULL,
+                'link' => '/en/categories',
+                'custom_link' => NULL,
+                'position' => 1,
+            ],
+        ];
+
+        foreach ($menuelements as $key => $value) {
+            $menuelement = (new MenuElement())
+                //->setMenu($value['menu_id'])
+                ->setLabel($value['label'])
+                ->setSlug($value['slug'])
+                ->setIcon($value['icon'])
+                ->setLink($value['link'])
+                ->setCustomLink($value['custom_link'])
+                ->setPosition($value['position'])
+            ;
+
+            $manager->persist($menuelement);
         }
 
         $manager->flush();

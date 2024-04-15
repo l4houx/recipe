@@ -108,7 +108,7 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             AppAdminTeamUserFixtures::class,
-            //AppPostCategoryFixtures::class
+            AppPostCategoryFixtures::class
         ];
     }
 }

@@ -16,6 +16,7 @@ class AppAdminTeamUserFixtures extends Fixture
     public const ADMINAPPLICATION = 'ADMINAPPLICATION';
     public const ADMIN = 'ADMIN';
     public const MODERATOR = 'MODERATOR';
+    public const RESTAURANT = 'RESTAURANT';
 
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher,
@@ -109,9 +110,8 @@ class AppAdminTeamUserFixtures extends Fixture
             )
         );
 
-        // User Restaurant
-        /* @var User $restaurant */
-        /*
+        // User Restaurants
+        /** @var User $restaurant */
         $restaurant = (new User());
         $restaurant
             ->setId(4)
@@ -126,14 +126,14 @@ class AppAdminTeamUserFixtures extends Fixture
             ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ->setLastLoginIp($this->faker()->ipv4())
         ;
-        $restaurant->getRestaurant()->setUser($restaurant);
+
+        $this->addReference(self::RESTAURANT, $restaurant);
 
         $manager->persist(
             $restaurant->setPassword(
                 $this->hasher->hashPassword($restaurant, 'restaurant')
             )
         );
-        */
 
         // Create 10 Users
         $genres = ['male', 'female'];

@@ -7,6 +7,7 @@
 {% block page %}home{% endblock %}
 
 {% block content %}
+    {#  
     {% if herosetting.content == "recipes" and herosetting.recipes | length %}
 
     {% endif %}
@@ -35,6 +36,7 @@
             </div>
         </section>
     {% endif %}
+    #}
 
     {% if '1' == settings["homepage_show_search_box"] %}
         <section class="py-8 bg-light">

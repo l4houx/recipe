@@ -36,7 +36,7 @@ class Menu
         return $this->header;
     }
 
-    public function setHeader(string $header): static
+    public function setHeader(?string $header): static
     {
         $this->header = $header;
 
