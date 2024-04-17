@@ -21,8 +21,8 @@
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ audience.name }}</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ audience.createdAt ? audience.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ audience.createdAt ? audience.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>

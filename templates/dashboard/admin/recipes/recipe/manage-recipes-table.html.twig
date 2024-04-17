@@ -26,8 +26,8 @@
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ recipe.title }}</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ recipe.createdAt ? recipe.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ recipe.createdAt ? recipe.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>

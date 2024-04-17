@@ -29,6 +29,7 @@ class RecipeController extends BaseController
     {
         $category = 'all';
         $categorySlug = '' == $request->query->get('category') ? 'all' : $request->query->get('category');
+        $isOnline = '' == $request->query->get('isOnline') ? 'all' : $request->query->get('isOnline');
         $keyword = '' == $request->query->get('keyword') ? 'all' : $request->query->get('keyword');
         $localonly = '' == $request->query->get('localonly') ? 'all' : $request->query->get('localonly');
         $country = '' == $request->query->get('country') ? 'all' : $request->query->get('country');
@@ -50,11 +51,11 @@ class RecipeController extends BaseController
             }
         }
 
-        /*
-        $rows = $paginator->paginate($this->settingService->getRecipes(['category' => $categorySlug, 'keyword' => $keyword, 'localonly' => $localonly, 'country' => $country, 'location' => $location, 'startdate' => $startdate, 'pricemin' => $pricemin, 'pricemax' => $pricemax, 'audience' => $audience, 'restaurant' => $restaurant, 'freeonly' => $freeonly, 'onlineonly' => $onlineonly])->getQuery(), $request->query->getInt('page', 1), $this->settingService->getSettings('recipes_per_page'), ['wrap-queries' => true]);
-        */
+        
+        $rows = $paginator->paginate($this->settingService->getRecipes(['category' => $categorySlug, 'isOnline' => $isOnline, 'keyword' => $keyword, 'localonly' => $localonly, 'country' => $country, 'location' => $location, 'startdate' => $startdate, 'pricemin' => $pricemin, 'pricemax' => $pricemax, 'audience' => $audience, 'restaurant' => $restaurant, 'freeonly' => $freeonly, 'onlineonly' => $onlineonly])->getQuery(), $request->query->getInt('page', 1), $this->settingService->getSettings('recipes_per_page'), ['wrap-queries' => true]);
+        
 
-        $query = $this->recipeRepository->findBy(['isOnline' => true], ['createdAt' => 'DESC']);
+        /*$query = $this->recipeRepository->findBy(['isOnline' => true], ['createdAt' => 'DESC']);
         $page = $request->query->getInt('page', 1);
 
         $rows = $paginator->paginate(
@@ -62,7 +63,7 @@ class RecipeController extends BaseController
             $page,
             $this->settingService->getSettings('recipes_per_page'),
             ['wrap-queries' => true]
-        );
+        );*/
 
         return $this->render('recipe/recipes.html.twig', compact('rows', 'category'));
     }

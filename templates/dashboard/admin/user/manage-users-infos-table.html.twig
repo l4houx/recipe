@@ -67,7 +67,7 @@
                 <tr>
                     <td width="30%">{{ "Premium"|trans }}</td>
                     <td>
-                        {{ user.premium ? user.premiumEnd | ago('for') : '' }}
+                        {{ user.premium ? user.premiumEnd | ago() : '' }}
                     </td>
                 </tr>
             {% endif %}
@@ -86,7 +86,7 @@
             <tr>
                 <td width="30%">{{ "Registration date"|trans }}</td>
                 <td>
-                    {{ user.createdAt ? user.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+                    {{ user.createdAt ? user.createdAt | ago() }}
                 </td>
             </tr>
             <tr>
@@ -98,7 +98,7 @@
             <tr>
                 <td width="30%">{{ "Update date"|trans }}</td>
                 <td>
-                    {{ user.updatedAt ? user.updatedAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+                    {{ user.updatedAt ? user.updatedAt | ago() }}
                 </td>
             </tr>
             <tr>

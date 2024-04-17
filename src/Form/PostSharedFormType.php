@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Form;
 
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;

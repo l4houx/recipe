@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Helper\DateTimeHelper;
 use Twig\Environment;
+use Twig\Extension\CoreExtension;
 use Twig\Extension\AbstractExtension;
 use Twig\Extra\Intl\IntlExtension;
 use Twig\TwigFilter;
@@ -27,7 +28,7 @@ class TwigDateTimeExtension extends AbstractExtension
             new TwigFilter('ago', $this->ago(...), ['is_safe' => ['html']]),
             new TwigFilter('countdown', $this->countdown(...), ['is_safe' => ['html']]),
             new TwigFilter('duration_short', $this->shortDuration(...), ['is_safe' => ['html']]),
-            new TwigFilter('formater_datetime', $this->formaterDateTime(...), ['is_safe' => ['html']]),
+            new TwigFilter('format_datetime', $this->formatDateTime(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -76,13 +77,20 @@ class TwigDateTimeExtension extends AbstractExtension
     }
 
     /**
+     * @param \DateTimeInterface|string|null $dateTime A date or null to use the current time
+     * @param \DateTimeZone|string|false|null $timezone The target timezone, null to use the default, false to leave unchanged
+     * 
      * @throws \Twig\Error\RuntimeError
      */
-    public function formaterDateTime(
-        \DateTimeImmutable $dateTime,
+    public function formatDateTime(
+        \DateTimeInterface|string|null $dateTime,
         ?string $dateFormat = 'long',
-        ?string $timeFormat = 'short'
+        ?string $timeFormat = 'short',
+        ?string $locale = null,
+        $timezone = null,
     ): string {
-        return $this->intlExtension->formatDateTime($this->environment, $dateTime, dateFormat: $dateFormat, timeFormat: $timeFormat);
+        return $this->intlExtension->formatDateTime(
+            $this->environment, $dateTime, dateFormat: $dateFormat, timeFormat: $timeFormat, locale: $locale, timezone: $timezone
+        );
     }
 }

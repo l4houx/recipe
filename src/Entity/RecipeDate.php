@@ -32,11 +32,11 @@ class RecipeDate
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Assert\NotBlank(groups: ['create', 'update'])]
-    private ?\DateTimeInterface $startdate = null;
+    private ?\DateTime $startdate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Assert\LessThan(propertyPath: 'startdate', groups: ['create', 'update'])]
-    private ?\DateTimeInterface $enddate = null;
+    private ?\DateTime $enddate = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipedates')]
     private ?Recipe $recipe = null;
@@ -108,7 +108,7 @@ class RecipeDate
         return null;
     }
 
-    public function getSubscriptionIdBySectionName($sectionName)
+    public function getSubscriptionIdBySectionName($sectionName): ?int
     {
         foreach ($this->subscriptions as $subscription) {
             // foreach ($this->getSeatingPlan()->getDesign()['sections'] as $section) {
@@ -122,39 +122,45 @@ class RecipeDate
         return null;
     }
 
-    public function payoutRequested(): bool {
+    public function payoutRequested(): bool
+    {
         foreach ($this->payoutRequests as $payoutRequest) {
-            if ($payoutRequest->getStatus() == 0 || $payoutRequest->getStatus() == 1) {
+            if (0 == $payoutRequest->getStatus() || 1 == $payoutRequest->getStatus()) {
                 return true;
             }
         }
+
         return false;
     }
 
-    public function payoutRequestStatusClass() {
+    public function payoutRequestStatusClass(): string
+    {
         foreach ($this->payoutRequests as $payoutRequest) {
-            if ($payoutRequest->getStatus() == 0 || $payoutRequest->getStatus() == 1) {
+            if (0 == $payoutRequest->getStatus() || 1 == $payoutRequest->getStatus()) {
                 return $payoutRequest->getStatusClass();
             }
         }
-        return "Unknown";
+
+        return 'Unknown';
     }
 
-    public function payoutRequestStatus() {
+    public function payoutRequestStatus(): string
+    {
         foreach ($this->payoutRequests as $payoutRequest) {
-            if ($payoutRequest->getStatus() == 0 || $payoutRequest->getStatus() == 1) {
+            if (0 == $payoutRequest->getStatus() || 1 == $payoutRequest->getStatus()) {
                 return $payoutRequest->stringifyStatus();
             }
         }
-        return "Unknown";
+
+        return 'Unknown';
     }
 
-    public function canBeScannedBy($scanner)
+    public function canBeScannedBy($scanner): bool
     {
         return $this->getScanners()->contains($scanner);
     }
 
-    public function isOnSaleByPos($pointOfSale)
+    public function isOnSaleByPos($pointOfSale): bool
     {
         return $this->getPointofsales()->contains($pointOfSale);
     }
@@ -168,7 +174,7 @@ class RecipeDate
         return round(($this->getScannedSubscriptionsCount() / $this->getOrderElementsQuantitySum()) * 100);
     }
 
-    public function getScannedSubscriptionsCount()
+    public function getScannedSubscriptionsCount(): int
     {
         $count = 0;
         foreach ($this->subscriptions as $subscription) {
@@ -286,7 +292,7 @@ class RecipeDate
     public function isOnSale(): bool
     {
         return
-                $this->recipe->getRestaurant()->getUser()->isVerified() && $this->isActive && $this->recipe->getIsOnline() && ($this->getStartdate() > new \DateTime()) && (!$this->isSoldOut()) && $this->hasASubscriptionOnSale() && (!$this->payoutRequested())
+            $this->recipe->getRestaurant()->getUser()->isVerified() && $this->isActive && $this->recipe->getIsOnline() && ($this->getStartdate() > new \DateTime()) && (!$this->isSoldOut()) && $this->hasASubscriptionOnSale() && (!$this->payoutRequested())
         ;
     }
 
@@ -362,7 +368,8 @@ class RecipeDate
         return $this->hasSeatingPlan;
     }
 
-    public function getHasSeatingPlan(): ?bool {
+    public function getHasSeatingPlan(): ?bool
+    {
         return $this->hasSeatingPlan;
     }
 
@@ -373,24 +380,24 @@ class RecipeDate
         return $this;
     }
 
-    public function getStartdate(): ?\DateTimeInterface
+    public function getStartdate(): ?\DateTime
     {
         return $this->startdate;
     }
 
-    public function setStartdate(?\DateTimeInterface $startdate): static
+    public function setStartdate(?\DateTime $startdate): static
     {
         $this->startdate = $startdate;
 
         return $this;
     }
 
-    public function getEnddate(): ?\DateTimeInterface
+    public function getEnddate(): ?\DateTime
     {
         return $this->enddate;
     }
 
-    public function setEnddate(?\DateTimeInterface $enddate): static
+    public function setEnddate(?\DateTime $enddate): static
     {
         $this->enddate = $enddate;
 

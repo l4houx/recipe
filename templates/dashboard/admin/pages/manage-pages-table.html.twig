@@ -22,8 +22,8 @@
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ page.title }}</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ page.createdAt ? page.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ page.createdAt ? page.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>

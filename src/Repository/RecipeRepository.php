@@ -225,7 +225,7 @@ class RecipeRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $user || 'all' !== $userEnabled) {
-            $qb->leftJoin('r.author', 'user');
+            $qb->leftJoin('r.user', 'user');
         }
 
         if ('all' !== $user) {

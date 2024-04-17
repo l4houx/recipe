@@ -16,8 +16,8 @@ class HomeController extends AbstractController
     #[Route('/', name: 'home', methods: ['GET'])]
     public function home(EntityManagerInterface $em): Response
     {
-        $herosetting = $em->getRepository(HomepageHeroSetting::class)->find(1);
+        $herosettings = $em->getRepository(HomepageHeroSetting::class)->find(1);
 
-        return $this->render('home/home.html.twig', compact('herosetting'));
+        return $this->render('home/home.html.twig', compact('herosettings'));
     }
 }

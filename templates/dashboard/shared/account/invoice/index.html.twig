@@ -27,7 +27,7 @@
                     <tbody>
                         {% for transaction in transactions %}
                             <tr>
-                                <td>{{ transaction.createdAt | format_date('long') }}</td>
+                                <td>{{ transaction.createdAt | ago() }}</td>
                                 <td>{{ transaction.createdAt | format_date('short') }}</td>
                                 <td>{{ 'Premium account'|trans }} {{ transaction.duration }} {{ 'month'|trans }}</td>
                                 <td>{{ transaction.price | format_currency('EUR') }}</td>

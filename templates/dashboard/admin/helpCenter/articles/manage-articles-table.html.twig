@@ -24,8 +24,8 @@
 										{{ article.title }}
 									</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ article.createdAt ? article.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ article.createdAt ? article.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>
@@ -48,7 +48,7 @@
                         </span>
 					</td>
 					<td>
-						{{ article.updatedAt ? article.updatedAt | format_date('long') : '' }}
+						{{ article.updatedAt ? article.updatedAt | ago() : '' }}
 					</td>
 					<td>
 						{% if article.isFeatured %}

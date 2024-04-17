@@ -83,7 +83,7 @@
                             <p>{{ post.content | html_markdown | nl2br }}</p>
                         </div>
                         <div class="mb-4">
-                            <p class="mb-0">{{ 'Published the'|trans }} {{ post.createdAt | format_date('long') }}</p>
+                            <p class="mb-0">{{ 'Published'|trans }} {{ post.createdAt | ago }}</p>
                         </div>
                     </div>
                     <hr class="mt-8 mb-5 ">

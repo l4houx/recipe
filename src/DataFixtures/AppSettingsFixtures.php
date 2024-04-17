@@ -2,26 +2,28 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Setting\Menu;
-use App\Entity\Setting\Setting;
-use App\Entity\Setting\Currency;
-use App\Entity\Setting\MenuElement;
-use Doctrine\Persistence\ObjectManager;
 use App\Entity\Setting\AppLayoutSetting;
+use App\Entity\Setting\Currency;
 use App\Entity\Setting\HomepageHeroSetting;
+use App\Entity\Setting\Menu;
+use App\Entity\Setting\MenuElement;
+use App\Entity\Setting\Setting;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class AppSettingsFixtures extends Fixture
 {
     use FakerTrait;
+
+    private $counter = 1;
 
     public function __construct(protected readonly ParameterBagInterface $params)
     {
@@ -38,11 +40,11 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Keywords en', 'website_keywords_en', $this->params->get('website_name').', restaurant my recipe, subscriptions online, buy subscriptions', TextareaType::class);
 
         // Meta DE
-        $settings[] = new Setting('Description de', 'website_description_de', "Revenue Management und Abonnementverkauf", TextareaType::class);
+        $settings[] = new Setting('Description de', 'website_description_de', 'Revenue Management und Abonnementverkauf', TextareaType::class);
         $settings[] = new Setting('Keywords de', 'website_keywords_de', $this->params->get('website_name').', Restaurant mein Rezept, Online-Abonnements, Abonnements kaufen', TextareaType::class);
 
         // Meta ES
-        $settings[] = new Setting('Description es', 'website_description_es', "Gestión de ingresos y venta de suscripciones", TextareaType::class);
+        $settings[] = new Setting('Description es', 'website_description_es', 'Gestión de ingresos y venta de suscripciones', TextareaType::class);
         $settings[] = new Setting('Keywords es', 'website_keywords_es', $this->params->get('website_name').', restaurante mi receta, suscripciones online, comprar suscripciones', TextareaType::class);
 
         // URLS and Name
@@ -83,7 +85,7 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Everyone can sign up', 'users_can_register', true, CheckboxType::class);
         $settings[] = new Setting('About Footer', 'website_about', 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore est repellendus adipisci voluptates, earum excepturi ut iusto quas alias, voluptatibus modi autem libero, ea delectus ex soluta quaerat aperiam atque!', TextareaType::class);
         $settings[] = new Setting('Primary color', 'primary_color', '#9a6ee2', TextType::class);
-        $settings[] = new Setting('Back to top', 'show_back_to_top_button', 1, CheckboxType::class);
+        $settings[] = new Setting('Back to top', 'show_back_to_top_button', true, CheckboxType::class);
         $settings[] = new Setting('Custom CSS', 'custom_css', '', TextareaType::class);
         $settings[] = new Setting('App Env', 'app_environment', 'dev', TextType::class);
         $settings[] = new Setting('App Theme', 'app_theme', 'dark', TextType::class);
@@ -109,8 +111,8 @@ class AppSettingsFixtures extends Fixture
 
         // Pages Show Action
         $settings[] = new Setting('Show Search Box On Home page', 'homepage_show_search_box', 0, CheckboxType::class);
-        $settings[] = new Setting('Show Call To Action', 'homepage_show_call_to_action', 1, CheckboxType::class);
-        $settings[] = new Setting('Show Cookie policy bar', 'show_cookie_policy_bar', 1, CheckboxType::class);
+        $settings[] = new Setting('Show Call To Action', 'homepage_show_call_to_action', true, CheckboxType::class);
+        $settings[] = new Setting('Show Cookie policy bar', 'show_cookie_policy_bar', true, CheckboxType::class);
 
         // Pages Show
         $settings[] = new Setting('Show Cookie policy page', 'show_cookie_policy_page', true, CheckboxType::class);
@@ -125,23 +127,23 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Show Supports page', 'show_supports_page', true, CheckboxType::class);
 
         // Filter
-        $settings[] = new Setting('Filter Category', 'show_category_filter', 1, CheckboxType::class);
-        $settings[] = new Setting('Filter Location', 'show_location_filter', 1, CheckboxType::class);
-        $settings[] = new Setting('Filter Date', 'show_date_filter', 1, CheckboxType::class);
-        $settings[] = new Setting('Filter Subscription', 'show_subscription_price_filter', 1, CheckboxType::class);
-        $settings[] = new Setting('Filter Audience', 'show_audience_filter', 1, CheckboxType::class);
+        $settings[] = new Setting('Filter Category', 'show_category_filter', true, CheckboxType::class);
+        $settings[] = new Setting('Filter Location', 'show_location_filter', true, CheckboxType::class);
+        $settings[] = new Setting('Filter Date', 'show_date_filter', true, CheckboxType::class);
+        $settings[] = new Setting('Filter Subscription', 'show_subscription_price_filter', true, CheckboxType::class);
+        $settings[] = new Setting('Filter Audience', 'show_audience_filter', true, CheckboxType::class);
 
         // Button
         $settings[] = new Setting('Show Map', 'show_map_button', 0, CheckboxType::class);
-        $settings[] = new Setting('Show Calendar', 'show_calendar_button', 1, CheckboxType::class);
-        $settings[] = new Setting('Show RSS Feed', 'show_rss_feed_button', 1, CheckboxType::class);
+        $settings[] = new Setting('Show Calendar', 'show_calendar_button', true, CheckboxType::class);
+        $settings[] = new Setting('Show RSS Feed', 'show_rss_feed_button', true, CheckboxType::class);
 
         // Modal
-        $settings[] = new Setting('Show Cart Modal', 'show_subscriptions_left_on_cart_modal', 1, CheckboxType::class);
+        $settings[] = new Setting('Show Cart Modal', 'show_subscriptions_left_on_cart_modal', true, CheckboxType::class);
 
         // Restaurant
-        $settings[] = new Setting('Payout Paypal', 'restaurant_payout_paypal_enabled', 1, CheckboxType::class);
-        $settings[] = new Setting('Payout Stripe', 'restaurant_payout_stripe_enabled', 1, CheckboxType::class);
+        $settings[] = new Setting('Payout Paypal', 'restaurant_payout_paypal_enabled', true, CheckboxType::class);
+        $settings[] = new Setting('Payout Stripe', 'restaurant_payout_stripe_enabled', true, CheckboxType::class);
         $settings[] = new Setting('Subscription Fee Online', 'subscription_fee_online', '0.00', TextType::class);
         $settings[] = new Setting('Subscription Fee Pos', 'subscription_fee_pos', '0.00', TextType::class);
         $settings[] = new Setting('Pos Subscription Price', 'pos_subscription_price_percentage_cut', '0.00', TextType::class);
@@ -175,7 +177,7 @@ class AppSettingsFixtures extends Fixture
         // Newsletter
         $settings[] = new Setting('Mailchimp API Key', 'mailchimp_api_key', '', TextType::class);
         $settings[] = new Setting('Mailchimp List ID', 'mailchimp_list_id', '', TextType::class);
-        $settings[] = new Setting('Newsletter Enabled', 'newsletter_enabled', 1, CheckboxType::class);
+        $settings[] = new Setting('Newsletter Enabled', 'newsletter_enabled', true, CheckboxType::class);
 
         // Currency
         $settings[] = new Setting('Currency To Currency', 'currency_ccy', 'USD', TextType::class);
@@ -232,6 +234,20 @@ class AppSettingsFixtures extends Fixture
                 'custom_background_name' => 'homepage.jpg',
                 'show_search_box' => 1,
             ],
+            2 => [
+                'title' => 'Discover Recipe',
+                'paragraph' => 'Uncover the best recipes',
+                'content' => 'recipes',
+                'custom_background_name' => 'homepage.jpg',
+                'show_search_box' => 1,
+            ],
+            3 => [
+                'title' => 'Discover Restaurant',
+                'paragraph' => 'Uncover the best restaurants',
+                'content' => 'restaurants',
+                'custom_background_name' => 'homepage.jpg',
+                'show_search_box' => 1,
+            ],
         ];
 
         foreach ($homepages as $key => $value) {
@@ -251,10 +267,8 @@ class AppSettingsFixtures extends Fixture
             1 => [
                 // Logo
                 'logo_name' => '5f626cc22a186068458664.png',
-
                 // Favicon
                 'favicon_name' => '5ecac8821172a412596921.png',
-
                 // OG
                 'og_image_name' => '5faadc546e235285098877.jpg',
             ],
@@ -443,7 +457,7 @@ class AppSettingsFixtures extends Fixture
             1 => [
                 'name' => 'Header menu',
                 'slug' => 'header-menu',
-                'header' => NULL,
+                'header' => null,
             ],
             2 => [
                 'name' => 'First Footer Section Menu',
@@ -468,6 +482,8 @@ class AppSettingsFixtures extends Fixture
                 ->setSlug($value['slug'])
                 ->setHeader($value['header'])
             ;
+            $this->addReference('menu-'.$this->counter, $menu);
+            ++$this->counter;
 
             $manager->persist($menu);
         }
@@ -476,190 +492,191 @@ class AppSettingsFixtures extends Fixture
         /** @var array<MenuElement> $menuelements */
         $menuelements = [
             1 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'Home',
                 'slug' => 'home',
                 'icon' => 'fas fa-home',
                 'link' => '/en',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 0,
             ],
             2 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'Browse Recipes',
                 'slug' => 'browse-recipes',
                 'icon' => 'fas fa-book',
                 'link' => '/en/recipes',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 1,
             ],
             3 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'Explore',
                 'slug' => 'explore',
                 'icon' => 'fas fa-stream',
                 'link' => 'categories_dropdown',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 2,
             ],
             4 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'Venues',
                 'slug' => 'venues',
                 'icon' => 'fas fa-compass',
                 'link' => '/en/venues',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 3,
             ],
             5 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'How It works?',
                 'slug' => 'how-it-works',
                 'icon' => 'fas fa-question-circle',
                 'link' => '/en/help-center',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 4,
             ],
             6 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'Blog',
                 'slug' => 'blog',
                 'icon' => 'fas fa-newspaper',
                 'link' => '/en/blog',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 5,
             ],
             7 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'My subscriptions',
                 'slug' => 'my-subscriptions',
                 'icon' => 'fas fa-ticket-alt',
                 'link' => '/en/dashboard/creator/my-subscriptions',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 6,
             ],
             8 => [
-                //'menu_id' => 1,
+                // 'menu_id' => 1,
                 'label' => 'Add my recipe',
                 'slug' => 'add-my-recipe',
                 'icon' => 'fas fa-calendar-plus',
                 'link' => '/en/dashboard/restaurant/my-recipes/add',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 7,
             ],
             9 => [
-                //'menu_id' => 2,
+                // 'menu_id' => 2,
                 'label' => 'About us',
                 'slug' => 'about-us',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/page/about-us',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 0,
             ],
             10 => [
-                //'menu_id' => 2,
+                // 'menu_id' => 2,
                 'label' => 'Help center',
                 'slug' => 'help-center',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/help-center',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 1,
             ],
             11 => [
-                //'menu_id' => 2,
+                // 'menu_id' => 2,
                 'label' => 'Blog',
                 'slug' => 'blog-2',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/blog',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 2,
             ],
             12 => [
-                //'menu_id' => 2,
+                // 'menu_id' => 2,
                 'label' => 'Venues',
                 'slug' => 'venues-1',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/venues',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 3,
             ],
             13 => [
-                //'menu_id' => 2,
+                // 'menu_id' => 2,
                 'label' => 'Send us an email',
                 'slug' => 'send-us-an-email',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/contact',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 4,
             ],
             14 => [
-                //'menu_id' => 3,
+                // 'menu_id' => 3,
                 'label' => 'Create an account',
                 'slug' => 'create-an-account',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/signup',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 0,
             ],
             15 => [
-                //'menu_id' => 3,
+                // 'menu_id' => 3,
                 'label' => 'Create an account',
                 'slug' => 'create-an-account',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/signup/restaurant',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 1,
             ],
             16 => [
-                //'menu_id' => 3,
+                // 'menu_id' => 3,
                 'label' => 'Sell subscriptions online',
                 'slug' => 'sell-subscriptions-online',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/dashboard/creator/my-subscriptions',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 2,
             ],
             17 => [
-                //'menu_id' => 3,
+                // 'menu_id' => 3,
                 'label' => 'Forgot your password ?',
                 'slug' => 'forgot-your-password',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/reset-password',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 3,
             ],
             18 => [
-                //'menu_id' => 3,
+                // 'menu_id' => 3,
                 'label' => 'Pricing and fees',
                 'slug' => 'pricing-and-fees',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/page/pricing-and-fees',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 4,
             ],
             19 => [
-                //'menu_id' => 4,
+                // 'menu_id' => 4,
                 'label' => 'All categories',
                 'slug' => 'all-categories',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => 'footer_categories_section',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 0,
             ],
             20 => [
-                //'menu_id' => 4,
+                // 'menu_id' => 4,
                 'label' => 'All categories',
                 'slug' => 'all-categories',
-                'icon' => NULL,
+                'icon' => null,
                 'link' => '/en/categories',
-                'custom_link' => NULL,
+                'custom_link' => null,
                 'position' => 1,
             ],
         ];
 
         foreach ($menuelements as $key => $value) {
             $menuelement = (new MenuElement())
-                //->setMenu($value['menu_id'])
+                ->setId($key)
+                ->setMenu($this->getReference('menu-'.$this->faker()->numberBetween(1, 4)))
                 ->setLabel($value['label'])
                 ->setSlug($value['slug'])
                 ->setIcon($value['icon'])

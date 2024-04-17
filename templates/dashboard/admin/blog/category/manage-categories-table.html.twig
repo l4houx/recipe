@@ -32,8 +32,8 @@
                                         {{ postcategory.name }}
                                     </h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ postcategory.createdAt ? postcategory.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ postcategory.createdAt ? postcategory.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>

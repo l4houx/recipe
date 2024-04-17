@@ -47,11 +47,11 @@ class RecipeSubscription
     private ?int $subscriptionsperattendee = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $salesstartdate = null;
+    private ?\DateTime $salesstartdate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Assert\LessThan(propertyPath: 'salesstartdate', groups: ['create', 'update'])]
-    private ?\DateTimeInterface $salesenddate = null;
+    private ?\DateTime $salesenddate = null;
 
     #[ORM\Column(type: Types::INTEGER)]
     private int $position;
@@ -484,24 +484,24 @@ class RecipeSubscription
         return $this;
     }
 
-    public function getSalesstartdate(): ?\DateTimeInterface
+    public function getSalesstartdate(): ?\DateTime
     {
         return $this->salesstartdate;
     }
 
-    public function setSalesstartdate(?\DateTimeInterface $salesstartdate): static
+    public function setSalesstartdate(?\DateTime $salesstartdate): static
     {
         $this->salesstartdate = $salesstartdate;
 
         return $this;
     }
 
-    public function getSalesenddate(): ?\DateTimeInterface
+    public function getSalesenddate(): ?\DateTime
     {
         return $this->salesenddate;
     }
 
-    public function setSalesenddate(?\DateTimeInterface $salesenddate): static
+    public function setSalesenddate(?\DateTime $salesenddate): static
     {
         $this->salesenddate = $salesenddate;
 

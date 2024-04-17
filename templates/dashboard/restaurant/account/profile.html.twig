@@ -1,6 +1,6 @@
 {% extends "Global/layout.html.twig" %}
 
-{% set pagetitle = 'Edit your organizer profile' | trans %}
+{% set pagetitle = 'Edit your restaurant profile' | trans %}
 
 {% block title %}{{pagetitle}}{% endblock %}
 
@@ -19,9 +19,9 @@
                     <div class="card box">
                         <div class="card-body">
 
-                            {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: ('<a href="'~ path('organizer', {'slug': app.user.organizer.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to preview your profile'|trans) } %}
+                            {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: ('<a href="'~ path('restaurant', {'slug': app.user.restaurant.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to preview your profile'|trans) } %}
 
-                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
                             {{ form_widget(form) }}
                             {{ form_end(form) }}
                         </div>

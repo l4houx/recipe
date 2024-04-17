@@ -8,29 +8,43 @@
 
 {% block content %}
     {#  
-    {% if herosetting.content == "recipes" and herosetting.recipes | length %}
+    {% if herosettings.content == "recipes" and herosettings.recipes | length %}
+
+        {% for recipe in herosettings.recipes %}
+
+        {% endfor %}
 
     {% endif %}
 
-    {% if herosetting.content == "restaurants" and herosetting.restaurants | length %}
+    {% if herosettings.content == "restaurants" and herosettings.restaurants | length %}
+
+        {% for user in herosettings.restaurants %}
+
+            {% if user.restaurant.coverName %}
+
+            {% endif %}
+
+        {% endfor %}
 
     {% endif %}
 
-    {% if herosetting.content == "custom" %}
+    {% if herosettings.content == "custom" %}
         <section class="py-8 bg-white">
             <div class="container my-lg-4">
                 <div class="row">
                     <div class="offset-lg-2 col-lg-8 col-md-12 col-12 mb-8">
-                        <h1 class="display-2 fw-bold mb-3">
-                            Hi there, we’re
-                            <span class="text-primary">{{ website_name }}</span>
-                        </h1>
-                        <p class="h2 mb-3">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore ratione delectus eius rerum dicta. Eaque vel est qui consectetur dolor! Enim ut aliquam at deserunt nulla dolores officia numquam nemo!
-                        </p>
-                        <p class="mb-0 h4 text-body lh-lg">
-                            {{ website_name }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet reprehenderit cum suscipit cumque quam! Dolore vitae quia, velit vel quasi impedit. Corporis error suscipit voluptates optio dolorum blanditiis qui ipsam.
-                        </p>
+                        {% if herosettings.title %}
+                            <h1 class="display-2 fw-bold mb-3">
+                                {{ herosettings.title }}
+                                <span class="text-primary">{{ website_name }}</span>
+                            </h1>
+                        {% endif %}
+                        {% if herosettings.paragraph %}
+                            <p class="h2 mb-3">
+                                {{ herosettings.paragraph }}
+                            </p>
+                            <p class="mb-0 h4 text-body lh-lg"></p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

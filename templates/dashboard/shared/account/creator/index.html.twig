@@ -16,7 +16,8 @@
                 <span class="ml-3">{{ "Member since"|trans }}</span>
                 <span class="ml-3 text-success">
                     <i class="bi bi-person-add fa-fw"></i> 
-                    {{ app.user.createdAt|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}
+                    {{ app.user.createdAt | date("m/d/Y", false) }}
+                    {# {{ app.user.createdAt|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }} #}
                 </span>
             </p>
         </div>

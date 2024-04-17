@@ -19,8 +19,8 @@
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ pricing.title }}</h4>
 									<span>
-										{{ 'Create the'|trans }}
-										{{ pricing.createdAt ? pricing.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+										{{ 'Create'|trans }}
+										{{ pricing.createdAt ? pricing.createdAt | ago() }}
 									</span>
 								</div>
 							</div>

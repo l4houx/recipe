@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity\Setting;
 
 use App\Entity\Recipe;
@@ -101,9 +99,9 @@ class HomepageHeroSetting
         return $this->content;
     }
 
-    public function setContent(string $content): static
+    public function setContent(?string $content): static
     {
-        $this->content = $content;
+        $this->content = trim($content ?: '');
 
         return $this;
     }
@@ -207,7 +205,7 @@ class HomepageHeroSetting
     {
         if (!$this->restaurants->contains($restaurant)) {
             $this->restaurants->add($restaurant);
-            $restaurant->setisrestaurantonhomepageslider($this);
+            $restaurant->setIsrestaurantonhomepageslider($this);
         }
 
         return $this;
@@ -217,8 +215,8 @@ class HomepageHeroSetting
     {
         if ($this->restaurants->removeElement($restaurant)) {
             // set the owning side to null (unless already changed)
-            if ($restaurant->getisrestaurantonhomepageslider() === $this) {
-                $restaurant->setisrestaurantonhomepageslider(null);
+            if ($restaurant->getIsrestaurantonhomepageslider() === $this) {
+                $restaurant->setIsrestaurantonhomepageslider(null);
             }
         }
 

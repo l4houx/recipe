@@ -27,8 +27,8 @@
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ category.name }}</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ category.createdAt ? category.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ category.createdAt ? category.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>
@@ -39,7 +39,7 @@
 					<td>
 						<span class="text-decoration-none" style="color: {{ category.color }}">{{ category.name }}</span>
 					</td>
-					<td>{{ category.updatedAt ? category.updatedAt | format_date('long') : '' }}</td>
+					<td>{{ category.updatedAt ? category.updatedAt | ago() : '' }}</td>
 					<td>
 						{% if category.isFeatured == false %}
 							{{ "No"|trans }}

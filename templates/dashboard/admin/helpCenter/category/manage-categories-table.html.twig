@@ -31,8 +31,8 @@
 										{{ category.name }}
 									</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ category.createdAt ? category.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ category.createdAt ? category.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>

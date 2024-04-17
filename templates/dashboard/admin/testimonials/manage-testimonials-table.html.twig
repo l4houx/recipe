@@ -28,8 +28,8 @@
 										{{ testimonial.author.username }} / {{ testimonial.author.email }}
 									</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ testimonial.createdAt ? testimonial.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+										{{ 'Published'|trans }}
+										{{ testimonial.createdAt ? testimonial.createdAt | ago() }}
 									</span>
 								</div>
 							</div>
@@ -41,7 +41,7 @@
 						{% include 'global/rating.html.twig' with {'rating' : testimonial.rating, 'class' : 'fs-6 align-top'} %}
                     </td>
 					<td>
-						{{ testimonial.updatedAt ? testimonial.updatedAt | format_date('long') : '' }}
+						{{ testimonial.updatedAt ? testimonial.updatedAt | ago() : '' }}
 					</td>
 					<td>
 						{% if testimonial.isOnline == false %}

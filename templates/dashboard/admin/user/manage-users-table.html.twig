@@ -26,8 +26,8 @@
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ user.username }} / {{ user.email }}</h4>
 									<span>
-										{{ 'Joined the'|trans }}
-										{{ user.createdAt ? user.createdAt | format_datetime(pattern="dd MMM. yyyy at kk:mm") }}
+										{{ 'Joined'|trans }}
+										{{ user.createdAt ? user.createdAt | ago() }}
 									</span>
 								</div>
 							</div>
@@ -35,7 +35,7 @@
 					</td>
 					<td>
 						{{ user.getFullName() }}
-						{{ user.premium ? user.premiumEnd | ago('for') : '' }}
+						{{ user.premium ? user.premiumEnd | ago() : '' }}
 					</td>
 					<td>
 						{% if user.lastLogin %}

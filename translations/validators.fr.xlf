@@ -573,11 +573,7 @@
         <source>Please enter a valid week.</source>
         <target>Veuillez entrer une semaine valide.</target>
       </trans-unit>
-      <trans-unit id="bsh2Z5Y" resname="This value is not a valid URL.">
-        <source>This value is not a valid URL.</source>
-        <target>Cette valeur n'est pas une URL valide.</target>
-      </trans-unit>
-      <trans-unit id="eEbM.AO" resname="The URL must match the URL of a Youtube or DailyMotion video">
+      <trans-unit id="VQplR8b" resname="The URL must match the URL of a Youtube or DailyMotion video">
         <source>The URL must match the URL of a Youtube or DailyMotion video</source>
         <target>L'url doit correspondre à l'url d'une vidéo Youtube ou DailyMotion</target>
       </trans-unit>
@@ -657,11 +653,11 @@
         <source>Please don't leave your name blank!</source>
         <target>S'il vous plaît, ne laissez pas votre nom vide!</target>
       </trans-unit>
-      <trans-unit id="Q2mV.ZW" resname="Invalid first name">
+      <trans-unit id="y4eFbt3" resname="Invalid first name">
         <source>Invalid first name</source>
         <target>Prénom invalide</target>
       </trans-unit>
-      <trans-unit id="s_qbQoh" resname="Invalid last name">
+      <trans-unit id="iYRU0ly" resname="Invalid last name">
         <source>Invalid last name</source>
         <target>Nom de famille invalide</target>
       </trans-unit>
@@ -669,13 +665,29 @@
         <source>The content of this comment is considered spam.</source>
         <target>Le contenu de ce commentaire est considéré comme du spam.</target>
       </trans-unit>
-      <trans-unit id="JEbb.81" resname="This email address is already in use">
+      <trans-unit id="_qIU9Aw" resname="This email address is already in use">
         <source>This email address is already in use</source>
         <target>Cette adresse email est déjà utilisée</target>
       </trans-unit>
-      <trans-unit id="vYoCBSg" resname="This username is already in use">
+      <trans-unit id="wV.feF." resname="This username is already in use">
         <source>This username is already in use</source>
         <target>Ce nom d'utilisateur est déjà utilisé</target>
+      </trans-unit>
+      <trans-unit id="NUbCxSM" resname="A report must be associated with a recipe or review">
+        <source>A report must be associated with a recipe or review</source>
+        <target>Un rapport doit être associé à une recette ou un avis</target>
+      </trans-unit>
+      <trans-unit id="7Q13eHx" resname="Invalid postal code.">
+        <source>Invalid postal code.</source>
+        <target>Code postal invalide.</target>
+      </trans-unit>
+      <trans-unit id="ZprBB4w" resname="The value should not be blank.">
+        <source>The value should not be blank.</source>
+        <target>La valeur ne doit pas être vide.</target>
+      </trans-unit>
+      <trans-unit id="kqNkKk3" resname="You must set the default locale at least for the translation fields">
+        <source>You must set the default locale at least for the translation fields</source>
+        <target>Vous devez définir les paramètres régionaux par défaut au moins pour les champs de traduction</target>
       </trans-unit>
     </body>
   </file>

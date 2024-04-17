@@ -150,8 +150,8 @@
 																{{ revise.target.title }}
 															</h4>
 															<span>
-																{{ 'Published the'|trans }}
-																{{ revise.createdAt ? revise.createdAt | format_date('long') }}
+																{{ 'Published'|trans }}
+																{{ revise.createdAt ? revise.createdAt | ago }}
 															</span>
 														</div>
 													</div>
@@ -274,7 +274,7 @@
 											</h4>
 											<p class="mb-1">{{ report.reason }}</p>
 											<span class="fs-6">
-												{{ report.createdAt ? report.createdAt | format_date('long') }}
+												{{ report.createdAt ? report.createdAt | ago }}
 											</span>
 										</div>
 									</div>

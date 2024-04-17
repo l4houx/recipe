@@ -22,8 +22,8 @@
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ paymentgateway.name }}</h4>
 									<span>
-										{{ 'Published the'|trans }}
-										{{ paymentgateway.createdAt ? paymentgateway.createdAt | format_date('long') : '' }}
+										{{ 'Published'|trans }}
+										{{ paymentgateway.createdAt ? paymentgateway.createdAt | ago() : '' }}
 									</span>
 								</div>
 							</div>

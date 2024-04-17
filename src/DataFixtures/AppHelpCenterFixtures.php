@@ -5,8 +5,8 @@ namespace App\DataFixtures;
 use App\Entity\Faq;
 use App\Entity\HelpCenterArticle;
 use App\Entity\HelpCenterCategory;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppHelpCenterFixtures extends Fixture
@@ -29,8 +29,8 @@ class AppHelpCenterFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $this->getHelpCenterCategoryData('User', null, 1, 'success', 'bi bi-person', $manager);
-        $this->getHelpCenterCategoryData('Restaurant', null, 1, 'primary', 'bi bi-book', $manager);
+        $this->getHelpCenterCategoryData('User', null, 1, '#78e08f', 'fas fa-user-alt', $manager);
+        $this->getHelpCenterCategoryData('Restaurant', null, 1, '#4a69bd', 'fas fa-book', $manager);
 
         $manager->flush();
 
@@ -48,10 +48,10 @@ class AppHelpCenterFixtures extends Fixture
                 ->setViews(rand(10, 160))
                 ->setIsOnline($this->faker()->randomElement([true, false]))
                 ->setIsFeatured($this->faker()->randomElement([true, false]))
-                //->setCategory($this->subcategories[$article % \count($this->subcategories)])
+                // ->setCategory($this->subcategories[$article % \count($this->subcategories)])
             ;
 
-            $category = $this->getReference('helpcentercategory-' . $this->faker()->numberBetween(1, 2));
+            $category = $this->getReference('helpcentercategory-'.$this->faker()->numberBetween(1, 2));
             $helpcenterarticle->setCategory($category);
 
             $manager->persist($helpcenterarticle);
@@ -76,10 +76,10 @@ class AppHelpCenterFixtures extends Fixture
 
     private function getHelpCenterCategoryData(
         string $name,
-        HelpCenterCategory $parent = null,
+        ?HelpCenterCategory $parent,
         bool $isOnline,
-        string $color = null,
-        string $icon = null,
+        ?string $color,
+        ?string $icon,
         ObjectManager $manager
     ): HelpCenterCategory {
         $helpcentercategory = (new HelpCenterCategory());

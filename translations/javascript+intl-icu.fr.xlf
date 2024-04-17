@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="_Kn6bbg" resname="This feature is disabled in demo mode">
+        <source>This feature is disabled in demo mode</source>
+        <target>Cette fonctionnalité est désactivée en mode démo</target>
+      </trans-unit>
+      <trans-unit id="fZ63rLE" resname="Close">
+        <source>Close</source>
+        <target>Fermer</target>
+      </trans-unit>
+      <trans-unit id="kfmoOmd" resname="Stick">
+        <source>Stick</source>
+        <target>Coller</target>
+      </trans-unit>
+      <trans-unit id="gjm1Kxq" resname="Unstick">
+        <source>Unstick</source>
+        <target>Décoller</target>
+      </trans-unit>
+      <trans-unit id="VSkRiwY" resname="Confirmation required">
+        <source>Confirmation required</source>
+        <target>Confirmation requise</target>
+      </trans-unit>
+      <trans-unit id="7r3SSnf" resname="Confirm">
+        <source>Confirm</source>
+        <target>Confirmer</target>
+      </trans-unit>
+      <trans-unit id="GXZu1sy" resname="Cancel">
+        <source>Cancel</source>
+        <target>Annuler</target>
+      </trans-unit>
+      <trans-unit id="fX42BYY" resname="No results found">
+        <source>No results found</source>
+        <target>Aucun résultat trouvé</target>
+      </trans-unit>
+      <trans-unit id="ZoyqhEz" resname="Searching ...">
+        <source>Searching ...</source>
+        <target>Recherche ...</target>
+      </trans-unit>
+      <trans-unit id="UlCUNpe" resname="Insert at least 3 characters">
+        <source>Insert at least 3 characters</source>
+        <target>Insérez au moins 3 caractères</target>
+      </trans-unit>
+      <trans-unit id="CHZ4fvd" resname="An error has occured">
+        <source>An error has occured</source>
+        <target>Une erreur est survenue</target>
+      </trans-unit>
+      <trans-unit id="g7eUFFw" resname="Read more">
+        <source>Read more</source>
+        <target>En savoir plus</target>
+      </trans-unit>
+      <trans-unit id="7ZgbwLZ" resname="Make sure to enter a valid email address">
+        <source>Make sure to enter a valid email address</source>
+        <target>Assurez-vous de saisir une adresse e-mail valide</target>
+      </trans-unit>
+      <trans-unit id="_KhNgNQ" resname="Please select the subscriptions quantity you want to buy">
+        <source>Please select the subscriptions quantity you want to buy</source>
+        <target>Veuillez sélectionner la quantité d'abonnements que vous souhaitez acheter</target>
+      </trans-unit>
+      <trans-unit id="j.bater" resname="Return to cart">
+        <source>Return to cart</source>
+        <target>Retour au panier</target>
+      </trans-unit>
+      <trans-unit id="T6NUOcf" resname="Time's up">
+        <source>Time's up</source>
+        <target>Le temps est écoulé</target>
+      </trans-unit>
+      <trans-unit id="z6aqu12" resname="The subscriptions have been released">
+        <source>The subscriptions have been released</source>
+        <target>Les abonnements ont été débloqués</target>
+      </trans-unit>
+      <trans-unit id="L3dmip3" resname="Message">
+        <source>Message</source>
+        <target>Message</target>
+      </trans-unit>
+      <trans-unit id="2NosSd8" resname="Note">
+        <source>Note</source>
+        <target>Note</target>
+      </trans-unit>
+      <trans-unit id="9qmHNgg" resname="The email address is not valid">
+        <source>The email address is not valid</source>
+        <target>L'adresse e-mail n'est pas valide</target>
+      </trans-unit>
+      <trans-unit id="_xy8OPt" resname="Select an option">
+        <source>Select an option</source>
+        <target>Choisir une option</target>
+      </trans-unit>
+      <trans-unit id="8kiP1O9" resname="Email address">
+        <source>Email address</source>
+        <target>Adresse e-mail</target>
+      </trans-unit>
+      <trans-unit id="rImR7wE" resname="Load more">
+        <source>Load more</source>
+        <target>Charger plus</target>
+      </trans-unit>
+      <trans-unit id="R9KlFe8" resname="Loading...">
+        <source>Loading...</source>
+        <target>Chargement...</target>
+      </trans-unit>
+      <trans-unit id="_9RmbHO" resname="Please select the subscriptions quantity for this order">
+        <source>Please select the subscriptions quantity for this order</source>
+        <target>Veuillez sélectionner la quantité d'abonnements pour cette commande</target>
+      </trans-unit>
+      <trans-unit id="NwguaN_" resname="January">
+        <source>January</source>
+        <target>Janvier</target>
+      </trans-unit>
+      <trans-unit id="yHfG.0B" resname="February">
+        <source>February</source>
+        <target>Février</target>
+      </trans-unit>
+      <trans-unit id="nZWizw1" resname="March">
+        <source>March</source>
+        <target>Mars</target>
+      </trans-unit>
+      <trans-unit id="Sv5uoVD" resname="April">
+        <source>April</source>
+        <target>Avril</target>
+      </trans-unit>
+      <trans-unit id="jHj_W5k" resname="May">
+        <source>May</source>
+        <target>Mai</target>
+      </trans-unit>
+      <trans-unit id="1YCMDgp" resname="June">
+        <source>June</source>
+        <target>Juin</target>
+      </trans-unit>
+      <trans-unit id="6c96HKS" resname="July">
+        <source>July</source>
+        <target>Juillet</target>
+      </trans-unit>
+      <trans-unit id="pm2JcOV" resname="August">
+        <source>August</source>
+        <target>Août</target>
+      </trans-unit>
+      <trans-unit id="zVWeoKv" resname="September">
+        <source>September</source>
+        <target>Septembre</target>
+      </trans-unit>
+      <trans-unit id=".deReHt" resname="October">
+        <source>October</source>
+        <target>Octobre</target>
+      </trans-unit>
+      <trans-unit id="neb_HXJ" resname="November">
+        <source>November</source>
+        <target>Novembre</target>
+      </trans-unit>
+      <trans-unit id="j7IEykY" resname="December">
+        <source>December</source>
+        <target>Décembre</target>
+      </trans-unit>
+      <trans-unit id="n9coxmy" resname="Add">
+        <source>Add</source>
+        <target>Ajouter</target>
+      </trans-unit>
+      <trans-unit id="w4EvxKy" resname="Remove">
+        <source>Remove</source>
+        <target>Retirer</target>
+      </trans-unit>
+      <trans-unit id="xm.rXrj" resname="Move up">
+        <source>Move up</source>
+        <target>Déplacer vers le haut</target>
+      </trans-unit>
+      <trans-unit id="QLtQ2hY" resname="Move down">
+        <source>Move down</source>
+        <target>Descendre</target>
+      </trans-unit>
+      <trans-unit id="8oovDiN" resname="Add a new recipe date">
+        <source>Add a new recipe date</source>
+        <target>Ajouter une nouvelle date de recette</target>
+      </trans-unit>
+      <trans-unit id="K9gVuCT" resname="Remove this recipe date">
+        <source>Remove this recipe date</source>
+        <target>Supprimer cette date de recette</target>
+      </trans-unit>
+      <trans-unit id="ndEWjVq" resname="Duplicate this recipe date">
+        <source>Duplicate this recipe date</source>
+        <target>Dupliquer cette date de recette</target>
+      </trans-unit>
+      <trans-unit id="f4xwG.g" resname="Add a new subscription">
+        <source>Add a new subscription</source>
+        <target>Ajouter un nouvel abonnement</target>
+      </trans-unit>
+      <trans-unit id="LCjZeMr" resname="Remove this subscription">
+        <source>Remove this subscription</source>
+        <target>Supprimer cet abonnement</target>
+      </trans-unit>
+      <trans-unit id="aa0a58l" resname="Duplicate this subscription">
+        <source>Duplicate this subscription</source>
+        <target>Dupliquer cet abonnement</target>
+      </trans-unit>
+      <trans-unit id="6w0jdbU" resname="weeks">
+        <source>weeks</source>
+        <target>semaines</target>
+      </trans-unit>
+      <trans-unit id="q1EATp1" resname="days">
+        <source>days</source>
+        <target>jours</target>
+      </trans-unit>
+      <trans-unit id="G1LzouF" resname="hr">
+        <source>hr</source>
+        <target>hr</target>
+      </trans-unit>
+      <trans-unit id="H2_m9p0" resname="min">
+        <source>min</source>
+        <target>min</target>
+      </trans-unit>
+      <trans-unit id="rdk1NO6" resname="sec">
+        <source>sec</source>
+        <target>sec</target>
+      </trans-unit>
+      <trans-unit id="iAfZfk8" resname="Mail server test email">
+        <source>Mail server test email</source>
+        <target>E-mail de test du serveur de messagerie</target>
+      </trans-unit>
+      <trans-unit id="9vRoj.I" resname="Send">
+        <source>Send</source>
+        <target>Envoyer</target>
+      </trans-unit>
+      <trans-unit id="rajWAY5" resname="days.Sun">
+        <source>days.Sun</source>
+        <target>jours.dimanche</target>
+      </trans-unit>
+      <trans-unit id="zFglO_n" resname="days.Mon">
+        <source>days.Mon</source>
+        <target>jours.lundi</target>
+      </trans-unit>
+      <trans-unit id="vjHEE73" resname="days.Tue">
+        <source>days.Tue</source>
+        <target>jours.mardi</target>
+      </trans-unit>
+      <trans-unit id="NUZFATP" resname="days.Wed">
+        <source>days.Wed</source>
+        <target>jours.mercredi</target>
+      </trans-unit>
+      <trans-unit id="0fJ__JA" resname="days.Thu">
+        <source>days.Thu</source>
+        <target>jours.jeudi</target>
+      </trans-unit>
+      <trans-unit id="N.I_1NZ" resname="days.Fri">
+        <source>days.Fri</source>
+        <target>jours.vendredi</target>
+      </trans-unit>
+      <trans-unit id="g92Yr7s" resname="days.Sat">
+        <source>days.Sat</source>
+        <target>jours.samedi</target>
+      </trans-unit>
+      <trans-unit id="KwZcfJz" resname="Today">
+        <source>Today</source>
+        <target>Aujourd'hui</target>
+      </trans-unit>
+      <trans-unit id="jyNk4Ru" resname="Day">
+        <source>Day</source>
+        <target>Jour</target>
+      </trans-unit>
+      <trans-unit id="54BBq1G" resname="Week">
+        <source>Week</source>
+        <target>Semaine</target>
+      </trans-unit>
+      <trans-unit id="MQylA_8" resname="Month">
+        <source>Month</source>
+        <target>Mois</target>
+      </trans-unit>
+      <trans-unit id="_X.RvPb" resname="Change background color">
+        <source>Change background color</source>
+        <target>Changer la couleur d'arrière-plan</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
