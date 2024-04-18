@@ -222,7 +222,7 @@ class Recipe
 
     public function getImagePath(): string
     {
-        return '/images/recipe/'.$this->imageName;
+        return 'uploads/recipe/'.$this->imageName;
     }
 
     public function getImagePlaceholder(string $size = 'default'): string

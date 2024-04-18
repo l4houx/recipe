@@ -1,30 +1,29 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Form;
 
-use App\Entity\Page;
-use App\Entity\Setting\AppLayoutSetting;
+use App\Entity\Setting\Page;
 use App\Service\SettingService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Entity\Setting\AppLayoutSetting;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Count;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Vich\UploaderBundle\Form\Type\VichImageType;
-
 use function Symfony\Component\Translation\t;
+use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class AppLayoutSettingFormType extends AbstractType
 {
@@ -681,6 +680,10 @@ class AppLayoutSettingFormType extends AbstractType
                 'constraints' => [
                     new NotNull(),
                 ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
         ;
     }

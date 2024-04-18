@@ -44,7 +44,7 @@ class AppPagesFixtures extends Fixture
                 'views' => $views,
             ],
             5 => [
-                'title' => 'About',
+                'title' => 'About us',
                 'slug' => 'about-us',
                 'content' => $content,
                 'views' => $views,
@@ -70,6 +70,12 @@ class AppPagesFixtures extends Fixture
             9 => [
                 'title' => 'Free Exchanges',
                 'slug' => 'free_exchanges',
+                'content' => $content,
+                'views' => $views,
+            ],
+            10 => [
+                'title' => 'Pricing and fees',
+                'slug' => 'pricing-and-fees',
                 'content' => $content,
                 'views' => $views,
             ],

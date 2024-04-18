@@ -2,15 +2,23 @@
 
 namespace App\Service;
 
+use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Order;
+use App\Entity\Venue;
 use Twig\Environment;
+use App\Entity\Recipe;
+use App\Entity\Category;
+use App\Entity\Restaurant;
 use GeoIp2\Database\Reader;
 use App\Entity\OrderElement;
+use App\Entity\Setting\Page;
 use Doctrine\ORM\QueryBuilder;
 use App\Entity\Setting\Setting;
 use App\Entity\Traits\HasRoles;
+use App\Entity\HelpCenterArticle;
 use App\Entity\OrderSubscription;
+use App\Entity\HelpCenterCategory;
 use Symfony\Component\Mime\Address;
 use Psr\Cache\CacheItemPoolInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -223,7 +231,7 @@ class SettingService
     public function disableSofDeleteFilterForAdmin(EntityManagerInterface $em, AuthorizationCheckerInterface $authChecker): void
     {
         $em->getFilters()->enable('softdeleteable');
-        if ($authChecker->isGranted(HasRoles::APPLICATION)) {
+        if ($authChecker->isGranted(HasRoles::ADMINAPPLICATION)) {
             $em->getFilters()->disable('softdeleteable');
         }
     }
@@ -267,7 +275,7 @@ class SettingService
     public function getAudiences($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
@@ -281,7 +289,7 @@ class SettingService
     public function getAmenities($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
@@ -295,7 +303,7 @@ class SettingService
     public function getVenuesTypes($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
@@ -324,7 +332,7 @@ class SettingService
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $restaurant = array_key_exists('restaurant', $criterias) ? $criterias['restaurant'] : 'all';
-        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $country = array_key_exists('country', $criterias) ? $criterias['country'] : 'all';
         $venuetypes = array_key_exists('venuetypes', $criterias) ? $criterias['venuetypes'] : 'all';
@@ -366,7 +374,7 @@ class SettingService
     public function getCategories($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $isFeatured = array_key_exists('isFeatured', $criterias) ? $criterias['isFeatured'] : 'all';
@@ -452,7 +460,7 @@ class SettingService
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
-        return $this->em->getRepository("App\Entity\RecipeDate")->getEventDates($reference, $restaurant, $recipe, $limit, $count);
+        return $this->em->getRepository("App\Entity\RecipeDate")->getRecipeDates($reference, $restaurant, $recipe, $limit, $count);
     }
 
     // Returns the recipe subscriptions after applying the specified search criterias
@@ -523,7 +531,7 @@ class SettingService
     public function getUsers($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        // $role = array_key_exists('role', $criterias) ? $criterias['role'] : 'all';
+        $role = array_key_exists('role', $criterias) ? $criterias['role'] : 'all';
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $createdbyrestaurantslug = array_key_exists('createdbyrestaurantslug', $criterias) ? $criterias['createdbyrestaurantslug'] : 'all';
         $restaurantname = array_key_exists('restaurantname', $criterias) ? $criterias['restaurantname'] : 'all';
@@ -538,12 +546,15 @@ class SettingService
         $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
         $countryslug = array_key_exists('countryslug', $criterias) ? $criterias['countryslug'] : 'all';
         $followedby = array_key_exists('followedby', $criterias) ? $criterias['followedby'] : 'all';
+        $hasboughtsubscriptionforRecipe = array_key_exists('hasboughtsubscriptionfor', $criterias) ? $criterias['hasboughtsubscriptionfor'] : "all";
+        $hasboughtsubscriptionforRestaurant = array_key_exists('hasboughtsubscriptionforrestaurant', $criterias) ? $criterias['hasboughtsubscriptionforrestaurant'] : "all";
+        $apiKey = array_key_exists('apikey', $criterias) ? $criterias['apikey'] : "all";
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
         $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'u.createdAt';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
-        return $this->em->getRepository("App\Entity\User")->getUsers(/* $role, */ $keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $slug, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $countryslug, $followedby, $limit, $sort, $order, $count);
+        return $this->em->getRepository("App\Entity\User")->getUsers(/*$role, */$keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $slug, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $countryslug, $followedby, $hasboughtsubscriptionforRecipe, $hasboughtsubscriptionforRestaurant, $apiKey, $limit, $sort, $order, $count);
     }
 
     // Returns the testimonials after applying the specified search criterias
@@ -729,7 +740,7 @@ class SettingService
         $dompdf = new Dompdf($pdfOptions);
         $html = $this->templating->render('dashboard/shared/order/subscription-pdf.html.twig', [
             'order' => $order,
-            'eventDateSubscriptionReference' => 'all'
+            'recipeDateSubscriptionReference' => 'all'
         ]);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
@@ -1002,5 +1013,104 @@ class SettingService
         $menus = $this->em->getRepository("App\Entity\Setting\Menu")->getMenus($slug);
 
         return $menus;
+    }
+
+    // Generates a list of pages to be chosen in a menu element
+    public function getLinks(): array
+    {
+        $linksArray = [];
+
+        // Add static pages urls
+        $staticPages = $this->getPages([])->getQuery()->getResult();
+        $staticPagesArray = [];
+        $staticPagesArray[$this->translator->trans('Home')] = $this->router->generate('home', ['_locale' => 'en']);
+        /** @var Page $staticPage */
+        foreach ($staticPages as $staticPage) {
+            $staticPagesArray[$staticPage->getTitle()] = $this->router->generate('page', ['slug' => $staticPage->getSlug(), '_locale' => 'en']);
+        }
+        $staticPagesArray[$this->translator->trans('Contact')] = $this->router->generate('contact', ['_locale' => 'en']);
+        $linksArray[$this->translator->trans("Static Pages")] = $staticPagesArray;
+
+        // Add Authentification pages urls
+        $authentificationPagesArray = [];
+        $authentificationPagesArray[$this->translator->trans('Login')] = $this->router->generate('login', ['_locale' => 'en']);
+        $authentificationPagesArray[$this->translator->trans('Forgot Password')] = $this->router->generate('forgot_password_request', ['_locale' => 'en']);
+        $authentificationPagesArray[$this->translator->trans('Creator Registration')] = $this->router->generate('register', ['_locale' => 'en']);
+        $authentificationPagesArray[$this->translator->trans('Restauranter Registration')] = $this->router->generate('register_restaurant', ['_locale' => 'en']);
+        $linksArray[$this->translator->trans("Authentification Pages")] = $authentificationPagesArray;
+
+        // Add Dashboard pages urls
+        $dashboardPagesArray = [];
+        $dashboardPagesArray[$this->translator->trans('Creator subscriptions')] = $this->router->generate('dashboard_creator_orders', ['_locale' => 'en']);
+        $dashboardPagesArray[$this->translator->trans('Create recipe')] = $this->router->generate('dashboard_restaurant_recipe_new', ['_locale' => 'en']);
+        $linksArray[$this->translator->trans("Dashboard Pages")] = $dashboardPagesArray;
+
+        // Add Category pages urls
+        $categoryPagesArray = [];
+        $categoryPagesArray[$this->translator->trans('Categories page')] = $this->router->generate('categories', ['_locale' => 'en']);
+        $categoryPagesArray[$this->translator->trans('No link, display featured categories dropdown on hover (header menu only)')] = 'categories_dropdown';
+        $categoryPagesArray[$this->translator->trans('Display top 4 featured categories (footer section menu only)')] = 'footer_categories_section';
+        $categories = $this->getCategories([])->getQuery()->getResult();
+        /** @var Category $category */
+        foreach ($categories as $category) {
+            $categoryPagesArray[$this->translator->trans('Category') . ' - ' . $category->getName()] = $this->router->generate('recipes', ['category' => $category->getSlug(), '_locale' => 'en']);
+        }
+        $linksArray[$this->translator->trans("Recipe Categories")] = $categoryPagesArray;
+
+        // Add Post pages urls
+        $postPagesArray = [];
+        $postPagesArray[$this->translator->trans('Post page')] = $this->router->generate('post', ['_locale' => 'en']);
+        $posts = $this->getBlogPosts([])->getQuery()->getResult();
+        /** @var Post post */
+        foreach ($posts as $post) {
+            $postPagesArray[$this->translator->trans('Post') . ' - ' . $post->getTitle()] = $this->router->generate('post_article', ['slug' => $post->getSlug(), '_locale' => 'en']);
+        }
+        $linksArray[$this->translator->trans("Post Pages")] = $postPagesArray;
+
+        // Add Recipe pages urls
+        $recipePagesArray = [];
+        $recipePagesArray[$this->translator->trans('Recipes page')] = $this->router->generate('recipes', ['_locale' => 'en']);
+        $recipes = $this->getRecipes([])->getQuery()->getResult();
+        /** @var Recipe $recipe */
+        foreach ($recipes as $recipe) {
+            $recipePagesArray[$this->translator->trans('Recipe') . ' - ' . $recipe->getTitle()] = $this->router->generate('recipe', ['slug' => $recipe->getSlug(), '_locale' => 'en']);
+        }
+        $linksArray[$this->translator->trans("Recipes Pages")] = $recipePagesArray;
+
+        // Add Help center pages urls
+        $helpCenterPagesArray = [];
+        $helpCenterPagesArray[$this->translator->trans('Help Center page')] = $this->router->generate('help_center', ['_locale' => 'en']);
+        $helpCenterCategories = $this->getHelpCenterCategories([])->getQuery()->getResult();
+        $helpCenterArticles = $this->getHelpCenterArticles([])->getQuery()->getResult();
+        /** @var HelpCenterCategory $helpCenterCategory */
+        foreach ($helpCenterCategories as $helpCenterCategory) {
+            $helpCenterPagesArray[$this->translator->trans('Help Center Category') . ' - ' . $helpCenterCategory->getName()] = $this->router->generate('help_center_category', ['slug' => $helpCenterCategory->getSlug(), '_locale' => 'en']);
+        }
+        /** @var HelpCenterArticle $helpCenterArticle */
+        foreach ($helpCenterArticles as $helpCenterArticle) {
+            $helpCenterPagesArray[$this->translator->trans('Help Center Article') . ' - ' . $helpCenterArticle->getTitle()] = $this->router->generate('help_center_article', ['slug' => $helpCenterArticle->getSlug(), '_locale' => 'en']);
+        }
+        $linksArray[$this->translator->trans("Help Center Pages")] = $helpCenterPagesArray;
+
+        // Add Restaurants pages urls
+        $restaurantsPagesArray = [];
+        $restaurants = $this->getUsers(["role" => "restaurant"])->getQuery()->getResult();
+        /** @var User $restaurant */
+        foreach ($restaurants as $restaurant) {
+            $restaurantsPagesArray[$this->translator->trans('Restaurant Profile') . ' - ' . $restaurant->getRestaurant()->getName()] = $this->router->generate('restaurant', ['slug' => $restaurant->getRestaurant()->getSlug(), '_locale' => 'en']);
+        }
+        $linksArray[$this->translator->trans("Restaurants Pages")] = $restaurantsPagesArray;
+
+        // Add Venues pages urls
+        $venuesPagesArray = [];
+        $venuesPagesArray[$this->translator->trans('Venues page')] = $this->router->generate('venues', ['_locale' => 'en']);
+        $venues = $this->getVenues([])->getQuery()->getResult();
+        /** @var Venue $venue */
+        foreach ($venues as $venue) {
+            $venuesPagesArray[$this->translator->trans('Venue') . ' - ' . $venue->getName()] = $this->router->generate('venue', ['slug' => $venue->getSlug(), '_locale' => 'en']);
+        }
+        $linksArray[$this->translator->trans("Venues Pages")] = $venuesPagesArray;
+
+        return $linksArray;
     }
 }

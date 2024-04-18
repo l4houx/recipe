@@ -39,8 +39,8 @@ class RegistrationController extends AbstractController
     ) {
     }
 
-    #[Route('/signup', name: 'register', methods: ['GET', 'POST'])]
-    public function register(Request $request): Response
+    #[Route('/signup-creator', name: 'register', methods: ['GET', 'POST'])]
+    public function registerCreator(Request $request): Response
     {
         if ($this->getUser()) {
             $this->addFlash('danger', $this->translator->trans('Already logged in'));

@@ -7,53 +7,68 @@ vich_uploader:
     mappings:
 
         restaurant_logo:
-            uri_prefix: '%restaurant_logo%'
-            upload_destination: '%kernel.project_dir%/public%restaurant_logo%'
+            uri_prefix: /uploads/restaurants
+            upload_destination: '%kernel.project_dir%/public/uploads/restaurants'
             namer: vich_uploader.namer_uniqid
 
         restaurant_cover:
-            uri_prefix: '%restaurant_cover%'
-            upload_destination: '%kernel.project_dir%/public%restaurant_cover%'
+            uri_prefix: /uploads/restaurants/covers
+            upload_destination: '%kernel.project_dir%/public/uploads/restaurants/covers'
             namer: vich_uploader.namer_uniqid
 
         category_image:
-            uri_prefix: '%category_image%'
-            upload_destination: '%kernel.project_dir%/public%category_image%'
+            uri_prefix: /uploads/categories
+            upload_destination: '%kernel.project_dir%/public/uploads/categories'
             namer: vich_uploader.namer_uniqid
 
         recipe_image:
-            uri_prefix: '%recipe_image%'
-            upload_destination: '%kernel.project_dir%/public%recipe_image%'
+            uri_prefix: /uploads/recipes
+            upload_destination: '%kernel.project_dir%/public/uploads/recipes'
             namer: vich_uploader.namer_uniqid
 
         post_image:
-            uri_prefix: '%post_image%'
-            upload_destination: '%kernel.project_dir%/public%post_image%'
+            uri_prefix: /uploads/post
+            upload_destination: '%kernel.project_dir%/public/uploads/post'
             namer: vich_uploader.namer_uniqid
 
         homepage_hero_custom_background:
-            uri_prefix: '%homepage_hero_custom_background%'
-            upload_destination: '%kernel.project_dir%/public%homepage_hero_custom_background%'
+            uri_prefix: /uploads/home
+            upload_destination: '%kernel.project_dir%/public/uploads/home'
+            namer: vich_uploader.namer_uniqid
+
+        homepage_hero_custom_block_one:
+            uri_prefix: /uploads/home/block
+            upload_destination: '%kernel.project_dir%/public/uploads/home/block'
+            namer: vich_uploader.namer_uniqid
+
+        homepage_hero_custom_block_two:
+            uri_prefix: /uploads/home/block
+            upload_destination: '%kernel.project_dir%/public/uploads/home/block'
+            namer: vich_uploader.namer_uniqid
+
+        homepage_hero_custom_block_three:
+            uri_prefix: /uploads/home/block
+            upload_destination: '%kernel.project_dir%/public/uploads/home/block'
             namer: vich_uploader.namer_uniqid
 
         app_layout:
-            uri_prefix: '%app_layout%'
-            upload_destination: '%kernel.project_dir%/public%app_layout%'
+            uri_prefix: /uploads/layout
+            upload_destination: '%kernel.project_dir%/public/uploads/layout'
             namer: vich_uploader.namer_uniqid
             inject_on_load: true
             delete_on_update: true
             delete_on_remove: true
 
         icon:
-            upload_destination: '%kernel.project_dir%/public%icon%'
-            uri_prefix: '%icon%'
+            uri_prefix: /uploads/icon
+            upload_destination: '%kernel.project_dir%/public/uploads/icon'
             namer:
                 service: Vich\UploaderBundle\Naming\PropertyNamer
                 options: { property: 'slug' }
 
         attachments:
-            uri_prefix: '%attachments%'
-            upload_destination: '%kernel.project_dir%/public%attachments%'
+            uri_prefix: uploads/attachments
+            upload_destination: '%kernel.project_dir%/public/uploads/attachments'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             directory_namer:
                 service: Vich\UploaderBundle\Naming\CurrentDateTimeDirectoryNamer
@@ -65,16 +80,16 @@ vich_uploader:
             delete_on_remove: true
 
         audience_image:
-            uri_prefix: '%audience_image%'
-            upload_destination: '%kernel.project_dir%/public%audience_image%'
+            uri_prefix: /uploads/audiences
+            upload_destination: '%kernel.project_dir%/public/uploads/audiences'
             namer: vich_uploader.namer_uniqid
 
         venue_image:
-            uri_prefix: '%venue_image%'
-            upload_destination: '%kernel.project_dir%/public%venue_image%'
+            uri_prefix: /uploads/venues
+            upload_destination: '%kernel.project_dir%/public/uploads/venues'
             namer: vich_uploader.namer_uniqid
 
         user_avatar:
-            uri_prefix: '%user_avatar%'
-            upload_destination: '%kernel.project_dir%/public%user_avatar%'
+            uri_prefix: /uploads/user
+            upload_destination: '%kernel.project_dir%/public/uploads/user'
             namer: vich_uploader.namer_uniqid

@@ -21,14 +21,14 @@ class AppCategoryFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // Create of 8 Categories
-        $this->createCategory('Food', '#3f7fca', '', true, true, 1, $manager);
-        $this->createCategory('Starters', '#f6b93b', '', true, true, 2, $manager);
-        $this->createCategory('Desserts', '#9141ac', '', true, true, 3, $manager);
-        $this->createCategory('Snacks', '#eb2f06', '', true, true, 4, $manager);
-        $this->createCategory('Bases', '#063970', '', true, false, 5, $manager);
-        $this->createCategory('Drinks', '#4a69bd', '', true, false, 6, $manager);
-        $this->createCategory('Appetizers', '#e07b39', '', true, false, 7, $manager);
-        $this->createCategory('Other', '#78e08f', 'fas fa-folder-open', true, true, 8, $manager);
+        $this->createCategory('Food', '#3f7fca', 'fab fa-foursquare', true, true, 1, $manager);
+        $this->createCategory('Starters', '#f6b93b', 'fas fa-star', true, true, 2, $manager);
+        $this->createCategory('Desserts', '#9141ac', 'fas fa-d', true, true, 3, $manager);
+        $this->createCategory('Snacks', '#eb2f06', 'fas fa-s', true, true, 4, $manager);
+        $this->createCategory('Bases', '#063970', 'fas fa-b', true, false, 5, $manager);
+        $this->createCategory('Drinks', '#4a69bd', 'fas fa-d', true, false, 6, $manager);
+        $this->createCategory('Appetizers', '#e07b39', 'fas fa-a', true, false, 7, $manager);
+        $this->createCategory('Other', '#78e08f', 'fas fa-folder-open', true, false, 8, $manager);
 
         $manager->flush();
     }

@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Mail server settings'|trans %}
+{% set pagetitle = 'Manage menus'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -24,18 +24,22 @@
                 <div class="d-lg-flex justify-content-between align-items-center card-header">
                     <div class="mb-3 mb-lg-0">
                         <h3 class="mb-0">{{ pagetitle }}</h3>
-                        <span>{{ "By clicking on send, an email is going to be sent to the chosen email address. Make sure to save the configuration to be tested before testing."|trans }}</span>
+                        <span></span>
                     </div>
                     <div>
-                        <a href="{{ path('dashboard_admin_setting_mail_server_test') }}" class="btn btn-outline-primary btn-sm">
-                            {{ 'Test the mail server configuration'|trans }}
+                        <a href="" class="btn btn-outline-primary btn-sm">
+                            {{ 'Create'|trans }}
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
-                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
-                        {{ form_widget(form) }}
-                    {{ form_end(form) }}
+                    {% if rows | length %}
+                        {% include "dashboard/admin/setting/manage-menus-table.html.twig" with {rows: rows} %}
+                    {% else %}
+                        <div class="card-footer">
+                            {% include "global/message.html.twig" with { type: "dark", message: ('No menus found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -155,39 +155,84 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-default">
             <ul class="navbar-nav mt-3 mt-lg-0">
-				<li class="nav-item">
-					<a class="nav-link {% if routename == "home" %}active{% endif %}" href="{{ path('home') }}">{{ "Home"|trans }}</a>
-				</li> 
-				<li class="nav-item">
-					<a class="nav-link {% if routename == "recipes" or routename == "recipe" %}active{% endif %}" href="{{ path('recipes') }}">{{ 'Recipes' }}</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if routename == "post" or routename == "post_article" or routename == "post_shared" %}active{% endif %}" href="{{ path('post') }}">{{ 'Blog'|trans }}</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if routename == "help_center" %}active{% endif %}" href="{{ path('help_center') }}">
-						{{ 'Help Center'|trans }}
-					</a>
-				</li>
-				{% if not app.user or not app.user.premium  %}
-					<li class="nav-item">
-						<a class="nav-link {% if routename == "pricing" %}active{% endif %}" href="{{ path('pricing') }}">
-							{{ 'Pricing'|trans }}
-						</a>
-					</li>
-				{% endif %}
-				<li class="nav-item">
-					<a class="nav-link {% if routename == "contact" %}active{% endif %}" href="{{ path('contact') }}">
-						{{ 'Contact'|trans }}
-					</a>
-				</li>
+                {% for menuElement in setting.getMenus({"slug" : "header-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                    {% set link = "#0" %}
+                    {% if menuElement.customLink %}
+                        {% set link = menuElement.customLink %}
+                    {% endif %}
+                    {% if menuElement.link %}
+                        {% set link = setting.changeLinkLocale(app.request.locale, menuElement.link) %}
+                    {% endif %}
+                    {% if link == "categories_dropdown" %}
+                        <li class="nav-item dropdown {% if routename == "categories" %}active{% endif %}">
+                            <a class="nav-link dropdown-toggle {% if routename == "categories" %}active{% endif %}" href="#" id="navbarCategories" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="{{ menuElement.icon }} fa-fw"></i> {{ menuElement.label }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarCategories">
+                                {% for category in setting.getCategories({ "isFeatured": true, "limit": 9 }).getQuery().getResult() %}
+                                    <li>
+                                        <a href="{{ path('recipes', { category: category.slug }) }}" class="dropdown-item justify-content-between {% if routename == "categories" %}active{% endif %}">
+                                            <i class="{{ category.icon }} fa-fw"></i>
+                                            {{ category.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                                <li>
+                                    <a href="{{ path('categories') }}" class="dropdown-item justify-content-between">
+                                        <i class="fas fa-folder-open fa-fw"></i> {{ "All categories"|trans }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if app.request.pathinfo == link %}active{% endif %}" href="{{ link }}">
+                                {% if menuElement.icon %}
+                                    <i class="{{ menuElement.icon }} fa-fw"></i>
+                                {% endif %}
+                                {% if menuElement.label %}
+                                    {{ menuElement.label }}
+                                {% endif %}
+                            </a>
+                        </li> 
+                    {% endif %}
+                {% endfor %}
+
+                {#  
+                    <li class="nav-item">
+                        <a class="nav-link {% if routename == "home" %}active{% endif %}" href="{{ path('home') }}">{{ "Home"|trans }}</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link {% if routename == "recipes" or routename == "recipe" %}active{% endif %}" href="{{ path('recipes') }}">{{ 'Recipes' }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if routename == "post" or routename == "post_article" or routename == "post_shared" %}active{% endif %}" href="{{ path('post') }}">{{ 'Blog'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if routename == "help_center" %}active{% endif %}" href="{{ path('help_center') }}">
+                            {{ 'Help Center'|trans }}
+                        </a>
+                    </li>
+                    {% if not app.user or not app.user.premium  %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if routename == "pricing" %}active{% endif %}" href="{{ path('pricing') }}">
+                                {{ 'Pricing'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if routename == "contact" %}active{% endif %}" href="{{ path('contact') }}">
+                            {{ 'Contact'|trans }}
+                        </a>
+                    </li>
+                #}
             </ul>
             <form action="{{ path('recipes') }}" class="mt-3 mt-lg-0 ms-lg-3 d-flex align-items-center">
                 <span class="position-absolute ps-3 search-icon">
                     <i class="bi bi-search"></i>
                 </span>
                 <label for="search" class="visually-hidden"></label>
-                <input type="search" id="search" class="form-control ps-6" placeholder="{{ "Search for recipes"|trans }}">
+                <input type="search" id="search" name="keyword" class="form-control ps-6" placeholder="{{ "Search for recipes"|trans }}">
             </form>
         </div>
     </div>

@@ -105,7 +105,7 @@ class Pricing implements \Stringable
 
     public function getImagePath(): string
     {
-        return '/images/icon/'.$this->imageName;
+        return 'uploads/icon/'.$this->imageName;
     }
 
     public function getImagePlaceholder(string $size = 'default'): string

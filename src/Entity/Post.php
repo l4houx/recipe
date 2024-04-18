@@ -119,7 +119,7 @@ class Post
 
     public function getImagePath(): string
     {
-        return '/images/post/'.$this->imageName;
+        return 'uploads/post/'.$this->imageName;
     }
 
     public function getImagePlaceholder(string $size = 'default'): string

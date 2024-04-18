@@ -104,7 +104,7 @@ class Audience
 
     public function getImagePath(): string
     {
-        return '/public/audiences/'.$this->imageName;
+        return 'uploads/audiences/'.$this->imageName;
     }
 
     public function getImagePlaceholder(string $size = 'default'): string

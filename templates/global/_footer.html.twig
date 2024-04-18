@@ -1,10 +1,11 @@
 <footer class="pt-lg-8 pt-5 footer bg-white">
     <div class="container mt-lg-2">
         <div class="row">
+            {#
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="mb-4">
                     <img src="{{ asset('images/brand/logo/logo.svg') }}" alt="{{ website_name }}" class="logo-inverse">
-                    {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="logo-inverse"> #}
+                    {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="logo-inverse"> }
                     <div class="mt-4">
                         <p>{{ settings["website_about"] | raw | nl2br }}</p>
                         <div class="fs-4 mt-4">
@@ -42,7 +43,112 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-12">
+            #}
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="mb-4">
+                    <img src="{{ asset('images/brand/logo/logo.svg') }}" alt="{{ website_name }}" class="logo-inverse">
+                    {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="logo-inverse"> #}
+                    <div class="mt-4">
+                        <p>{{ settings["website_about"] | raw | nl2br }}</p>
+                        <div class="fs-4 mt-4">
+                            {% include "global/_social-link.html.twig" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-4">
+                <div class="mb-4">
+                    <h3 class="fw-bold mb-3">
+                        {{ setting.getMenus({"slug" : "first-footer-section-menu"}).getQuery().getOneOrNullResult().getHeader() }}
+                    </h3>
+                    <ul class="list-unstyled nav nav-footer flex-column nav-x-0">
+                        {% for menuElement in setting.getMenus({"slug" : "first-footer-section-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                            <li>
+                                {% set link = "#0" %}
+                                {% if menuElement.customLink %}
+                                    {% set link = menuElement.customLink %}
+                                {% endif %}
+                                {% if menuElement.link %}
+                                    {% set link = setting.changeLinkLocale(app.request.locale, menuElement.link) %}
+                                {% endif %}
+                                <a href="{{ link }}" class="nav-link">
+                                    {% if menuElement.icon %}
+                                        <i class="{{ menuElement.icon }} fa-fw"></i>
+                                    {% endif %}
+                                    {% if menuElement.label %}
+                                        {{ menuElement.label }}
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-4">
+                <div class="mb-4">
+                    <h3 class="fw-bold mb-3">
+                        {{ setting.getMenus({"slug" : "second-footer-section-menu"}).getQuery().getOneOrNullResult().getHeader() }}
+                    </h3>
+                    <ul class="list-unstyled nav nav-footer flex-column nav-x-0">
+                        {% for menuElement in setting.getMenus({"slug" : "second-footer-section-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                            <li>
+                                {% set link = "#0" %}
+                                {% if menuElement.customLink %}
+                                    {% set link = menuElement.customLink %}
+                                {% endif %}
+                                {% if menuElement.link %}
+                                    {% set link = setting.changeLinkLocale(app.request.locale, menuElement.link) %}
+                                {% endif %}
+                                <a href="{{ link }}" class="nav-link">
+                                    {% if menuElement.icon %}
+                                        <i class="{{ menuElement.icon }} fa-fw"></i>
+                                    {% endif %}
+                                    {% if menuElement.label %}
+                                        {{ menuElement.label }}
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-4">
+                <div class="mb-4">
+                    <h3 class="fw-bold mb-3">
+                        {{ setting.getMenus({"slug" : "third-footer-section-menu"}).getQuery().getOneOrNullResult().getHeader() }}
+                    </h3>
+                    <ul class="list-unstyled nav nav-footer flex-column nav-x-0">
+                        {% for menuElement in setting.getMenus({"slug" : "third-footer-section-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                            <li>
+                                {% set link = "#0" %}
+                                {% if menuElement.customLink %}
+                                    {% set link = menuElement.customLink %}
+                                {% endif %}
+                                {% if menuElement.link %}
+                                    {% set link = setting.changeLinkLocale(app.request.locale, menuElement.link) %}
+                                {% endif %}
+                                {% if link == "footer_categories_section" %}
+                                    {% for category in setting.getCategories({ "isFeatured": true, "limit": 4 }).getQuery().getResult() %}
+                                        <a href="{{ path('recipes', { category: category.slug }) }}" class="nav-link">
+                                            {{ category.name }}
+                                        </a>
+                                    {% endfor %}
+                                {% else %}
+                                    <a href="{{ link }}" class="nav-link">
+                                        {% if menuElement.icon %}
+                                            <i class="{{ menuElement.icon }} fa-fw"></i>
+                                        {% endif %}
+                                        {% if menuElement.label %}
+                                            {{ menuElement.label }}
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-12">
                 <div class="mb-4">
                     <h3 class="fw-bold mb-3">{{ 'Get In Touch.'|trans }}</h3>
                     <p>{{ address | raw | nl2br }}</p>

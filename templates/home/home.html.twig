@@ -7,7 +7,6 @@
 {% block page %}home{% endblock %}
 
 {% block content %}
-    {#  
     {% if herosettings.content == "recipes" and herosettings.recipes | length %}
 
         {% for recipe in herosettings.recipes %}
@@ -29,28 +28,121 @@
     {% endif %}
 
     {% if herosettings.content == "custom" %}
-        <section class="py-8 bg-white">
-            <div class="container my-lg-4">
-                <div class="row">
-                    <div class="offset-lg-2 col-lg-8 col-md-12 col-12 mb-8">
-                        {% if herosettings.title %}
-                            <h1 class="display-2 fw-bold mb-3">
-                                {{ herosettings.title }}
-                                <span class="text-primary">{{ website_name }}</span>
-                            </h1>
-                        {% endif %}
-                        {% if herosettings.paragraph %}
-                            <p class="h2 mb-3">
-                                {{ herosettings.paragraph }}
-                            </p>
-                            <p class="mb-0 h4 text-body lh-lg"></p>
-                        {% endif %}
+        <section class="bg-light py-8 bg-cover">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-8 col-12">
+                        <div>
+                            <div class="text-center text-md-start">
+                            {% if herosettings.title %}
+                                <h1 class="display-2 fw-bold mb-3">{{ herosettings.title }}</h1>
+                            {% endif %}
+                            {% if herosettings.paragraph %}
+                                <p class="lead">{{ herosettings.paragraph }}</p>
+                            {% endif %}
+                            </div>
+                            {% if herosettings.showSearchBox %}
+                                <div class="mt-8">
+                                    <div class="bg-white rounded-md-pill shadow rounded-3 mb-4">
+                                        <div class="p-md-2 p-4">
+                                            <form action="{{ path('recipes') }}" class="row g-1">
+                                                <div class="col-12 col-md-3">
+                                                    <div class="input-group mb-2 mb-md-0 border-md-0 border rounded-pill">
+                                                        <span class="input-group-text bg-transparent border-0 pe-0 ps-md-3 ps-md-0" id="hero-search-category">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <label for="hero-search-category" class="form-label text-dark visually-hidden">
+                                                            {{ "Looking for"|trans }}
+                                                        </label>
+                                                        <select id="hero-search-category" name="category" data-sort-options="1" class="form-select rounded-pill border-0 ps-3 form-focus-none">
+                                                            <option value>{{ "Anything"|trans }}</option>
+                                                            {% for category in setting.getCategories({}).getQuery().getResult() %}
+                                                                <option value="{{ category.slug }}">{{ category.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    <div class="input-group mb-3 mb-md-0 border-md-0 border rounded-pill">
+                                                        <span class="input-group-text bg-transparent border-0 pe-0 ps-md-0" id="hero-search-country">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
+                                                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <label for="hero-search-country" class="form-label text-dark visually-hidden">
+                                                            {{ "In"|trans }}
+                                                        </label>
+                                                        <select id="hero-search-country" name="country" data-sort-options="1" class="form-select rounded-pill border-0 ps-3 form-focus-none">
+                                                            <option value>{{ "Anywhere"|trans }}</option>
+                                                            {% for country in setting.getCountries({}).getQuery().getResult() %}
+                                                                <option value="{{ country.slug }}">{{ country.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    <div class="input-group mb-3 mb-md-0 border-md-0 border rounded-pill">
+                                                        <span class="input-group-text bg-transparent border-0 pe-0 ps-md-0" id="hero-search-stardate">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
+                                                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <label for="hero-search-stardate" class="form-label text-dark visually-hidden">
+                                                            {{ "When"|trans }}
+                                                        </label>
+                                                        <select id="hero-search-stardate" name="startdate" class="form-select rounded-pill border-0 ps-3 form-focus-none">
+                                                            <option value>{{ "Anytime"|trans }}</option>
+                                                            <option value="today">{{ "Today"|trans }}</option>
+                                                            <option value="tomorrow">{{ "Tomorrow"|trans }}</option>
+                                                            <option value="thisweekend">{{ "This weekend"|trans }}</option>
+                                                            <option value="thisweek">{{ "This week"|trans }}</option>
+                                                            <option value="nextweek">{{ "Next week"|trans }}</option>
+                                                            <option value="thismonth">{{ "This month"|trans }}</option>
+                                                            <option value="nextmonth">{{ "Next month"|trans }}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-3 text-end d-grid">
+                                                    <button type="submit" class="btn btn-primary rounded-pill">{{ "Search"|trans }}</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <span class="fs-4">Currently listing 30,642 jobs from 5,717 companies</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="offset-lg-1 col-lg-3 col-12 text-center">
+                        <div class="position-relative d-none d-lg-block">
+                            {% if herosettings.customBackgroundName %}
+                                <img src="{{ herosettings.getCustomBackgroundPath }}" class="img-fluid" alt="img">
+                            {% endif %}
+                            {% if herosettings.customBlockOneName %}
+                                <div class="position-absolute top-0 mt-7 ms-n6 ms-md-n6 ms-lg-n12 start-0">
+                                    <img src="{{ herosettings.getCustomBlockOnePath }}" class="img-fluid" alt="img">
+                                </div>
+                            {% endif %}
+                            {% if herosettings.customBlockTwoName %}
+                                <div class="position-absolute bottom-0 mb-8 me-n6 me-md-n4 me-lg-n12 end-0">
+                                    <img src="{{ herosettings.getCustomBlockTwoPath }}" class="img-fluid" alt="img">
+                                </div>
+                            {% endif %}
+                            {% if herosettings.customBlockThreeName %}
+                                <div class="position-absolute bottom-0 mb-n4 ms-n1 ms-md-n4 ms-lg-n7 start-0">
+                                    <img src="{{ herosettings.getCustomBlockThreePath }}" class="img-fluid" alt="img">
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     {% endif %}
-    #}
 
     {% if '1' == settings["homepage_show_search_box"] %}
         <section class="py-8 bg-light">
@@ -140,54 +232,52 @@
     {% endif %}
 
     {% if setting.getSettings('homepage_categories_number') > 0 %}
-        {% for category in setting.getCategories({ "isFeatured": true, "limit": setting.getSettings('homepage_categories_number') }).getQuery().getResult() %}
-            <section class="bg-light py-8">
-                <div class="container">
-                    <div class="row">
-                        <div class="offset-xl-1 col-xl-10 col-md-12 col-12">
-                            <div class="row text-center">
-                                <div class="col-md-12 px-lg-8 mb-8 mt-6">
-                                    <span class="text-uppercase text-primary fw-semibold ls-md">{{ 'Browse Category'|trans }}</span>
-                                    <h2 class="h1 fw-bold mt-3">{{ 'Featured categories'|trans }}</h2>
-                                    <p class="mb-0 fs-4"></p>
-                                </div>
+        <section class="bg-gray-100 py-8">
+            <div class="container">
+                <div class="row">
+                    <div class="offset-xl-1 col-xl-10 col-md-12 col-12">
+                        <div class="row text-center">
+                            <div class="col-md-12 px-lg-8 mb-8 mt-6">
+                                <span class="text-uppercase text-primary fw-semibold ls-md">{{ 'Browse Category'|trans }}</span>
+                                <h2 class="h1 fw-bold mt-3">{{ 'Featured categories'|trans }}</h2>
+                                <p class="mb-0 fs-4"></p>
                             </div>
-                            <div class="row gy-4">
-                                {% for category in setting.getCategories({ "isFeatured": true, "limit": setting.getSettings('homepage_categories_number') }).getQuery().getResult() %}
-                                    <div class="col-lg-3 col-md-4 col-12">
-                                        <div class="card border-top border-4 card-hover-with-icon">
-                                            <div class="card-body">
-                                                <div class="icon-shape icon-lg rounded-circle bg-light mb-3 card-icon">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-activity" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.33L10 12.036l1.53-4.208A.5.5 0 0 1 12 7.5h3.5a.5.5 0 0 1 0 1h-3.15l-1.88 5.17a.5.5 0 0 1-.94 0L6 3.964 4.47 8.171A.5.5 0 0 1 4 8.5H.5a.5.5 0 0 1 0-1h3.15l1.88-5.17A.5.5 0 0 1 6 2Z">
-                                                    </path></svg>
+                        </div>
+                        <div class="row gy-4">
+                            {% for category in setting.getCategories({ "isFeatured": true, "limit": setting.getSettings('homepage_categories_number') }).getQuery().getResult() %}
+                                <div class="col-lg-3 col-md-4 col-12">
+                                    <div class="card border-top border-4 card-hover-with-icon">
+                                        <div class="card-body">
+                                            <div class="icon-shape icon-lg rounded-circle bg-light mb-3 card-icon">
+                                                <i class="{{ category.icon }} fa-fw text-primary"></i>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h4 class="mb-0">{{ category.name }}</h4>
+                                                    <p class="mb-0"></p>
                                                 </div>
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div>
-                                                        <h4 class="mb-0">{{ category.name }}</h4>
-                                                        <p class="mb-0"></p>
-                                                    </div>
-                                                    <a href="{{ path('recipes', { category: category.slug }) }}" class="text-inherit">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
-                                                        </path></svg>
-                                                    </a>
-                                                </div>
+                                                <a href="{{ path('recipes', { category: category.slug }) }}" class="text-inherit">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z">
+                                                        </path>
+                                                    </svg>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
-                                <div class="col-12 mt-8 text-center">
-                                    <a href="#" class="btn btn-outline-primary">
-                                        {{ 'View All Category'|trans }}
-                                    </a>
+                                    {# {% include "global/category-card.html.twig" with {category: category} %} #}
                                 </div>
+                            {% endfor %}
+                            <div class="col-12 mt-8 text-center">
+                                <a href="{{ path('categories') }}" class="btn btn-outline-primary">
+                                    {{ 'View All Category'|trans }}
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        {% endfor %}
+            </div>
+        </section>
     {% endif %}
 
     {% if setting.getSettings('homepage_posts_number') > 0 %}
@@ -266,7 +356,7 @@
                             {{ "recipe to the next level ?"|trans }}
                         </h2>
                         <p class="lead px-lg- 8 mb-6"></p>
-                        <a href="#" class="btn btn-primary">{{ "Create my recipe"|trans }}</a>
+                        <a href="{{ path('dashboard_restaurant_recipe_new') }}" class="btn btn-primary">{{ "Create my recipe"|trans }}</a>
                     </div>
                 </div>
             </div>

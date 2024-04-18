@@ -80,6 +80,9 @@ parameters:
     # Vich
     attachments:                      /images/attachments
     homepage_hero_custom_background:  /images/home
+    homepage_hero_custom_block_one:   /images/home/block
+    homepage_hero_custom_block_two:   /images/home/block
+    homepage_hero_custom_block_three: /images/home/block
     app_layout:                       /images/layout
     post_image:                       /images/post
     icon:                             /images/icon

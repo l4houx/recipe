@@ -76,7 +76,7 @@ class VenueImage
 
     public function getImagePath(): string
     {
-        return '/images/venues/'.$this->imageName;
+        return 'uploads/venues/'.$this->imageName;
     }
 
     public function getPosition(): ?int

@@ -17,12 +17,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
@@ -146,46 +146,55 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SubscriptionReservation::class, cascade: ['remove'])]
     private Collection $subscriptionReservations;
 
-    public function hasBoughtASubscriptionForRecipe($recipe) {
+    public function hasBoughtASubscriptionForRecipe($recipe): Order|false
+    {
         foreach ($this->orders as $order) {
-            if ($order->getStatus() == 1 && $order->containsRecipe($recipe)) {
+            if (1 == $order->getStatus() && $order->containsRecipe($recipe)) {
                 return $order;
             }
         }
+
         return false;
     }
 
-    public function getOrdersQuantitySum($status = 1, $upcomingtickets = "all") {
+    public function getOrdersQuantitySum(int $status = 1, string $upcomingtickets = 'all')
+    {
         $sum = 0;
         foreach ($this->orders as $order) {
             foreach ($order->getOrderelements() as $orderelement) {
-                if ($status === "all" || $orderelement->getOrder()->getStatus() === $status && ($upcomingtickets === "all" || ($upcomingtickets == 1 && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() >= new \DateTime) || ($upcomingtickets == 0 && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() < new \DateTime) )) {
+                if ('all' === $status || $orderelement->getOrder()->getStatus() === $status && ('all' === $upcomingtickets || (1 == $upcomingtickets && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() >= new \DateTime()) || (0 == $upcomingtickets && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() < new \DateTime()))) {
                     $sum += $orderelement->getquantity();
                 }
             }
         }
+
         return $sum;
     }
 
-    public function isRecipeSubscriptionInCart($recipesubscription) {
+    public function isRecipeSubscriptionInCart($recipesubscription)
+    {
         foreach ($this->cartelements as $cartelement) {
             if ($cartelement->getRecipeSubscription() == $recipesubscription) {
                 return $cartelement->getQuantity();
             }
         }
+
         return false;
     }
 
-    public function getCartelementByRecipeSubscriptionReference($recipesubscriptionreference): ?CartElement {
+    public function getCartelementByRecipeSubscriptionReference($recipesubscriptionreference): ?CartElement
+    {
         foreach ($this->cartelements as $cartelement) {
             if ($cartelement->getRecipeSubscription()->getReference() == $recipesubscriptionreference) {
                 return $cartelement;
             }
         }
+
         return null;
     }
 
-    public function getSubscriptionsInCartPriceSum(bool $includeFees = false): float {
+    public function getSubscriptionsInCartPriceSum(bool $includeFees = false): float
+    {
         $sum = 0;
         foreach ($this->cartelements as $cartelement) {
             $sum += $cartelement->getPrice();
@@ -193,10 +202,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         if ($includeFees) {
             $sum += $this->getTotalFees();
         }
+
         return (float) $sum;
     }
 
-    public function getTotalSubscriptionFees() {
+    public function getTotalSubscriptionFees(): int|float
+    {
         if (!count($this->cartelements)) {
             return 0;
         }
@@ -204,30 +215,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         foreach ($this->cartelements as $cartelement) {
             $sum += $cartelement->getQuantity() * $cartelement->getSubscriptionFee();
         }
+
         return (float) $sum;
     }
 
-    public function getTotalFees() {
+    public function getTotalFees()
+    {
         $sum = 0;
         $sum += $this->getTotalSubscriptionFees();
+
         return $sum;
     }
 
-    public function getNotFreeSubscriptionsInCartQuantitySum() {
+    public function getNotFreeSubscriptionsInCartQuantitySum()
+    {
         $sum = 0;
         foreach ($this->cartelements as $cartelement) {
             if (!$cartelement->getRecipeSubscription()->getIsFree()) {
                 $sum += $cartelement->getQuantity();
             }
         }
+
         return $sum;
     }
 
-    public function getSubscriptionsInCartQuantitySum() {
+    public function getSubscriptionsInCartQuantitySum()
+    {
         $sum = 0;
         foreach ($this->cartelements as $cartelement) {
             $sum += $cartelement->getQuantity();
         }
+
         return $sum;
     }
 

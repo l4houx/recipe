@@ -44,6 +44,42 @@ class HomepageHeroSetting
     #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
     private ?string $customBackgroundName = null;
 
+    // NOTE: This is not a mapped field of entity metadata, just a simple property.
+    #[Vich\UploadableField(mapping: 'homepage_hero_custom_block_one', fileNameProperty: 'customBlockOneName')]
+    #[Assert\File(
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'],
+        mimeTypesMessage: 'The file should be an image'
+    )]
+    private ?File $customBlockOneFile = null;
+
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    private ?string $customBlockOneName = null;
+
+    // NOTE: This is not a mapped field of entity metadata, just a simple property.
+    #[Vich\UploadableField(mapping: 'homepage_hero_custom_block_two', fileNameProperty: 'customBlockTwoName')]
+    #[Assert\File(
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'],
+        mimeTypesMessage: 'The file should be an image'
+    )]
+    private ?File $customBlockTwoFile = null;
+
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    private ?string $customBlockTwoName = null;
+
+    // NOTE: This is not a mapped field of entity metadata, just a simple property.
+    #[Vich\UploadableField(mapping: 'homepage_hero_custom_block_three', fileNameProperty: 'customBlockThreeName')]
+    #[Assert\File(
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'],
+        mimeTypesMessage: 'The file should be an image'
+    )]
+    private ?File $customBlockThreeFile = null;
+
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    private ?string $customBlockThreeName = null;
+
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $show_search_box = null;
 
@@ -143,7 +179,127 @@ class HomepageHeroSetting
 
     public function getCustomBackgroundPath(): string
     {
-        return '/public/images/home/'.$this->customBackgroundName;
+        return 'uploads/home/'.$this->customBackgroundName;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     */
+    public function setCustomBlockOneFile(File|UploadedFile|null $customBlockOneFile)
+    {
+        $this->customBlockOneFile = $customBlockOneFile;
+
+        if (null !== $customBlockOneFile) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+
+        return $this;
+    }
+
+    public function getCustomBlockOneFile(): ?File
+    {
+        return $this->customBlockOneFile;
+    }
+
+    public function getCustomBlockOneName(): ?string
+    {
+        return $this->customBlockOneName;
+    }
+
+    public function setCustomBlockOneName(?string $customBlockOneName): static
+    {
+        $this->customBlockOneName = $customBlockOneName;
+
+        return $this;
+    }
+
+    public function getCustomBlockOnePath(): string
+    {
+        return 'uploads/home/block/'.$this->customBlockOneName;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     */
+    public function setCustomBlockTwoFile(File|UploadedFile|null $customBlockTwoFile)
+    {
+        $this->customBlockTwoFile = $customBlockTwoFile;
+
+        if (null !== $customBlockTwoFile) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+
+        return $this;
+    }
+
+    public function getCustomBlockTwoFile(): ?File
+    {
+        return $this->customBlockTwoFile;
+    }
+
+    public function getCustomBlockTwoName(): ?string
+    {
+        return $this->customBlockTwoName;
+    }
+
+    public function setCustomBlockTwoName(?string $customBlockTwoName): static
+    {
+        $this->customBlockTwoName = $customBlockTwoName;
+
+        return $this;
+    }
+
+    public function getCustomBlockTwoPath(): string
+    {
+        return 'uploads/home/block/'.$this->customBlockTwoName;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     */
+    public function setCustomBlockThreeFile(File|UploadedFile|null $customBlockThreeFile)
+    {
+        $this->customBlockThreeFile = $customBlockThreeFile;
+
+        if (null !== $customBlockThreeFile) {
+            $this->setUpdatedAt(new \DateTime());
+        }
+
+        return $this;
+    }
+
+    public function getCustomBlockThreeFile(): ?File
+    {
+        return $this->customBlockThreeFile;
+    }
+
+    public function getCustomBlockThreeName(): ?string
+    {
+        return $this->customBlockThreeName;
+    }
+
+    public function setCustomBlockThreeName(?string $customBlockThreeName): static
+    {
+        $this->customBlockThreeName = $customBlockThreeName;
+
+        return $this;
+    }
+
+    public function getCustomBlockThreePath(): string
+    {
+        return 'uploads/home/block/'.$this->customBlockThreeName;
     }
 
     public function isShowSearchBox(): ?bool

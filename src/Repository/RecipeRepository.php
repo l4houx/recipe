@@ -264,8 +264,8 @@ class RecipeRepository extends ServiceEntityRepository
 
         if ('all' !== $category) {
             $qb->leftJoin('r.category', 'category');
-            $qb->join('category.translations', 'categorytranslations');
-            $qb->andWhere('categorytranslations.slug = :category')->setParameter('category', $category);
+            //$qb->join('category.translations', 'categorytranslations');
+            //$qb->andWhere('categorytranslations.slug = :category')->setParameter('category', $category);
         }
 
         if ('all' !== $venue || 'all' !== $country || 'all' !== $location || 'all' !== $pricemin || 'all' !== $pricemax || 'all' != $startdate || 'all' != $startdatemin || 'all' != $startdatemax || 'recipedates.startdate' === $sort || 'all' !== $elapsed || 'all' !== $onsalebypos || 'all' !== $onlineonly) {
@@ -357,7 +357,7 @@ class RecipeRepository extends ServiceEntityRepository
         }
 
         if (true === $isOnHomepageSlider) {
-            $qb->andWhere('e.isonhomepageslider IS NOT NULL');
+            $qb->andWhere('r.isonhomepageslider IS NOT NULL');
         }
 
         if ('all' !== $isOnline) {

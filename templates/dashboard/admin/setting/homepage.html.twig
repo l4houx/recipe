@@ -38,7 +38,7 @@
                             {{ form_row(form.customBackgroundFile) }}
                             {{ form_row(form.show_search_box) }}
                         </div>
-                        <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button>
+                        {# <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button> #}
                     {{ form_end(form) }}
                 </div>
             </div>
@@ -46,20 +46,20 @@
     </div>
 {% endblock %}
 
-{#  
 {% block javascripts %}
+    {{ parent() }}
     <script>
         $(document).ready(function () {
-            $("input[name='homepage_hero_settings[content]']").change(function () {
-                if ($('#homepage_hero_settings_content_1').is(':checked')) {
+            $("input[name='homepage_hero_setting_form[content]']").change(function () {
+                if ($('#homepage_hero_setting_form_content_1').is(':checked')) {
                     $('#recipes').show();
                     $('#restaurants').hide();
                     $('#custom').hide();
-                } else if ($('#homepage_hero_settings_content_2').is(':checked')) {
+                } else if ($('#homepage_hero_setting_form_content_2').is(':checked')) {
                     $('#recipes').hide();
                     $('#restaurants').show();
                     $('#custom').hide();
-                } else if ($('#homepage_hero_settings_content_3').is(':checked')) {
+                } else if ($('#homepage_hero_setting_form_content_3').is(':checked')) {
                     $('#recipes').hide();
                     $('#restaurants').hide();
                     $('#custom').show();
@@ -69,8 +69,7 @@
                     $('#custom').hide();
                 }
             });
-            $("input[name='homepage_hero_settings[content]']").trigger('change');
+            $("input[name='homepage_hero_setting_form[content]']").trigger('change');
         });
     </script>
 {% endblock %}
-#}

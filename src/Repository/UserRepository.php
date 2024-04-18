@@ -208,7 +208,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @param string                   $order
      * @param int                      $count
      */
-    public function getUsers($role, $keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $slug, $followedby, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
+    public function getUsers($role, $keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $slug, $followedby, $email, $firstname, $lastname, $isVerified, $isSuspended, $hasboughtsubscriptionforRecipe, $hasboughtsubscriptionforRestaurant, $apiKey,$isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -219,7 +219,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         if ($role !== "all") {
-            $qb->andWhere("u.roles LIKE :roles")->setParameter("roles", "%ROLE_" . strtoupper($role) . "%");
+            $qb->andWhere("u.roles LIKE :role")->setParameter("role", "%ROLE_" . strtoupper($role) . "%");
             if ($role == "pointofsale" && $createdbyrestaurantslug !== "all") {
                 $qb->leftJoin("u.pointofsale", "pointofsale");
                 $qb->leftJoin("pointofsale.restaurant", "pointofsalerestaurant");
@@ -289,7 +289,36 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->setMaxResults($limit);
         }
 
-        $qb->orderBy($sort, $order);
+        if ($apiKey !== "all") {
+            $qb->andWhere("u.apiKey = :apiKey")->setParameter("apiKey", $apiKey);
+        }
+
+        if ($hasboughtsubscriptionforRecipe !== "all" || $hasboughtsubscriptionforRestaurant != "all") {
+            $qb->join("u.orders", "orders");
+            $qb->join("orders.orderelements", "orderelements");
+            $qb->join("orderelements.recipesubscription", "recipesubscription");
+            $qb->join("recipesubscription.recipedate", "recipedate");
+            $qb->join("recipedate.recipe", "recipe");
+        }
+
+        if ($hasboughtsubscriptionforRecipe !== "all") {
+            $qb->join("recipe.translations", "recipetranslations");
+            $qb->andWhere("orders.status = :statuspaid")->setParameter("statuspaid", 1);
+            $qb->andWhere("recipetranslations.slug = :hasboughtsubscriptionforrecipe")->setParameter("hasboughtsubscriptionforrecipe", $hasboughtsubscriptionforRecipe);
+        }
+
+        if ($hasboughtsubscriptionforRestaurant !== "all") {
+            $qb->join("recipe.restaurant", "recipeRestaurant");
+            $qb->andWhere("recipeRestaurant.slug = :hasboughtsubscriptionforrestaurant")->setParameter("hasboughtsubscriptionforrestaurant", $hasboughtsubscriptionforRestaurant);
+        }
+
+        if ($hasboughtsubscriptionforRecipe !== "all") {
+            $qb->orderBy("orders.createdAt", "DESC");
+        } else {
+            $qb->orderBy($sort, $order);
+        }
+
+        //$qb->orderBy($sort, $order);
 
         $qb->andWhere('u.slug != :administrator')->setParameter('administrator', 'administrator');
 

@@ -110,7 +110,8 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Number Of Recipes On The homepage', 'homepage_recipes_number', 12, NumberType::class);
 
         // Pages Show Action
-        $settings[] = new Setting('Show Search Box On Home page', 'homepage_show_search_box', 0, CheckboxType::class);
+        $settings[] = new Setting('Show the homepage hero seach box', 'show_search_box', true, CheckboxType::class);
+        $settings[] = new Setting('Show the search box', 'homepage_show_search_box', 0, CheckboxType::class);
         $settings[] = new Setting('Show Call To Action', 'homepage_show_call_to_action', true, CheckboxType::class);
         $settings[] = new Setting('Show Cookie policy bar', 'show_cookie_policy_bar', true, CheckboxType::class);
 
@@ -189,11 +190,11 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Description', 'feed_description', 'Latest Recipes', TextareaType::class);
         $settings[] = new Setting('Limit', 'feed_recipes_limit', 100, NumberType::class);
 
-        // Mail
-        $settings[] = new Setting('Mail Server Transport', 'mail_server_transport', '', TextType::class);
+        // Mail Server
+        $settings[] = new Setting('Mail Server Transport', 'mail_server_transport', '', CheckboxType::class);
         $settings[] = new Setting('Mail Server Host', 'mail_server_host', '', TextType::class);
         $settings[] = new Setting('Mail Server Port', 'mail_server_port', 'NULL', TextType::class);
-        $settings[] = new Setting('Mail Server Encryption', 'mail_server_encryption', 'NULL', TextType::class);
+        $settings[] = new Setting('Mail Server Encryption', 'mail_server_encryption', 'NULL', CheckboxType::class);
         $settings[] = new Setting('Mail Server Authentication mode', 'mail_server_auth_mode', 'NULL', TextType::class);
         $settings[] = new Setting('Mail Server Username', 'mail_server_username', '', TextType::class);
         $settings[] = new Setting('Mail Server Password', 'mail_server_password', '', TextType::class);
@@ -231,7 +232,10 @@ class AppSettingsFixtures extends Fixture
                 'title' => 'Discover Recipe',
                 'paragraph' => 'Uncover the best recipes',
                 'content' => 'custom',
-                'custom_background_name' => 'homepage.jpg',
+                'custom_background_name' => 'hero-section.png',
+                'custom_block_one_name' => 'hero-block-1.svg',
+                'custom_block_two_name' => 'hero-block-2.svg',
+                'custom_block_three_name' => 'hero-block-3.svg',
                 'show_search_box' => 1,
             ],
             2 => [
@@ -495,7 +499,7 @@ class AppSettingsFixtures extends Fixture
                 // 'menu_id' => 1,
                 'label' => 'Home',
                 'slug' => 'home',
-                'icon' => 'fas fa-home',
+                'icon' => 'fas fa-house',
                 'link' => '/en',
                 'custom_link' => null,
                 'position' => 0,
@@ -513,7 +517,7 @@ class AppSettingsFixtures extends Fixture
                 // 'menu_id' => 1,
                 'label' => 'Explore',
                 'slug' => 'explore',
-                'icon' => 'fas fa-stream',
+                'icon' => 'fas fa-list',
                 'link' => 'categories_dropdown',
                 'custom_link' => null,
                 'position' => 2,
@@ -531,17 +535,17 @@ class AppSettingsFixtures extends Fixture
                 // 'menu_id' => 1,
                 'label' => 'How It works?',
                 'slug' => 'how-it-works',
-                'icon' => 'fas fa-question-circle',
+                'icon' => 'fas fa-question',
                 'link' => '/en/help-center',
                 'custom_link' => null,
                 'position' => 4,
             ],
             6 => [
                 // 'menu_id' => 1,
-                'label' => 'Blog',
-                'slug' => 'blog',
+                'label' => 'Post',
+                'slug' => 'post',
                 'icon' => 'fas fa-newspaper',
-                'link' => '/en/blog',
+                'link' => '/en/post',
                 'custom_link' => null,
                 'position' => 5,
             ],
@@ -549,7 +553,7 @@ class AppSettingsFixtures extends Fixture
                 // 'menu_id' => 1,
                 'label' => 'My subscriptions',
                 'slug' => 'my-subscriptions',
-                'icon' => 'fas fa-ticket-alt',
+                'icon' => 'fas fa-ticket',
                 'link' => '/en/dashboard/creator/my-subscriptions',
                 'custom_link' => null,
                 'position' => 6,
@@ -558,8 +562,8 @@ class AppSettingsFixtures extends Fixture
                 // 'menu_id' => 1,
                 'label' => 'Add my recipe',
                 'slug' => 'add-my-recipe',
-                'icon' => 'fas fa-calendar-plus',
-                'link' => '/en/dashboard/restaurant/my-recipes/add',
+                'icon' => 'fas fa-plus',
+                'link' => '/en/dashboard/restaurant/my-recipes/new',
                 'custom_link' => null,
                 'position' => 7,
             ],
@@ -583,10 +587,10 @@ class AppSettingsFixtures extends Fixture
             ],
             11 => [
                 // 'menu_id' => 2,
-                'label' => 'Blog',
-                'slug' => 'blog-2',
+                'label' => 'Post',
+                'slug' => 'post-2',
                 'icon' => null,
-                'link' => '/en/blog',
+                'link' => '/en/post',
                 'custom_link' => null,
                 'position' => 2,
             ],
@@ -613,23 +617,23 @@ class AppSettingsFixtures extends Fixture
                 'label' => 'Create an account',
                 'slug' => 'create-an-account',
                 'icon' => null,
-                'link' => '/en/signup',
+                'link' => '/en/signup-creator',
                 'custom_link' => null,
                 'position' => 0,
             ],
             15 => [
                 // 'menu_id' => 3,
-                'label' => 'Create an account',
-                'slug' => 'create-an-account',
+                'label' => 'Sell subscriptions online',
+                'slug' => 'sell-subscriptions-online',
                 'icon' => null,
-                'link' => '/en/signup/restaurant',
+                'link' => '/en/signup-restaurant',
                 'custom_link' => null,
                 'position' => 1,
             ],
             16 => [
                 // 'menu_id' => 3,
-                'label' => 'Sell subscriptions online',
-                'slug' => 'sell-subscriptions-online',
+                'label' => 'My subscriptions',
+                'slug' => 'my-subscriptions',
                 'icon' => null,
                 'link' => '/en/dashboard/creator/my-subscriptions',
                 'custom_link' => null,
@@ -655,8 +659,8 @@ class AppSettingsFixtures extends Fixture
             ],
             19 => [
                 // 'menu_id' => 4,
-                'label' => 'All categories',
-                'slug' => 'all-categories',
+                'label' => 'No text',
+                'slug' => 'no-text',
                 'icon' => null,
                 'link' => 'footer_categories_section',
                 'custom_link' => null,

@@ -101,7 +101,7 @@ class AppLayoutSetting
 
     public function getLogoPath(): string
     {
-        return '/public/layout/'.$this->logoName;
+        return 'uploads/layout/'.$this->logoName;
     }
 
     /**
@@ -141,7 +141,7 @@ class AppLayoutSetting
 
     public function getFaviconPath(): string
     {
-        return '/public/layout/'.$this->faviconName;
+        return 'uploads/layout/'.$this->faviconName;
     }
 
     /**
@@ -181,6 +181,6 @@ class AppLayoutSetting
 
     public function getOgImagePath(): string
     {
-        return '/public/layout/'.$this->ogImageName;
+        return 'uploads/layout/'.$this->ogImageName;
     }
 }

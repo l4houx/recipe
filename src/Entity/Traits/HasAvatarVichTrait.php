@@ -62,7 +62,7 @@ trait HasAvatarVichTrait
 
     public function getAvatarPath(): string
     {
-        return '/images/user/'.$this->avatarName;
+        return 'uploads/user/'.$this->avatarName;
     }
 
     public function getAvatarPlaceholder(string $size = 'default'): string

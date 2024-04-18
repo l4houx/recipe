@@ -102,7 +102,7 @@ class Category
 
     public function getImagePath(): string
     {
-        return '/images/category/'.$this->imageName;
+        return 'uploads/category/'.$this->imageName;
     }
 
     public function getImagePlaceholder(string $size = 'default'): string

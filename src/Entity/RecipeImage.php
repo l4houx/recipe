@@ -77,7 +77,7 @@ class RecipeImage
 
     public function getImagePath(): string
     {
-        return '/images/recipe/'.$this->imageName;
+        return 'uploads/recipe/'.$this->imageName;
     }
 
     public function getPosition(): ?int

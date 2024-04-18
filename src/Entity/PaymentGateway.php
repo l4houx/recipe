@@ -96,7 +96,7 @@ class PaymentGateway
 
     public function getLogoPath(): string
     {
-        return '/images/payment/gateways/'.$this->gatewayLogoName;
+        return 'uploads/payment/gateways/'.$this->gatewayLogoName;
     }
 
     public function getInstructions(): ?string

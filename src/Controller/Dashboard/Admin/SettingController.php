@@ -2,33 +2,37 @@
 
 namespace App\Controller\Dashboard\Admin;
 
-use App\Entity\PaymentGateway;
+use App\Entity\User;
 use App\Entity\Recipe;
-use App\Entity\Setting\Currency;
-use App\Entity\Setting\HomepageHeroSetting;
+use App\Form\MenuFormType;
+use App\Entity\Setting\Menu;
+use App\Entity\PaymentGateway;
 use App\Entity\Setting\Setting;
 use App\Entity\Traits\HasRoles;
-use App\Entity\User;
-use App\Form\AppLayoutSettingFormType;
-use App\Form\HomepageHeroSettingFormType;
 use App\Service\SettingService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
+use App\Entity\Setting\Currency;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Contracts\Translation\TranslatorInterface;
-
+use App\Form\AppLayoutSettingFormType;
+use App\Entity\Setting\AppLayoutSetting;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Form\HomepageHeroSettingFormType;
+use App\Entity\Setting\HomepageHeroSetting;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use function Symfony\Component\Translation\t;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Routing\Requirement\Requirement;
+
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 #[Route(path: '/%website_dashboard_path%/admin/manage-settings', name: 'dashboard_admin_setting_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
@@ -44,6 +48,7 @@ class SettingController extends AdminBaseController
     #[Route(path: '/layout', name: 'layout', methods: ['GET', 'POST'])]
     public function layout(Request $request): Response
     {
+        /** @var AppLayoutSetting $appLayoutSetting */
         $appLayoutSetting = $this->em->getRepository("App\Entity\Setting\AppLayoutSetting")->find(1);
         if (!$appLayoutSetting) {
             $this->addFlash('danger', $this->translator->trans('The layout settings could not be loaded'));
@@ -251,6 +256,10 @@ class SettingController extends AdminBaseController
                 'label' => t('Disqus subdomain'),
                 'help' => t('Go to the documentation to get help about setting up Disqus'),
             ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
+            ])
             ->getForm()
         ;
         $form->handleRequest($request);
@@ -302,6 +311,10 @@ class SettingController extends AdminBaseController
                 'required' => false,
                 'label' => t('Secret key'),
             ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
+            ])
             ->getForm()
         ;
         $form->handleRequest($request);
@@ -338,6 +351,10 @@ class SettingController extends AdminBaseController
                 'required' => false,
                 'label' => t('Google Maps Api Key'),
                 'help' => t('Leave api key empty to disable google maps project wide'),
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -408,23 +425,27 @@ class SettingController extends AdminBaseController
                 'label' => t('Password'),
                 'required' => false,
             ])
-            ->add('no_reply_email', TextType::class, [
+            ->add('website_no_reply_email', TextType::class, [
                 'label' => t('No reply email address'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ],
                 'help' => t('This email address will be used as the sender of all the emails sent by the platform, in almost all cases, it is the same as the username above'),
             ])
-            ->add('contact_email', TextType::class, [
+            ->add('website_contact_email', TextType::class, [
                 'label' => t('Contact email'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ],
                 'help' => t('This email address will receive the contact form messages'),
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -436,33 +457,33 @@ class SettingController extends AdminBaseController
                 /** @var Setting $setting */
                 $setting = $form->getData();
                 $this->settingervice->setSettings('mail_server_transport', $setting['mail_server_transport']);
-                $this->settingervice->setSettings('mail_server_host', rawurlencode($setting['mail_server_host']));
+                $this->settingervice->setSettings('mail_server_host', urlencode($setting['mail_server_host']));
                 $this->settingervice->setSettings('mail_server_port', $setting['mail_server_port']);
                 $this->settingervice->setSettings('mail_server_encryption', $setting['mail_server_encryption']);
-                $this->settingervice->setSettings('mail_server_username', rawurlencode($setting['mail_server_username']));
-                $this->settingervice->setSettings('mail_server_password', rawurlencode($setting['mail_server_password']));
+                $this->settingervice->setSettings('mail_server_username', urlencode($setting['mail_server_username']));
+                $this->settingervice->setSettings('mail_server_password', urlencode($setting['mail_server_password']));
                 $this->settingervice->setSettings('website_contact_email', $setting['website_contact_email']);
                 $this->settingervice->setSettings('website_no_reply_email', $setting['website_no_reply_email']);
 
                 $dsnUrl = $setting['mail_server_transport'].'://';
 
-                if (mb_strlen($setting['mail_server_username'])) {
-                    $dsnUrl .= rawurlencode($setting['mail_server_username']);
+                if (strlen($setting['mail_server_username'])) {
+                    $dsnUrl .= urlencode($setting['mail_server_username']);
                 }
-                if (mb_strlen($setting['mail_server_password'])) {
-                    $dsnUrl .= ':'.rawurlencode($setting['mail_server_password']);
+                if (strlen($setting['mail_server_password'])) {
+                    $dsnUrl .= ':'.urlencode($setting['mail_server_password']);
                 }
-                if (mb_strlen($setting['mail_server_host'])) {
+                if (strlen($setting['mail_server_host'])) {
                     $dsnUrl .= '@'.$setting['mail_server_host'];
                 }
-                if (mb_strlen($setting['mail_server_port'])) {
+                if (strlen($setting['mail_server_port'])) {
                     $dsnUrl .= ':'.$setting['mail_server_port'];
                 }
-                if (mb_strlen($setting['mail_server_encryption'])) {
+                if (strlen($setting['mail_server_encryption'])) {
                     $dsnUrl .= '/?encryption='.$setting['mail_server_encryption'];
                 }
                 if ('gmail' === $setting['mail_server_transport']) {
-                    if (mb_strlen($setting['mail_server_encryption'])) {
+                    if (strlen($setting['mail_server_encryption'])) {
                         $dsnUrl .= '&auth_mode=oauth';
                     } else {
                         $dsnUrl .= '?auth_mode=oauth';
@@ -476,11 +497,11 @@ class SettingController extends AdminBaseController
             }
         } else {
             $form->get('mail_server_transport')->setData($this->settingervice->getSettings('mail_server_transport'));
-            $form->get('mail_server_host')->setData(rawurldecode($this->settingervice->getSettings('mail_server_host')));
+            $form->get('mail_server_host')->setData(urldecode($this->settingervice->getSettings('mail_server_host')));
             $form->get('mail_server_port')->setData($this->settingervice->getSettings('mail_server_port'));
             $form->get('mail_server_encryption')->setData($this->settingervice->getSettings('mail_server_encryption'));
-            $form->get('mail_server_username')->setData(rawurldecode($this->settingervice->getSettings('mail_server_username')));
-            $form->get('mail_server_password')->setData(rawurldecode($this->settingervice->getSettings('mail_server_password')));
+            $form->get('mail_server_username')->setData(urldecode($this->settingervice->getSettings('mail_server_username')));
+            $form->get('mail_server_password')->setData(urldecode($this->settingervice->getSettings('mail_server_password')));
             $form->get('website_contact_email')->setData($this->settingervice->getSettings('website_contact_email'));
             $form->get('website_no_reply_email')->setData($this->settingervice->getSettings('website_no_reply_email'));
         }
@@ -542,6 +563,10 @@ class SettingController extends AdminBaseController
                 'required' => false,
                 'help' => t('Go to the documentation to get help about getting a list id'),
             ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
+            ])
             ->getForm()
         ;
 
@@ -578,12 +603,13 @@ class SettingController extends AdminBaseController
         if (!$homepageherosetting) {
             $this->addFlash('danger', $this->translator->trans('The homepage settings could not be loaded'));
 
-            return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
+            $this->settingervice->redirectToReferer("index");
         }
         $form = $this->createForm(HomepageHeroSettingFormType::class, $homepageherosetting)->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                /** @var HomepageHeroSetting $homeSliderRecipes */
                 $homeSliderRecipes = $this->settingervice->getRecipes(['isOnHomepageSlider' => true])->getQuery()->getResult();
                 /** @var Recipe $recipe */
                 foreach ($homeSliderRecipes as $recipe) {
@@ -596,7 +622,7 @@ class SettingController extends AdminBaseController
                     $this->em->persist($recipe);
                 }
 
-                /** @var HomepageHeroSetting $homeSliderRestaurant */
+                /** @var HomepageHeroSetting $homeSliderRestaurants */
                 $homeSliderRestaurants = $this->settingervice->getUsers(['isOnHomepageSlider' => true, 'roles' => 'restaurant'])->getQuery()->getResult();
                 /** @var User $user */
                 foreach ($homeSliderRestaurants as $user) {
@@ -612,7 +638,9 @@ class SettingController extends AdminBaseController
                 $this->em->persist($homepageherosetting);
                 $this->em->flush();
 
-                $setting = $request->request->all()['homepage_hero_settings'];
+                /** @var Setting $setting */
+                $setting = $request->request->all()['homepage_hero_setting'];
+                $this->settingervice->setSettings('show_search_box', $setting['show_search_box']);
                 $this->settingervice->setSettings('homepage_show_search_box', $setting['homepage_show_search_box']);
                 $this->settingervice->setSettings('homepage_recipes_number', $setting['homepage_recipes_number']);
                 $this->settingervice->setSettings('homepage_categories_number', $setting['homepage_categories_number']);
@@ -623,9 +651,11 @@ class SettingController extends AdminBaseController
                 $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
 
                 return $this->redirectToRoute('dashboard_admin_setting_homepage', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
-            $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
         } else {
+            $form->get('show_search_box')->setData($this->settingervice->getSettings('show_search_box'));
             $form->get('homepage_show_search_box')->setData($this->settingervice->getSettings('homepage_show_search_box'));
             $form->get('homepage_recipes_number')->setData($this->settingervice->getSettings('homepage_recipes_number'));
             $form->get('homepage_categories_number')->setData($this->settingervice->getSettings('homepage_categories_number'));
@@ -643,8 +673,12 @@ class SettingController extends AdminBaseController
         $form = $this->createFormBuilder()
             ->add('reviews_per_page', TextType::class, [
                 'required' => true,
-                'label' => 'Number of reviews per page',
+                'label' => t('Number of reviews per page'),
                 'attr' => ['class' => 'touchspin-integer'],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -673,14 +707,14 @@ class SettingController extends AdminBaseController
         $form = $this->createFormBuilder()
             ->add('recipes_per_page', TextType::class, [
                 'required' => true,
-                'label' => 'Number of recipes per page',
+                'label' => t('Number of recipes per page'),
                 'attr' => ['class' => 'touchspin-integer'],
             ])
             ->add('show_map_button', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show map button',
+                'label' => t('Show map button'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -691,7 +725,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show calendar button',
+                'label' => t('Show calendar button'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -702,7 +736,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show RSS feed button',
+                'label' => t('Show RSS feed button'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -713,7 +747,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show category filter',
+                'label' => t('Show category filter'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -724,7 +758,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show location filter',
+                'label' => t('Show location filter'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -735,7 +769,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show date filter',
+                'label' => t('Show date filter'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -746,7 +780,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show subscription price filter',
+                'label' => t('Show subscription price filter'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -757,12 +791,16 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show audience filter',
+                'label' => t('Show audience filter'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
                 ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -809,7 +847,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Enable comments',
+                'label' => t('Enable comments'),
                 'choices' => ['No' => 'no', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -818,13 +856,17 @@ class SettingController extends AdminBaseController
             ])
             ->add('facebook_app_id', TextType::class, [
                 'required' => false,
-                'label' => 'Facebook app id',
-                'help' => 'Go to the documentation to get help about getting an app ID',
+                'label' => t('Facebook app id'),
+                'help' => t('Go to the documentation to get help about getting an app ID'),
             ])
             ->add('disqus_subdomain', TextType::class, [
                 'required' => false,
-                'label' => 'Disqus subdomain',
-                'help' => 'Go to the documentation to get help about setting up Disqus',
+                'label' => t('Disqus subdomain'),
+                'help' => t('Go to the documentation to get help about setting up Disqus'),
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -859,7 +901,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Enable Facebook Social Login',
+                'label' => t('Enable Facebook Social Login'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -868,17 +910,17 @@ class SettingController extends AdminBaseController
             ])
             ->add('social_login_facebook_id', TextType::class, [
                 'required' => false,
-                'label' => 'Facebook Id',
+                'label' => t('Facebook Id'),
             ])
             ->add('social_login_facebook_secret', TextType::class, [
                 'required' => false,
-                'label' => 'Facebook Secret',
+                'label' => t('Facebook Secret'),
             ])
             ->add('social_login_google_enabled', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Enable Google Social Login',
+                'label' => t('Enable Google Social Login'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -887,11 +929,15 @@ class SettingController extends AdminBaseController
             ])
             ->add('social_login_google_id', TextType::class, [
                 'required' => false,
-                'label' => 'Google Id',
+                'label' => t('Google Id'),
             ])
             ->add('social_login_google_secret', TextType::class, [
                 'required' => false,
-                'label' => 'Google Secret',
+                'label' => t('Google Secret'),
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -940,7 +986,7 @@ class SettingController extends AdminBaseController
                 'expanded' => false,
                 'class' => Currency::class,
                 'choice_label' => 'ccy',
-                'label' => 'Currency',
+                'label' => t('Currency'),
                 'attr' => ['class' => 'select2'],
                 'constraints' => [
                     new NotBlank(),
@@ -950,7 +996,7 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Currency symbol position',
+                'label' => t('Currency symbol position'),
                 'choices' => ['Left' => 'left', 'Right' => 'right'],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -959,33 +1005,33 @@ class SettingController extends AdminBaseController
             ])
             ->add('subscription_fee_online', TextType::class, [
                 'required' => true,
-                'label' => 'Subscription fee (Online)',
-                'help' => 'This fee will be added to the subscription sale price which are bought online, put 0 to disable additional fees for subscriptions which are bought online, does not apply for free subscriptions, will be applied to future orders',
+                'label' => t('Subscription fee (Online)'),
+                'help' => t('This fee will be added to the subscription sale price which are bought online, put 0 to disable additional fees for subscriptions which are bought online, does not apply for free subscriptions, will be applied to future orders'),
                 'attr' => ['class' => 'touchspin-decimal', 'data-min' => 0, 'data-max' => 1000000],
             ])
             ->add('subscription_fee_pos', TextType::class, [
                 'required' => true,
-                'label' => 'Subscription fee (Point Of Sale)',
-                'help' => 'This fee will be added to the subscription sale price which are bought from a point of sale, put 0 to disable additional fees for subscriptions which are bought from a point of sale, does not apply for free subscriptions, will be applied to future orders',
+                'label' => t('Subscription fee (Point Of Sale)'),
+                'help' => t('This fee will be added to the subscription sale price which are bought from a point of sale, put 0 to disable additional fees for subscriptions which are bought from a point of sale, does not apply for free subscriptions, will be applied to future orders'),
                 'attr' => ['class' => 'touchspin-decimal', 'data-min' => 0, 'data-max' => 1000000],
             ])
             ->add('online_subscription_price_percentage_cut', TextType::class, [
                 'required' => true,
-                'label' => 'Subscription price percentage cut (Online)',
-                'help' => 'This percentage will be deducted from each subscription sold online, upon restaurant payout request, this percentage will be taken from each subscription sold online, will be applied to future orders',
+                'label' => t('Subscription price percentage cut (Online)'),
+                'help' => t('This percentage will be deducted from each subscription sold online, upon restaurant payout request, this percentage will be taken from each subscription sold online, will be applied to future orders'),
                 'attr' => ['class' => 'touchspin-integer', 'data-min' => 0, 'data-max' => 100],
             ])
             ->add('pos_subscription_price_percentage_cut', TextType::class, [
                 'required' => true,
-                'label' => 'Subscription price percentage cut (Point of sale)',
-                'help' => 'This percentage will be deducted from each subscription sold on a point of sale, upon restaurant payout request, this percentage will be taken from each subscription sold on a point of sale, will be applied to future orders',
+                'label' => t('Subscription price percentage cut (Point of sale)'),
+                'help' => t('This percentage will be deducted from each subscription sold on a point of sale, upon restaurant payout request, this percentage will be taken from each subscription sold on a point of sale, will be applied to future orders'),
                 'attr' => ['class' => 'touchspin-integer', 'data-min' => 0, 'data-max' => 100],
             ])
             ->add('restaurant_payout_paypal_enabled', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Allow Paypal as a payout method for the restaurants to receive their revenue',
+                'label' => t('Allow Paypal as a payout method for the restaurants to receive their revenue'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
@@ -996,12 +1042,16 @@ class SettingController extends AdminBaseController
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Allow Stripe as a payout method for the restaurants to receive their revenue',
+                'label' => t('Allow Stripe as a payout method for the restaurants to receive their revenue'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
                 ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -1094,23 +1144,27 @@ class SettingController extends AdminBaseController
         $form = $this->createFormBuilder()
             ->add('checkout_timeleft', TextType::class, [
                 'required' => true,
-                'label' => 'Timeleft',
+                'label' => t('Timeleft'),
                 'constraints' => [
                     new NotBlank(),
                 ],
                 'attr' => ['class' => 'touchspin-integer', 'data-min' => 100, 'data-max' => 3600],
-                'help' => 'Number of seconds before the reserved subscriptions are released if the order is still awaiting payment',
+                'help' => t('Number of seconds before the reserved subscriptions are released if the order is still awaiting payment'),
             ])
             ->add('show_subscriptions_left_on_cart_modal', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
-                'label' => 'Show subscriptions left count on cart modal',
+                'label' => t('Show subscriptions left count on cart modal'),
                 'choices' => ['Disabled' => 0, 'Enabled' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),
                 ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
             ->getForm()
         ;
@@ -1133,5 +1187,45 @@ class SettingController extends AdminBaseController
         }
 
         return $this->render('dashboard/admin/setting/checkout.html.twig', compact('form'));
+    }
+
+    #[Route(path: '/menus', name: 'menus', methods: ['GET', 'POST'])]
+    public function menus(): Response
+    {
+        $rows = $this->settingervice->getMenus([])->getQuery()->getResult();
+
+        return $this->render('dashboard/admin/setting/menus.html.twig', compact('rows'));
+    }
+
+    #[Route(path: '/menus/{slug}/edit', name: 'menus_edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function menuEdit(Request $request, ?string $slug = null): Response
+    {
+        /** @var Menu $menu */
+        $menu = $this->settingervice->getMenus(["slug" => $slug])->getQuery()->getOneOrNullResult();
+
+        if (!$menu) {
+            $this->addFlash('danger', $this->translator->trans('The menu can not be found'));
+
+            return $this->redirectToRoute('dashboard_admin_setting_menus', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $form = $this->createForm(MenuFormType::class, $menu)->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                foreach ($menu->getMenuElements() as $menuElement) {
+                    $menuElement->setMenu($menu);
+                }
+                $this->em->persist($menu);
+                $this->em->flush();
+                $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
+
+                return $this->redirectToRoute('dashboard_admin_setting_menus', [], Response::HTTP_SEE_OTHER);
+            } else {
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
+            }
+        }
+
+        return $this->render('dashboard/admin/setting/menu-edit.html.twig', compact('menu', 'form'));
     }
 }

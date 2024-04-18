@@ -99,7 +99,7 @@ class Attachment implements \Stringable
 
     public function getAttachmentPath(): string
     {
-        return '/images/attachments/'.$this->attachmentName;
+        return 'uploads/attachments/'.$this->attachmentName;
     }
 
     public function getAttachmentPlaceholder(string $size = 'default'): string

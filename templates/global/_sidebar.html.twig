@@ -109,7 +109,7 @@
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_setting_menus" or routename == "dashboard_admin_setting_menus_edit" %}active{% endif %}" href="{{ path('dashboard_admin_setting_menus') }}">
 													{{ 'Menus'|trans }}
 												</a>
 											</li>

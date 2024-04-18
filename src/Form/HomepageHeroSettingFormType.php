@@ -2,22 +2,23 @@
 
 namespace App\Form;
 
-use App\Entity\Recipe;
-use App\Entity\Setting\HomepageHeroSetting;
 use App\Entity\User;
+use App\Entity\Recipe;
 use App\Service\SettingService;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Vich\UploaderBundle\Form\Type\VichImageType;
-
+use App\Entity\Setting\HomepageHeroSetting;
 use function Symfony\Component\Translation\t;
+use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class HomepageHeroSettingFormType extends AbstractType
 {
@@ -73,7 +74,7 @@ class HomepageHeroSettingFormType extends AbstractType
                 'label' => t('Restaurants'),
                 'help' => t('Make sure to select restaurants who have added a cover photo'),
                 'query_builder' => function () {
-                    return $this->settingService->getUsers(['roles' => 'restaurant']);
+                    return $this->settingService->getUsers(['role' => 'restaurant']);
                 },
             ])
             ->add('customBackgroundFile', VichImageType::class, [
@@ -146,6 +147,10 @@ class HomepageHeroSettingFormType extends AbstractType
                 'constraints' => [
                     new NotNull(),
                 ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
             ])
         ;
     }
