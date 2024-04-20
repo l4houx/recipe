@@ -30,8 +30,8 @@
         <div class="col-6 col-lg-3">
             <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
                 <option selected="">{{ "Sort by"|trans }}</option>
-                {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "c.createdAt", {"direction": "desc", "criteria": "c.createdAt"}) }}
-                {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "c.createdAt", {"direction": "asc", "criteria": "c.createdAt"}) }}
+                <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "c.createdAt", {"direction": "desc", "criteria": "c.createdAt"}) }}</option>
+                <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "c.createdAt", {"direction": "asc", "criteria": "c.createdAt"}) }}</option>
             </select>
         </div>
         <div class="col-6 col-lg-3">

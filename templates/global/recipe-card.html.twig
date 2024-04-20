@@ -1,8 +1,7 @@
 {% if recipeDate is defined %}
 	{% set displayedRecipeDate = recipeDate %}
 {% else %}
-    {# {% set displayedRecipeDate = recipe.getFirstOnSaleRecipeDate %} #}
-    {% set displayedRecipeDate = '' %}
+    {% set displayedRecipeDate = recipe.getFirstOnSaleRecipeDate %}
 {% endif %}
 
 {% if customLink is defined %}

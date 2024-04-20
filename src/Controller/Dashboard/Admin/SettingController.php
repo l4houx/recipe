@@ -12,6 +12,7 @@ use App\Entity\Traits\HasRoles;
 use App\Service\SettingService;
 use App\Entity\Setting\Currency;
 use Symfony\Component\Mime\Address;
+use App\Form\PaymentGatewayFormType;
 use App\Form\AppLayoutSettingFormType;
 use App\Entity\Setting\AppLayoutSetting;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,8 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Routing\Requirement\Requirement;
 
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -664,7 +665,7 @@ class SettingController extends AdminBaseController
             $form->get('homepage_show_call_to_action')->setData($this->settingervice->getSettings('homepage_show_call_to_action'));
         }
 
-        return $this->render('dashboard/admin/setting/homepage.html.twig', compact('form'));
+        return $this->render('dashboard/admin/setting/homepage.html.twig', compact('form', 'homepageherosetting'));
     }
 
     #[Route(path: '/reviews-list-page', name: 'reviews_list_page', methods: ['GET', 'POST'])]
@@ -1089,21 +1090,22 @@ class SettingController extends AdminBaseController
         return $this->render('dashboard/admin/setting/payment.html.twig', compact('form'));
     }
 
-    /*
     #[Route(path: '/payment/gateways/new', name: 'payment_gateways_new', methods: ['GET', 'POST'])]
     #[Route(path: '/payment/gateways/{slug}/edit', name: 'payment_gateways_edit', methods: ['GET', 'POST'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function paymentgatewaysaddedit(Request $request, ?string $slug = null): Response {
-
+    public function paymentgatewaysaddedit(Request $request, ?string $slug = null): Response
+    {
         if (!$slug) {
             $paymentgateway = new PaymentGateway();
-            $form = $this->createForm(PaymentGatewayFormType::class, $paymentgateway, array('validation_groups' => 'create'));
+            $form = $this->createForm(PaymentGatewayFormType::class, $paymentgateway, ['validation_groups' => 'create']);
         } else {
-            /** @var PaymentGateway $paymentgateway /
-            $paymentgateway = $this->settingervice->getPaymentGateways(array('isOnline' => 'all', 'slug' => $slug))->getQuery()->getOneOrNullResult();
-            $form = $this->createForm(PaymentGatewayFormType::class, $paymentgateway, array('validation_groups' => 'update'));
+            /** @var PaymentGateway $paymentgateway */
+            $paymentgateway = $this->settingervice->getPaymentGateways(['isOnline' => 'all', 'slug' => $slug])->getQuery()->getOneOrNullResult();
+            $form = $this->createForm(PaymentGatewayFormType::class, $paymentgateway, ['validation_groups' => 'update']);
+
             if (!$paymentgateway) {
                 $this->addFlash('danger', $this->translator->trans('The payment gateway can not be found'));
-                return $this->redirectToRoute("dashboard_admin_setting_payment");
+
+                return $this->redirectToRoute('dashboard_admin_setting_payment', [], Response::HTTP_SEE_OTHER);
             }
         }
 
@@ -1113,7 +1115,7 @@ class SettingController extends AdminBaseController
             $paymentgateway->setGatewayName($paymentgateway->getFactoryName());
 
             if (!$slug) {
-                $checkIfAnotherPGIsAddedWithSameFactoryName = $services->getPaymentGateways(array("gatewayFactoryName" => $paymentgateway->getFactoryName()))->getQuery()->getOneOrNullResult();
+                $checkIfAnotherPGIsAddedWithSameFactoryName = $this->settingervice->getPaymentGateways(["gatewayFactoryName" => $paymentgateway->getFactoryName()])->getQuery()->getOneOrNullResult();
                 if ($checkIfAnotherPGIsAddedWithSameFactoryName) {
                     $form->get('factoryName')->addError(new \Symfony\Component\Form\FormError($this->translator->trans('This payment gateway has already been added')));
                 }
@@ -1128,7 +1130,7 @@ class SettingController extends AdminBaseController
                     $this->addFlash('success', $this->translator->trans('Content was edited successfully.'));
                 }
 
-                return $this->redirectToRoute("dashboard_admin_setting_payment");
+                return $this->redirectToRoute('dashboard_admin_setting_payment', [], Response::HTTP_SEE_OTHER);
             } else {
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
@@ -1136,7 +1138,6 @@ class SettingController extends AdminBaseController
 
         return $this->render('dashboard/admin/setting/payment-gateway-new-edit.html.twig', compact('form', 'paymentgateway'));
     }
-    */
 
     #[Route(path: '/checkout', name: 'checkout', methods: ['GET', 'POST'])]
     public function checkout(Request $request): Response

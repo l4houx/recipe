@@ -1,0 +1,207 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = 'Venues'|trans %}
+{% block title pagetitle %}
+
+{% block pageheader %}
+	<section class="bg-primary py-4 py-lg-6">
+		<div class="container">
+			<div class="row align-items-center">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-12">
+					<div>
+						<h1 class="mb-0 text-white display-4">{{ pagetitle }}</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+	<section class="py-8">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<div class="row align-items-center mb-4">
+						<div class="col">
+							<div class="mb-4">
+								<p class="mb-0">{{ "%resultsCount% recipe(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
+							</div>
+						</div>
+						<div class="col-auto">
+							<div class="d-flex">
+								{% if rows.getTotalItemCount > 0 %}
+									<div class="ms-3">
+										<select id="sortable-select" class="form-select select2" data-placeholder="{{ "Select an option"|trans }}">
+                                            <option value>{{ "Sort by"|trans }}</option>
+											<option value>{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}</option>
+											<option value>{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}</option>
+										</select>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					{% if rows.getTotalItemCount > 0 %}
+						{% for venue in rows %}
+							{% include "global/venue-card.html.twig" with {venue: venue} %}
+						{% endfor %}
+					{% else %}
+						{% include "global/message.html.twig" with { type: "dark", message: ('No venues found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+					{% endif %}
+					{% if rows.getTotalItemCount > 0 %}
+						{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+					{% endif %}
+				</div>
+				<div class="col-md-4 mt-4 mt-md-0">
+					<div class="card border mb-6 mb-md-0 shadow-none">
+						<form method="get">
+							<div class="card-header">
+								<h4 class="mb-0 fs-5">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter me-2" viewBox="0 0 16 16">
+										<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"></path>
+									</svg>
+									{{ "All Filters"|trans }}
+								</h4>
+							</div>
+							<div class="card-body py-3">
+								<a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterKeyword" role="button" aria-expanded="false" aria-controls="collapseFilterKeyword">
+									{{ "Keyword"|trans }}
+									<span class="float-end">
+										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewbox="0 0 16 16">
+											<path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+										</svg>
+									</span>
+								</a>
+								<div class="collapse show" id="collapseFilterKeyword">
+									<div class="mt-3">
+										<label for="keyword" class="visually-hidden">{{ "Keyword"|trans }}</label>
+										<input id="keyword" name="keyword" type="text" class="form-control" value="{{ app.request.get('keyword') }}" placeholder="{{ "Venue name..."|trans }}">
+									</div>
+								</div>
+							</div>
+							<div class="card-body border-top py-3">
+								<a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterCountry" role="button" aria-expanded="false" aria-controls="collapseFilterCountry">
+									{{ "Country"|trans }}
+									<span class="float-end">
+										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewbox="0 0 16 16">
+											<path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+										</svg>
+									</span>
+								</a>
+								<div class="collapse show" id="collapseFilterCountry">
+									<div id="filter-country-container" class="mt-3">
+										<label for="country" class="visually-hidden">{{ "Country"|trans }}</label>
+										<select class="form-select" id="country" name="country" data-sort-options="1">
+											<option value="">&nbsp;</option>
+											{% for country in setting.getCountries({}).getQuery().getResult() %}
+												<option value="{{ country.slug }}">{{ country.name }}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="card-body border-top py-3">
+								<a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterVenue" role="button" aria-expanded="false" aria-controls="collapseFilterVenue">
+									{{ "Venue type"|trans }}
+									<span class="float-end">
+										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-down" viewbox="0 0 16 16">
+											<path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+										</svg>
+									</span>
+								</a>
+								<div class="collapse show" id="collapseFilterVenue">
+									<div class="mt-3">
+										{% for venuetype in setting.getVenuesTypes({ 'hasvenues': true, 'limit': 5, 'sort': 'venuescount', 'order': 'DESC' }).getQuery().getResult() %}
+											<div class="form-check mb-2">
+												<input class="form-check-input" type="checkbox" name="venuetypes[]" value="{{ venuetype.slug }}" id="venue-type-{{ loop.index }}" checked="">
+												<label class="form-check-label" for="venue-type-{{ loop.index }}">
+													{{ venuetype.name }}
+												</label>
+												<span class="form-check-label float-end">
+													<span class="badge bg-light round">
+														{{ venuetype.venues | length }}
+													</span>
+												</span>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<div class="card-body border-top py-3">
+								<h4 class="mb-4 fs-5">{{ "Seated guests"|trans }}</h4>
+								<div id="slider" class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+									<div class="noUi-base">
+										<div class="noUi-connects">
+											<div class="noUi-connect" style="transform: translate(0%) scale(0.533333, 1);"></div>
+										</div>
+										<div class="noUi-origin" style="transform: translate(-46.6667%); z-index: 4;">
+											<div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="60.0" aria-valuenow="32.0" aria-valuetext="32.00">
+												<div class="noUi-touch-area"></div>
+												<div class="noUi-tooltip">32</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="d-flex justify-content-between mt-2 fs-6 text-dark">
+									<span>4 yrs</span>
+									<span>30 yrs</span>
+								</div>
+							</div>
+							<div class="card-body border-top py-3">
+								<h4 class="mb-4 fs-5">{{ "Standing guests"|trans }}</h4>
+								<div id="slider" class="noUi-target noUi-ltr noUi-horizontal noUi-txt-dir-ltr">
+									<div class="noUi-base">
+										<div class="noUi-connects">
+											<div class="noUi-connect" style="transform: translate(0%) scale(0.533333, 1);"></div>
+										</div>
+										<div class="noUi-origin" style="transform: translate(-46.6667%); z-index: 4;">
+											<div class="noUi-handle noUi-handle-lower" data-handle="0" tabindex="0" role="slider" aria-orientation="horizontal" aria-valuemin="0.0" aria-valuemax="60.0" aria-valuenow="32.0" aria-valuetext="32.00">
+												<div class="noUi-touch-area"></div>
+												<div class="noUi-tooltip">32</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="d-flex justify-content-between mt-2 fs-6 text-dark">
+									<span>4 yrs</span>
+									<span>30 yrs</span>
+								</div>
+							</div>
+							<div class="card-body pb-3 pt-0 d-grid">
+								<button class="btn btn-outline-secondary">{{ "Search"|trans }}</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+        $(document).ready(function () {
+            if (getURLParameter('country')) {
+                $('#filter-country-select option').each(function () {
+                    if ($(this).val() == getURLParameter('country'))
+                    {
+                        $(this).prop('selected', true).trigger('change');
+                    }
+                });
+            }
+            if (getURLArrayParameter('venuetypes[]')) {
+                for (var i = 0; i < getURLArrayParameter('venuetypes[]').length; i++) {
+                    console.log(getURLArrayParameter('venuetypes[]'));
+                    $('input[name="venuetypes[]"][value="' + getURLArrayParameter('venuetypes[]')[i] + '"]').prop('checked', 'checked');
+                }
+            }
+        });
+	</script>
+{% endblock %}

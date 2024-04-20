@@ -24,7 +24,10 @@
 									{% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
 								</div>
 								<div class="ms-3">
-									<h4 class="mb-1 text-primary-hover">{{ user.username }} / {{ user.email }}</h4>
+									<h4 class="mb-1 text-primary-hover">{{ user.getCrossRoleName }}</h4>
+									{% if user.country %}
+										<span class="flag flag-{{user.country.code|lower}} ml-2 mb-2"></span>
+									{% endif %}
 									<span>
 										{{ 'Joined'|trans }}
 										{{ user.createdAt ? user.createdAt | ago() }}
@@ -34,12 +37,12 @@
 						</a>
 					</td>
 					<td>
-						{{ user.getFullName() }}
+						{{ user.username }} / {{ user.email }}
 						{{ user.premium ? user.premiumEnd | ago() : '' }}
 					</td>
 					<td>
 						{% if user.lastLogin %}
-							{{ user.lastLogin|ago}}
+							{{ user.lastLogin | ago}}
 						{% else %}
 							{{ "N/A"|trans }}
 						{% endif %}
@@ -50,7 +53,8 @@
 						{% endif %}
 					</td>
 					<td>
-						{% include "global/user-roles.html.twig" %}
+						{# {% include "global/user-roles.html.twig" %} #}
+						{{ user.getRole|trans|raw }}
 					</td>
 					<td>{{ user.registerDuration }}s</td>
 					<td>

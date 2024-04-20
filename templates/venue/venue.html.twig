@@ -1,0 +1,893 @@
+{% extends 'page.html.twig' %}
+
+{% set pagetitle = venue.name %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "venues" : ("Venues"|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+	<section class="p-lg-5 py-7">
+		<div class="container">
+			{% if venue.images | length > 0 %}
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-12 mb-5">
+						<div id="carouselVenueIndicators" class="carousel slide" data-bs-ride="carousel">
+							<ol class="carousel-indicators">
+								{% for iteration in 1..venue.images | length %}
+									<li data-bs-target="#carouselVenueIndicators" data-bs-slide-to="{{ iteration - 1 }}" {{ (loop.first ) ?'class="active" aria-current="true"' : '' }}></li>
+								{% endfor %}
+							</ol>
+							<div class="carousel-inner">
+								{% for image in venue.images %}
+									<div class="carousel-item {{ (loop.first ) ? 'active' : '' }}">
+										<img src="{{ asset(image.getImagePath) }}" class="d-block w-100 " alt="{{ venue.name }}">
+									</div>
+								{% endfor %}
+							</div>
+							<a class="carousel-control-prev" href="#carouselVenueIndicators" role="button"
+								data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">{{ "Previous"|trans }}</span>
+							</a>
+							<a class="carousel-control-next" href="#carouselVenueIndicators" role="button"
+								data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">{{ "Next"|trans }}</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+			<div class="row">
+				<div class="col-xl-8 col-lg-12 col-md-12 col-12 mb-4 mb-xl-0">
+					<div class="card mb-5">
+						<div class="card-body">
+							<div class="d-flex justify-content-between align-items-center">
+								<h1 class="fw-semibold mb-2">{{ venue.name }}</h1>
+								<div class="text-inherit mb-2">{{ venue.type.name }}</div>
+							</div>
+							<div class="d-flex mb-5 lh-1">
+								<span class="fs-6 align-top me-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+										class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+										<path
+											d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+										</path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+										class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+										<path
+											d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+										</path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+										class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+										<path
+											d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+										</path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+										class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+										<path
+											d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+										</path>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+										class="bi bi-star-half text-warning" viewBox="0 0 16 16">
+										<path
+											d="M5.354 5.119 7.538.792A.516.516 0 0 1 8 .5c.183 0 .366.097.465.292l2.184 4.327 4.898.696A.537.537 0 0 1 16 6.32a.548.548 0 0 1-.17.445l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256a.52.52 0 0 1-.146.05c-.342.06-.668-.254-.6-.642l.83-4.73L.173 6.765a.55.55 0 0 1-.172-.403.58.58 0 0 1 .085-.302.513.513 0 0 1 .37-.245l4.898-.696zM8 12.027a.5.5 0 0 1 .232.056l3.686 1.894-.694-3.957a.565.565 0 0 1 .162-.505l2.907-2.77-4.052-.576a.525.525 0 0 1-.393-.288L8.001 2.223 8 2.226v9.8z">
+										</path>
+									</svg>
+								</span>
+								<span class="fw-medium">(140)</span>
+								<span class="ms-4 d-none d-md-block">
+									<svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+										xmlns="http://www.w3.org/2000/svg">
+										<rect x="3" y="8" width="2" height="6" rx="1" fill="#754FFE"></rect>
+										<rect x="7" y="5" width="2" height="9" rx="1" fill="#754FFE"></rect>
+										<rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
+									</svg>
+									<span>Intermediate</span>
+								</span>
+								<span class="ms-4 d-none d-md-block">
+									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+										class="bi bi-people" viewBox="0 0 16 16">
+										<path
+											d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816ZM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z">
+										</path>
+									</svg>
+									<span>Enrolled</span>
+								</span>
+							</div>
+							<div class="d-flex justify-content-between">
+								<div class="d-flex align-items-center">
+									<img src="../assets/images/avatar/avatar-1.jpg" class="rounded-circle avatar-md"
+										alt="avatar">
+									<div class="ms-2 lh-1">
+										<h4 class="mb-1">Kathryn Jones</h4>
+										<p class="fs-6 mb-0">@kathrynjones</p>
+									</div>
+								</div>
+								<div>
+									<a href="#" class="btn btn-outline-secondary btn-sm">Follow</a>
+								</div>
+							</div>
+						</div>
+						<ul class="nav nav-lt-tab" id="tab" role="tablist">
+							<li class="nav-item" role="presentation">
+								<a class="nav-link active" id="description-tab" data-bs-toggle="pill" href="#description"
+									role="tab" aria-controls="description" aria-selected="true">
+									{{ "Description"|trans }}
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="review-tab" data-bs-toggle="pill" href="#review" role="tab"
+									aria-controls="review" aria-selected="false" tabindex="-1">Reviews</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="transcript-tab" data-bs-toggle="pill" href="#transcript" role="tab"
+									aria-controls="transcript" aria-selected="false" tabindex="-1">Transcript</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="faq-tab" data-bs-toggle="pill" href="#faq" role="tab"
+									aria-controls="faq" aria-selected="false" tabindex="-1">FAQ</a>
+							</li>
+						</ul>
+					</div>
+					<div class="card rounded-3">
+						<div class="card-body">
+							<div class="tab-content" id="tabContent">
+								<div class="tab-pane fade show active" id="description" role="tabpanel"
+									aria-labelledby="description-tab">
+									<div class="mb-4">
+										<h3 class="mb-2">{{ "Location"|trans }}</h3>
+										{% if venue.isShowmap %}
+											<iframe height="500" class="w-100 border-0 venue-map" src="{{ setting.getCurrentRequestProtocol() }}://maps.google.com/maps?q={{ venue.name | url_encode ~ '%20' ~ venue.stringifyAddress|url_encode }}&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+										{% endif %}
+									</div>
+									<div class="mb-4">
+										<h3 class="mb-2">{{ "Address"|trans }}</h3>
+										<p>{{ venue.stringifyAddress }}</p>
+									</div>
+									<div class="mb-4">
+										<h3 class="mb-2">{{ "Guests"|trans }}</h3>
+										<p>Add Code Here</p>
+									</div>
+									{% if venue.neighborhoods %}
+										<div class="mb-4">
+											<h3 class="mb-2">{{ "Neighborhoods"|trans }}</h3>
+											<p>{{ venue.neighborhoods |raw | nl2br }}</p>
+										</div>
+									{% endif %}
+									{% if venue.description %}
+										<div class="mb-4">
+											<h3 class="mb-2">{{ "The space"|trans }}</h3>
+											<p>{{ venue.description |raw | nl2br }}</p>
+										</div>
+									{% endif %}
+									{% if venue.pricing %}
+										<div class="mb-4">
+											<h3 class="mb-2">{{ "Pricing"|trans }}</h3>
+											<p>{{ venue.pricing |raw | nl2br }}</p>
+										</div>
+									{% endif %}
+									{% if venue.availibility %}
+										<div class="mb-4">
+											<h3 class="mb-2">{{ "Availability"|trans }}</h3>
+											<p>{{ venue.availibility |raw | nl2br }}</p>
+										</div>
+									{% endif %}
+									{#  
+									{% if venue.foodbeverage %}
+										<div class="mb-4">
+											<h3 class="mb-2">{{ "Food and beverage"|trans }}</h3>
+											<p>{{ venue.foodbeverage |raw | nl2br }}</p>
+										</div>
+									{% endif %}
+									#}
+									{% if venue.amenities | length > 0 %}
+										<h4 class="mb-3">{{ "Amenities"|trans }}</h4>
+										<div class="row g-2 mb-3">
+											{% for amenity in venue.amenities %}
+												<div class="col-12 col-md-3">
+													<div>
+														<span>
+															<i class="{{ amenity.icon }} align-text-bottom text-success"></i>
+														</span>
+														<span class="ms-1">{{ amenity.name }}</span>
+													</div>
+												</div>
+											{% endfor %}
+										</div>
+									{% endif %}
+								</div>
+								<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+									<div class="mb-3">
+										<h3 class="mb-4">How students rated this venues</h3>
+										<div class="row align-items-center">
+											<div class="col-auto text-center">
+												<h3 class="display-2 fw-bold">4.5</h3>
+												<span class="fs-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+														fill="currentColor" class="bi bi-star-fill text-warning"
+														viewBox="0 0 16 16">
+														<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+														</path>
+													</svg>
+													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+														fill="currentColor" class="bi bi-star-fill text-warning"
+														viewBox="0 0 16 16">
+														<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+														</path>
+													</svg>
+													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+														fill="currentColor" class="bi bi-star-fill text-warning"
+														viewBox="0 0 16 16">
+														<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+														</path>
+													</svg>
+													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+														fill="currentColor" class="bi bi-star-fill text-warning"
+														viewBox="0 0 16 16">
+														<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+														</path>
+													</svg>
+													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+														fill="currentColor" class="bi bi-star-fill text-warning"
+														viewBox="0 0 16 16">
+														<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+														</path>
+													</svg>
+												</span>
+												<p class="mb-0 fs-6">(Based on 27 reviews)</p>
+											</div>
+											<!-- Progress Bar -->
+											<div class="col order-3 order-md-2">
+												<div class="progress mb-3" style="height: 6px">
+													<div class="progress-bar bg-warning" role="progressbar"
+														style="width: 90%" aria-valuenow="90" aria-valuemin="0"
+														aria-valuemax="100"></div>
+												</div>
+												<div class="progress mb-3" style="height: 6px">
+													<div class="progress-bar bg-warning" role="progressbar"
+														style="width: 80%" aria-valuenow="80" aria-valuemin="0"
+														aria-valuemax="100"></div>
+												</div>
+												<div class="progress mb-3" style="height: 6px">
+													<div class="progress-bar bg-warning" role="progressbar"
+														style="width: 70%" aria-valuenow="70" aria-valuemin="0"
+														aria-valuemax="100"></div>
+												</div>
+												<div class="progress mb-3" style="height: 6px">
+													<div class="progress-bar bg-warning" role="progressbar"
+														style="width: 60%" aria-valuenow="60" aria-valuemin="0"
+														aria-valuemax="100"></div>
+												</div>
+												<div class="progress mb-0" style="height: 6px">
+													<div class="progress-bar bg-warning" role="progressbar"
+														style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+														aria-valuemax="100"></div>
+												</div>
+											</div>
+											<div class="col-md-auto col-6 order-2 order-md-3">
+												<!-- Rating -->
+												<div>
+													<span class="fs-6 align-top">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+													<span class="ms-1">53%</span>
+												</div>
+												<div>
+													<span class="fs-6 align-top">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+													<span class="ms-1">36%</span>
+												</div>
+												<div>
+													<span class="fs-6 align-top">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+													<span class="ms-1">9%</span>
+												</div>
+												<div>
+													<span class="fs-6 align-top">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+													<span class="ms-1">3%</span>
+												</div>
+												<div>
+													<span class="fs-6 align-top">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-light"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+													<span class="ms-1">2%</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<hr class="my-5">
+									<div class="mb-3">
+										<div class="d-lg-flex align-items-center justify-content-between mb-5">
+											<!-- Reviews -->
+											<div class="mb-3 mb-lg-0">
+												<h3 class="mb-0">Reviews</h3>
+											</div>
+											<div>
+												<form class="form-inline">
+													<div class="d-flex align-items-center me-2">
+														<span class="position-absolute ps-3">
+															<i class="fe fe-search"></i>
+														</span>
+
+														<label for="search" class="visually-hidden"></label>
+														<input type="search" id="search" class="form-control ps-6"
+															placeholder="Search Venues">
+													</div>
+												</form>
+											</div>
+										</div>
+										<!-- Rating -->
+										<div class="d-flex align-items-start border-bottom pb-4 mb-4">
+											<img src="../assets/images/avatar/avatar-2.jpg" alt=""
+												class="rounded-circle avatar-lg">
+											<div class="ms-3">
+												<h4 class="mb-1">
+													Max Hawkins
+													<span class="ms-1 fs-6">2 Days ago</span>
+												</h4>
+												<div class="mb-2">
+													<span class="fs-6">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+												</div>
+												<p>
+													Lectures were at a really good pace and I never felt lost. The
+													instructor was well informed and allowed me to learn and navigate Figma
+													easily.
+												</p>
+												<div class="d-lg-flex">
+													<p class="mb-0">Was this review helpful?</p>
+													<a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+													<a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+												</div>
+											</div>
+										</div>
+										<!-- Rating -->
+										<div class="d-flex align-items-start border-bottom pb-4 mb-4">
+											<img src="../assets/images/avatar/avatar-3.jpg" alt=""
+												class="rounded-circle avatar-lg">
+											<div class="ms-3">
+												<h4 class="mb-1">
+													Arthur Williamson
+													<span class="ms-1 fs-6">3 Days ago</span>
+												</h4>
+												<div class="mb-2">
+													<span class="fs-6">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+												</div>
+												<p>Its pretty good.Just a reminder that there are also students with
+													Windows, meaning Figma its a bit different of yours. Thank you!</p>
+												<div class="d-lg-flex">
+													<p class="mb-0">Was this review helpful?</p>
+													<a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+													<a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+												</div>
+											</div>
+										</div>
+										<!-- Rating -->
+										<div class="d-flex align-items-start border-bottom pb-4 mb-4">
+											<img src="../assets/images/avatar/avatar-4.jpg" alt=""
+												class="rounded-circle avatar-lg">
+											<div class="ms-3">
+												<h4 class="mb-1">
+													Claire Jones
+													<span class="ms-1 fs-6">4 Days ago</span>
+												</h4>
+												<div class="mb-2">
+													<span class="fs-6">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+												</div>
+												<p>
+													Great venue for learning Figma, the only bad detail would be that some
+													icons are not included in the assets. But 90% of the icons needed
+													are included, and the voice of the instructor was very clear and easy to
+													understood.
+												</p>
+												<div class="d-lg-flex">
+													<p class="mb-0">Was this review helpful?</p>
+													<a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+													<a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+												</div>
+											</div>
+										</div>
+										<!-- Rating -->
+										<div class="d-flex align-items-start">
+											<img src="../assets/images/avatar/avatar-5.jpg" alt=""
+												class="rounded-circle avatar-lg">
+											<div class="ms-3">
+												<h4 class="mb-1">
+													Bessie Pena
+													<span class="ms-1 fs-6">5 Days ago</span>
+												</h4>
+												<div class="mb-2">
+													<span class="fs-6">
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+															fill="currentColor" class="bi bi-star-fill text-warning"
+															viewBox="0 0 16 16">
+															<path
+																d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z">
+															</path>
+														</svg>
+													</span>
+												</div>
+												<p>I have really enjoyed this class and learned a lot, found it very
+													inspiring and helpful, thank you!</p>
+												<div class="d-lg-flex">
+													<p class="mb-0">Was this review helpful?</p>
+													<a href="#" class="btn btn-xs btn-primary ms-lg-3">Yes</a>
+													<a href="#" class="btn btn-xs btn-outline-secondary ms-1">No</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="transcript" role="tabpanel" aria-labelledby="transcript-tab">
+									<!-- Description -->
+									<div>
+										<h3 class="mb-3">Transcript from the "Introduction" Lesson</h3>
+										<div class="mb-4">
+											<h4>
+												Venue Overview
+												<a href="#" class="ms-2 h4 text-primary">[00:00:00]</a>
+											</h4>
+											<p class="mb-0">
+												My name is John Deo and I work as human duct tape at Gatsby, that means that
+												I do a lot of different things. Everything from dev roll to writing
+												content to writing code. And I used to work as an architect at IBM. I live
+												in Portland, Oregon.
+											</p>
+										</div>
+										<div class="mb-4">
+											<h4>
+												Introduction
+												<a href="#" class="ms-2 h4 text-primary">[00:00:16]</a>
+											</h4>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+										</div>
+										<div class="mb-4">
+											<h4>
+												Why Take This Venue?
+												<a href="#" class="ms-2 h4 text-primary">[00:00:37]</a>
+											</h4>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+										</div>
+										<div class="mb-4">
+											<h4>
+												A Look at the Demo Application
+												<a href="#" class="ms-2 h4 text-primary">[00:00:54]</a>
+											</h4>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+										</div>
+										<div class="mb-4">
+											<h4>
+												Summary
+												<a href="#" class="ms-2 h4 text-primary">[00:01:31]</a>
+											</h4>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+									<!-- FAQ -->
+									<div>
+										<h3 class="mb-3">Venue - Frequently Asked Questions</h3>
+										<div class="mb-4">
+											<h4>How this venue help me to design layout?</h4>
+											<p>
+												My name is Jason Woo and I work as human duct tape at Gatsby, that means
+												that I do a lot of different things. Everything from dev roll to
+												writing content to writing code. And I used to work as an architect at IBM.
+												I live in Portland, Oregon.
+											</p>
+										</div>
+										<div class="mb-4">
+											<h4>What is important of this venue?</h4>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+										</div>
+										<div class="mb-4">
+											<h4>Why Take This Venue?</h4>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+										</div>
+										<div class="mb-4">
+											<h4>Is able to create application after this venue?</h4>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+											<p>
+												We'll dive into GraphQL, the fundamentals of GraphQL. We're only gonna use
+												the pieces of it that we need to build in Gatsby. We're not gonna be
+												doing a deep dive into what GraphQL is or the language specifics. We're also
+												gonna get into MDX. MDX is a way to write React components in your
+												markdown.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% if venue.isQuoteform and venue.contactemail %}
+					<div class="col-xl-4 col-lg-12 col-md-12 col-12">
+						<div class="card mb-4 ">
+							<div class="card-header">
+								<h4 class="mb-0">{{ "Request a quote"|trans }}</h4>
+							</div>
+							<div class="card-body">
+								{{ form_start(form, {'attr': {'novalidate': 'novalidate'} }) }}
+									{{ form_widget(form) }}
+								{{ form_end(form) }}
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</section>
+{% endblock %}

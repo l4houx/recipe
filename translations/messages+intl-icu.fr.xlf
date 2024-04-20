@@ -2599,127 +2599,127 @@
       </trans-unit>
       <trans-unit id="GTExDkb" resname="Show the GDPR compliance page link">
         <source>Show the GDPR compliance page link</source>
-        <target>__Show the GDPR compliance page link</target>
+        <target>Afficher le lien de la page de conformité RGPD</target>
       </trans-unit>
       <trans-unit id="XKjqBOQ" resname="Gdpr compliance page slug">
         <source>Gdpr compliance page slug</source>
-        <target>__Gdpr compliance page slug</target>
+        <target>Slug de la page de conformité RGPD</target>
       </trans-unit>
       <trans-unit id="Veey7A7" resname="Show the Feedback page link">
         <source>Show the Feedback page link</source>
-        <target>__Show the Feedback page link</target>
+        <target>Afficher le lien de la page de commentaires</target>
       </trans-unit>
       <trans-unit id="424WpTP" resname="Feedback page slug">
         <source>Feedback page slug</source>
-        <target>__Feedback page slug</target>
+        <target>Slug de la page de commentaires</target>
       </trans-unit>
       <trans-unit id="PoaASNB" resname="Show the Support page link">
         <source>Show the Support page link</source>
-        <target>__Show the Support page link</target>
+        <target>Afficher le lien de la page d'assistance</target>
       </trans-unit>
       <trans-unit id="vpcXMdi" resname="Support page slug">
         <source>Support page slug</source>
-        <target>__Support page slug</target>
+        <target>Slug de la page d'assistance</target>
       </trans-unit>
       <trans-unit id="r4BeGNT" resname="Custom css">
         <source>Custom css</source>
-        <target>__Custom css</target>
+        <target>CSS personnalisé</target>
       </trans-unit>
       <trans-unit id="vtlDU0S" resname="About footer">
         <source>About footer</source>
-        <target>__About footer</target>
+        <target>À propos du pied de page</target>
       </trans-unit>
       <trans-unit id="LbYa1yl" resname="Google analytics Tracking ID">
         <source>Google analytics Tracking ID</source>
-        <target>__Google analytics Tracking ID</target>
+        <target>ID de suivi Google Analytics</target>
       </trans-unit>
       <trans-unit id="kDIFMei" resname="e.g. UA-000000-2">
         <source>e.g. UA-000000-2</source>
-        <target>__e.g. UA-000000-2</target>
+        <target>par exemple. UA-000000-2</target>
       </trans-unit>
       <trans-unit id="9CKHxqI" resname="Everyone can register">
         <source>Everyone can register</source>
-        <target>__Everyone can register</target>
+        <target>Tout le monde peut s'inscrire</target>
       </trans-unit>
       <trans-unit id="WV1kBMj" resname="Translation :">
         <source>Translation :</source>
-        <target>__Translation :</target>
+        <target>Traduction :</target>
       </trans-unit>
       <trans-unit id="05G9SBE" resname="Venue image :">
         <source>Venue image :</source>
-        <target>__Venue image :</target>
+        <target>Image du lieu :</target>
       </trans-unit>
       <trans-unit id="G9WbIvZ" resname="Featured order :">
         <source>Featured order :</source>
-        <target>__Featured order :</target>
+        <target>Commande en vedette :</target>
       </trans-unit>
       <trans-unit id="s_EIJK2" resname="Set the display order for the featured categories">
         <source>Set the display order for the featured categories</source>
-        <target>__Set the display order for the featured categories</target>
+        <target>Définir l'ordre d'affichage des catégories présentées</target>
       </trans-unit>
       <trans-unit id="GqTLC8y" resname="Image">
         <source>Image</source>
-        <target>__Image</target>
+        <target>Image</target>
       </trans-unit>
       <trans-unit id="CkWVHkI" resname="Restaurant name :">
         <source>Restaurant name :</source>
-        <target>__Restaurant name :</target>
+        <target>Nom du restaurant :</target>
       </trans-unit>
       <trans-unit id="W1XKzFk" resname="About the restaurant :">
         <source>About the restaurant :</source>
-        <target>__About the restaurant :</target>
+        <target>À propos du restaurant :</target>
       </trans-unit>
       <trans-unit id="Twoa4oZ" resname="Categories :">
         <source>Categories :</source>
-        <target>__Categories :</target>
+        <target>Catégories :</target>
       </trans-unit>
       <trans-unit id="ecNvW1P" resname="Select the categories that represent your recipes types">
         <source>Select the categories that represent your recipes types</source>
-        <target>__Select the categories that represent your recipes types</target>
+        <target>Sélectionnez les catégories qui représentent vos types de recettes</target>
       </trans-unit>
       <trans-unit id="DQiCGnk" resname="Restaurant logo :">
         <source>Restaurant logo :</source>
-        <target>__Restaurant logo :</target>
+        <target>Logo du restaurant :</target>
       </trans-unit>
       <trans-unit id="IJ4lJHy" resname="Cover photo :">
         <source>Cover photo :</source>
-        <target>__Cover photo :</target>
+        <target>Photo de couverture :</target>
       </trans-unit>
       <trans-unit id="lMrtkjo" resname="Optionally add a cover photo to showcase your restaurant activities">
         <source>Optionally add a cover photo to showcase your restaurant activities</source>
-        <target>__Optionally add a cover photo to showcase your restaurant activities</target>
+        <target>Ajoutez éventuellement une photo de couverture pour présenter les activités de votre restaurant</target>
       </trans-unit>
       <trans-unit id="S18atE_" resname="Website :">
         <source>Website :</source>
-        <target>__Website :</target>
+        <target>Site web :</target>
       </trans-unit>
       <trans-unit id="d7D4vPz" resname="Google Plus :">
         <source>Google Plus :</source>
-        <target>__Google Plus :</target>
+        <target>Google Plus :</target>
       </trans-unit>
       <trans-unit id="cOxdji7" resname="Show venues map :">
         <source>Show venues map :</source>
-        <target>__Show venues map :</target>
+        <target>Afficher le plan des sites :</target>
       </trans-unit>
       <trans-unit id="U8KZEeI" resname="Show a map at the bottom of your restaurant profile page containing the venues you added">
         <source>Show a map at the bottom of your restaurant profile page containing the venues you added</source>
-        <target>__Show a map at the bottom of your restaurant profile page containing the venues you added</target>
+        <target>Afficher une carte au bas de la page de profil de votre restaurant contenant les lieux que vous avez ajoutés</target>
       </trans-unit>
       <trans-unit id="KYxLD.q" resname="Show followers :">
         <source>Show followers :</source>
-        <target>__Show followers :</target>
+        <target>Afficher les abonnés :</target>
       </trans-unit>
       <trans-unit id="24reySe" resname="Show the number and list of people that follow you">
         <source>Show the number and list of people that follow you</source>
-        <target>__Show the number and list of people that follow you</target>
+        <target>Afficher le nombre et la liste des personnes qui vous suivent</target>
       </trans-unit>
       <trans-unit id="7j7X_13" resname="Show reviews :">
         <source>Show reviews :</source>
-        <target>__Show reviews :</target>
+        <target>Afficher les avis :</target>
       </trans-unit>
       <trans-unit id="8I07SS1" resname="Show the reviews that you received for your recipes">
         <source>Show the reviews that you received for your recipes</source>
-        <target>__Show the reviews that you received for your recipes</target>
+        <target>Affichez les avis que vous avez reçus pour vos recettes</target>
       </trans-unit>
       <trans-unit id="wT9NPt2" resname="Expecting GithubResourceOwner as the first parameter">
         <source>Expecting GithubResourceOwner as the first parameter</source>
@@ -3303,391 +3303,391 @@
       </trans-unit>
       <trans-unit id="5E4eIFb" resname="Number of posts per page">
         <source>Number of posts per page</source>
-        <target>__Number of posts per page</target>
+        <target>Nombre d'articles par page</target>
       </trans-unit>
       <trans-unit id="WqfNxxs" resname="Number of comments per page">
         <source>Number of comments per page</source>
-        <target>__Number of comments per page</target>
+        <target>Nombre de commentaires par page</target>
       </trans-unit>
       <trans-unit id="r25NduG" resname="Enable comments">
         <source>Enable comments</source>
-        <target>__Enable comments</target>
+        <target>Activer les commentaires</target>
       </trans-unit>
       <trans-unit id="tJDj5RR" resname="Facebook app id">
         <source>Facebook app id</source>
-        <target>__Facebook app id</target>
+        <target>ID de l'application Facebook</target>
       </trans-unit>
       <trans-unit id="kR1KJxi" resname="Go to the documentation to get help about getting an app ID">
         <source>Go to the documentation to get help about getting an app ID</source>
-        <target>__Go to the documentation to get help about getting an app ID</target>
+        <target>Accédez à la documentation pour obtenir de l'aide sur l'obtention d'un ID d'application</target>
       </trans-unit>
       <trans-unit id="e4QZKVJ" resname="Disqus subdomain">
         <source>Disqus subdomain</source>
-        <target>__Disqus subdomain</target>
+        <target>Sous-domaine Disqus</target>
       </trans-unit>
       <trans-unit id="3NxXyIQ" resname="Go to the documentation to get help about setting up Disqus">
         <source>Go to the documentation to get help about setting up Disqus</source>
-        <target>__Go to the documentation to get help about setting up Disqus</target>
+        <target>Accédez à la documentation pour obtenir de l'aide sur la configuration de Disqus</target>
       </trans-unit>
       <trans-unit id="HPpZUye" resname="Enable Google Repatcha">
         <source>Enable Google Repatcha</source>
-        <target>__Enable Google Repatcha</target>
+        <target>Activer Google Recaptcha</target>
       </trans-unit>
       <trans-unit id="HS2dFnb" resname="Site key">
         <source>Site key</source>
-        <target>__Site key</target>
+        <target>Clé du site</target>
       </trans-unit>
       <trans-unit id="9HqZ688" resname="Secret key">
         <source>Secret key</source>
-        <target>__Secret key</target>
+        <target>Clef secrète</target>
       </trans-unit>
       <trans-unit id="y_jrHxn" resname="Google Maps Api Key">
         <source>Google Maps Api Key</source>
-        <target>__Google Maps Api Key</target>
+        <target>Clé API Google Maps</target>
       </trans-unit>
       <trans-unit id="du3se7K" resname="Leave api key empty to disable google maps project wide">
         <source>Leave api key empty to disable google maps project wide</source>
-        <target>__Leave api key empty to disable google maps project wide</target>
+        <target>Laissez la clé API vide pour désactiver Google Maps à l'échelle du projet</target>
       </trans-unit>
       <trans-unit id="qurUq.X" resname="Transport">
         <source>Transport</source>
-        <target>__Transport</target>
+        <target>Transporter</target>
       </trans-unit>
       <trans-unit id="SoIxGLm" resname="Host">
         <source>Host</source>
-        <target>__Host</target>
+        <target>Host</target>
       </trans-unit>
       <trans-unit id="cumln1o" resname="Port">
         <source>Port</source>
-        <target>__Port</target>
+        <target>Port</target>
       </trans-unit>
       <trans-unit id="gvTnGaG" resname="Encryption">
         <source>Encryption</source>
-        <target>__Encryption</target>
+        <target>Chiffrement</target>
       </trans-unit>
       <trans-unit id="47ienTP" resname="Username">
         <source>Username</source>
-        <target>__Username</target>
+        <target>Nom d'utilisateur</target>
       </trans-unit>
       <trans-unit id="bqw.U5s" resname="No reply email address">
         <source>No reply email address</source>
-        <target>__No reply email address</target>
+        <target>Aucune adresse e-mail de réponse</target>
       </trans-unit>
       <trans-unit id="JBvqfXH" resname="This email address will be used as the sender of all the emails sent by the platform, in almost all cases, it is the same as the username above">
         <source>This email address will be used as the sender of all the emails sent by the platform, in almost all cases, it is the same as the username above</source>
-        <target>__This email address will be used as the sender of all the emails sent by the platform, in almost all cases, it is the same as the username above</target>
+        <target>Cette adresse email sera utilisée comme expéditeur de tous les emails envoyés par la plateforme, dans presque tous les cas, c'est la même que le nom d'utilisateur ci-dessus</target>
       </trans-unit>
       <trans-unit id="hs8KXm." resname="This email address will receive the contact form messages">
         <source>This email address will receive the contact form messages</source>
-        <target>__This email address will receive the contact form messages</target>
+        <target>Cette adresse email recevra les messages du formulaire de contact</target>
       </trans-unit>
       <trans-unit id="iAfZfk8" resname="Mail server test email">
         <source>Mail server test email</source>
-        <target>__Mail server test email</target>
+        <target>E-mail de test du serveur de messagerie</target>
       </trans-unit>
       <trans-unit id="l0VC_Aj" resname="The email could not be sent">
         <source>The email could not be sent</source>
-        <target>__The email could not be sent</target>
+        <target>L'e-mail n'a pas pu être envoyé</target>
       </trans-unit>
       <trans-unit id="QJMTMts" resname="The test email has been sent, please check the inbox of">
         <source>The test email has been sent, please check the inbox of</source>
-        <target>__The test email has been sent, please check the inbox of</target>
+        <target>L'e-mail de test a été envoyé, veuillez vérifier la boîte de réception de</target>
       </trans-unit>
       <trans-unit id="uIc8M2u" resname="Enable newsletter">
         <source>Enable newsletter</source>
-        <target>__Enable newsletter</target>
+        <target>Activer la newsletter</target>
       </trans-unit>
       <trans-unit id="H3LOjqq" resname="SSL must be activated on your hosting server in order to use Mailchimp">
         <source>SSL must be activated on your hosting server in order to use Mailchimp</source>
-        <target>__SSL must be activated on your hosting server in order to use Mailchimp</target>
+        <target>SSL doit être activé sur votre serveur d'hébergement pour pouvoir utiliser Mailchimp</target>
       </trans-unit>
       <trans-unit id="OgXM7au" resname="Mailchimp app id">
         <source>Mailchimp app id</source>
-        <target>__Mailchimp app id</target>
+        <target>ID de l'application Mailchimp</target>
       </trans-unit>
       <trans-unit id="tgV9ws7" resname="Go to the documentation to get help about getting an api key">
         <source>Go to the documentation to get help about getting an api key</source>
-        <target>__Go to the documentation to get help about getting an api key</target>
+        <target>Accédez à la documentation pour obtenir de l'aide sur l'obtention d'une clé API</target>
       </trans-unit>
       <trans-unit id="SbRr9jY" resname="Mailchimp list id">
         <source>Mailchimp list id</source>
-        <target>__Mailchimp list id</target>
+        <target>ID de liste Mailchimp</target>
       </trans-unit>
       <trans-unit id="likzzTG" resname="Go to the documentation to get help about getting a list id">
         <source>Go to the documentation to get help about getting a list id</source>
-        <target>__Go to the documentation to get help about getting a list id</target>
+        <target>Accédez à la documentation pour obtenir de l'aide sur l'obtention d'un identifiant de liste</target>
       </trans-unit>
       <trans-unit id="9X.Pucz" resname="The homepage settings could not be loaded">
         <source>The homepage settings could not be loaded</source>
-        <target>__The homepage settings could not be loaded</target>
+        <target>Les paramètres de la page d'accueil n'ont pas pu être chargés</target>
       </trans-unit>
       <trans-unit id="g0FnhN5" resname="The country can not be found">
         <source>The country can not be found</source>
-        <target>__The country can not be found</target>
+        <target>Le pays ne peut pas être trouvé</target>
       </trans-unit>
       <trans-unit id="tLYIkBm" resname="The country can not be deleted because it is linked with one or more recipes">
         <source>The country can not be deleted because it is linked with one or more recipes</source>
-        <target>__The country can not be deleted because it is linked with one or more recipes</target>
+        <target>Le pays ne peut pas être supprimé car il est lié à une ou plusieurs recettes</target>
       </trans-unit>
       <trans-unit id="gZtm6ws" resname="The pricing can not be found">
         <source>The pricing can not be found</source>
-        <target>__The pricing can not be found</target>
+        <target>Le prix est introuvable</target>
       </trans-unit>
       <trans-unit id="r8Neakz" resname="The subscription has already been scanned">
         <source>The subscription has already been scanned</source>
-        <target>__The subscription has already been scanned</target>
+        <target>L'abonnement a déjà été scanné</target>
       </trans-unit>
       <trans-unit id="RCCszVi" resname="The subscription has been successfully scanned">
         <source>The subscription has been successfully scanned</source>
-        <target>__The subscription has been successfully scanned</target>
+        <target>L'abonnement a été analysé avec succès</target>
       </trans-unit>
       <trans-unit id="7UZu3B4" resname="Your modification has been saved, you can revert your changes as long as they have not been validated">
         <source>Your modification has been saved, you can revert your changes as long as they have not been validated</source>
-        <target>__Your modification has been saved, you can revert your changes as long as they have not been validated</target>
+        <target>Votre modification a été enregistrée, vous pouvez annuler vos modifications tant qu'elles n'ont pas été validées</target>
       </trans-unit>
       <trans-unit id="fsNxqX8" resname="Invalid credentials">
         <source>Invalid credentials</source>
-        <target>__Invalid credentials</target>
+        <target>Identifiants invalides</target>
       </trans-unit>
       <trans-unit id="5INfAl6" resname="The scanner account is disabled by the restaurant">
         <source>The scanner account is disabled by the restaurant</source>
-        <target>__The scanner account is disabled by the restaurant</target>
+        <target>Le compte scanner est désactivé par le restaurant</target>
       </trans-unit>
       <trans-unit id="iqUqwk3" resname="The subscription can not be found">
         <source>The subscription can not be found</source>
-        <target>__The subscription can not be found</target>
+        <target>L'abonnement n'est pas trouvé</target>
       </trans-unit>
       <trans-unit id="YbjTmZc" resname="The subscription is not valid for this recipe date">
         <source>The subscription is not valid for this recipe date</source>
-        <target>__The subscription is not valid for this recipe date</target>
+        <target>L'abonnement n'est pas valable pour cette date de recette</target>
       </trans-unit>
       <trans-unit id="4t03I_Z" resname="The subscription was already scanned at">
         <source>The subscription was already scanned at</source>
-        <target>__The subscription was already scanned at</target>
+        <target>L'abonnement a déjà été scanné à</target>
       </trans-unit>
       <trans-unit id="OmotvvW" resname="Access granted">
         <source>Access granted</source>
-        <target>__Access granted</target>
+        <target>Accès autorisé</target>
       </trans-unit>
       <trans-unit id="I9d7RAA" resname="No recipes on sale">
         <source>No recipes on sale</source>
-        <target>__No recipes on sale</target>
+        <target>Aucune recette en vente</target>
       </trans-unit>
       <trans-unit id="Yqk6yK0" resname="Error during payment">
         <source>Error during payment</source>
-        <target>__Error during payment</target>
+        <target>Erreur lors du paiement</target>
       </trans-unit>
       <trans-unit id="EHJ7qff" resname="Unable to contact Stripe API">
         <source>Unable to contact Stripe API</source>
-        <target>__Unable to contact Stripe API</target>
+        <target>Impossible de contacter l'API Stripe</target>
       </trans-unit>
       <trans-unit id="jakt2Z." resname="Unable to find matching subscription">
         <source>Unable to find matching subscription</source>
-        <target>__Unable to find matching subscription</target>
+        <target>Impossible de trouver l'abonnement correspondant</target>
       </trans-unit>
       <trans-unit id="yUSsgw0" resname="Unable to find the user corresponding to the payment">
         <source>Unable to find the user corresponding to the payment</source>
-        <target>__Unable to find the user corresponding to the payment</target>
+        <target>Impossible de retrouver l'utilisateur correspondant au paiement</target>
       </trans-unit>
       <trans-unit id="HcykZXk" resname="You can introduce the recipe details in multiple locales">
         <source>You can introduce the recipe details in multiple locales</source>
-        <target>__You can introduce the recipe details in multiple locales</target>
+        <target>Vous pouvez présenter les détails de la recette dans plusieurs paramètres régionaux</target>
       </trans-unit>
       <trans-unit id="yuq6ynP" resname="Select the languages that will be spoken in your recipe">
         <source>Select the languages that will be spoken in your recipe</source>
-        <target>__Select the languages that will be spoken in your recipe</target>
+        <target>Sélectionnez les langues qui seront parlées dans votre recette</target>
       </trans-unit>
       <trans-unit id="s0tSUgH" resname="Select the audience types that are targeted in your recipe">
         <source>Select the audience types that are targeted in your recipe</source>
-        <target>__Select the audience types that are targeted in your recipe</target>
+        <target>Sélectionnez les types d'audience ciblés dans votre recette</target>
       </trans-unit>
       <trans-unit id="H7AARge" resname="Select the country that your recipe represents (ie: A movie's country of production)">
         <source>Select the country that your recipe represents (ie: A movie's country of production)</source>
-        <target>__Select the country that your recipe represents (ie: A movie's country of production)</target>
+        <target>Sélectionnez le pays que représente votre recette (c'est-à-dire : le pays de production d'un film)</target>
       </trans-unit>
       <trans-unit id="cnC8RYK" resname="If you have an Youtube video that represents your recipe, add it in the standard format: https://www.youtube.com/watch?v=FzG4uDgje3M">
         <source>If you have an Youtube video that represents your recipe, add it in the standard format: https://www.youtube.com/watch?v=FzG4uDgje3M</source>
-        <target>__If you have an Youtube video that represents your recipe, add it in the standard format: https://www.youtube.com/watch?v=FzG4uDgje3M</target>
+        <target>Si vous avez une vidéo Youtube qui représente votre recette, ajoutez-la au format standard: https://www.youtube.com/watch?v=FzG4uDgje3M</target>
       </trans-unit>
       <trans-unit id="cSdrX3c" resname="Enter the list of artists that will perform in your recipe (press Enter after each entry)">
         <source>Enter the list of artists that will perform in your recipe (press Enter after each entry)</source>
-        <target>__Enter the list of artists that will perform in your recipe (press Enter after each entry)</target>
+        <target>Entrez la liste des artistes qui se produiront dans votre recette (appuyez sur Entrée après chaque entrée)</target>
       </trans-unit>
       <trans-unit id="0z8WsAG" resname="To help creator find your recipe quickly, enter some keywords that identify your recipe (press Enter after each entry)">
         <source>To help creator find your recipe quickly, enter some keywords that identify your recipe (press Enter after each entry)</source>
-        <target>__To help creator find your recipe quickly, enter some keywords that identify your recipe (press Enter after each entry)</target>
+        <target>Pour aider le créateur à trouver rapidement votre recette, saisissez quelques mots-clés qui identifient votre recette (appuyez sur Entrée après chaque saisie)</target>
       </trans-unit>
       <trans-unit id="gk2a.xe" resname="If your recipe is a movie for example, select the available subtitles">
         <source>If your recipe is a movie for example, select the available subtitles</source>
-        <target>__If your recipe is a movie for example, select the available subtitles</target>
+        <target>Si votre recette est un film par exemple, sélectionnez les sous-titres disponibles</target>
       </trans-unit>
       <trans-unit id="lUWbr0S" resname="Show the creators number and list in the recipe page">
         <source>Show the creators number and list in the recipe page</source>
-        <target>__Show the creators number and list in the recipe page</target>
+        <target>Afficher le numéro et la liste des créateurs dans la page de recette</target>
       </trans-unit>
       <trans-unit id="z0OQ1fU" resname="Early bird, General admission, VIP...">
         <source>Early bird, General admission, VIP...</source>
-        <target>__Early bird, General admission, VIP...</target>
+        <target>Réservation anticipée, Admission générale, VIP...</target>
       </trans-unit>
       <trans-unit id="73xucpt" resname="Tell your creators more about this subscription type">
         <source>Tell your creators more about this subscription type</source>
-        <target>__Tell your creators more about this subscription type</target>
+        <target>Informez-en davantage vos créateurs sur ce type d'abonnement</target>
       </trans-unit>
       <trans-unit id="JsVc53C" resname="Select the parent category to add a sub category">
         <source>Select the parent category to add a sub category</source>
-        <target>__Select the parent category to add a sub category</target>
+        <target>Sélectionnez la catégorie parent pour ajouter une sous-catégorie</target>
       </trans-unit>
       <trans-unit id="sXkSWAX" resname="Number of seconds before the reserved subscriptions are released if the order is still awaiting payment">
         <source>Number of seconds before the reserved subscriptions are released if the order is still awaiting payment</source>
-        <target>__Number of seconds before the reserved subscriptions are released if the order is still awaiting payment</target>
+        <target>Nombre de secondes avant le déblocage des abonnements réservés si la commande est toujours en attente de paiement</target>
       </trans-unit>
       <trans-unit id="q4_4QpS" resname="The recipe date stats (sales and attendance) will be visible on the scanner app">
         <source>The recipe date stats (sales and attendance) will be visible on the scanner app</source>
-        <target>__The recipe date stats (sales and attendance) will be visible on the scanner app</target>
+        <target>Les statistiques de date de recette (ventes et fréquentation) seront visibles sur l'application scanner</target>
       </trans-unit>
       <trans-unit id="rC0kQKN" resname="This fee will be added to the subscription sale price which are bought from a point of sale, put 0 to disable additional fees for subscriptions which are bought from a point of sale, does not apply for free subscriptions, will be applied to future orders">
         <source>This fee will be added to the subscription sale price which are bought from a point of sale, put 0 to disable additional fees for subscriptions which are bought from a point of sale, does not apply for free subscriptions, will be applied to future orders</source>
-        <target>__This fee will be added to the subscription sale price which are bought from a point of sale, put 0 to disable additional fees for subscriptions which are bought from a point of sale, does not apply for free subscriptions, will be applied to future orders</target>
+        <target>Ces frais seront ajoutés au prix de vente des abonnements achetés en point de vente, mettre 0 pour désactiver les frais supplémentaires pour les abonnements achetés en point de vente, ne s'appliquent pas aux abonnements gratuits, seront appliqués aux commandes futures</target>
       </trans-unit>
       <trans-unit id="GOGeHAb" resname="This percentage will be deducted from each subscription sold online, upon restaurant payout request, this percentage will be taken from each subscription sold online, will be applied to future orders">
         <source>This percentage will be deducted from each subscription sold online, upon restaurant payout request, this percentage will be taken from each subscription sold online, will be applied to future orders</source>
-        <target>__This percentage will be deducted from each subscription sold online, upon restaurant payout request, this percentage will be taken from each subscription sold online, will be applied to future orders</target>
+        <target>Ce pourcentage sera déduit de chaque abonnement vendu en ligne, sur demande de paiement du restaurant, ce pourcentage sera prélevé sur chaque abonnement vendu en ligne, sera appliqué aux commandes futures</target>
       </trans-unit>
       <trans-unit id=".Aofl5Q" resname="This percentage will be deducted from each subscription sold on a point of sale, upon restaurant payout request, this percentage will be taken from each subscription sold on a point of sale, will be applied to future orders">
         <source>This percentage will be deducted from each subscription sold on a point of sale, upon restaurant payout request, this percentage will be taken from each subscription sold on a point of sale, will be applied to future orders</source>
-        <target>__This percentage will be deducted from each subscription sold on a point of sale, upon restaurant payout request, this percentage will be taken from each subscription sold on a point of sale, will be applied to future orders</target>
+        <target>Ce pourcentage sera déduit de chaque abonnement vendu en point de vente, sur demande de paiement du restaurant, ce pourcentage sera prélevé sur chaque abonnement vendu en point de vente, sera appliqué aux commandes futures</target>
       </trans-unit>
       <trans-unit id="1dXjmGG" resname="Editing the title after the recipe is saved won't change the recipe url">
         <source>Editing the title after the recipe is saved won't change the recipe url</source>
-        <target>__Editing the title after the recipe is saved won't change the recipe url</target>
+        <target>Modifier le titre une fois la recette enregistrée ne modifiera pas l'URL de la recette</target>
       </trans-unit>
       <trans-unit id="QuGBtEk" resname="Enter the website url without http nor https">
         <source>Enter the website url without http nor https</source>
-        <target>__Enter the website url without http nor https</target>
+        <target>Entrez l'url du site sans http ni https</target>
       </trans-unit>
       <trans-unit id="zJFOpuQ" resname="Enter the chosen primary color code (i.e #ffffff)">
         <source>Enter the chosen primary color code (i.e #ffffff)</source>
-        <target>__Enter the chosen primary color code (i.e #ffffff)</target>
+        <target>Entrez le code de couleur primaire choisi (c'est-à-dire #ffffff)</target>
       </trans-unit>
       <trans-unit id="kjsIJBc" resname="Please make sure to change this parameter also in .env file at the root folder of the project as it is required in some external bundle">
         <source>Please make sure to change this parameter also in .env file at the root folder of the project as it is required in some external bundle</source>
-        <target>__Please make sure to change this parameter also in .env file at the root folder of the project as it is required in some external bundle</target>
+        <target>Veuillez vous assurer de modifier également ce paramètre dans le fichier .env dans le dossier racine du projet, car il est requis dans certains bundles externes.</target>
       </trans-unit>
       <trans-unit id="8_hhOh9" resname="Go to the Pages section in the settings to add a new page">
         <source>Go to the Pages section in the settings to add a new page</source>
-        <target>__Go to the Pages section in the settings to add a new page</target>
+        <target>Allez dans la section Pages dans les paramètres pour ajouter une nouvelle page</target>
       </trans-unit>
       <trans-unit id="UumrkgO" resname="Enter the website url without http nor https, Please make sure to change this parameter also in .env file at the root folder of the project as it is required in some external bundle">
         <source>Enter the website url without http nor https, Please make sure to change this parameter also in .env file at the root folder of the project as it is required in some external bundle</source>
-        <target>__Enter the website url without http nor https, Please make sure to change this parameter also in .env file at the root folder of the project as it is required in some external bundle</target>
+        <target>Entrez l'URL du site Web sans http ni https. Assurez-vous de modifier également ce paramètre dans le fichier .env dans le dossier racine du projet, car il est requis dans certains bundles externes.</target>
       </trans-unit>
       <trans-unit id="NLMwLG6" resname="This fee will be added to the subscription sale price which are bought online, put 0 to disable additional fees for subscriptions which are bought online, does not apply for free subscriptions, will be applied to future orders">
         <source>This fee will be added to the subscription sale price which are bought online, put 0 to disable additional fees for subscriptions which are bought online, does not apply for free subscriptions, will be applied to future orders</source>
-        <target>__This fee will be added to the subscription sale price which are bought online, put 0 to disable additional fees for subscriptions which are bought online, does not apply for free subscriptions, will be applied to future orders</target>
+        <target>Ces frais seront ajoutés au prix de vente des abonnements achetés en ligne, mettez 0 pour désactiver les frais supplémentaires pour les abonnements achetés en ligne, ne s'appliquent pas aux abonnements gratuits, seront appliqués aux commandes futures</target>
       </trans-unit>
       <trans-unit id="xaZLeIY" resname="Set the number of subscriptions that an creator can buy for this subscription type">
         <source>Set the number of subscriptions that an creator can buy for this subscription type</source>
-        <target>__Set the number of subscriptions that an creator can buy for this subscription type</target>
+        <target>Définir le nombre d'abonnements qu'un créateur peut acheter pour ce type d'abonnement</target>
       </trans-unit>
       <trans-unit id="ypM9OuX" resname="Besides the qr code scanning feature, the scanner account will be able to check in the creators using a list and a button">
         <source>Besides the qr code scanning feature, the scanner account will be able to check in the creators using a list and a button</source>
-        <target>__Besides the qr code scanning feature, the scanner account will be able to check in the creators using a list and a button</target>
+        <target>En plus de la fonction de numérisation de code QR, le compte du scanner pourra enregistrer les créateurs à l'aide d'une liste et d'un bouton.</target>
       </trans-unit>
       <trans-unit id="iyHubYk" resname="Enable maintenance mode to display a maintenance page for all users but the users who are granted the ROLE_ADMINISTRATOR role, if you lost your session, you can edit the MAINTENANCE_MODE parameter directly in the .env file">
         <source>Enable maintenance mode to display a maintenance page for all users but the users who are granted the ROLE_ADMINISTRATOR role, if you lost your session, you can edit the MAINTENANCE_MODE parameter directly in the .env file</source>
-        <target>__Enable maintenance mode to display a maintenance page for all users but the users who are granted the ROLE_ADMINISTRATOR role, if you lost your session, you can edit the MAINTENANCE_MODE parameter directly in the .env file</target>
+        <target>Activez le mode maintenance pour afficher une page de maintenance pour tous les utilisateurs sauf les utilisateurs qui ont le rôle ROLE_ADMINISTRATOR, si vous avez perdu votre session, vous pouvez modifier le paramètre MAINTENANCE_MODE directement dans le fichier .env</target>
       </trans-unit>
       <trans-unit id="1Jr0z3a" resname="For 'Cash / Check / Bank Transfer / Other', the order will remain on the 'Awaiting payment' status until the restaurant or the administrator approves it">
         <source>For 'Cash / Check / Bank Transfer / Other', the order will remain on the 'Awaiting payment' status until the restaurant or the administrator approves it</source>
-        <target>__For 'Cash / Check / Bank Transfer / Other', the order will remain on the 'Awaiting payment' status until the restaurant or the administrator approves it</target>
+        <target>Pour 'Espèces / Chèque / Virement bancaire / Autre', la commande restera au statut 'En attente de paiement' jusqu'à ce que le restaurant ou l'administrateur l'approuve</target>
       </trans-unit>
       <trans-unit id="OUv9Cyx" resname="Restaurant is disabled">
         <source>Restaurant is disabled</source>
-        <target>__Restaurant is disabled</target>
+        <target>Le restaurant est désactivé</target>
       </trans-unit>
       <trans-unit id="tM2deTj" resname="Recipe date is disabled">
         <source>Recipe date is disabled</source>
-        <target>__Recipe date is disabled</target>
+        <target>La date de la recette est désactivée</target>
       </trans-unit>
       <trans-unit id="9JyQCl5" resname="Recipe subscription is disabled">
         <source>Recipe subscription is disabled</source>
-        <target>__Recipe subscription is disabled</target>
+        <target>L'abonnement à la recette est désactivé</target>
       </trans-unit>
       <trans-unit id="MfwDvUF" resname="Recipe is not published">
         <source>Recipe is not published</source>
-        <target>__Recipe is not published</target>
+        <target>La recette n'est pas publiée</target>
       </trans-unit>
       <trans-unit id="j8yFrJU" resname="Recipe already started">
         <source>Recipe already started</source>
-        <target>__Recipe already started</target>
+        <target>Recette déjà commencée</target>
       </trans-unit>
       <trans-unit id="Gifu28Y" resname="Sold out">
         <source>Sold out</source>
-        <target>__Sold out</target>
+        <target>Épuisé</target>
       </trans-unit>
       <trans-unit id="tCfD6Ta" resname="No subscription on sale">
         <source>No subscription on sale</source>
-        <target>__No subscription on sale</target>
+        <target>Aucun abonnement en vente</target>
       </trans-unit>
       <trans-unit id="FwVNEzo" resname="Sale didn't start yet">
         <source>Sale didn't start yet</source>
-        <target>__Sale didn't start yet</target>
+        <target>La vente n'a pas encore commencé</target>
       </trans-unit>
       <trans-unit id="lOb3g2Q" resname="Sale ended">
         <source>Sale ended</source>
-        <target>__Sale ended</target>
+        <target>Vente terminée</target>
       </trans-unit>
       <trans-unit id="nLdvfkP" resname="On sale">
         <source>On sale</source>
-        <target>__On sale</target>
+        <target>En soldes</target>
       </trans-unit>
       <trans-unit id="MxVRsN5" resname="Pending">
         <source>Pending</source>
-        <target>__Pending</target>
+        <target>En attente</target>
       </trans-unit>
       <trans-unit id="Z.VCum2" resname="Authorized">
         <source>Authorized</source>
-        <target>__Authorized</target>
+        <target>Autorisé(e)</target>
       </trans-unit>
       <trans-unit id="igP6mtd" resname="Captured">
         <source>Captured</source>
-        <target>__Captured</target>
+        <target>Capturé</target>
       </trans-unit>
       <trans-unit id="E8ou4km" resname="Canceled">
         <source>Canceled</source>
-        <target>__Canceled</target>
+        <target>Annulé</target>
       </trans-unit>
       <trans-unit id="45KjiRw" resname="Suspended">
         <source>Suspended</source>
-        <target>__Suspended</target>
+        <target>Suspendu(e)</target>
       </trans-unit>
       <trans-unit id="AxqPD2W" resname="Failed">
         <source>Failed</source>
-        <target>__Failed</target>
+        <target>Échoué</target>
       </trans-unit>
       <trans-unit id="t2TNwOq" resname="Unknown">
         <source>Unknown</source>
-        <target>__Unknown</target>
+        <target>Inconnu(e)</target>
       </trans-unit>
       <trans-unit id="h7QuQMK" resname="Approved">
         <source>Approved</source>
-        <target>__Approved</target>
+        <target>Approuvé(e)</target>
       </trans-unit>
       <trans-unit id="W857fy_" resname="Locked (Payout request approved)">
         <source>Locked (Payout request approved)</source>
-        <target>__Locked (Payout request approved)</target>
+        <target>Verrouillé (demande de paiement approuvée)</target>
       </trans-unit>
       <trans-unit id="kl5ecUU" resname="Locked (Payout request pending)">
         <source>Locked (Payout request pending)</source>
-        <target>__Locked (Payout request pending)</target>
+        <target>Verrouillé (demande de paiement en attente)</target>
       </trans-unit>
       <trans-unit id="fCeIlZ8" resname="Awaiting payment">
         <source>Awaiting payment</source>
-        <target>__Awaiting payment</target>
+        <target>En attente de paiement</target>
       </trans-unit>
       <trans-unit id="_4G5Ya9" resname="Paid">
         <source>Paid</source>
-        <target>__Paid</target>
+        <target>Payé</target>
       </trans-unit>
       <trans-unit id="XhS3Bkw" resname="form.label.delete">
         <source>form.label.delete</source>
@@ -3819,7 +3819,7 @@
       </trans-unit>
       <trans-unit id="IlRhod_" resname="Sign up restaurant">
         <source>Sign up restaurant</source>
-        <target>_Inscrivez-vous au restaurant</target>
+        <target>Inscrivez-vous restaurant</target>
       </trans-unit>
       <trans-unit id="oXlHg6q" resname="Offline">
         <source>Offline</source>
@@ -4155,19 +4155,19 @@
       </trans-unit>
       <trans-unit id=".VWrqNm" resname="Add a new recipes">
         <source>Add a new recipes</source>
-        <target>__Add a new recipes</target>
+        <target>Ajouter une nouvelle recette</target>
       </trans-unit>
       <trans-unit id="5hucTfq" resname="Update the recipe">
         <source>Update the recipe</source>
-        <target>__Update the recipe</target>
+        <target>Mettre à jour la recette</target>
       </trans-unit>
       <trans-unit id="HmRfT7a" resname="The fields preceded with a red * are mandatory">
         <source>The fields preceded with a red * are mandatory</source>
-        <target>__The fields preceded with a red * are mandatory</target>
+        <target>Les champs précédés d'un * rouge sont obligatoires</target>
       </trans-unit>
       <trans-unit id="gykSbNn" resname="Reserved seats">
         <source>Reserved seats</source>
-        <target>__Reserved seats</target>
+        <target>Places réservées</target>
       </trans-unit>
       <trans-unit id="plYQfpn" resname="Statistics">
         <source>Statistics</source>
@@ -4207,79 +4207,79 @@
       </trans-unit>
       <trans-unit id="5xcfK72" resname="Create your review for %recipetitle%">
         <source>Create your review for %recipetitle%</source>
-        <target>__Create your review for %recipetitle%</target>
+        <target>Créez votre avis pour {recipetitle}</target>
       </trans-unit>
       <trans-unit id="6k_QhPk" resname="Manage reviews">
         <source>Manage reviews</source>
-        <target>__Manage reviews</target>
+        <target>Gérer les avis</target>
       </trans-unit>
       <trans-unit id="zdFDZsL" resname="You have full control to manage your own account setting.">
         <source>You have full control to manage your own account setting.</source>
-        <target>__You have full control to manage your own account setting.</target>
+        <target>Vous avez le contrôle total pour gérer les paramètres de votre propre compte.</target>
       </trans-unit>
       <trans-unit id="s3NZBdD" resname="Export To CSV...">
         <source>Export To CSV...</source>
-        <target>__Export To CSV...</target>
+        <target>Exporter vers CSV...</target>
       </trans-unit>
       <trans-unit id="6aoLg6_" resname="No review found">
         <source>No review found</source>
-        <target>__No review found</target>
+        <target>Aucun avis trouvé</target>
       </trans-unit>
       <trans-unit id="uDIALaK" resname="Invoice">
         <source>Invoice</source>
-        <target>__Invoice</target>
+        <target>Facture</target>
       </trans-unit>
       <trans-unit id="cvk5P5w" resname="Of">
         <source>Of</source>
-        <target>__Of</target>
+        <target>De</target>
       </trans-unit>
       <trans-unit id="z1hPEzk" resname="SIRET :">
         <source>SIRET :</source>
-        <target>__SIRET :</target>
+        <target>SIRET :</target>
       </trans-unit>
       <trans-unit id="ycRF0M5" resname="VAT N° :">
         <source>VAT N° :</source>
-        <target>__VAT N° :</target>
+        <target>T.V.A N° :</target>
       </trans-unit>
       <trans-unit id="yhXrwFo" resname="For">
         <source>For</source>
-        <target>__For</target>
+        <target>Pour</target>
       </trans-unit>
       <trans-unit id="aJcSg4Q" resname="Subject">
         <source>Subject</source>
-        <target>__Subject</target>
+        <target>Sujet</target>
       </trans-unit>
       <trans-unit id="PnLCybM" resname="Invoice n°">
         <source>Invoice n°</source>
-        <target>__Invoice n°</target>
+        <target>Facture n°</target>
       </trans-unit>
       <trans-unit id="AWeuzGt" resname="Issued on">
         <source>Issued on</source>
-        <target>__Issued on</target>
+        <target>Publié le</target>
       </trans-unit>
       <trans-unit id="2gK3fkk" resname="Price excluding tax">
         <source>Price excluding tax</source>
-        <target>__Price excluding tax</target>
+        <target>Prix hors taxes</target>
       </trans-unit>
       <trans-unit id="kyo1kNY" resname="Price incl. VAT">
         <source>Price incl. VAT</source>
-        <target>__Price incl. VAT</target>
+        <target>Prix TTC T.V.A</target>
       </trans-unit>
       <trans-unit id="QUVVhOB" resname="Tax (20.00%)">
         <source>Tax (20.00%)</source>
-        <target>__Tax (20.00%)</target>
+        <target>Taxe (20.00%)</target>
       </trans-unit>
       <trans-unit id="4fK4rKy" resname="Member of an approved management center, accepting payment by check as such">
         <source>Member of an approved management center, accepting payment by check as such</source>
-        <target>__Member of an approved management center, accepting payment by check as such</target>
+        <target>Membre d'un centre de gestion agréé, acceptant le paiement par chèque comme tel</target>
       </trans-unit>
       <trans-unit id="_.HlVtH" resname="Law 83-629 of 07/12/83, art. 8: « Administrative authorization does not confer any official character on the company or">
         <source>Law 83-629 of 07/12/83, art. 8: « Administrative authorization does not confer any official character on the company or</source>
-        <target>__Law 83-629 of 07/12/83, art. 8: « Administrative authorization does not confer any official character on the company or</target>
+        <target>Loi 83-629 du 12/07/83, art. 8 : « L'autorisation administrative ne confère aucun caractère officiel à l'entreprise ou</target>
       </trans-unit>
       <trans-unit id="04nIrQe" resname="to the people who benefit from it. It does not in any way engage the responsibility of public authorities.»">
         <source>to the people who benefit from it. It does not in any way engage the responsibility of public authorities.»</source>
-        <target>__to the people who benefit from it. It does not in any way engage the responsibility of public authorities.»</target>
+        <target>aux personnes qui en bénéficient. Elle n’engage en aucun cas la responsabilité des pouvoirs publics.»</target>
       </trans-unit>
       <trans-unit id="9NXzb_D" resname="Account status">
         <source>Account status</source>
@@ -4371,7 +4371,7 @@
       </trans-unit>
       <trans-unit id="qsg7Qcf" resname="My responses">
         <source>My responses</source>
-        <target>__My responses</target>
+        <target>Mes réponses</target>
       </trans-unit>
       <trans-unit id="0gib5nK" resname="Token">
         <source>Token</source>
@@ -4423,63 +4423,63 @@
       </trans-unit>
       <trans-unit id="FgGRqK6" resname="No seating plans found for this venue">
         <source>No seating plans found for this venue</source>
-        <target>__No seating plans found for this venue</target>
+        <target>Aucun plan de salle trouvé pour ce lieu</target>
       </trans-unit>
       <trans-unit id="gr5G_3F" resname="Add a new seating plan">
         <source>Add a new seating plan</source>
-        <target>__Add a new seating plan</target>
+        <target>Ajouter un nouveau plan de salle</target>
       </trans-unit>
       <trans-unit id="jCFtLyS" resname="Update the seating plan">
         <source>Update the seating plan</source>
-        <target>__Update the seating plan</target>
+        <target>Mettre à jour le plan de salle</target>
       </trans-unit>
       <trans-unit id="BCgLUuK" resname="&lt;ul&gt;&lt;li&gt;Make sure to place the stage and the sections within the designer&lt;/li&gt;&lt;li&gt;Once assigned to an recipe date, a seating plan can not be edited anymore, you can duplicate it and create a new version and apply the desired changes to the duplicated version.&lt;/li&gt;&lt;/ul&gt;">
         <source>&lt;ul&gt;&lt;li&gt;Make sure to place the stage and the sections within the designer&lt;/li&gt;&lt;li&gt;Once assigned to an recipe date, a seating plan can not be edited anymore, you can duplicate it and create a new version and apply the desired changes to the duplicated version.&lt;/li&gt;&lt;/ul&gt;</source>
-        <target><![CDATA[__<ul><li>Make sure to place the stage and the sections within the designer</li><li>Once assigned to an recipe date, a seating plan can not be edited anymore, you can duplicate it and create a new version and apply the desired changes to the duplicated version.</li></ul>]]></target>
+        <target><![CDATA[__<ul><li>Assurez-vous de placer la scène et les sections dans le concepteur.</li><li>Une fois attribué à une date de recette, un plan de salle ne peut plus être modifié, vous pouvez le dupliquer et créer une nouvelle version et appliquer les modifications souhaitées à la version dupliquée.</li></ul>]]></target>
       </trans-unit>
       <trans-unit id="ZFARVtS" resname="Manage venues">
         <source>Manage venues</source>
-        <target>__Manage venues</target>
+        <target>Gérer les lieux</target>
       </trans-unit>
       <trans-unit id="pSrOQg8" resname="All">
         <source>All</source>
-        <target>__All</target>
+        <target>Tout(e)</target>
       </trans-unit>
       <trans-unit id="yRKQJb0" resname="Sort by">
         <source>Sort by</source>
-        <target>__Sort by</target>
+        <target>Trier par</target>
       </trans-unit>
       <trans-unit id="K4q_4Jk" resname="No venues found">
         <source>No venues found</source>
-        <target>__No venues found</target>
+        <target>Aucun lieu trouvé</target>
       </trans-unit>
       <trans-unit id="nOQFDZ." resname="Recipes count">
         <source>Recipes count</source>
-        <target>__Recipes count</target>
+        <target>Les recettes comptent</target>
       </trans-unit>
       <trans-unit id="IEBsznj" resname="Listed on the directory">
         <source>Listed on the directory</source>
-        <target>__Listed on the directory</target>
+        <target>Inscrit dans l'annuaire</target>
       </trans-unit>
       <trans-unit id="4mylvwl" resname="Not listed on the directory">
         <source>Not listed on the directory</source>
-        <target>__Not listed on the directory</target>
+        <target>Non répertorié dans l'annuaire</target>
       </trans-unit>
       <trans-unit id="rCCle.3" resname="Hide">
         <source>Hide</source>
-        <target>__Hide</target>
+        <target>Cacher</target>
       </trans-unit>
       <trans-unit id="ZqY41iA" resname="Hide from public directory">
         <source>Hide from public directory</source>
-        <target>__Hide from public directory</target>
+        <target>Masquer du répertoire public</target>
       </trans-unit>
       <trans-unit id="zU6A0PP" resname="List on public directory">
         <source>List on public directory</source>
-        <target>__List on public directory</target>
+        <target>Liste sur l'annuaire public</target>
       </trans-unit>
       <trans-unit id="lc7bhcZ" resname="Add a new venue">
         <source>Add a new venue</source>
-        <target>__Add a new venue</target>
+        <target>Ajouter un nouveau lieu</target>
       </trans-unit>
       <trans-unit id="pdjItUi" resname="Update the venue">
         <source>Update the venue</source>
@@ -4599,47 +4599,47 @@
       </trans-unit>
       <trans-unit id="jSa8Yp3" resname="Events summary">
         <source>Events summary</source>
-        <target>__Events summary</target>
+        <target>Résumé des événements</target>
       </trans-unit>
       <trans-unit id="MOniE3Q" resname="My events">
         <source>My events</source>
-        <target>__My events</target>
+        <target>Mes événements</target>
       </trans-unit>
       <trans-unit id="wAC7QdI" resname="Events added">
         <source>Events added</source>
-        <target>__Events added</target>
+        <target>Événements ajoutés</target>
       </trans-unit>
       <trans-unit id="fdWNPpH" resname="Published events">
         <source>Published events</source>
-        <target>__Published events</target>
+        <target>Événements publiés</target>
       </trans-unit>
       <trans-unit id="35EQtW_" resname="Upcoming events">
         <source>Upcoming events</source>
-        <target>__Upcoming events</target>
+        <target>Évènements à venir</target>
       </trans-unit>
       <trans-unit id="ms72wer" resname="Event dates">
         <source>Event dates</source>
-        <target>__Event dates</target>
+        <target>Dates des événements</target>
       </trans-unit>
       <trans-unit id="N154y.v" resname="Attendees summary">
         <source>Attendees summary</source>
-        <target>__Attendees summary</target>
+        <target>Résumé des participants</target>
       </trans-unit>
       <trans-unit id="rU7ZRUP" resname="Manage attendees">
         <source>Manage attendees</source>
-        <target>__Manage attendees</target>
+        <target>Gérer les participants</target>
       </trans-unit>
       <trans-unit id="UHtSohP" resname="Orders placed">
         <source>Orders placed</source>
-        <target>__Orders placed</target>
+        <target>Commandes passées</target>
       </trans-unit>
       <trans-unit id="NKCcQPE" resname="Paid orders">
         <source>Paid orders</source>
-        <target>__Paid orders</target>
+        <target>Commandes payées</target>
       </trans-unit>
       <trans-unit id="wCTdihW" resname="Tickets sold">
         <source>Tickets sold</source>
-        <target>__Tickets sold</target>
+        <target>Billets vendus</target>
       </trans-unit>
       <trans-unit id="9IXsxq9" resname="Add a new scanner">
         <source>Add a new scanner</source>
@@ -4779,291 +4779,291 @@
       </trans-unit>
       <trans-unit id="84QCxR2" resname="Manage audiences">
         <source>Manage audiences</source>
-        <target>__Manage audiences</target>
+        <target>Gérer les audiences</target>
       </trans-unit>
       <trans-unit id="1K7v__n" resname="No audiences found">
         <source>No audiences found</source>
-        <target>__No audiences found</target>
+        <target>Aucune audience trouvé</target>
       </trans-unit>
       <trans-unit id="ujyXC5V" resname="Add a new audience">
         <source>Add a new audience</source>
-        <target>__Add a new audience</target>
+        <target>Ajouter une nouvelle audience</target>
       </trans-unit>
       <trans-unit id="LNJB.Cg" resname="Update the audience">
         <source>Update the audience</source>
-        <target>__Update the audience</target>
+        <target>Mettre à jour l'audience</target>
       </trans-unit>
       <trans-unit id="Wr126Er" resname="Venue page settings">
         <source>Venue page settings</source>
-        <target>__Venue page settings</target>
+        <target>Paramètres de la page du lieu</target>
       </trans-unit>
       <trans-unit id="WoOstcH" resname="Global payment settings">
         <source>Global payment settings</source>
-        <target>__Global payment settings</target>
+        <target>Paramètres de paiement globaux</target>
       </trans-unit>
       <trans-unit id="2C.Vfew" resname="Manage currencies">
         <source>Manage currencies</source>
-        <target>__Manage currencies</target>
+        <target>Gérer les devises</target>
       </trans-unit>
       <trans-unit id="KvOYvm1" resname="Payment gateways">
         <source>Payment gateways</source>
-        <target>__Payment gateways</target>
+        <target>Passerelles de paiement</target>
       </trans-unit>
       <trans-unit id="ToGE2HE" resname="No payment gateways found">
         <source>No payment gateways found</source>
-        <target>__No payment gateways found</target>
+        <target>Aucune passerelle de paiement trouvé</target>
       </trans-unit>
       <trans-unit id="wjXp3a6" resname="Recipes list page settings">
         <source>Recipes list page settings</source>
-        <target>__Recipes list page settings</target>
+        <target>Paramètres de la page de liste de recettes</target>
       </trans-unit>
       <trans-unit id="_qWroe0" resname="Google Recaptcha settings">
         <source>Google Recaptcha settings</source>
-        <target>__Google Recaptcha settings</target>
+        <target>Paramètres Google Recaptcha</target>
       </trans-unit>
       <trans-unit id="1uEN9jY" resname="Homepage settings">
         <source>Homepage settings</source>
-        <target>__Homepage settings</target>
+        <target>Paramètres de la page d'accueil</target>
       </trans-unit>
       <trans-unit id="XiAn8P7" resname="Reviews list page settings">
         <source>Reviews list page settings</source>
-        <target>__Reviews list page settings</target>
+        <target>Paramètres de la page de liste des avis</target>
       </trans-unit>
       <trans-unit id="uvKOtNt" resname="Layout settings">
         <source>Layout settings</source>
-        <target>__Layout settings</target>
+        <target>Paramètres de mise en page</target>
       </trans-unit>
       <trans-unit id="RmAZqgF" resname="Newsletter settings">
         <source>Newsletter settings</source>
-        <target>__Newsletter settings</target>
+        <target>Paramètres de la newsletter</target>
       </trans-unit>
       <trans-unit id="1Jex88r" resname="Mail server settings">
         <source>Mail server settings</source>
-        <target>__Mail server settings</target>
+        <target>Paramètres du serveur de messagerie</target>
       </trans-unit>
       <trans-unit id="l5rzV5H" resname="By clicking on send, an email is going to be sent to the chosen email address. Make sure to save the configuration to be tested before testing.">
         <source>By clicking on send, an email is going to be sent to the chosen email address. Make sure to save the configuration to be tested before testing.</source>
-        <target>__By clicking on send, an email is going to be sent to the chosen email address. Make sure to save the configuration to be tested before testing.</target>
+        <target>En cliquant sur envoyer, un email va être envoyé à l'adresse email choisie. Assurez-vous de sauvegarder la configuration à tester avant de tester.</target>
       </trans-unit>
       <trans-unit id="FFruxro" resname="Test the mail server configuration">
         <source>Test the mail server configuration</source>
-        <target>__Test the mail server configuration</target>
+        <target>Tester la configuration du serveur de messagerie</target>
       </trans-unit>
       <trans-unit id="LcEvY.0" resname="Checkout settings">
         <source>Checkout settings</source>
-        <target>__Checkout settings</target>
+        <target>Paramètres de paiement</target>
       </trans-unit>
       <trans-unit id="vcT_xQI" resname="Add a new payment gateway">
         <source>Add a new payment gateway</source>
-        <target>__Add a new payment gateway</target>
+        <target>Ajouter une nouvelle passerelle de paiement</target>
       </trans-unit>
       <trans-unit id="EZMXuN9" resname="Update the payment gateway">
         <source>Update the payment gateway</source>
-        <target>__Update the payment gateway</target>
+        <target>Mettre à jour la passerelle de paiement</target>
       </trans-unit>
       <trans-unit id="6.uFXPo" resname="Please enter the selected payment gateway details">
         <source>Please enter the selected payment gateway details</source>
-        <target>__Please enter the selected payment gateway details</target>
+        <target>Veuillez saisir les détails de la passerelle de paiement sélectionnée</target>
       </trans-unit>
       <trans-unit id="C5Y.f0S" resname="Ccy">
         <source>Ccy</source>
-        <target>__Ccy</target>
+        <target>Ccy</target>
       </trans-unit>
       <trans-unit id="IgPENKx" resname="No currencies found">
         <source>No currencies found</source>
-        <target>__No currencies found</target>
+        <target>Aucune devise trouvé</target>
       </trans-unit>
       <trans-unit id="8VpsB2n" resname="Add a new currency">
         <source>Add a new currency</source>
-        <target>__Add a new currency</target>
+        <target>Ajouter une nouvelle devise</target>
       </trans-unit>
       <trans-unit id="Jz9Za6e" resname="Edit the currency">
         <source>Edit the currency</source>
-        <target>__Edit the currency</target>
+        <target>Modifier la devise</target>
       </trans-unit>
       <trans-unit id="IrBiQoi" resname="Google Maps settings">
         <source>Google Maps settings</source>
-        <target>__Google Maps settings</target>
+        <target>Paramètres Google Maps</target>
       </trans-unit>
       <trans-unit id="ey1sZSV" resname="Order of appearance">
         <source>Order of appearance</source>
-        <target>__Order of appearance</target>
+        <target>Ordre d'apparition</target>
       </trans-unit>
       <trans-unit id="_7Hqxve" resname="Social Login settings">
         <source>Social Login settings</source>
-        <target>__Social Login settings</target>
+        <target>Paramètres de connexion sociale</target>
       </trans-unit>
       <trans-unit id="Bc2SInW" resname="Articles count">
         <source>Articles count</source>
-        <target>__Articles count</target>
+        <target>Nombre d'articles</target>
       </trans-unit>
       <trans-unit id="7sJOlHC" resname="Manage help center categories">
         <source>Manage help center categories</source>
-        <target>__Manage help center categories</target>
+        <target>Gérer les catégories du centre d'aide</target>
       </trans-unit>
       <trans-unit id="eF278op" resname="Add a new help center category">
         <source>Add a new help center category</source>
-        <target>__Add a new help center category</target>
+        <target>Ajouter une nouvelle catégorie du centre d'aide</target>
       </trans-unit>
       <trans-unit id="Z0u8ClN" resname="Edit the help center category">
         <source>Edit the help center category</source>
-        <target>__Edit the help center category</target>
+        <target>Modifier la catégorie du centre d'aide</target>
       </trans-unit>
       <trans-unit id="VJjZcRJ" resname="Manage help center articles">
         <source>Manage help center articles</source>
-        <target>__Manage help center articles</target>
+        <target>Gérer les articles du centre d'aide</target>
       </trans-unit>
       <trans-unit id="R.EDNAp" resname="No articles found">
         <source>No articles found</source>
-        <target>__No articles found</target>
+        <target>Aucun article trouvé</target>
       </trans-unit>
       <trans-unit id="BA_niKw" resname="Add a new help center article">
         <source>Add a new help center article</source>
-        <target>__Add a new help center article</target>
+        <target>Ajouter un nouvel article du centre d'aide</target>
       </trans-unit>
       <trans-unit id="HI4UfkV" resname="Edit the help center article">
         <source>Edit the help center article</source>
-        <target>__Edit the help center article</target>
+        <target>Modifier l'article du centre d'aide</target>
       </trans-unit>
       <trans-unit id="RlRVs7j" resname="Blog posts count">
         <source>Blog posts count</source>
-        <target>__Blog posts count</target>
+        <target>Les articles du blog comptent</target>
       </trans-unit>
       <trans-unit id="57zj146" resname="Manage post categories">
         <source>Manage post categories</source>
-        <target>__Manage post categories</target>
+        <target>Gérer les catégories de l'articles</target>
       </trans-unit>
       <trans-unit id="dCRI1h1" resname="No post categories found">
         <source>No post categories found</source>
-        <target>__No post categories found</target>
+        <target>Aucune catégorie de l'article trouvé</target>
       </trans-unit>
       <trans-unit id="3nD4ed2" resname="Add a new post category">
         <source>Add a new post category</source>
-        <target>__Add a new post category</target>
+        <target>Ajouter une nouvelle catégorie de l'article</target>
       </trans-unit>
       <trans-unit id="18qXnGR" resname="Edit the post category">
         <source>Edit the post category</source>
-        <target>__Edit the post category</target>
+        <target>Modifier la catégorie de l'article</target>
       </trans-unit>
       <trans-unit id="p7Ufal4" resname="Main post image">
         <source>Main post image</source>
-        <target>__Main post image</target>
+        <target>Image de l'article principal</target>
       </trans-unit>
       <trans-unit id="Std9gvn" resname="Manage posts">
         <source>Manage posts</source>
-        <target>__Manage posts</target>
+        <target>Gérer les articles</target>
       </trans-unit>
       <trans-unit id="PQwg715" resname="No posts found">
         <source>No posts found</source>
-        <target>__No posts found</target>
+        <target>Aucun article trouvé</target>
       </trans-unit>
       <trans-unit id="8br5YA6" resname="Add a new post">
         <source>Add a new post</source>
-        <target>__Add a new post</target>
+        <target>Ajouter un nouvelle article</target>
       </trans-unit>
       <trans-unit id="lCaDapJ" resname="Edit the post">
         <source>Edit the post</source>
-        <target>__Edit the post</target>
+        <target>Modifier l'article</target>
       </trans-unit>
       <trans-unit id="HtcsSzf" resname="Enabled users">
         <source>Enabled users</source>
-        <target>__Enabled users</target>
+        <target>Utilisateurs autorisés</target>
       </trans-unit>
       <trans-unit id="acUjoTs" resname="Disabled users">
         <source>Disabled users</source>
-        <target>__Disabled users</target>
+        <target>Utilisateurs désactivés</target>
       </trans-unit>
       <trans-unit id="lQA5NVk" resname="Suspended users">
         <source>Suspended users</source>
-        <target>__Suspended users</target>
+        <target>Utilisateurs suspendus</target>
       </trans-unit>
       <trans-unit id="MKZCFur" resname="View all">
         <source>View all</source>
-        <target>__View all</target>
+        <target>Voir tout</target>
       </trans-unit>
       <trans-unit id="2oCx1XQ" resname="Revisions">
         <source>Revisions</source>
-        <target>__Revisions</target>
+        <target>Révisions</target>
       </trans-unit>
       <trans-unit id="jnUruYF" resname="reported">
         <source>reported</source>
-        <target>__reported</target>
+        <target>signalé(e)</target>
       </trans-unit>
       <trans-unit id="uNMehSc" resname="on">
         <source>on</source>
-        <target>__on</target>
+        <target>sur</target>
       </trans-unit>
       <trans-unit id="kIXjqEG" resname="Manage pricings">
         <source>Manage pricings</source>
-        <target>__Manage pricings</target>
+        <target>Gérer les tarifs</target>
       </trans-unit>
       <trans-unit id="25ZKp.s" resname="No pricings found">
         <source>No pricings found</source>
-        <target>__No pricings found</target>
+        <target>Aucun prix trouvé</target>
       </trans-unit>
       <trans-unit id="0AvU7DL" resname="Formula">
         <source>Formula</source>
-        <target>__Formula</target>
+        <target>Formule</target>
       </trans-unit>
       <trans-unit id="y2xZAmm" resname="Create">
         <source>Create</source>
-        <target>__Create</target>
+        <target>Créer</target>
       </trans-unit>
       <trans-unit id="lCQpRwu" resname="Add a new pricing">
         <source>Add a new pricing</source>
-        <target>__Add a new pricing</target>
+        <target>Ajouter un nouveau prix</target>
       </trans-unit>
       <trans-unit id="RV7lEEc" resname="Edit pricing">
         <source>Edit pricing</source>
-        <target>__Edit pricing</target>
+        <target>Modifier les prix</target>
       </trans-unit>
       <trans-unit id="pqMtvFY" resname="Link">
         <source>Link</source>
-        <target>__Link</target>
+        <target>Lien</target>
       </trans-unit>
       <trans-unit id="ECzQwBu" resname="Manage pages">
         <source>Manage pages</source>
-        <target>__Manage pages</target>
+        <target>Gérer les pages</target>
       </trans-unit>
       <trans-unit id="2ZVKbiv" resname="No pages found">
         <source>No pages found</source>
-        <target>__No pages found</target>
+        <target>Aucune page trouvé</target>
       </trans-unit>
       <trans-unit id="qT00bAX" resname="Add a new page">
         <source>Add a new page</source>
-        <target>__Add a new page</target>
+        <target>Ajouter une nouvelle page</target>
       </trans-unit>
       <trans-unit id="XSxnQ7h" resname="Edit page">
         <source>Edit page</source>
-        <target>__Edit page</target>
+        <target>Modifier la page</target>
       </trans-unit>
       <trans-unit id="yo6CbZw" resname="Avatar">
         <source>Avatar</source>
-        <target>__Avatar</target>
+        <target>Avatar</target>
       </trans-unit>
       <trans-unit id="FHNqLrn" resname="Role">
         <source>Role</source>
-        <target>__Role</target>
+        <target>Rôle</target>
       </trans-unit>
       <trans-unit id="dQgbWT0" resname="Disabled">
         <source>Disabled</source>
-        <target>__Disabled</target>
+        <target>Désactivé</target>
       </trans-unit>
       <trans-unit id="a3ZKSW2" resname="Registration date">
         <source>Registration date</source>
-        <target>__Registration date</target>
+        <target>Date d'inscription</target>
       </trans-unit>
       <trans-unit id="ZEgX1Cq" resname="Register duration">
         <source>Register duration</source>
-        <target>__Register duration</target>
+        <target>Durée d'inscription</target>
       </trans-unit>
       <trans-unit id="4aQV5M0" resname="Update date">
         <source>Update date</source>
-        <target>__Update date</target>
+        <target>Date de mise à jour</target>
       </trans-unit>
       <trans-unit id="nJsOGkH" resname="Last login ip">
         <source>Last login ip</source>
-        <target>__Last login ip</target>
+        <target>Dernière adresse IP de connexion</target>
       </trans-unit>
       <trans-unit id="MG8bsgZ" resname="Phone number">
         <source>Phone number</source>
@@ -5071,87 +5071,87 @@
       </trans-unit>
       <trans-unit id="QEir7jX" resname="Registered using Facebook">
         <source>Registered using Facebook</source>
-        <target>__Registered using Facebook</target>
+        <target>Enregistré via Facebook</target>
       </trans-unit>
       <trans-unit id="M3MKqit" resname="Registered using Google">
         <source>Registered using Google</source>
-        <target>__Registered using Google</target>
+        <target>Enregistré via Google</target>
       </trans-unit>
       <trans-unit id="lAI8sD8" resname="Facebook profile picture">
         <source>Facebook profile picture</source>
-        <target>__Facebook profile picture</target>
+        <target>Photo de profil Facebook</target>
       </trans-unit>
       <trans-unit id="ocEhJhm" resname="Enlarge">
         <source>Enlarge</source>
-        <target>__Enlarge</target>
+        <target>Agrandir</target>
       </trans-unit>
       <trans-unit id="WXzoaGl" resname="Birthdate">
         <source>Birthdate</source>
-        <target>__Birthdate</target>
+        <target>Date de naissance</target>
       </trans-unit>
       <trans-unit id="5cY7K_t" resname="Creator information">
         <source>Creator information</source>
-        <target>__Creator information</target>
+        <target>Informations sur le créateur</target>
       </trans-unit>
       <trans-unit id="qebZlje" resname="Cart elements">
         <source>Cart elements</source>
-        <target>__Cart elements</target>
+        <target>Éléments du panier</target>
       </trans-unit>
       <trans-unit id="MegJxwT" resname="Bought subscriptions">
         <source>Bought subscriptions</source>
-        <target>__Bought subscriptions</target>
+        <target>Abonnements achetés</target>
       </trans-unit>
       <trans-unit id="eh8qg6y" resname="Favorites">
         <source>Favorites</source>
-        <target>__Favorites</target>
+        <target>Favoris</target>
       </trans-unit>
       <trans-unit id="xBjLhz_" resname="Last login / IP">
         <source>Last login / IP</source>
-        <target>__Last login / IP</target>
+        <target>Dernière connexion / IP</target>
       </trans-unit>
       <trans-unit id="4S1ooTJ" resname="Joined">
         <source>Joined</source>
-        <target>__Joined</target>
+        <target>Rejoint(e)</target>
       </trans-unit>
       <trans-unit id="7r3SSnf" resname="Confirm">
         <source>Confirm</source>
-        <target>__Confirm</target>
+        <target>Confirmer</target>
       </trans-unit>
       <trans-unit id="kFR6HoJ" resname="Ninja">
         <source>Ninja</source>
-        <target>__Ninja</target>
+        <target>Ninja</target>
       </trans-unit>
       <trans-unit id="fbW208e" resname="Are you sure you want to suspend this user ?">
         <source>Are you sure you want to suspend this user ?</source>
-        <target>__Are you sure you want to suspend this user ?</target>
+        <target>Êtes-vous sûr de vouloir suspendre cet utilisateur ?</target>
       </trans-unit>
       <trans-unit id="OX5.szj" resname="Suspend !">
         <source>Suspend !</source>
-        <target>__Suspend !</target>
+        <target>Suspendre !</target>
       </trans-unit>
       <trans-unit id="SUjhNBg" resname="Suspend">
         <source>Suspend</source>
-        <target>__Suspend</target>
+        <target>Suspendre</target>
       </trans-unit>
       <trans-unit id="CfYkImZ" resname="More information">
         <source>More information</source>
-        <target>__More information</target>
+        <target>Plus d'information</target>
       </trans-unit>
       <trans-unit id="nvQ7JK4" resname="Manage user">
         <source>Manage user</source>
-        <target>__Manage user</target>
+        <target>Gérer l'utilisateur</target>
       </trans-unit>
       <trans-unit id="WGBuWCR" resname="Manage users">
         <source>Manage users</source>
-        <target>__Manage users</target>
+        <target>Gérer les utilisateurs</target>
       </trans-unit>
       <trans-unit id="lB3krBm" resname="Account information">
         <source>Account information</source>
-        <target>__Account information</target>
+        <target>Information sur le compte</target>
       </trans-unit>
       <trans-unit id="66nBvED" resname="Manage levels">
         <source>Manage levels</source>
-        <target>__Manage levels</target>
+        <target>Gérer les niveaux</target>
       </trans-unit>
       <trans-unit id="JeSmCyX" resname="Manage venues types">
         <source>Manage venues types</source>

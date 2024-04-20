@@ -72,7 +72,7 @@ trait HasAddressTrait
             $address .= $this->postalcode.' ';
         }
 
-        if ($this->countrycode) {
+        if ($this->country) {
             $address .= $this->country->getName();
         }
 

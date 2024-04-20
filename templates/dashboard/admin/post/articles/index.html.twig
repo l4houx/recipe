@@ -30,10 +30,10 @@
         <div class="col-12 col-lg-4">
             <select class="form-select">
                 <option selected="">{{ "Select an option"|trans }}</option>
-                {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.createdAt", {"direction": "desc", "criteria": "p.createdAt"}) }}
-                {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "p.createdAt", {"direction": "asc", "criteria": "p.createdAt"}) }}
-                {{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.views", {"direction": "desc", "criteria": "p.views"}) }}
-                {{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "asc"|trans ~ ')', "p.views", {"direction": "asc", "criteria": "p.views"}) }}
+                <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.createdAt", {"direction": "desc", "criteria": "p.createdAt"}) }}</option>
+                <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "p.createdAt", {"direction": "asc", "criteria": "p.createdAt"}) }}</option>
+                <option selected="">{{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.views", {"direction": "desc", "criteria": "p.views"}) }}</option>
+                <option selected="">{{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "asc"|trans ~ ')', "p.views", {"direction": "asc", "criteria": "p.views"}) }}</option>
             </select>
         </div>
     </div>

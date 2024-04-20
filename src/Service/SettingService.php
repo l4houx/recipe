@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Order;
@@ -344,9 +346,8 @@ class SettingService
         $maxseatedguests = array_key_exists('maxseatedguests', $criterias) ? $criterias['maxseatedguests'] : 'all';
         $minstandingguests = array_key_exists('minstandingguests', $criterias) ? $criterias['minstandingguests'] : 'all';
         $maxstandingguests = array_key_exists('maxstandingguests', $criterias) ? $criterias['maxstandingguests'] : 'all';
-        $restaurantEnabled = array_key_exists('restaurantEnabled', $criterias) ? $criterias['restaurantEnabled'] : 'all';
 
-        return $this->em->getRepository("App\Entity\Venue")->getVenues($restaurant, $isOnline, $keyword, $country, $venuetypes, $directory, $slug, $limit, $minseatedguests, $maxseatedguests, $minstandingguests, $maxstandingguests, $count, $restaurantEnabled);
+        return $this->em->getRepository("App\Entity\Venue")->getVenues($restaurant, $isOnline, $keyword, $country, $venuetypes, $directory, $slug, $limit, $minseatedguests, $maxseatedguests, $minstandingguests, $maxstandingguests, $count);
     }
 
     // Returns the reviews after applying the specified search criterias
@@ -489,7 +490,6 @@ class SettingService
     }
 
     // Returns the orders after applying the specified search criterias
-    /*
     public function getOrders($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
@@ -512,20 +512,19 @@ class SettingService
         $sumOrderElements = array_key_exists('sumOrderElements', $criterias) ? $criterias['sumOrderElements'] : false;
 
         if ($this->authChecker->isGranted(HasRoles::CREATOR) || $this->authChecker->isGranted(HasRoles::POINTOFSALE)) {
-            /** @var User $user /
+            /** @var User $user */
             $user = $this->security->getUser();
             $user = $user->getSlug();
         }
 
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            /** @var User $user /
+            /** @var User $user */
             $user = $this->security->getUser();
             $restaurant = $user->getRestaurant()->getSlug();
         }
 
         return $this->em->getRepository("App\Entity\Order")->getOrders($status, $user, $restaurant, $recipe, $recipeDate, $recipeSubscription, $reference, $upcomingSubscriptions, $datefrom, $dateto, $paymentgateway, $sort, $order, $limit, $count, $ordersQuantityByDateStat, $sumOrderElements);
     }
-    */
 
     // Returns the users after applying the specified search criterias
     public function getUsers($criterias): QueryBuilder
@@ -730,9 +729,8 @@ class SettingService
         return $this->em->getRepository("App\Entity\PaymentGateway")->getPaymentGateways($restaurant, $isOnline, $gatewayFactoryName, $slug, $sort, $order, $restaurantPayoutPaypalEnabled, $restaurantPayoutStripeEnabled);
     }
 
-    /*
     // Sends the subscriptions to the creator
-    public function sendOrderConfirmationEmail($order, string $emailTo): int
+    public function sendOrderConfirmationEmail(Order $order, string $emailTo): int
     {
         $pdfOptions = new Options();
         $pdfOptions->set('isRemoteEnabled', true);
@@ -767,7 +765,6 @@ class SettingService
 
         return 1;
     }
-    */
 
     // Sends the payout processed email to the restaurant
     public function sendPayoutProcessedEmail($payoutRequest, string $emailTo): int
@@ -792,11 +789,10 @@ class SettingService
         return 1;
     }
 
-    /*
     // Handles all the operations needed after a successful payment processing
     public function handleSuccessfulPayment($orderReference): void
     {
-        /** @var Order $order /
+        /** @var Order $order */
         $order = $this->getOrders(array('status' => 0, 'reference' => $orderReference))->getQuery()->getOneOrNullResult();
         $order->setStatus(1);
         $this->em->persist($order);
@@ -826,12 +822,11 @@ class SettingService
             $this->sendOrderConfirmationEmail($order, $order->getPayment()->getClientEmail());
         }
     }
-    
 
     // Handles all the operations needed after a canceled payment processing
-    public function handleCanceledPayment($orderReference, $note = null): void
+    public function handleCanceledPayment(string $orderReference, $note = null): void
     {
-        /** @var Order $order /
+        /** @var Order $order */
         $order = $this->getOrders(['status' => 'all', 'reference' => $orderReference])->getQuery()->getOneOrNullResult();
         foreach ($order->getOrderelements() as $orderElement) {
             foreach ($orderElement->getSubscriptionReservations() as $subscriptionReservation) {
@@ -846,16 +841,15 @@ class SettingService
     }
 
     // Handles all the operations needed after a failed payment processing
-    public function handleFailedPayment($orderReference, $note = null): void
+    public function handleFailedPayment(string $orderReference, $note = null): void
     {
-        /** @var Order $order /
+        /** @var Order $order */
         $order = $this->getOrders(['status' => 0, 'reference' => $orderReference])->getQuery()->getOneOrNullResult();
         $order->setStatus(-2);
         $order->setNote($note);
         $this->em->persist($order);
         $this->em->flush();
     }
-    */
 
     // Returns the currencies
     public function getCurrencies(mixed $criterias): QueryBuilder

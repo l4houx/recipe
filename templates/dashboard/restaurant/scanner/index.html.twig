@@ -54,8 +54,8 @@
                             <div class="col-sm-12 col-lg-6 text-center text-lg-right">
                                 <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
                                     <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
-                                        {{ knp_pagination_sortable(scanners, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "u.createdAt", {"direction": "desc", "criteria": "u.createdAt"}) }}
-                                        {{ knp_pagination_sortable(scanners, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "u.createdAt", {"direction": "asc", "criteria": "u.createdAt"}) }}
+                                        <option value="">{{ knp_pagination_sortable(scanners, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "u.createdAt", {"direction": "desc", "criteria": "u.createdAt"}) }}</option>
+                                        <option value="">{{ knp_pagination_sortable(scanners, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "u.createdAt", {"direction": "asc", "criteria": "u.createdAt"}) }}</option>
                                     </select>
                                 </label>
                                 <a href="{{ path('dashboard_organizer_scanner_add') }}" class="btn btn-primary ml-3" data-toggle="tooltip" title="{{'Add a new scanner' | trans}}"><i class="fas fa-plus"></i></a>

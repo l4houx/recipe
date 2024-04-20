@@ -71,10 +71,10 @@
                         <div class="ms-3">
                             <select class="form-select">
                                 <option value="">{{ "Sort by"|trans }}</option>
-                                {{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.rating", {"direction": "desc", "criteria": "r.rating"}) }}
-                                {{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.rating", {"direction": "asc", "criteria": "r.rating"}) }}
-                                {{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.createdAt", {"direction": "desc", "criteria": "r.createdAt"}) }}
-                                {{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.createdAt", {"direction": "asc", "criteria": "r.createdAt"}) }}
+                                <option selected="">{{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.rating", {"direction": "desc", "criteria": "r.rating"}) }}</option>
+                                <option selected="">{{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.rating", {"direction": "asc", "criteria": "r.rating"}) }}</option>
+                                <option selected="">{{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.createdAt", {"direction": "desc", "criteria": "r.createdAt"}) }}
+                                <option selected="">{{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.createdAt", {"direction": "asc", "criteria": "r.createdAt"}) }}</option>
                             </select>
                         </div>
                     </div>

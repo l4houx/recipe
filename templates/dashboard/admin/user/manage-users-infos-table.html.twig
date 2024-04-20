@@ -2,42 +2,43 @@
 	<table class="table mb-0 text-nowrap table-hover table-centered">
 		<thead class="">
 			<tr>
-                <th colspan="2">
-                    <i class="bi bi-file text-muted"></i>  {{ pagetitle }}
-                </th>
+				<th colspan="2">
+					<i class="bi bi-file text-muted"></i>
+					{{ pagetitle }}
+				</th>
 			</tr>
 		</thead>
-        <tbody>
-            <tr>
-                <td width="30%">{{ "Avatar"|trans }}</td>
-                <td>
-                    {% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Role"|trans }}</td>
-                <td>
-                    {#{% include "global/user-roles.html.twig" %} #}
-                    {{ user.getRole|trans }} 
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Status"|trans }}</td>
-                <td>
-                    {% if user.isVerified == false %}
-                        <span class="badge bg-danger-soft">
-                            <i class="bi bi-person-slash"></i>
-                            {{ "Disabled"|trans }}
-                        </span>
-                    {% else %}
-                        <span class="badge bg-success-soft">
-                            <i class="bi bi-person-check"></i>
-                            {{ "Enabled"|trans }}
-                        </span>
-                    {% endif %}
-                </td>
-            </tr>
-            {#  
+		<tbody>
+			<tr>
+				<td width="30%">{{ "Avatar"|trans }}</td>
+				<td>
+					{% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Role"|trans }}</td>
+				<td>
+					{#{% include "global/user-roles.html.twig" %} #}
+					{{ user.getRole|trans|raw }}
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Status"|trans }}</td>
+				<td>
+					{% if user.isVerified == false %}
+						<span class="badge bg-danger-soft">
+							<i class="bi bi-person-slash"></i>
+							{{ "Disabled"|trans }}
+						</span>
+					{% else %}
+						<span class="badge bg-success-soft">
+							<i class="bi bi-person-check"></i>
+							{{ "Enabled"|trans }}
+						</span>
+					{% endif %}
+				</td>
+			</tr>
+			{#  
             {% if user.gender %}
                 <tr>
                     <td width="30%">{{ "Gender"|trans }}</td>
@@ -47,84 +48,84 @@
                 </tr>
             {% endif %}
             #}
-            {% if user.firstname %}
-                <tr>
-                    <td width="30%">{{ "First name"|trans }}</td>
-                    <td>
-                        {{ user.firstname }}
-                    </td>
-                </tr>
-            {% endif %}
-            {% if user.lastname %}
-                <tr>
-                    <td width="30%">{{ "Last name"|trans }}</td>
-                    <td>
-                        {{ user.lastname }}
-                    </td>
-                </tr>
-            {% endif %}
-            {% if user.premium %}
-                <tr>
-                    <td width="30%">{{ "Premium"|trans }}</td>
-                    <td>
-                        {{ user.premium ? user.premiumEnd | ago() : '' }}
-                    </td>
-                </tr>
-            {% endif %}
-            <tr>
-                <td width="30%">{{ "Email"|trans }}</td>
-                <td>
-                    {{ user.email }}
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Username"|trans }}</td>
-                <td>
-                    {{ user.username }}
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Registration date"|trans }}</td>
-                <td>
-                    {{ user.createdAt ? user.createdAt | ago() }}
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Register duration"|trans }}</td>
-                <td>
-                    {{ user.registerDuration }}s
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Update date"|trans }}</td>
-                <td>
-                    {{ user.updatedAt ? user.updatedAt | ago() }}
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Last login"|trans }}</td>
-                <td>
-                    {{ user.lastLogin | ago() }}
-                </td>
-            </tr>
-            <tr>
-                <td width="30%">{{ "Last login ip"|trans }}</td>
-                <td>
-                    <a href="https://ipinfo.io/{{ user.lastLoginIp }}" target="_blank">{{ user.lastLoginIp }}</a>
-                    {% if user.lastLoginIp %}
-                        {{ ipService.getLocation(user.lastLoginIp).emoji ?? '' }}
-                    {% endif %}
-                </td>
-            </tr>
-            {% if user.phone %}
-                <tr>
-                    <td width="30%">{{ "Phone number"|trans }}</td>
-                    <td>
-                        {{ user.phone }}
-                    </td>
-                </tr>
-            {% endif %}
-            {#
+			{% if user.firstname %}
+				<tr>
+					<td width="30%">{{ "First name"|trans }}</td>
+					<td>
+						{{ user.firstname }}
+					</td>
+				</tr>
+			{% endif %}
+			{% if user.lastname %}
+				<tr>
+					<td width="30%">{{ "Last name"|trans }}</td>
+					<td>
+						{{ user.lastname }}
+					</td>
+				</tr>
+			{% endif %}
+			{% if user.premium %}
+				<tr>
+					<td width="30%">{{ "Premium"|trans }}</td>
+					<td>
+						{{ user.premium ? user.premiumEnd | ago() : '' }}
+					</td>
+				</tr>
+			{% endif %}
+			<tr>
+				<td width="30%">{{ "Email"|trans }}</td>
+				<td>
+					{{ user.email }}
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Username"|trans }}</td>
+				<td>
+					{{ user.username }}
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Registration date"|trans }}</td>
+				<td>
+					{{ user.createdAt ? user.createdAt | ago() }}
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Register duration"|trans }}</td>
+				<td>
+					{{ user.registerDuration }}s
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Update date"|trans }}</td>
+				<td>
+					{{ user.updatedAt ? user.updatedAt | ago() }}
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Last login"|trans }}</td>
+				<td>
+					{{ user.lastLogin | ago() }}
+				</td>
+			</tr>
+			<tr>
+				<td width="30%">{{ "Last login ip"|trans }}</td>
+				<td>
+					<a href="https://ipinfo.io/{{ user.lastLoginIp }}" target="_blank">{{ user.lastLoginIp }}</a>
+					{% if user.lastLoginIp %}
+						{{ ipService.getLocation(user.lastLoginIp).emoji ?? '' }}
+					{% endif %}
+				</td>
+			</tr>
+			{% if user.phone %}
+				<tr>
+					<td width="30%">{{ "Phone number"|trans }}</td>
+					<td>
+						{{ user.phone }}
+					</td>
+				</tr>
+			{% endif %}
+			{#
             {% if user.avatarName %}
                 <tr>
                     <td width="30%">{{ "Avatar"|trans }}</td>
@@ -134,109 +135,361 @@
                 </tr>
             {% endif %}
             #}
-            {% if user.facebookId %}
-                <tr>
-                    <td width="30%">{{ "Registered using Facebook"|trans }} <i class="fab fa-facebook-f fa-sm btn-facebook ml-2 p-2"></i></td>
-                    <td>
-                        Facebook Id: {{ user.facebookId }}
-                    </td>
-                </tr>
-            {% endif %}
-            {% if user.googleId %}
-                <tr>
-                    <td width="30%">{{ "Registered using Google"|trans }} <i class="fab fa-google fa-sm btn-youtube ml-2 p-2"></i></td>
-                    <td>
-                        Google Id: {{ user.googleId }}
-                    </td>
-                </tr>
-            {% endif %}
-            {% if user.facebookProfilePicture %}
-                <tr>
-                    <td width="30%">{{ "Facebook profile picture"|trans }}</td>
-                    <td>
-                        <a class="fancybox" href="{{ user.facebookProfilePicture }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
-                            <img src="{{ user.facebookProfilePicture }}" class="img-thumbnail img-50-50" />
-                        </a>
-                    </td>
-                </tr>
-            {% endif %} 
-            {% if user.birthdate %}
-                <tr>
-                    <td width="30%">{{ "Birthdate"|trans }}</td>
-                    <td>
-                        {{ user.birthdate | date(date_format_date_only) }}
-                    </td>
-                </tr>
-            {% endif %}
-            {#  
-            {% if user.stringifyAddress %}
-                <tr>
-                    <td width="30%">{{ "Address"|trans }}</td>
-                    <td>
-                        {{ user.stringifyAddress }}
-                    </td>
-                </tr>
-            {% endif %}
-            #}
-        </tbody>
+			{% if user.facebookId %}
+				<tr>
+					<td width="30%">{{ "Registered using Facebook"|trans }}
+						<i class="fab fa-facebook-f fa-sm btn-facebook ml-2 p-2"></i>
+					</td>
+					<td>
+						{{ "Facebook Id"|trans }}:
+						{{ user.facebookId }}
+					</td>
+				</tr>
+			{% endif %}
+			{% if user.googleId %}
+				<tr>
+					<td width="30%">{{ "Registered using Google"|trans }}
+						<i class="fab fa-google fa-sm btn-youtube ml-2 p-2"></i>
+					</td>
+					<td>
+						{{ "Google Id"|trans }}:
+						{{ user.googleId }}
+					</td>
+				</tr>
+			{% endif %}
+			{% if user.facebookProfilePicture %}
+				<tr>
+					<td width="30%">{{ "Facebook profile picture"|trans }}</td>
+					<td>
+						<a class="fancybox" href="{{ user.facebookProfilePicture }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+							<img src="{{ user.facebookProfilePicture }}" class="img-thumbnail img-50-50"/>
+						</a>
+					</td>
+				</tr>
+			{% endif %}
+			{% if user.birthdate %}
+				<tr>
+					<td width="30%">{{ "Birthdate"|trans }}</td>
+					<td>
+						{{ user.birthdate | date(date_format_date_only) }}
+					</td>
+				</tr>
+			{% endif %}
+			{% if user.stringifyAddress %}
+				<tr>
+					<td width="30%">{{ "Address"|trans }}</td>
+					<td>
+						{{ user.stringifyAddress }}
+					</td>
+				</tr>
+			{% endif %}
+		</tbody>
 	</table>
 </div>
 {% if user.hasRole('ROLE_CREATOR') %}
-    <div class="table-responsive overflow-y-hidden">
-        <table class="table mb-0 text-nowrap table-hover table-centered">
-            <thead class="">
-                <tr>
-                    <th colspan="2">
-                        <i class="bi bi-file text-muted"></i>  {{ "Creator information"|trans }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {#  
-                <tr>
-                    <td width="30%">{{ "Avatar"|trans }}</td>
-                    <td>
-                        {% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
-                    </td>
-                </tr>
-                #}
-                <tr>
-                    <td width="30%">{{ "Cart elements"|trans }}</td>
-                    <td>
-                        {{ user.cartelements | length }}
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30%">{{ "Bought subscriptions"|trans }}</td>
-                    <td>
-                        {{ user.getOrdersQuantitySum }}
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30%">{{ "Reviews"|trans }}</td>
-                    <td>
-                        {{ user.reviews | length }}
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30%">{{ "Favorites"|trans }}</td>
-                    <td>
-                        {{ user.favorites | length }}
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30%">{{ "Following"|trans }}</td>
-                    <td>
-                        {{ user.following | length }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+	<div class="table-responsive overflow-y-hidden">
+		<table class="table mb-0 text-nowrap table-hover table-centered">
+			<thead class="">
+				<tr>
+					<th colspan="2">
+						<i class="bi bi-file text-muted"></i>
+						{{ "Creator information"|trans }}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#  
+				                <tr>
+				                    <td width="30%">{{ "Avatar"|trans }}</td>
+				                    <td>
+				                        {% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
+				                    </td>
+				                </tr>
+				                #}
+				<tr>
+					<td width="30%">{{ "Cart elements"|trans }}</td>
+					<td>
+						{{ user.cartelements | length }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Bought subscriptions"|trans }}</td>
+					<td>
+						{{ user.getOrdersQuantitySum }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Reviews"|trans }}</td>
+					<td>
+						{{ user.reviews | length }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Favorites"|trans }}</td>
+					<td>
+						{{ user.favorites | length }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Following"|trans }}</td>
+					<td>
+						{{ user.following | length }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 {% elseif user.hasRole('ROLE_RESTAURANT') %}
-
+	<div class="table-responsive overflow-y-hidden">
+		<table class="table mb-0 text-nowrap table-hover table-centered">
+			<thead class="">
+				<tr>
+					<th colspan="2">
+						<i class="bi bi-file text-muted"></i>
+						{{ "Restauranter information"|trans }}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+                {#  
+				{% if user.restaurant.logoName %}
+					<tr>
+						<td width="30%">{{ "Logo"|trans }}</td>
+						<td>
+							<a class="fancybox" href="{{ asset(user.restaurant.getLogoPath) }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+								<img src="{{ asset(user.restaurant.getLogoPath) }}" class="img-thumbnail img-50-50"/>
+							</a>
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.coverName %}
+					<tr>
+						<td width="30%">{{ "Cover picture"|trans }}</td>
+						<td>
+							<a class="fancybox" href="{{ asset(user.restaurant.getCoverPath) }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+								<img src="{{ asset(user.restaurant.getCoverPath) }}" class="img-thumbnail img-50-50"/>
+							</a>
+						</td>
+					</tr>
+				{% endif %}
+                #}
+				<tr>
+					<td width="30%">{{ "Name"|trans }}</td>
+					<td>
+						{{ user.restaurant.name | default('') }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Profile views"|trans }}</td>
+					<td>
+						{{ user.restaurant.views | default('') }}
+					</td>
+				</tr>
+				{% if user.restaurant.content | default('') %}
+					<tr>
+						<td width="30%">{{ "Description"|trans }}</td>
+						<td>
+							{{ user.restaurant.content | striptags }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.country | default('') %}
+					<tr>
+						<td width="30%">{{ "Country"|trans }}</td>
+						<td>
+							{{ user.restaurant.country.name }}
+						</td>
+					</tr>
+				{% endif %}
+				<tr>
+					<td width="30%">{{ "Is featured on the homepage slider?"|trans }}</td>
+					<td>
+						{{ user.isrestaurantonhomepageslider ? "Yes"|trans : "No"|trans }}
+					</td>
+				</tr>
+                {#
+				<tr>
+					<td width="30%">{{ "Recipes"|trans }}</td>
+					<td>
+						{{ user.restaurant.recipes | length }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Venues"|trans }}</td>
+					<td>
+						{{ user.restaurant.venues | length}}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Scanners"|trans }}</td>
+					<td>
+						{{ user.restaurant.scanners | length}}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Points of sale"|trans }}</td>
+					<td>
+						{{ user.restaurant.pointofsales | length}}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Followed by"|trans }}</td>
+					<td>
+						{{ user.restaurant.followedby | length}}
+					</td>
+				</tr>
+				{% if user.restaurant.categories | length %}
+					<tr>
+						<td width="30%">{{ "Main categories"|trans }}</td>
+						<td>
+							{{ user.restaurant.displayCategories }}
+						</td>
+					</tr>
+				{% endif %}
+                #}
+				{% if user.restaurant.website | default('') %}
+					<tr>
+						<td width="30%">{{ "Website"|trans }}</td>
+						<td>
+							{{ user.restaurant.website }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.phone | default('') %}
+					<tr>
+						<td width="30%">{{ "Phone number"|trans }}</td>
+						<td>
+							{{ user.restaurant.phone }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.facebook | default('') %}
+					<tr>
+						<td width="30%">{{ "Facebook"|trans }}</td>
+						<td>
+							{{ user.restaurant.facebook }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.twitter | default('') %}
+					<tr>
+						<td width="30%">{{ "Twitter"|trans }}</td>
+						<td>
+							{{ user.restaurant.twitter }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.instagram | default('') %}
+					<tr>
+						<td width="30%">{{ "Instagram"|trans }}</td>
+						<td>
+							{{ user.restaurant.instagram }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.googleplus | default('') %}
+					<tr>
+						<td width="30%">{{ "Google plus"|trans }}</td>
+						<td>
+							{{ user.restaurant.googleplus }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.linkedin | default('') %}
+					<tr>
+						<td width="30%">{{ "LinkedIn"|trans }}</td>
+						<td>
+							{{ user.restaurant.linkedin }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.youtubeurl | default('') %}
+					<tr>
+						<td width="30%">{{ "Youtube video"|trans }}</td>
+						<td>
+							{{ user.restaurant.youtubeurl }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.showvenuesmap | default('') %}
+					<tr>
+						<td width="30%">{{ "Show venues map"|trans }}</td>
+						<td>
+							{{ user.restaurant.showvenuesmap ? "Yes"|trans : "No"|trans }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.showfollowers | default('') %}
+					<tr>
+						<td width="30%">{{ "Show followers"|trans }}</td>
+						<td>
+							{{ user.restaurant.showfollowers ? "Yes"|trans : "No"|trans }}
+						</td>
+					</tr>
+				{% endif %}
+				{% if user.restaurant.showreviews | default('') %}
+					<tr>
+						<td width="30%">{{ "Show reviews"|trans }}</td>
+						<td>
+							{{ user.restaurant.showreviews ? "Yes"|trans : "No"|trans }}
+						</td>
+					</tr>
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
 {% elseif user.hasRole('ROLE_SCANNER') %}
-
+	<div class="table-responsive overflow-y-hidden">
+		<table class="table mb-0 text-nowrap table-hover table-centered">
+			<thead class="">
+				<tr>
+					<th colspan="2">
+						<i class="bi bi-file text-muted"></i>
+						{{ "Scanner information"|trans }}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td width="30%">{{ "Name"|trans }}</td>
+					<td>
+						{{ user.scanner.name }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Assigned recipes"|trans }}</td>
+					<td>
+						{{ user.scanner.recipedates | length }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 {% elseif user.hasRole('ROLE_POINTOFSALE') %}
-
+	<div class="table-responsive overflow-y-hidden">
+		<table class="table mb-0 text-nowrap table-hover table-centered">
+			<thead class="">
+				<tr>
+					<th colspan="2">
+						<i class="bi bi-file text-muted"></i>
+						{{ "Point of sale information"|trans }}
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td width="30%">{{ "Name"|trans }}</td>
+					<td>
+						{{ user.pointofsale.name }}
+					</td>
+				</tr>
+				<tr>
+					<td width="30%">{{ "Assigned recipes"|trans }}</td>
+					<td>
+						{{ user.pointofsale.recipedates | length }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 {% endif %}

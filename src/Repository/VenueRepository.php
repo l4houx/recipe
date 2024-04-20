@@ -22,7 +22,7 @@ class VenueRepository extends ServiceEntityRepository
         parent::__construct($registry, Venue::class);
     }
 
-    public function getVenues($restaurant, $isOnline, $keyword, $country, $venuetypes, $directory, $slug, $limit, $minseatedguests, $maxseatedguests, $minstandingguests, $maxstandingguests, $count, $restaurantEnabled): QueryBuilder
+    public function getVenues($restaurant, $isOnline, $keyword, $country, $venuetypes, $directory, $slug, $limit, $minseatedguests, $maxseatedguests, $minstandingguests, $maxstandingguests, $count): QueryBuilder
     {
         $qb = $this->createQueryBuilder('v');
 
@@ -32,21 +32,11 @@ class VenueRepository extends ServiceEntityRepository
             $qb->select('v');
         }
 
-        // if ($restaurant !== "all" || $restaurantEnabled !== "all") {
         if ('all' !== $restaurant) {
             $qb->innerJoin('v.restaurant', 'restaurant');
         }
         if ('all' !== $restaurant) {
             $qb->andWhere('restaurant.slug = :restaurant')->setParameter('restaurant', $restaurant);
-        }
-
-        /*if ($restaurantEnabled !== "all") {
-            $qb->innerJoin("restaurant.user", "user");
-            $qb->andWhere("user.isVerified = :userEnabled")->setParameter("userEnabled", $restaurantEnabled);
-        }*/
-
-        if ('all' !== $keyword || 'all' !== $slug) {
-            $qb->join('v.translations', 'translations');
         }
 
         if ('all' !== $country) {
@@ -75,7 +65,7 @@ class VenueRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $directory) {
-            $qb->andWhere('v.listedondirectory = :listedondirectory')->setParameter('listedondirectory', $directory);
+            $qb->andWhere('v.isListedondirectory = :isListedondirectory')->setParameter('isListedondirectory', $directory);
         }
 
         if ('all' !== $slug) {

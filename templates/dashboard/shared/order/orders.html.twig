@@ -41,8 +41,8 @@
                     </div>
                     <div class="col-lg-3 col-md-5 col-12">
                         <select class="form-select">
-                            {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "o.createdAt", {"direction": "desc", "criteria": "o.createdAt"}) }}
-                            {{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "o.createdAt", {"direction": "asc", "criteria": "o.createdAt"}) }}
+                            <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "o.createdAt", {"direction": "desc", "criteria": "o.createdAt"}) }}</option>
+                            <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "o.createdAt", {"direction": "asc", "criteria": "o.createdAt"}) }}</option>
                         </select>
                     </div>
                 </form>

@@ -31,9 +31,9 @@ class VenueController extends BaseController
         $minstandingguests = '' == $request->query->get('minstandingguests') ? 'all' : $request->query->get('minstandingguests');
         $maxstandingguests = '' == $request->query->get('maxstandingguests') ? 'all' : $request->query->get('maxstandingguests');
 
-        $venues = $paginator->paginate($this->settingService->getVenues(['directory' => true, 'keyword' => $keyword, 'country' => $country, 'venuetypes' => $venuetypes, 'minseatedguests' => $minseatedguests, 'maxseatedguests' => $maxseatedguests, 'minstandingguests' => $minstandingguests, 'maxstandingguests' => $maxstandingguests]), $request->query->getInt('page', 1), 8);
+        $rows = $paginator->paginate($this->settingService->getVenues(['directory' => true, 'keyword' => $keyword, 'country' => $country, 'venuetypes' => $venuetypes, 'minseatedguests' => $minseatedguests, 'maxseatedguests' => $maxseatedguests, 'minstandingguests' => $minstandingguests, 'maxstandingguests' => $maxstandingguests]), $request->query->getInt('page', 1), 4);
 
-        return $this->render('venue/venues.html.twig', compact('venues'));
+        return $this->render('venue/venues.html.twig', compact('rows'));
     }
 
     #[Route(path: '/venue/{slug}', name: 'venue', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]

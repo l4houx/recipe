@@ -87,6 +87,36 @@ class HomepageHeroSettingFormType extends AbstractType
                 'label' => t('Custom hero background image'),
                 'translation_domain' => 'messages',
             ])
+            ->add('customBlockOneFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_label' => false,
+                'download_uri' => false,
+                'image_uri' => false,
+                'imagine_pattern' => 'scale',
+                'label' => t('Custom hero background image'),
+                'translation_domain' => 'messages',
+            ])
+            ->add('customBlockTwoFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_label' => false,
+                'download_uri' => false,
+                'image_uri' => false,
+                'imagine_pattern' => 'scale',
+                'label' => t('Custom hero background image'),
+                'translation_domain' => 'messages',
+            ])
+            ->add('customBlockThreeFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_label' => false,
+                'download_uri' => false,
+                'image_uri' => false,
+                'imagine_pattern' => 'scale',
+                'label' => t('Custom hero background image'),
+                'translation_domain' => 'messages',
+            ])
             ->add('show_search_box', ChoiceType::class, [
                 'required' => false,
                 'multiple' => false,

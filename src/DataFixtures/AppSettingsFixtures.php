@@ -238,6 +238,7 @@ class AppSettingsFixtures extends Fixture
                 'custom_block_three_name' => 'hero-block-3.svg',
                 'show_search_box' => 1,
             ],
+            /*
             2 => [
                 'title' => 'Discover Recipe',
                 'paragraph' => 'Uncover the best recipes',
@@ -252,6 +253,7 @@ class AppSettingsFixtures extends Fixture
                 'custom_background_name' => 'homepage.jpg',
                 'show_search_box' => 1,
             ],
+            */
         ];
 
         foreach ($homepages as $key => $value) {

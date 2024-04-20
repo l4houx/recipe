@@ -81,4 +81,17 @@ return [
     'fontawesome-iconpicker' => [
         'version' => '3.2.0',
     ],
+    'nouislider' => [
+        'version' => '15.7.1',
+    ],
+    'nouislider/dist/nouislider.min.css' => [
+        'version' => '15.7.1',
+        'type' => 'css',
+    ],
+    'tiny-slider' => [
+        'version' => '2.9.4',
+    ],
+    'feather-icons' => [
+        'version' => '4.29.1',
+    ],
 ];

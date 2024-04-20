@@ -36,9 +36,27 @@
                         </div>
                         <div id="custom">
                             {{ form_row(form.customBackgroundFile) }}
+                            <div class="mb-6 mb-lg-8">
+                                <h5 class="mb-3">{{ 'Main hero background (910x995)'|trans }}</h5>
+                                <img src="{{ homepageherosetting.customBackgroundName ? asset(homepageherosetting.getCustomBackgroundPath) : homepageherosetting.getCustomBackgroundPlaceholder }}" alt="img" class="img-4by3-lg rounded">
+                            </div>
+                            {{ form_row(form.customBlockOneFile) }}
+                            <div class="mb-6 mb-lg-8">
+                                <h5 class="mb-3">{{ 'Main image one (241x154)'|trans }}</h5>
+                                <img src="{{ homepageherosetting.CustomBlockOneName ? asset(homepageherosetting.getCustomBlockOnePath) : homepageherosetting.getCustomBlockOnePlaceholder }}" alt="img" class="img-4by3-lg rounded">
+                            </div>
+                            {{ form_row(form.customBlockTwoFile) }}
+                            <div class="mb-6 mb-lg-8">
+                                <h5 class="mb-3">{{ 'Main image two (241x154)'|trans }}</h5>
+                                <img src="{{ homepageherosetting.CustomBlockTwoName ? asset(homepageherosetting.getCustomBlockTwoPath) : homepageherosetting.getCustomBlockTwoPlaceholder }}" alt="img" class="img-4by3-lg rounded">
+                            </div>
+                            {{ form_row(form.customBlockThreeFile) }}
+                            <div class="mb-6 mb-lg-8">
+                                <h5 class="mb-3">{{ 'Main image three (241x154)'|trans }}</h5>
+                                <img src="{{ homepageherosetting.CustomBlockThreeName ? asset(homepageherosetting.getCustomBlockThreePath) : homepageherosetting.getCustomBlockThreePlaceholder }}" alt="img" class="img-4by3-lg rounded">
+                            </div>
                             {{ form_row(form.show_search_box) }}
                         </div>
-                        {# <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button> #}
                     {{ form_end(form) }}
                 </div>
             </div>

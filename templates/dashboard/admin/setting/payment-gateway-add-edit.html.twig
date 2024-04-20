@@ -28,7 +28,6 @@
                 <div class="card-body">
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
                         {{ form_widget(form) }}
-                        <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button>
                     {{ form_end(form) }}
                 </div>
             </div>
@@ -37,6 +36,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script>
         $(document).ready(function () {
             $("#payment_gateway_factoryName").change(function () {

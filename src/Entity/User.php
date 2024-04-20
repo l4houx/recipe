@@ -7,7 +7,6 @@ use App\Entity\Setting\HomepageHeroSetting;
 use App\Entity\Traits\HasDeletedAtTrait;
 use App\Entity\Traits\HasLimit;
 use App\Entity\Traits\HasNotifiableTrait;
-// use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Entity\Traits\HasPremiumTrait;
 use App\Entity\Traits\HasProfileDetailsTrait;
 use App\Entity\Traits\HasRoles;
@@ -325,21 +324,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     public function getRole(): string
     {
         if ($this->hasRole(HasRoles::CREATOR)) {
-            return 'Creator';
+            return '<span class="badge me-2 bg-success-soft">Creator</span>';
         } elseif ($this->hasRole(HasRoles::RESTAURANT)) {
-            return 'Restaurant';
+            return '<span class="badge me-2 bg-primary-soft">Restaurant</span>';
         } elseif ($this->hasRole(HasRoles::POINTOFSALE)) {
-            return 'Point of sale';
+            return '<span class="badge me-2 bg-success-soft">Point of sale</span>';
         } elseif ($this->hasRole(HasRoles::SCANNER)) {
-            return 'Scanner';
+            return '<span class="badge me-2 bg-info-soft">Scanner</span>';
         } elseif ($this->hasRole(HasRoles::SUPERADMIN) || $this->hasRole(HasRoles::ADMINAPPLICATION)) {
-            return 'Administrator';
+            return '<span class="badge me-2 bg-danger">Administrator</span>';
         } elseif ($this->hasRole(HasRoles::ADMIN)) {
-            return 'Admin';
+            return '<span class="badge me-2 bg-info">Admin</span>';
         } elseif ($this->hasRole(HasRoles::MODERATOR)) {
-            return 'Moderator';
+            return '<span class="badge me-2 bg-secondary">Moderator</span>';
         } else {
-            return 'N/A';
+            return '<span class="badge me-2 bg-primary">N/A</span>';
         }
     }
 

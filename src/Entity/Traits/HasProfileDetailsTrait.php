@@ -19,9 +19,6 @@ trait HasProfileDetailsTrait
     use HasRegistrationDetailsTrait;
     use HasGedmoTimestampTrait;
 
-    // #[ORM\Column(type: Types::STRING, length: 2, nullable: true, options: ['default' => 'FR'])]
-    // private ?string $country = null;
-
     #[ORM\Column(type: Types::STRING, options: ['default' => null], nullable: true)]
     private ?string $theme = null;
 
@@ -71,20 +68,6 @@ trait HasProfileDetailsTrait
     {
         return (string) $this->getFullName();
     }
-
-    /*
-    public function getCountry(): string
-    {
-        return $this->country ?: 'FR';
-    }
-
-    public function setCountry(?string $country): static
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-    */
 
     public function getTheme(): ?string
     {

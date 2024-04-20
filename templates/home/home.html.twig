@@ -16,22 +16,77 @@
     {% endif %}
 
     {% if herosettings.content == "restaurants" and herosettings.restaurants | length %}
-
-        {% for user in herosettings.restaurants %}
-
-            {% if user.restaurant.coverName %}
-
-            {% endif %}
-
-        {% endfor %}
-
+        <section class="bg-primary">
+            <div class="container">
+                {% for user in herosettings.restaurants %}
+                    {% if user.restaurant.coverName %}
+                        <div class="row align-items-center g-0">
+                            <div class="col-xl-5 col-lg-6 col-md-12">
+                                <div class="py-7 py-lg-0">
+                                    <h1 class="text-white display-4 fw-bold">{{ user.restaurant.name }}</h1>
+                                    {% if user.restaurant.content %}
+                                        <p class="text-white-50 mb-4 lead">{{ user.restaurant.content | striptags }}</p>
+                                    {% endif %}
+                                    <a href="{{ path('recipes', { restaurant : user.restaurant.slug }) }}" class="btn btn-dark">
+                                        {{ "Buy tickets"|trans }}
+                                    </a>
+                                    <a href="#" class="btn btn-white">Are You Creator?</a>
+                                </div>
+                            </div>
+                            <div class="col-xl-7 col-lg-6 col-md-12 text-lg-end text-center">
+                                <img src="{{ asset(user.restaurant.getCoverPath) }}" alt="{{ user.restaurant.name }}" class="img-fluid">
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        <section class="bg-white py-4 shadow-sm">
+            <div class="container">
+                <div class="row align-items-center g-0">
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-lg-0 mb-4">
+                        <div class="d-flex align-items-center">
+                            <span class="icon-shape icon-lg bg-light-warning rounded-circle text-center text-dark-warning fs-4">
+                                <i class="bi bi-book"></i>
+                            </span>
+                            <div class="ms-3">
+                                <h4 class="mb-0 fw-semibold">30,000 online restauranters</h4>
+                                <p class="mb-0">Enjoy a variety of fresh topics</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-lg-0 mb-4">
+                        <div class="d-flex align-items-center">
+                            <span class="icon-shape icon-lg bg-light-warning rounded-circle text-center text-dark-warning fs-4">
+                                <i class="bi bi-people"></i>
+                            </span>
+                            <div class="ms-3">
+                                <h4 class="mb-0 fw-semibold">Expert instruction</h4>
+                                <p class="mb-0">Find the right instructor for you</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12">
+                        <div class="d-flex align-items-center">
+                            <span class="icon-shape icon-lg bg-light-warning rounded-circle text-center text-dark-warning fs-4">
+                                <i class="bi bi-alarm"></i>
+                            </span>
+                            <div class="ms-3">
+                                <h4 class="mb-0 fw-semibold">Lifetime access</h4>
+                                <p class="mb-0">Learn on your schedule</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     {% endif %}
 
     {% if herosettings.content == "custom" %}
         <section class="bg-light py-8 bg-cover">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-8 col-12">
+                    <div class="col-lg-6 col-12">
                         <div>
                             <div class="text-center text-md-start">
                             {% if herosettings.title %}
@@ -48,11 +103,6 @@
                                             <form action="{{ path('recipes') }}" class="row g-1">
                                                 <div class="col-12 col-md-3">
                                                     <div class="input-group mb-2 mb-md-0 border-md-0 border rounded-pill">
-                                                        <span class="input-group-text bg-transparent border-0 pe-0 ps-md-3 ps-md-0" id="hero-search-category">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
-                                                            </svg>
-                                                        </span>
                                                         <label for="hero-search-category" class="form-label text-dark visually-hidden">
                                                             {{ "Looking for"|trans }}
                                                         </label>
@@ -66,12 +116,6 @@
                                                 </div>
                                                 <div class="col-12 col-md-3">
                                                     <div class="input-group mb-3 mb-md-0 border-md-0 border rounded-pill">
-                                                        <span class="input-group-text bg-transparent border-0 pe-0 ps-md-0" id="hero-search-country">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
-                                                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
-                                                            </svg>
-                                                        </span>
                                                         <label for="hero-search-country" class="form-label text-dark visually-hidden">
                                                             {{ "In"|trans }}
                                                         </label>
@@ -85,12 +129,6 @@
                                                 </div>
                                                 <div class="col-12 col-md-3">
                                                     <div class="input-group mb-3 mb-md-0 border-md-0 border rounded-pill">
-                                                        <span class="input-group-text bg-transparent border-0 pe-0 ps-md-0" id="hero-search-stardate">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
-                                                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
-                                                            </svg>
-                                                        </span>
                                                         <label for="hero-search-stardate" class="form-label text-dark visually-hidden">
                                                             {{ "When"|trans }}
                                                         </label>
@@ -112,12 +150,12 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <span class="fs-4">Currently listing 30,642 jobs from 5,717 companies</span>
+                                    <span class="fs-4"></span>
                                 </div>
                             {% endif %}
                         </div>
                     </div>
-                    <div class="offset-lg-1 col-lg-3 col-12 text-center">
+                    <div class="offset-lg-1 col-lg-5 col-12 text-center">
                         <div class="position-relative d-none d-lg-block">
                             {% if herosettings.customBackgroundName %}
                                 <img src="{{ herosettings.getCustomBackgroundPath }}" class="img-fluid" alt="img">
@@ -224,10 +262,10 @@
         </section>
     {% endif %}
 
-    {% if setting.getSettings('homepage_recipes_number') %}
-        {% set homepageRecipes = setting.getRecipes({"limit": setting.getSettings('homepage_recipes_number')}).getQuery().getResult() %}
-        {% if homepageRecipes | length > 0 %}
-            
+    {% if setting.getSettings('homepage_recipes_number') > 0 %}
+        {% set latestRecipes = setting.getRecipes({"limit": setting.getSettings('homepage_recipes_number')}).getQuery().getResult() %}
+        {% if latestRecipes | length > 0 %}
+
         {% endif %}
     {% endif %}
 
@@ -281,8 +319,8 @@
     {% endif %}
 
     {% if setting.getSettings('homepage_posts_number') > 0 %}
-        {% set latestblogposts = setting.getBlogPosts({"limit": setting.getSettings('homepage_posts_number')}).getQuery().getResult() %}
-        {% if latestblogposts | length %}
+        {% set latestPosts = setting.getBlogPosts({"limit": setting.getSettings('homepage_posts_number')}).getQuery().getResult() %}
+        {% if latestPosts | length %}
             <section class="py-lg-8 py-6">
                 <div class="container my-lg-8">
                     <div class="row">
@@ -297,7 +335,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        {% for post in latestblogposts %}
+                        {% for post in latestPosts %}
                             {% include "global/post-card.html.twig" with {post: post, thumbnailsize: [241, 241]} %}
                         {% endfor %}
                         <div class="col-xl-12 col-md-12 col-12">
@@ -314,8 +352,8 @@
     {% endif %}
 
     {% if setting.getSettings('homepage_testimonials_number') > 0 %}
-        {% set latesttestimonials = setting.getTestimonials({"limit": 2, "order": "DESC", "isOnline": true}).getQuery().getResult() %}
-        {% if latesttestimonials | length %}
+        {% set latestTestimonials = setting.getTestimonials({"limit": 2, "order": "DESC", "isOnline": true}).getQuery().getResult() %}
+        {% if latestTestimonials | length %}
             <section class="py-7 py-lg-8 bg-gray-100">
                 <div class="container my-lg-8">
                     <div class="row mb-8 justify-content-center">
@@ -328,7 +366,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        {% for testimonial in latesttestimonials %}
+                        {% for testimonial in latestTestimonials %}
                             {% include "global/testimonial-card.html.twig" with {testimonial: testimonial} %}
                         {% endfor %}
                     </div>

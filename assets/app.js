@@ -1,12 +1,33 @@
-//import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/css/app.min.css';
-import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
-
-// Dark Mode
+/* darkmode js */
 import './vendor/darkMode.js';
 
+/* Libs CSS */
+/*
+import './vendor/@fortawesome/fontawesome-free/css/all.min.css';
+import './vendor/bootstrap-icons/font/bootstrap-icons.min.css';
+import './vendor/feather-icons/dist/feather-icons.css';
+import './vendor/simplebar/dist/simplebar.min.css';
+import './vendor/nouislider/dist/nouislider.min.css';
+import './vendor/tiny-slider/tiny-slider.css';
+*/
+
+/* Theme CSS */
+import './styles/css/app.min.css';
+
 // loads the Bootstrap plugins
-import './vendor/jquery/jquery.index.js'
+//import './vendor/jquery/jquery.index.js';
+
+
+/* Scripts */
+//import './vendor/nouislider/nouislider.index.js';
+
+/* Libs JS */
+import './vendor/@popperjs/core/core.index.js';
+import './vendor/bootstrap/bootstrap.index.js';
+//import './vendor/simplebar/dist/simplebar.min.js';
+//import './vendor/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js';
+//import './vendor/tiny-slider/tiny-slider.index.js';
+
 
 /*
 import canvasConfetti from 'canvas-confetti';
@@ -16,15 +37,10 @@ document.body.addRecipeListener('click', () => {
 })
 */
 
-
-
-import './vendor/simplebar/dist/simplebar.min.css';
-import './vendor/simplebar/simplebar.index.js';
-
 // start the Stimulus application
 import './bootstrap.js';
 
-//import './vendor/darkMode.js';
+/* Theme JS */
 import './js/theme.min.js';
 
 $(document).ready(function () {

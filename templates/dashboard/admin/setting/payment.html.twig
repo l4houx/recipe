@@ -1,3 +1,5 @@
+{% extends 'admin.html.twig' %}
+
 {% set pagetitle = 'Payment settings'|trans %}
 {% block title pagetitle %}
 
@@ -33,7 +35,6 @@
                 <div class="card-body">
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation', 'name': 'payment_settings'} }) }}
                         {{ form_widget(form) }}
-                        <button type="submit" class="btn btn-primary">{{ 'Update'|trans }}</button>
                     {{ form_end(form) }}
                 </div>
             </div>
@@ -65,6 +66,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script>
         $(document).ready(function () {
             $('#form_subscription_fee_pos').closest('.form-group').hide();

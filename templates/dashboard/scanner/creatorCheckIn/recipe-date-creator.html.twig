@@ -40,8 +40,8 @@
                             <div class="col-sm-12 col-lg-6 text-center text-lg-right">
                                 <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
                                     <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
-                                        {{ knp_pagination_sortable(tickets, "Order date"|trans ~ ' (' ~ "desc"|trans ~ ')', "t.createdAt", {"direction": "desc", "criteria": "t.createdAt"}) }}
-                                        {{ knp_pagination_sortable(tickets, "Order date"|trans ~ ' (' ~ "asc"|trans ~ ')', "t.createdAt", {"direction": "asc", "criteria": "t.createdAt"}) }}
+                                        <option value="">{{ knp_pagination_sortable(tickets, "Order date"|trans ~ ' (' ~ "desc"|trans ~ ')', "t.createdAt", {"direction": "desc", "criteria": "t.createdAt"}) }}</option>
+                                        <option value="">{{ knp_pagination_sortable(tickets, "Order date"|trans ~ ' (' ~ "asc"|trans ~ ')', "t.createdAt", {"direction": "asc", "criteria": "t.createdAt"}) }}</option>
                                     </select>
                                 </label>
                             </div>
