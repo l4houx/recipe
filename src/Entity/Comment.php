@@ -28,20 +28,17 @@ class Comment
 
     public const COMMENT_LIMIT = HasLimit::COMMENT_LIMIT;
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $email = null;
-
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $username = null;
-
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    //#[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
-    #[ORM\JoinColumn(onDelete: 'CASCADE', nullable: true)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false)]
     private ?User $author = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(onDelete: 'CASCADE', nullable: false, name: 'post_id')]
-    private Post $target;
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    // #[ORM\JoinColumn(nullable: false)]
+    private ?Post $post = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    // #[ORM\JoinColumn(nullable: false)]
+    private ?Venue $venue = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'replies')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
@@ -75,32 +72,6 @@ class Comment
         $this->replies = new ArrayCollection();
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(?string $email): void
-    {
-        $this->email = $email;
-    }
-
-    public function getUsername(): string
-    {
-        if (null !== $this->author) {
-            return $this->author->getUsername();
-        }
-
-        return $this->username ?: '';
-    }
-
-    public function setUsername(?string $username): static
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
     public function getAuthor(): ?User
     {
         return $this->author;
@@ -113,14 +84,26 @@ class Comment
         return $this;
     }
 
-    public function getTarget(): ?Post
+    public function getPost(): ?Post
     {
-        return $this->target;
+        return $this->post;
     }
 
-    public function setTarget(?Post $target): static
+    public function setPost(?Post $post): static
     {
-        $this->target = $target;
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getVenue(): ?Venue
+    {
+        return $this->venue;
+    }
+
+    public function setVenue(?Venue $venue): static
+    {
+        $this->venue = $venue;
 
         return $this;
     }
@@ -150,6 +133,18 @@ class Comment
         if (!$this->replies->contains($comment)) {
             $this->replies->add($comment);
             $comment->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReply(self $comment): static
+    {
+        if ($this->replies->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getParent() === $this) {
+                $comment->setParent(null);
+            }
         }
 
         return $this;

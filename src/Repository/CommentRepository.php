@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Post;
 use App\Entity\User;
+use App\Entity\Venue;
 use App\Entity\Recipe;
 use App\Entity\Comment;
 use Doctrine\ORM\Query;
@@ -47,13 +48,72 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findForPagination(int $page): PaginationInterface // (PostCommentController)
+    /**
+     * @return array<array-key, Comment>
+     */
+    public function getCommentsByEntityAndPage($value, int $page): array
     {
-        $builder = $this->createQueryBuilder('c')
+        if ($value instanceof Post) {
+            $object = 'post';
+        }
+
+        if ($value instanceof Venue) {
+            $object = 'venue';
+        }
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.'.$object.' = :val')
             ->andWhere('c.isApproved = true')
-            ->orderBy('c.publishedAt', 'DESC')
-            ->join('c.target', 't')
-            ->leftJoin('c.author', 'a')
+            ->setParameter('val', $value->getId())
+            ->orderBy('c.id', 'DESC')
+            ->setMaxResults(HasLimit::COMMENT_LIMIT)
+            ->setFirstResult(($page - 1) * HasLimit::COMMENT_LIMIT)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findRecentComments($value)
+    {
+        if ($value instanceof Post) {
+            $object = 'post';
+        }
+
+        if ($value instanceof Venue) {
+            $object = 'venue';
+        }
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.'.$object.' = :val')
+            ->andWhere('c.isApproved = true')
+            ->setParameter('val', $value->getId())
+            ->orderBy('c.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findForPagination($value, int $page): PaginationInterface // (PostCommentController)
+    {
+        if ($value instanceof Post) {
+            $object = 'post';
+        }
+
+        if ($value instanceof Venue) {
+            $object = 'venue';
+        }
+
+        $builder = $this->createQueryBuilder('c')
+            ->andWhere('c.'.$object.' = :val')
+            ->andWhere('c.isApproved = true')
+            ->setParameter('val', $value->getId())
+            ->orderBy('c.id', 'DESC')
+
+
+            //->andWhere('c.isApproved = true')
+            //->orderBy('c.publishedAt', 'DESC')
+            //->join('c.target', 't')
+            //->leftJoin('c.author', 'a')
         ;
 
         return $this->paginator->paginate(
@@ -78,8 +138,10 @@ class CommentRepository extends ServiceEntityRepository
     public function findLastByUser(User $user, int $maxResults): array //  (UserController)
     {
         return $this->createQueryBuilder('c')
-            ->join('c.target', 't')
-            ->where('t.isOnline = true')
+            ->join('c.post', 'p')
+            ->where('p.isOnline = true')
+            ->join('c.venue', 'v')
+            ->where('v.isOnline = true')
             ->andWhere('c.author = :user')
             ->andWhere('c.isApproved = true')
             ->orderBy('c.publishedAt', 'DESC')

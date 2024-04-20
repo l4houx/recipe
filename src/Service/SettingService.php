@@ -238,6 +238,26 @@ class SettingService
         }
     }
 
+    // Returns the comments after applying the specified search criterias
+    public function getComments($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        $isApproved = array_key_exists('isApproved', $criterias) ? $criterias['isApproved'] : true;
+        $isRGPD = array_key_exists('isRGPD', $criterias) ? $criterias['isRGPD'] : true;
+        $ip = \array_key_exists('ip', $criterias) ? $criterias['ip'] : 'all';
+        $keyword = \array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $author = array_key_exists('author', $criterias) ? $criterias['author'] : 'all';
+        $post = array_key_exists('post', $criterias) ? $criterias['post'] : 'all';
+        $venue = array_key_exists('venue', $criterias) ? $criterias['venue'] : 'all';
+        $parent = array_key_exists('parent', $criterias) ? $criterias['parent'] : 'all';
+        $limit = \array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'createdAt';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
+
+        return $this->em->getRepository("App\Entity\Comment")->getComments($isApproved, $isRGPD, $ip, $keyword, $slug, $author, $post, $venue, $parent,$limit, $order, $sort);
+    }
+
     // Returns the pages after applying the specified search criterias
     public function getPages($criterias): QueryBuilder
     {

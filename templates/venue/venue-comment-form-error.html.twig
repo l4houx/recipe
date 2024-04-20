@@ -7,7 +7,7 @@
 {% block title pagetitle %}
 
 {% block breadcrumb %}
-    {% set breadcrumb = [{ (path('post_article', { slug: post.slug })): post.title, "current" : (pagetitle) }] %}
+    {% set breadcrumb = [{ (path('venue', { slug: venue.slug })): venue.name, "current" : (pagetitle) }] %}
     {% include "global/breadcrumb.html.twig" with breadcrumb %}
 {% endblock %}
 
@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="offset-md-2 col-md-8 col-12">
                     <div class="mb-3">
-                        <p class="lead mb-8">{{ post.title }}</p>
+                        <p class="lead mb-8">{{ venue.name }}</p>
                         <div class="d-flex justify-content-between">
                             <span>{{ 'Contact Information'|trans }}</span>
                             <div class="text-end">

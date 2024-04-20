@@ -45,7 +45,8 @@ class PostController extends AbstractController
         }
 
         $page = $request->query->getInt('page', 1);
-        $comments = $this->commentRepository->findForPagination($page);
+        $comments = $this->commentRepository->findForPagination($post, $page);
+        //$comments = $this->commentRepository->findRecentComments($post);
 
         $post->viewed();
 

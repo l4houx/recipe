@@ -84,11 +84,10 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
             for ($k = 1; $k <= $this->faker()->numberBetween(1, 5); ++$k) {
                 $comment = (new Comment())
                     ->setIp($this->faker()->ipv4)
-                    //->setUsername()
                     ->setContent($this->faker()->paragraph())
                     ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
-                    ->setTarget($post)
-                    //->setParent()
+                    ->setPost($post)
+                    ->setParent(null)
                     ->setIsApproved($this->faker()->numberBetween(0, 1))
                     ->setIsRGPD(true)
                     ->setPublishedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))

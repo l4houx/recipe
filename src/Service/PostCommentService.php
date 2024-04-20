@@ -26,18 +26,18 @@ class PostCommentService
 
     public function createdComment(CommentDTO $data): Comment
     {
-        /** @var Post $target */
-        $target = $this->em->getRepository(Post::class)->find($data->target);
+        /** @var Post $post */
+        $post = $this->em->getRepository(Post::class)->find($data->target);
 
         /** @var Comment|null $parent */
         $parent = $data->parent ? $this->em->getReference(Comment::class, $data->parent) : null;
 
         $comment = (new Comment())
             ->setIp($this->requestStack->getMainRequest()?->getClientIp())
-            ->setUsername($data->username)
+            //->setUsername($data->username)
             ->setContent($data->content)
             ->setAuthor($this->securityService->getUserOrNull())
-            ->setTarget($target)
+            ->setPost($post)
             ->setParent($parent)
             ->setIsApproved(false)
             ->setIsRGPD(true)

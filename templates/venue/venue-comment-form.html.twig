@@ -1,5 +1,5 @@
 <h2 class="mb-4 fw-semibold">{{ 'Leave a comment'|trans }}</h2>
-{{ form_start(form, {method: 'post', action: path('post_comment_add', {'slug': post.slug}), attr: {novalidate: 'novalidate', class: 'row gx-3 needs-validation', id: 'comment-form'} }) }}
+{{ form_start(form, {method: 'post', action: path('venue_comment_add', {'slug': venue.slug}), attr: {novalidate: 'novalidate', class: 'row gx-3 needs-validation', id: 'comment-form'} }) }}
     {{ form_errors(form) }}
     <div class="mb-3 col-12">
         {{ form_row(form.content) }}

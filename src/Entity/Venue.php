@@ -129,12 +129,20 @@ class Venue
     #[ORM\InverseJoinColumn(name: 'amenity_id', referencedColumnName: 'id')]
     private Collection $amenities;
 
+    /**
+     * @var collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'venue', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OrderBy(['publishedAt' => 'DESC'])]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->seatingPlans = new ArrayCollection();
         $this->recipedates = new ArrayCollection();
         $this->amenities = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getDescription(): string
@@ -499,6 +507,36 @@ class Venue
     public function removeAmenity(Amenity $amenity): static
     {
         $this->amenities->removeElement($amenity);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setVenue($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getVenue() === $this) {
+                $comment->setVenue(null);
+            }
+        }
 
         return $this;
     }

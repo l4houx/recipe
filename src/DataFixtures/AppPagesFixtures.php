@@ -81,7 +81,7 @@ class AppPagesFixtures extends Fixture
             ],
         ];
 
-        // Create 9 Pages
+        // Create 10 Pages
         foreach ($pages as $key => $value) {
             $page = (new Page())
                 ->setTitle($value['title'])
@@ -99,40 +99,87 @@ class AppPagesFixtures extends Fixture
     private function getContentMarkdown(): string
     {
         return <<<'MARKDOWN'
-            Lorem ipsum dolor sit amet consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et **dolore magna aliqua**: Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum.
-
-              * Ut enim ad minim veniam
-              * Quis nostrud exercitation *ullamco laboris*
-              * Nisi ut aliquip ex ea commodo consequat
-
-            Praesent id fermentum lorem. Ut est lorem, fringilla at accumsan nec, euismod at
-            nunc. Aenean mattis sollicitudin mattis. Nullam pulvinar vestibulum bibendum.
-            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-            himenaeos. Fusce nulla purus, gravida ac interdum ut, blandit eget ex. Duis a
-            luctus dolor.
-
-            Integer auctor massa maximus nulla scelerisque accumsan. *Aliquam ac malesuada*
-            ex. Pellentesque tortor magna, vulputate eu vulputate ut, venenatis ac lectus.
-            Praesent ut lacinia sem. Mauris a lectus eget felis mollis feugiat. Quisque
-            efficitur, mi ut semper pulvinar, urna urna blandit massa, eget tincidunt augue
-            nulla vitae est.
-
-            Ut posuere aliquet tincidunt. Aliquam erat volutpat. **Class aptent taciti**
-            sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi
-            arcu orci, gravida eget aliquam eu, suscipit et ante. Morbi vulputate metus vel
-            ipsum finibus, ut dapibus massa feugiat. Vestibulum vel lobortis libero. Sed
-            tincidunt tellus et viverra scelerisque. Pellentesque tincidunt cursus felis.
-            Sed in egestas erat.
-
-            Aliquam pulvinar interdum massa, vel ullamcorper ante consectetur eu. Vestibulum
-            lacinia ac enim vel placerat. Integer pulvinar magna nec dui malesuada, nec
-            congue nisl dictum. Donec mollis nisl tortor, at congue erat consequat a. Nam
-            tempus elit porta, blandit elit vel, viverra lorem. Sed sit amet tellus
-            tincidunt, faucibus nisl in, aliquet libero.
+            <h1 class="fw-bold mb-3">This is a H1, Perfect's for titles.</h1>
+            <p class="fs-4 mb-4">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Stress, for the United States element ante.
+                Duis cursus, mi quis viverra ornare, eros pain, sometimes none at all, freedom of
+                the living creature was as the profit and financial security. Jasmine neck adapter and just running
+                it lorem makeup sad smile of the television set.
+            </p>
+            <p class="mb-1 fs-4">
+                <span class="text-dark fw-semibold">Email:</span>
+                hello@yourdomain.com
+            </p>
+            <p class="mb-1 fs-4">
+                <span class="text-dark fw-semibold">Address:</span>
+                52, Komal Villas, Mansarovar Vadodara - 374321
+            </p>
+            <div class="d-flex mt-5">
+                <div>
+                    <h3 class="fw-bold">A</h3>
+                </div>
+                <div class="ms-3">
+                    <h3 class="fw-bold">This is a H3's perfect for the titles.</h3>
+                    <p class="fs-4">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Stress, for the United States
+                        element ante. Duis cursus, mi quis viverra ornare, eros pain, none at all, freedom of the
+                        living creature was as the profit and financial security. Jasmine neck adapter and just
+                        running it lorem makeup hairstyle. Now sad smile of the television set.
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex mt-3">
+                <div>
+                    <h3 class="fw-bold">B</h3>
+                </div>
+                <div class="ms-3">
+                    <h3 class="fw-bold">This is a H3's perfect for the titles.</h3>
+                    <p class="fs-4">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Stress, for the United States
+                        element ante. Duis cursus, mi quis viverra ornare, eros pain, none at all, freedom of the
+                        living creature was as the profit and financial security. Jasmine neck adapter and just
+                        running it lorem makeup hairstyle. Now sad smile of the television set.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-5">
+                <h2 class="fw-bold">This is a H2's perfect for the titles.</h2>
+                <p class="fs-4">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Stress, for the United States element
+                    ante. Duis cursus, mi quis viverra ornare, eros pain , sometimes none at all, freedom
+                    of the living creature was as the profit and financial security. Jasmine neck adapter and just
+                    running it lorem makeup hairstyle. Now sad smile of the television set.
+                </p>
+                <ul class="fs-4">
+                    <li>More than 60+ components</li>
+                    <li>Five ready tests</li>
+                    <li>Coming soon page</li>
+                    <li>Check list with left icon</li>
+                    <li>And much more ...</li>
+                </ul>
+            </div>
+            <div class="mt-5">
+                <h2 class="fw-bold">This is a H2's perfect for the titles.</h2>
+                <p class="fs-4">
+                    Geeks ui takes the privacy of its users very seriously. For the current our Privacy Policy,
+                    please click
+                    <a href="#">here</a>
+                    .
+                </p>
+                <p class="mb-6 fs-4">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cursus, mi quis viverra ornare,
+                    eros pain, sometimes none at all, freedom of the living creature was as the profit and
+                    financial security. Jasmine neck adapter and just running it lorem makeup hairstyle. Now sad
+                    smile of the television set.
+                </p>
+                <h2 class="fw-bold">Changes about terms</h2>
+                <p class="fs-4">If we change our terms of use we will post those changes on this page. Registered
+                    users will be sent an email that outlines changes made to the terms of use.</p>
+                <p class="fs-4">
+                    Questions? Please email us at
+                    <a href="#">hello@yourdomain.com</a>
+                </p>
+            </div>
             MARKDOWN;
     }
 }

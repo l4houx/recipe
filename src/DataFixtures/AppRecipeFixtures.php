@@ -2,32 +2,33 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\CartElement;
-use App\Entity\Category;
-use App\Entity\Country;
-use App\Entity\Ingredient;
-use App\Entity\PointOfSale;
-use App\Entity\Quantity;
-use App\Entity\Recipe;
-use App\Entity\RecipeDate;
-use App\Entity\RecipeImage;
-use App\Entity\RecipeSubscription;
-use App\Entity\Restaurant;
-use App\Entity\Review;
-use App\Entity\Scanner;
-use App\Entity\Setting\HomepageHeroSetting;
-use App\Entity\Setting\Language;
-use App\Entity\Testimonial;
 use App\Entity\User;
 use App\Entity\Venue;
+use App\Entity\Recipe;
+use App\Entity\Review;
+use App\Entity\Comment;
+use App\Entity\Country;
+use App\Entity\Scanner;
+use App\Entity\Category;
+use App\Entity\Quantity;
+use App\Entity\Ingredient;
+use App\Entity\RecipeDate;
+use App\Entity\Restaurant;
 use App\Entity\VenueImage;
+use App\Entity\CartElement;
+use App\Entity\PointOfSale;
+use App\Entity\RecipeImage;
+use App\Entity\Testimonial;
+use App\Entity\Setting\Language;
 use App\Entity\VenueSeatingPlan;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use App\Entity\RecipeSubscription;
 use Doctrine\Persistence\ObjectManager;
+use App\Entity\Setting\HomepageHeroSetting;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use FakerRestaurant\Provider\fr_FR\Restaurant as FakerRestaurant;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -284,6 +285,22 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
 
             $manager->persist($venue);
             $venues[] = $venue;
+
+            // Create Comments
+            for ($k = 1; $k <= $this->faker()->numberBetween(1, 5); ++$k) {
+                $comment = (new Comment())
+                    ->setIp($this->faker()->ipv4)
+                    ->setContent($this->faker()->paragraph())
+                    ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                    ->setVenue($venue)
+                    ->setParent(null)
+                    ->setIsApproved($this->faker()->numberBetween(0, 1))
+                    ->setIsRGPD(true)
+                    ->setPublishedAt(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
+                ;
+
+                $manager->persist($comment);
+            }
         }
 
         // Create 20 Venues Images

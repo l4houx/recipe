@@ -1,4 +1,4 @@
-<h2 class="mb-4 fw-semibold">{{ 'Leave a comment'|trans }}</h2>
+<h2 {{ attributes }} class="mb-4 fw-semibold">{{ 'Leave a comment'|trans }}</h2>
 {{ form_start(form, {method: 'post', action: path('post_comment_add', {'slug': post.slug}), attr: {novalidate: 'novalidate', class: 'row gx-3 needs-validation', id: 'comment-form'} }) }}
     {{ form_errors(form) }}
     <div class="mb-3 col-12">

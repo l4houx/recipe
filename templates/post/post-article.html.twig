@@ -60,7 +60,7 @@
                             {% include "global/user-avatar.html.twig" with { user: post.author, type: "md" } %}
                             <div class="ms-2 lh-1">
                                 <h5 class="mb-1">{{ 'Author'|trans }} {{ post.author.username }}</h5>
-                                <span class="text-primary">{{ post.author.getRole|trans }}</span>
+                                <span class="text-primary">{{ post.author.getRole|trans|raw }}</span>
                             </div>
                         </div>
                         <div>
@@ -92,7 +92,7 @@
                             {% include "global/user-avatar.html.twig" with { user: post.author, type: "md" } %}
                             <div class="ms-2 lh-1">
                                 <h5 class="mb-1">{{ 'Author'|trans }} {{ post.author.username }}</h5>
-                                <span class="text-primary">{{ post.author.getRole|trans }}</span>
+                                <span class="text-primary">{{ post.author.getRole|trans|raw }}</span>
                             </div>
                         </div>
                         <div>
@@ -123,7 +123,7 @@
                     </div>
                     {% set post_comments_enabled = setting.getSettings("post_comments_enabled") %}
                     {% if '0' != settings["post_comments_enabled"] %}
-                        {% if is_granted('ROLE_USER') %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <div class="mb-5">
                                 <div class="card border">
                                     <div class="card-body p-5">
@@ -151,7 +151,7 @@
                             {% if comments.getTotalItemCount > 0 %}
                                 {% for comment in comments %}
                                     {% if comment.parent == null %}
-                                        {% include 'post/_post-comment.html.twig' %}
+                                        {% include 'global/comment.html.twig' %}
                                     {% endif %}
                                 {% endfor %}
                                 {{ knp_pagination_render(comments, null, {}, {'align': 'center'}) }}

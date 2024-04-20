@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
-use App\Entity\Post;
+use App\Entity\Venue;
 use App\Form\CommentFormType;
 use App\Repository\CommentRepository;
 use App\Service\CommentsService;
@@ -18,60 +18,60 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PostCommentController extends AbstractController
+class VenueCommentController extends AbstractController
 {
-    #[Route(path: '/post-comment/{slug}/add', name: 'post_comment_add', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['POST'])]
+    #[Route(path: '/venue-comment/{slug}/add', name: 'venue_comment_add', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED')]
-    public function postcommentAdd(
+    public function venuecommentAdd(
         Request $request,
-        #[MapEntity(mapping: ['slug' => 'slug'])] Post $post,
+        #[MapEntity(mapping: ['slug' => 'slug'])] Venue $venue,
         CommentsService $commentsService,
         CommentRepository $commentRepository,
         EntityManagerInterface $em,
         TranslatorInterface $translator
     ): Response {
-        $comments = $commentRepository->findRecentComments($post);
+        $comments = $commentRepository->findRecentComments($venue);
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment)->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $comment = $form->getData();
-                $commentsService->createdComment($form, $comment, $post, null);
+                $commentsService->createdComment($form, $comment, null, $venue);
 
                 $this->addFlash('success', $translator->trans('Your comment has been sent, thank you. It will be published after validation by a moderator.'));
             } else {
                 $this->addFlash('danger', $translator->trans('The form contains invalid data'));
             }
 
-            return $this->redirectToRoute('post_article', ['slug' => $post->getSlug()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('venue', ['slug' => $venue->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('post/post-comment-form-error.html.twig', compact('comments', 'post', 'form'));
+        return $this->render('venue/venue-comment-form-error.html.twig', compact('comments', 'venue', 'form'));
     }
 
-    public function form(Post $post): Response
+    public function form(Venue $venue): Response
     {
         $form = $this->createForm(CommentFormType::class);
 
-        return $this->render('post/post-comment-form.html.twig', compact('post', 'form'));
+        return $this->render('venue/venue-comment-form.html.twig', compact('venue', 'form'));
     }
 
-    #[Route(path: '/post-comment/comment/{id<[0-9]+>}', name: 'post_comment_delete', methods: ['POST'])]
+    #[Route(path: '/venue-comment/comment/{id<[0-9]+>}', name: 'venue_comment_delete', methods: ['POST'])]
     #[Security("is_granted('ROLE_USER') and user === comment.getAuthor()")]
-    public function postcommentDeleted(
+    public function venuecommentDeleted(
         Request $request,
         CommentsService $commentsService,
         Comment $comment,
         TranslatorInterface $translator
     ): Response {
-        $params = ['slug' => $comment->getPost()->getSlug()];
+        $params = ['slug' => $comment->getVenue()->getSlug()];
 
         if ($this->isCsrfTokenValid('comment_deletion_'.$comment->getId(), $request->request->get('csrf_token'))) {
             $commentsService->deletedComment($comment);
             $this->addFlash('success', $translator->trans('Your comment has been successfully deleted.'));
         }
 
-        return $this->redirectToRoute('post_article', $params);
+        return $this->redirectToRoute('venue', $params);
     }
 }

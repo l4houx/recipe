@@ -62,25 +62,21 @@ class Post
     private ?PostCategory $category = null;
 
     /**
-     * //@var collection<int, Comment>
+     * @var collection<int, Comment>
      */
-    /*
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true, cascade: ['persist'])]
     #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $comments;
-    */
 
     public function __toString(): string
     {
         return sprintf('#%d %s', $this->getId(), $this->getTitle());
     }
 
-    /*
     public function __construct()
     {
         $this->comments = new ArrayCollection();
     }
-    */
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -168,9 +164,8 @@ class Post
     }
 
     /**
-     * //@return Collection<int, Comment>
+     * @return Collection<int, Comment>
      */
-    /*
     public function getComments(): Collection
     {
         return $this->comments;
@@ -180,7 +175,7 @@ class Post
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setTarget($this);
+            $comment->setPost($this);
         }
 
         return $this;
@@ -190,19 +185,13 @@ class Post
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getTarget() === $this) {
-                $comment->setTarget(null);
+            if ($comment->getPost() === $this) {
+                $comment->setPost(null);
             }
         }
 
         return $this;
     }
-
-    public function getActiveComments(): Collection
-    {
-        return $this->getComments()->matching(CommentRepository::createIsActiveCriteria());
-    }
-    */
 
     public function hasVideo(): bool
     {

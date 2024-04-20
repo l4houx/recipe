@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Venue;
+use App\Service\SettingService;
 use App\Form\VenueQuoteFormType;
 use App\Service\SendMailService;
-use App\Service\SettingService;
+use App\Repository\CommentRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class VenueController extends BaseController
 {
     public function __construct(
-        private readonly SettingService $settingService
+        private readonly SettingService $settingService,
+        private readonly CommentRepository $commentRepository
     ) {
     }
 
@@ -69,6 +71,9 @@ class VenueController extends BaseController
             }
         }
 
-        return $this->render('venue/venue.html.twig', compact('form', 'venue'));
+        $page = $request->query->getInt('page', 1);
+        $comments = $this->commentRepository->findForPagination($venue, $page);
+
+        return $this->render('venue/venue.html.twig', compact('form', 'comments', 'venue'));
     }
 }
