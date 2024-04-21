@@ -25,11 +25,11 @@
         {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <div class="mb-3">
-            <label for="text">{{ 'User name or email :'|trans }}</label>
+            <label for="text" class="form-label required">{{ 'User name or email :'|trans }}</label>
             <input type="text" id="text" class="form-control" name="username" placeholder="{{ 'Email address here'|trans }}" value="{{ last_username }}"  autocomplete="username" required autofocus>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">{{ 'Password'|trans }}</label>
+            <label for="password" class="form-label required">{{ 'Password :'|trans }}</label>
             <input type="password" id="password" class="form-control" name="password" placeholder="**************" autocomplete="current-password" required>
         </div>
         <div class="d-lg-flex justify-content-between align-items-center mb-4">

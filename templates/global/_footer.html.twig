@@ -81,6 +81,11 @@
                                 </a>
                             </li>
                         {% endfor %}
+                        <li>
+                            {% if not app.user or not app.user.premium  %}
+                                <a class="nav-link" href="{{ path('pricing') }}">{{ 'Pricing'|trans }}</a>
+                            {% endif %}
+                        </li>
                     </ul>
                 </div>
             </div>

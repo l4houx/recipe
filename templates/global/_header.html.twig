@@ -197,7 +197,14 @@
                         </li> 
                     {% endif %}
                 {% endfor %}
-
+                {% if not app.user or not app.user.premium  %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if routename == "pricing" %}active{% endif %}" href="{{ path('pricing') }}">
+                            <i class="fas fa-p fa-fw"></i>
+                            {{ 'Pricing'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
                 {#  
                     <li class="nav-item">
                         <a class="nav-link {% if routename == "home" %}active{% endif %}" href="{{ path('home') }}">{{ "Home"|trans }}</a>

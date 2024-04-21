@@ -2579,6 +2579,12 @@ progress {
   margin-bottom: 0.5rem;
 }
 
+.col-form-label.required:after,
+label.required:after {
+  content: "*";
+  color: var(--bs-danger);
+}
+
 .col-form-label,
 .form-label {
   color: var(--bs-form-label-color);

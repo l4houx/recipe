@@ -27,22 +27,27 @@ class HelpCenterSupportFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => t('Name :'),
+                'label' => t('Your name :'),
+                'purify_html' => true,
                 'empty_data' => '',
                 'required' => true,
+                'attr' => ['placeholder' => t('Your name')],
             ])
             ->add('email', EmailType::class, [
                 'label' => t('Email address :'),
+                'purify_html' => true,
                 'empty_data' => '',
                 'required' => true,
+                'attr' => ['placeholder' => t('Email address here')],
             ])
             ->add('message', TextareaType::class, [
                 'label' => t('Message :'),
+                'purify_html' => true,
                 'empty_data' => '',
                 'required' => true,
                 'attr' => [
-                    'rows' => 10,
-                    'cols' => 30,
+                    'placeholder' => t('Write down here'),
+                    'rows' => 6
                 ],
             ])
             ->add('service', ChoiceType::class, options: [
