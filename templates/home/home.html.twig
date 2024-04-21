@@ -376,6 +376,7 @@
     {% endif %}
 
     {% if '1' == settings["homepage_show_call_to_action"] %}
+        {#  
         <section class="py-8 bg-gray-200">
             <div class="container my-lg-8">
                 <div class="row">
@@ -395,6 +396,31 @@
                         </h2>
                         <p class="lead px-lg- 8 mb-6"></p>
                         <a href="{{ path('dashboard_restaurant_recipe_new') }}" class="btn btn-primary">{{ "Create my recipe"|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        #}
+
+        <section class="py-8 bg-gray-200"
+            style="background: url('{{ asset('images/background/homepage-graphics.svg') }}') no-repeat; background-size: cover; background-position: top center">
+            <div class="container my-lg-8">
+                <div class="row justify-content-center text-center">
+                    <div class="col-md-9 col-12">
+                        <h2 class="display-4">{{ "Are you ready to take your"|trans }}</h2>
+                        <p class="lead px-lg-8 mb-6">
+                            {% for category in setting.getCategories({ "isFeatured": true, "limit": 9 }).getQuery().getResult() %}
+                                {{ category.name | lower }}
+                                {% if not loop.last %}|{% endif %}
+                            {% endfor %}
+                            {{ "recipe to the next level ?"|trans }}
+                        </p>
+                        <div class="d-grid d-md-block">
+                            <a href="{{ path('dashboard_restaurant_recipe_new') }}" class="btn btn-primary mb-2 mb-md-0">
+                                {{ "Create my recipe"|trans }}
+                            </a>
+                            <a href="../sign-up.html" class="btn btn-info">Business</a>
+                        </div>
                     </div>
                 </div>
             </div>

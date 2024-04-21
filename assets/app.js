@@ -22,8 +22,8 @@ import './styles/css/app.min.css';
 //import './vendor/nouislider/nouislider.index.js';
 
 /* Libs JS */
-import './vendor/@popperjs/core/core.index.js';
-import './vendor/bootstrap/bootstrap.index.js';
+//import './vendor/@popperjs/core/core.index.js';
+//import './vendor/bootstrap/bootstrap.index.js';
 //import './vendor/simplebar/dist/simplebar.min.js';
 //import './vendor/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js';
 //import './vendor/tiny-slider/tiny-slider.index.js';
@@ -89,6 +89,26 @@ $(document).ready(function () {
                 format: 'Y-m-d',
                 timepicker: false
             });
+        });
+    }
+
+    // Initializes word rotator
+    if ($('.rotate-words').length) {
+        $('.rotate-words').Morphext({
+            animation: "fadeIn",
+            separator: "|",
+            speed: 2000,
+        });
+    }
+
+    if ($('#js-rotating').length) {
+        $("#js-rotating").Morphext({
+            animation: "fadeIn", // Overrides default "bounceIn"
+            separator: "|", // Overrides default ","
+            speed: 2000, // Overrides default 2000
+            complete: function () {
+                // Overrides default empty function
+            }
         });
     }
 

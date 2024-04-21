@@ -17,38 +17,53 @@ class AppPricingFixtures extends Fixture
     {
         $pricings = [
             1 => [
-                'btn' => 'outline-primary',
-                'imageName' => 'starter.svg',
-                'title' => 'Starter',
-                'subtitle' => 'Starter account 1 month',
-                'symbol' => '$',
-                'price' => 5,
+                'border' => 'dark-warning',
+                'btn' => 'outline-dark-warning',
+                'btntitle' => 'Get Started for Free',
+                'title' => 'Free',
+                'subtitle' => 'Free account <span class="text-dark fw-medium">1</span> month',
+                'price' => 0,
+                'pricetitle' => "It's Free",
                 'duration' => 1,
                 'monthly' => 'Monthly',
-                'stripe_id' => 'price_1HfQctFCMNgisvowhVOcdXr1',
+                'stripe_id' => null,
             ],
             2 => [
+                'border' => 'dark-primary',
                 'btn' => 'primary',
-                'imageName' => 'premium.svg',
+                'btntitle' => 'Start Today',
+                'title' => 'Starter',
+                'subtitle' => 'Starter account <span class="text-dark fw-medium">1</span> month',
+                'price' => 5,
+                'pricetitle' => null,
+                'duration' => 1,
+                'monthly' => 'Monthly',
+                'stripe_id' => null,
+            ],
+            3 => [
+                'border' => 'dark-info',
+                'btn' => 'outline-dark-info',
+                'btntitle' => 'Contact Sales',
                 'title' => 'Premium',
-                'subtitle' => 'Premium account 12 months',
-                'symbol' => '$',
+                'subtitle' => 'Premium account <span class="text-primary fw-medium">12</span> months.',
                 'price' => 50,
+                'pricetitle' => null,
                 'duration' => 12,
                 'monthly' => 'Yearly',
-                'stripe_id' => 'price_1HfQd2FCMNgisvowxxEQMysm',
+                'stripe_id' => null,
             ],
         ];
 
         foreach ($pricings as $key => $value) {
             $pricing = (new Pricing())
+                ->setBorder($value['border'])
                 ->setBtn($value['btn'])
-                ->setImageName($value['imageName'])
+                ->setBtnTitle($value['btntitle'])
                 ->setTitle($value['title'])
                 ->setSubTitle($value['subtitle'])
-                ->setSymbol($value['symbol'])
-                ->setPrice($value['price'])
-                ->setDuration($value['duration'])
+                ->setPrice((float)$value['price'])
+                ->setPriceTitle($value['pricetitle'])
+                ->setDuration((int)$value['duration'])
                 ->setMonthly($value['monthly'])
                 ->setStripeId($value['stripe_id'])
             ;
