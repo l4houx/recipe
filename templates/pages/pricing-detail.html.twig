@@ -1,5 +1,6 @@
 {% extends 'page.html.twig' %}
 
+{% set bodyClass = 'bg-white' %}
 {% set pagetitle = 'Become a premium member'|trans %}
 {% block title pagetitle %}
 
@@ -23,8 +24,8 @@
 				<div class="col-lg-6 col-12">
 					<div class="mb-8">
 						<h2 class="display-4 fw-bold mb-4 pe-8">
-							Compare plan &amp;
-							<span class="text-primary">additional features</span>
+							{{ 'Compare plan &amp;'|trans }}
+							<span class="text-primary">{{ 'additional features'|trans }}</span>
 						</h2>
 						<p class="lead">Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.</p>
 					</div>
@@ -66,27 +67,27 @@
 								</tr>
 								<tr>
 									<td class="border-top-0 ps-0" colspan="5">Unlimited viewers</td>
-									<td class="border-top-0 ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="border-top-0 ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="border-top-0 ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 								<tr>
 									<td class="ps-0" colspan="5">Public packages</td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 								<tr>
 									<td class="ps-0" colspan="5">Cross-platform Desktop app</td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 								<tr>
 									<td class="ps-0" colspan="5">Sketch &amp; Figma import</td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 							</tbody>
 							<tbody class="border-top-0">
@@ -105,27 +106,27 @@
 
 								<tr>
 									<td class="border-top-0 ps-0" colspan="5">Community support</td>
-									<td class="border-top-0 ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="border-top-0 ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="border-top-0 ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 								<tr>
 									<td class="ps-0" colspan="5">Email support</td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 								<tr>
 									<td class="ps-0" colspan="5">Dedicated account manager</td>
-									<td class="ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 								<tr>
 									<td class="ps-0" colspan="5">Sketch &amp; Figma import</td>
-									<td class="ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 							</tbody>
 							<tbody class="border-top-0">
@@ -144,22 +145,22 @@
 
 								<tr>
 									<td class="border-top-0 ps-0" colspan="5">Smart Components</td>
-									<td class="border-top-0 ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="border-top-0 ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="border-top-0 ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="border-top-0 ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 
 								<tr>
 									<td class="ps-0" colspan="5">Custom Fonts</td>
-									<td class="ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 								<tr>
 									<td class="ps-0" colspan="5">Figma Files</td>
-									<td class="ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="ps-0"><i class="fe fe-x fs-3"></i></td>
-									<td class="ps-0"><i class="fe fe-check fs-3 text-success"></i></td>
+									<td class="ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="ps-0"><i class="bi bi-x fs-3"></i></td>
+									<td class="ps-0"><i class="bi bi-check fs-3 text-success"></i></td>
 								</tr>
 							</tbody>
 						</table>
@@ -174,43 +175,30 @@
 				<div class="col-xl-6 col-lg-10 col-12">
 					<div class="mb-8 pe-8">
 						<h2 class="display-4 fw-bold mb-4">
-							Frequently asked questions,
-
-							<span class="text-primary">answered.</span>
+							{{ 'Frequently asked questions,'|trans }}
+							<span class="text-primary">{{ 'answered.'|trans }}</span>
 						</h2>
 						<p class="fs-4">
-							More questions? Visit the
-							<a href="#">Help Center.</a>
+							{{ 'More questions? Visit the'|trans }}
+							<a href="{{ path('help_center_faq') }}">{{ 'Help Center.'|trans }}</a>
 						</p>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-6 col-12">
-					<div class="mb-6 pe-lg-8">
-						<h3 class="mb-2">What is the cost of an online course?</h3>
-						<p class="fs-4">Create beautiful website with this Geeks UI template. Get started building a site today.</p>
-					</div>
+			{% if faqs | length > 0 %}
+				<div class="row">
+					{% for faq in faqs %}
+						<div class="col-md-6 col-12">
+							<div class="mb-6 pe-lg-8">
+								<h3 class="mb-2">{{ faq.question }}?</h3>
+								<p class="fs-4">{{ faq.answer | html_markdown_excerpt(100) | nl2br }}</p>
+							</div>
+						</div>
+					{% endfor %}
 				</div>
-				<div class="col-md-6 col-12">
-					<div class="mb-6 pe-lg-8">
-						<h3 class="mb-2">What do I need to take a course?</h3>
-						<p class="fs-4">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quae aspernatur autem consequatur placeat.</p>
-					</div>
-				</div>
-				<div class="col-md-6 col-12">
-					<div class="mb-6 pe-lg-8">
-						<h3 class="mb-2">What do I receive for taking this course?</h3>
-						<p class="fs-4">Sit amet lorem ipsum consectetur adipisicing elit. Officiis libero quibusdam minus ipsum saepe?</p>
-					</div>
-				</div>
-				<div class="col-md-6 col-12">
-					<div class="mb-6 pe-lg-8">
-						<h3 class="mb-2">What will I get if I subscribe to this Certificate?</h3>
-						<p class="fs-4">Dolor lorem ipsum sit amet consectetur adipisicing elit. Perspiciatis magnam dolorem.</p>
-					</div>
-				</div>
-			</div>
+			{% else %}
+				{% include "global/message.html.twig" with { type: "dark", message: ('No faqs found'|trans), icon: "bi bi-exclamation-circle" } %}
+			{% endif %}
 		</div>
 	</section>
 	<section class="py-8 ps-0 bg-light">
@@ -225,7 +213,7 @@
 									<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
 								</svg>
 							</span>
-							Geeks
+							
 						</h2>
 						<p class="fs-4">Our average call quality rating is 4.4 out of 5. That leads to happy tweets like these:</p>
 					</div>
@@ -241,7 +229,7 @@
 								</svg>
 							</span>
 							<p class="fs-3 text-dark fw-semibold">
-								"Geeks has created an incredibly seamless experience for app design. My mind is blown fusce consequat ligula in dui congue interdum."
+								" has created an incredibly seamless experience for app design. My mind is blown fusce consequat ligula in dui congue interdum."
 							</p>
 							<div class="d-flex mt-4 align-items-center">
 								<img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle">

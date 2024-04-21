@@ -44,39 +44,6 @@ class HelpCenterController extends AbstractController
         return $this->render('helpCenter/index.html.twig', compact('faqs'));
     }
 
-    #[Route('/{slug}', name: 'help_center_category', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function helpCenterCategory(Request $request, string $slug): Response
-    {
-        /** @var HelpCenterCategory $category */
-        $category = $this->settingService->getHelpCenterCategories(['slug' => $slug])->getQuery()->getOneOrNullResult();
-
-        if (!$category) {
-            $this->addFlash('danger', $this->translator->trans('The category not be found'));
-
-            return $this->redirectToRoute('help_center');
-        }
-
-        return $this->render('helpCenter/category.html.twig', compact('category'));
-    }
-
-    #[Route('/article/{slug}', name: 'help_center_article', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function helpCenterArticle(Request $request, string $slug, EntityManagerInterface $em): Response
-    {
-        /** @var HelpCenterArticle $article */
-        $article = $this->settingService->getHelpCenterArticles(['slug' => $slug])->getQuery()->getOneOrNullResult();
-
-        if (!$article) {
-            $this->addFlash('danger', $this->translator->trans('The article not be found'));
-            return $this->redirectToRoute('help_center');
-        }
-
-        $article->viewed();
-        $em->persist($article);
-        $em->flush();
-
-        return $this->render('helpCenter/article.html.twig', compact('article'));
-    }
-
     #[Route('/support', name: 'help_center_support', methods: ['GET', 'POST'])]
     public function helpCenterSupport(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
@@ -108,7 +75,7 @@ class HelpCenterController extends AbstractController
     }
 
     #[Route('/faq', name: 'help_center_faq', methods: ['GET'])]
-    public function helpCenterFaq(Request $reques): Response
+    public function helpCenterFaq(Request $request): Response
     {
         $faqs = $this->faqRepository->findAlls();
 
@@ -119,5 +86,38 @@ class HelpCenterController extends AbstractController
         }
 
         return $this->render('helpCenter/faq.html.twig', compact('faqs'));
+    }
+
+    #[Route('/{slug}', name: 'help_center_category', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function helpCenterCategory(Request $request, string $slug): Response
+    {
+        /** @var HelpCenterCategory $category */
+        $category = $this->settingService->getHelpCenterCategories(['slug' => $slug])->getQuery()->getOneOrNullResult();
+
+        if (!$category) {
+            $this->addFlash('danger', $this->translator->trans('The category not be found'));
+
+            return $this->redirectToRoute('help_center');
+        }
+
+        return $this->render('helpCenter/category.html.twig', compact('category'));
+    }
+
+    #[Route('/article/{slug}', name: 'help_center_article', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function helpCenterArticle(Request $request, string $slug, EntityManagerInterface $em): Response
+    {
+        /** @var HelpCenterArticle $article */
+        $article = $this->settingService->getHelpCenterArticles(['slug' => $slug])->getQuery()->getOneOrNullResult();
+
+        if (!$article) {
+            $this->addFlash('danger', $this->translator->trans('The article not be found'));
+            return $this->redirectToRoute('help_center');
+        }
+
+        $article->viewed();
+        $em->persist($article);
+        $em->flush();
+
+        return $this->render('helpCenter/article.html.twig', compact('article'));
     }
 }

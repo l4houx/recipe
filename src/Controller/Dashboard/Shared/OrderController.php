@@ -2,35 +2,38 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\BaseController;
-use App\Entity\Order;
-use App\Entity\Payment;
-use App\Entity\Recipe;
-use App\Entity\SubscriptionReservation;
-use App\Entity\Traits\HasRoles;
-use App\Service\SettingService;
-use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Knp\Component\Pager\PaginatorInterface;
-use Payum\Core\Request\GetHumanStatus;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
+use App\Entity\Order;
+use Twig\Environment;
+use App\Entity\Recipe;
+use App\Entity\Payment;
+use App\Form\CheckoutFormType;
+use App\Entity\Traits\HasRoles;
+use App\Service\SettingService;
+use App\Controller\BaseController;
 use Symfony\Component\Mime\Address;
+use Payum\Core\Request\GetHumanStatus;
+use App\Entity\SubscriptionReservation;
+use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+#[IsGranted(HasRoles::DEFAULT)]
 class OrderController extends BaseController
 {
     public function __construct(
@@ -84,7 +87,7 @@ class OrderController extends BaseController
                         return $this->redirectToRoute('dashboard_main');
                     }
                     // Check recipe quotas
-                    if ($orderelement->getRecipesubscription()->getSubscriptionsLeftCount(true, $this->getUser()) > 0 && $orderelement->getQuantity() > $orderelement->getRecipesubscription()->getSubscriptionsLeftCount(true, $this->getUser())) {
+                    if ($orderelement->getRecipeSubscription()->getSubscriptionsLeftCount(true, $this->getUser()) > 0 && $orderelement->getQuantity() > $orderelement->getRecipeSubscription()->getSubscriptionsLeftCount(true, $this->getUser())) {
                         $this->settingService->handleCanceledPayment($order->getReference(), $this->translator->trans('Your order has been automatically canceled because one or more recipe\'s quotas has changed'));
                         $this->addFlash('info', $this->translator->trans('Your order has been automatically canceled because one or more recipe\'s quotas has changed'));
 
@@ -404,6 +407,7 @@ class OrderController extends BaseController
     #[Route(path: '/%website_dashboard_path%/restaurant/manage-orders', name: 'dashboard_restaurant_orders', methods: ['GET'])]
     public function orders(Request $request, PaginatorInterface $paginator, AuthorizationCheckerInterface $authChecker): Response
     {
+        //$upcomingsubscriptions = ($request->query->get('upcomingsubscriptions')) == "" ? 1 : intval($request->query->get('upcomingsubscriptions'));
         $reference = '' == $request->query->get('reference') ? 'all' : $request->query->get('reference');
         $recipe = '' == $request->query->get('recipe') ? 'all' : $request->query->get('recipe');
         $recipedate = '' == $request->query->get('recipedate') ? 'all' : $request->query->get('recipedate');
@@ -751,7 +755,7 @@ class OrderController extends BaseController
         }
 
         $email = (new TemplatedEmail())
-            ->to(new Address($emailTo))
+            ->to(new Address((string)$emailTo))
             ->from(new Address(
                 $this->settingService->getSettings('website_no_reply_email'),
                 $this->settingService->getSettings('website_name')

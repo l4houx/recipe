@@ -17,8 +17,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * @method User getUser()
  */
-#[Route(path: '/%website_dashboard_path%/my-subscriptions', name: 'dashboard_subscription_')]
 #[IsGranted(HasRoles::DEFAULT)]
+#[Route(path: '/%website_dashboard_path%/my-subscriptions', name: 'dashboard_subscription_')]
 class SubscriptionController extends BaseController
 {
     public function __construct(

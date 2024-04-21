@@ -600,7 +600,7 @@ class SettingService
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $parent = \array_key_exists('parent', $criterias) ? $criterias['parent'] : 'all';
-        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = \array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = \array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = \array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
@@ -615,7 +615,7 @@ class SettingService
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $selecttags = \array_key_exists('selecttags', $criterias) ? $criterias['selecttags'] : false;
-        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $isFeatured = \array_key_exists('isFeatured', $criterias) ? $criterias['isFeatured'] : 'all';
         $keyword = \array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = \array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';

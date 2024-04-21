@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\SettingService;
+use App\Repository\FaqRepository;
 use App\Repository\UserRepository;
 use App\Repository\PricingRepository;
 use App\Repository\TestimonialRepository;
@@ -23,7 +24,7 @@ class PagesController extends AbstractController
     }
 
     #[Route(path: '/pricing', name: 'pricing', methods: ['GET'])]
-    public function pricing(PricingRepository $pricingRepository): Response
+    public function pricing(PricingRepository $pricingRepository, FaqRepository $faqRepository): Response
     {
         $pricings = $pricingRepository->findAllPricing();
 
@@ -33,7 +34,15 @@ class PagesController extends AbstractController
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('pages/pricing-detail.html.twig', compact('pricings'));
+        $faqs = $faqRepository->findAlls();
+
+        if (!$faqs) {
+            $this->addFlash('danger', $this->translator->trans('The faq can not be found'));
+
+            return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('pages/pricing-detail.html.twig', compact('pricings', 'faqs'));
     }
 
     #[Route(path: '/team', name: 'team', methods: ['GET'])]

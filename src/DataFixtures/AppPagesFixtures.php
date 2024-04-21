@@ -161,7 +161,7 @@ class AppPagesFixtures extends Fixture
             <div class="mt-5">
                 <h2 class="fw-bold">This is a H2's perfect for the titles.</h2>
                 <p class="fs-4">
-                    Geeks ui takes the privacy of its users very seriously. For the current our Privacy Policy,
+                    Yourdomain ui takes the privacy of its users very seriously. For the current our Privacy Policy,
                     please click
                     <a href="#">here</a>
                     .

@@ -202,7 +202,7 @@ class AppSettingsFixtures extends Fixture
         // Google
         $settings[] = new Setting('Google Recaptcha Secret Key', 'google_recaptcha_secret_key', '', TextType::class);
         $settings[] = new Setting('Google Recaptcha Site Key', 'google_recaptcha_site_key', '', TextType::class);
-        $settings[] = new Setting('Google Recaptcha Enabled', 'google_recaptcha_enabled', 0, CheckboxType::class);
+        $settings[] = new Setting('Google Recaptcha Enabled', 'google_recaptcha_enabled', true, CheckboxType::class);
         $settings[] = new Setting('Google Map API Key', 'google_maps_api_key', '', TextType::class);
         $settings[] = new Setting('Google Analytics', 'google_analytics_code', '', TextareaType::class);
 
@@ -217,8 +217,8 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Facebook Enabled', 'social_login_facebook_enabled', 0, CheckboxType::class);
 
         // Comment
-        $settings[] = new Setting('Venue Comments Enabled', 'venue_comments_enabled', 0, CheckboxType::class);
-        $settings[] = new Setting('Post Comments Enabledd', 'post_comments_enabled', 0, CheckboxType::class);
+        $settings[] = new Setting('Venue Comments Enabled', 'venue_comments_enabled', true, CheckboxType::class);
+        $settings[] = new Setting('Post Comments Enabledd', 'post_comments_enabled', true, CheckboxType::class);
         $settings[] = new Setting('Facebook Comments Enabled', 'facebook_app_id', '', TextType::class);
         $settings[] = new Setting('Disqus Comments Enabled', 'disqus_subdomain', '', TextType::class);
 
@@ -262,6 +262,9 @@ class AppSettingsFixtures extends Fixture
                 ->setParagraph($value['paragraph'])
                 ->setContent($value['content'])
                 ->setCustomBackgroundName($value['custom_background_name'])
+                ->setCustomBlockOneName($value['custom_block_one_name'])
+                ->setCustomBlockTwoName($value['custom_block_two_name'])
+                ->setCustomBlockThreeName($value['custom_block_three_name'])
                 ->setShowSearchBox((bool) $value['show_search_box'])
             ;
 
@@ -682,7 +685,7 @@ class AppSettingsFixtures extends Fixture
         foreach ($menuelements as $key => $value) {
             $menuelement = (new MenuElement())
                 ->setId($key)
-                ->setMenu($this->getReference('menu-'.$this->faker()->numberBetween(1, 4)))
+                ->setMenu($this->faker()->randomElement($this->getReference('menu-'.$this->faker()->numberBetween(1, 4))))
                 ->setLabel($value['label'])
                 ->setSlug($value['slug'])
                 ->setIcon($value['icon'])

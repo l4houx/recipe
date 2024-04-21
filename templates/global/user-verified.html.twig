@@ -1,4 +1,4 @@
-{% if user.isVerified %}
+{% if app.user and app.user.isVerified == false %}
     <a href="javascript:void(0);" class="position-absolute top-0 end-0 {{ class is defined ? class : '' }}" data-bs-toggle="tooltip" data-placement="top" aria-label="{{ 'Verified'|trans }}" data-bs-original-title="{{ 'Verified'|trans }}">
         <img src="{{ asset('images/svg/checked-mark.svg') }}" alt="checked" height="30" width="30">
     </a>

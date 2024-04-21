@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% set breadcrumb = [{ "help_center": ('Help center'|trans), "current":(pagetitle) }] %}
 	{% include "global/breadcrumb.html.twig" with breadcrumb %}
 {% endblock %}
 
