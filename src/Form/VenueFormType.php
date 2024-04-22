@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use App\Entity\Amenity;
 use App\Entity\Country;
 use App\Entity\Venue;
@@ -29,38 +28,24 @@ class VenueFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('translations', TranslationsType::class, [
-                'label' => 'Translation',
-                'fields' => [
-                    'name' => [
-                        'purify_html' => true,
-                        'locale_options' => [
-                            'en' => ['label' => 'Name'],
-                            'fr' => ['label' => 'Nom'],
-                            'es' => ['label' => 'Nombre'],
-                            'ar' => ['label' => 'اسم'],
-                            'pt' => ['label' => 'Nome do menu'],
-                            'de' => ['label' => 'Menüname'],
-                            'it' => ['label' => 'Nome'],
-                            'br' => ['label' => 'Nome'],
-                        ],
-                    ],
-                    'description' => [
-                        'field_type' => TextareaType::class,
-                        'attr' => ['class' => 'wysiwyg'],
-                        'locale_options' => [
-                            'en' => ['label' => 'Description'],
-                            'fr' => ['label' => 'Description'],
-                            'es' => ['label' => 'Descripción'],
-                            'ar' => ['label' => 'التفاصيل'],
-                            'pt' => ['label' => 'Descrição'],
-                            'de' => ['label' => 'Beschreibung'],
-                            'it' => ['label' => 'Descrizione'],
-                            'br' => ['label' => 'Descrição'],
-                        ],
-                    ],
-                ],
-                'excluded_fields' => ['slug'],
+            ->add('name', TextType::class, [
+                'label' => t('Name :'),
+                'required' => false,
+                'purify_html' => true,
+                'empty_data' => '',
+            ])
+            ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
+                'empty_data' => '',
+                'required' => false,
+                'help' => t('Field must contain an unique value.'),
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => t('Description :'),
+                'required' => true,
+                'empty_data' => '',
+                'attr' => ['class' => 'wysiwyg', 'placeholder' => '', 'rows' => 6],
+                'help' => t(''),
             ])
             ->add('type', EntityType::class, [
                 'required' => true,
@@ -83,6 +68,7 @@ class VenueFormType extends AbstractType
                     return $this->settingService->getAmenities([]);
                 },
             ])
+            /*
             ->add('seatedguests', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
@@ -95,16 +81,19 @@ class VenueFormType extends AbstractType
                 'label' => t('Standing guests number :'),
                 'attr' => ['class' => 'touchspin-integer', 'data-max' => 100000],
             ])
+            */
             ->add('neighborhoods', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Neighborhoods :'),
             ])
+            /*
             ->add('foodbeverage', TextareaType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Food and beverage details :'),
             ])
+            */
             ->add('pricing', TextareaType::class, [
                 'purify_html' => true,
                 'required' => false,
@@ -140,6 +129,8 @@ class VenueFormType extends AbstractType
                 'required' => true,
                 'label' => t('State :'),
             ])
+            ->add('country', CountryAutocompleteField::class, ['required' => true])
+            /*
             ->add('country', EntityType::class, [
                 'required' => true,
                 'class' => Country::class,
@@ -151,13 +142,14 @@ class VenueFormType extends AbstractType
                     return $this->settingService->getCountries([]);
                 },
             ])
+            */
             ->add('lat', HiddenType::class, [
                 'required' => false,
             ])
             ->add('lng', HiddenType::class, [
                 'required' => false,
             ])
-            ->add('showmap', ChoiceType::class, [
+            ->add('isShowmap', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,
@@ -165,7 +157,7 @@ class VenueFormType extends AbstractType
                 'choices' => ['No' => false, 'Yes' => true],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
             ])
-            ->add('quoteform', ChoiceType::class, [
+            ->add('isQuoteform', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
                 'expanded' => true,

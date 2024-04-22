@@ -2,9 +2,9 @@
 
 namespace App\Form;
 
-use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use App\Entity\VenueType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,24 +15,17 @@ class VenueTypeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('translations', TranslationsType::class, [
-                'label' => t('Translation :'),
-                'fields' => [
-                    'name' => [
-                        'purify_html' => true,
-                        'locale_options' => [
-                            'en' => ['label' => 'Name'],
-                            'fr' => ['label' => 'Nom'],
-                            'es' => ['label' => 'Nombre'],
-                            'ar' => ['label' => 'اسم'],
-                            'pt' => ['label' => 'Nome do menu'],
-                            'de' => ['label' => 'Menüname'],
-                            'it' => ['label' => 'Nome'],
-                            'br' => ['label' => 'Nome'],
-                        ],
-                    ],
-                ],
-                'excluded_fields' => ['slug'],
+            ->add('name', TextType::class, [
+                'label' => t('Name :'),
+                'required' => false,
+                'purify_html' => true,
+                'empty_data' => '',
+            ])
+            ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
+                'empty_data' => '',
+                'required' => false,
+                'help' => t('Field must contain an unique value.'),
             ])
         ;
     }

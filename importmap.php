@@ -16,6 +16,14 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'recipes' => [
+        'path' => './assets/js/recipes.js',
+        'entrypoint' => true,
+    ],
+    'recipe' => [
+        'path' => './assets/js/recipe.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -93,5 +101,11 @@ return [
     ],
     'feather-icons' => [
         'version' => '4.29.1',
+    ],
+    'typed.js' => [
+        'version' => '2.1.0',
+    ],
+    'tippy.js' => [
+        'version' => '6.3.7',
     ],
 ];

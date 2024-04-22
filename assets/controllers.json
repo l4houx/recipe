@@ -11,6 +11,15 @@
                 }
             }
         },
+        "@symfony/ux-dropzone": {
+            "dropzone": {
+                "enabled": true,
+                "fetch": "eager",
+                "autoimport": {
+                    "@symfony/ux-dropzone/dist/style.min.css": true
+                }
+            }
+        },
         "@symfony/ux-live-component": {
             "live": {
                 "enabled": true,
@@ -36,6 +45,12 @@
             },
             "mercure-turbo-stream": {
                 "enabled": false,
+                "fetch": "eager"
+            }
+        },
+        "@symfony/ux-typed": {
+            "typed": {
+                "enabled": true,
                 "fetch": "eager"
             }
         }

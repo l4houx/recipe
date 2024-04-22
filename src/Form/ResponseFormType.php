@@ -17,15 +17,17 @@ class ResponseFormType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class, [
-                'label' => t('Your message :'),
-                'empty_data' => '',
-                'attr' => [
-                    'rows' => 10,
-                    'cols' => 30,
-                ],
+                'label' => t("Content :"),
+                'purify_html' => true,
                 'required' => true,
+                'empty_data' => '',
+                'attr' => ['placeholder' => '', 'rows' => 6],
+                'help' => t(''),
             ])
-            ->add(t('Send'), SubmitType::class)
+            ->add('send', SubmitType::class, [
+                'label' => t('Send'),
+                'attr' => ['class' => 'btn btn-primary'],
+            ])
         ;
     }
 

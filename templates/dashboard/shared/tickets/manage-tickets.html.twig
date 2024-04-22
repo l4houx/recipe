@@ -1,0 +1,7 @@
+{% if app.request.attributes.get('_route') == 'dashboard_ticket_index' %}
+	{% for ticket in rows %}
+		{{ component('ticket', { 'ticket': ticket, 'hidden': true }) }}
+	{% endfor %}
+{% else %}
+	{{ component('ticket', { 'ticket': ticket }) }}
+{% endif %}

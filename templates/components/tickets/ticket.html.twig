@@ -1,30 +1,85 @@
-<article class="ticket {{ hidden ? 'dropdown-ticket'}}">
-	<div class="flex justify-between">
-		<div>
-			<span style="--bg-color: {{ticket.level.color}};">{{ticket.level.name}}</span>
-			<span style="--bg-color: {{ticket.status.color}};">{{ticket.status.name}}</span>
+<div class="border p-3 rounded-3 mb-2 {{ hidden ? 'dropdown-ticket'}}" id="heading-{{ ticket.id }}">
+	<h3 class="mb-0 fs-4">
+		<a href="#" class="d-flex align-items-center text-inherit {{ (ticket.id ) ? 'active' : '' }}" data-bs-toggle="collapse" data-bs-target="#collapse-{{ ticket.id }}" aria-expanded="false" aria-controls="#collapse-{{ ticket.id }}">
+			<span class="me-auto">
+				<h5>{{ 'Subject'|trans }} {{ ticket.subject }}?</h5>
+				{% if ticket.application %}
+					<h6>{{ 'Application'|trans }} {{ ticket.application.name }}</h6>
+				{% endif %}
+			</span>
+			<span class="collapse-toggle ms-4">
+				<i class="bi bi-chevron-down"></i>
+			</span>
+		</a>
+	</h3>
+	<div id="collapse-{{ ticket.id }}" class="collapse" aria-labelledby="heading-{{ ticket.id }}" data-bs-parent="#accordionTicket">
+		<div class="d-flex mb-4 pt-4">
+			{% include "global/user-avatar.html.twig" with { user: ticket.user, type: "lg" } %}
+			<div class="ms-3">
+				<div class="fs-6 mb-3 mt-1">
+					<div class="d-md-flex justify-content-between align-items-center">
+						<div>
+							<h4 class="mb-1">
+								{{ ticket.author ?? (ticket.user.firstname ~ ' ' ~ ticket.user.lastname) }}
+							</h4>
+						</div>
+						<div>
+							<span>{{ 'Answer'|trans }} </span>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus text-warning" viewBox="0 0 16 16">
+								<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+							</svg>
+							<span class="ms-0">({{ ticket.responses | length }})</span>
+						</div>
+					</div>
+					<span class="align-text-top">
+						<span class="lh-1 align-text-top">
+							<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-bar-chart" viewBox="0 0 16 16" style="color: {{ ticket.level.color }};">
+							<path d="M4 11H2v3h2zm5-4H7v7h2zm5-5v12h-2V2zm-2-1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM6 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm-5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/>
+							</svg>
+						</span>
+						<span class="fw-semibold" style="color: {{ ticket.level.color }};">{{ ticket.level.name }}</span>
+						<span class="lh-1 align-text-top ms-2">
+							<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16" style="color: {{ ticket.status.color }};">
+								<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+								<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117M11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5M4 1.934V15h6V1.077z"/>
+							</svg>
+						</span>
+						<span class="fw-semibold" style="color: {{ ticket.status.color }};">{{ ticket.status.name }}</span>
+					</span>
+				</div>
+				<div>
+					<p>{{ ticket.content | nl2br }}</p>
+					<div class="d-md-flex justify-content-between align-items-center">
+						<div>
+							<span>{{ 'Answer'|trans }} </span>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus text-warning" viewBox="0 0 16 16">
+								<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+							</svg>
+							<span class="ms-0">({{ ticket.responses | length }})</span>
+						</div>
+						<div class="mt-3">
+							{% if ticket.status.close %}
+								<span class="fw-semibold text-success">{{ 'Closed'|trans }}</span>
+							{% else %}
+								<a href="{{ path('dashboard_ticket_close', {id: ticket.id}) }}" class="btn btn-outline-danger btn-sm">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+										<path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+									</svg>
+									{{ 'Close'|trans }}
+								</a>
+							{% endif %}
+							{% if hidden %}
+								<a href="{{ path('dashboard_response_index', {id: ticket.id}) }}" class="btn btn-outline-primary btn-sm">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply" viewBox="0 0 16 16">
+										<path d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.7 8.7 0 0 0-1.921-.306 7 7 0 0 0-.798.008h-.013l-.005.001h-.001L7.3 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L2.614 8.254l-.042-.028a.147.147 0 0 1 0-.252l.042-.028zM7.8 10.386q.103 0 .223.006c.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96z"/>
+									</svg>
+									{{ 'Reply'|trans }}
+								</a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		{% if ticket.status.close %}
-			<span class="text-green-700 font-bold">Clos</span>
-		{% else %}
-			<a href="{{ path('dashboard_ticket_close', {id: ticket.id}) }}" class="btn">Cloturer</a>
-		{% endif %}
 	</div>
-	<h5>{{ticket.subject }}</h5>
-	{% if ticket.application %}
-		<h6>{{ticket.application.name}}</h6>
-	{% endif %}
-	<small>{{ticket.author ?? (ticket.user.firstname ~ ' ' ~ ticket.user.lastname) }}</small>
-	<strong class="info-responses">
-		{{ticket.responses | length}}
-		<img src="/images/Shape.png" alt="shape"/>
-	</strong>
-	<p>
-		{{ticket.content | nl2br}}
-	</p>
-	{% if hidden %}
-		<p class="flex justify-center !mt-2">
-			<a href="{{ path('dashboard_response_index', {id: ticket.id}) }}" class="btn">Répondre</a>
-		</p>
-	{% endif %}
-</article>
+</div>

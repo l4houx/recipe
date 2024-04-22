@@ -5,7 +5,8 @@
 
 {% block content %}
 	<div class="row">
-		{% for status in statuses %}
+		{#  
+		{% for status in statuses | sort() %}
 			<div class="col-lg-4 col-md-12 col-12">
 				<div class="card mb-4">
 					<div class="p-4">
@@ -19,7 +20,7 @@
 				</div>
 			</div>
 		{% endfor %}
-		{% for level in levels %}
+		{% for level in levels | sort() %}
 			<div class="col-lg-4 col-md-12 col-12">
 				<div class="card mb-4">
 					<div class="p-4">
@@ -33,6 +34,7 @@
 				</div>
 			</div>
 		{% endfor %}
+		#}
 		<div class="col-lg-4 col-md-12 col-12">
 			<div class="card mb-4">
 				<div class="p-4">

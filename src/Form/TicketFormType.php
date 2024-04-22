@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Level;
 use App\Entity\Ticket;
 use App\Entity\Application;
+use App\Entity\Traits\HasRoles;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\ApplicationRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -26,7 +27,7 @@ class TicketFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /**@var User $user */
+        /** @var User $user */
         $user = $this->security->getUser();
 
         $builder
@@ -34,12 +35,13 @@ class TicketFormType extends AbstractType
                 'class' => Application::class,
                 'choice_label' => 'name',
                 'query_builder' => function (ApplicationRepository $repo) use ($user) {
-                    if ($this->security->isGranted('ROLE_ADMIN')) {
+                    if ($this->security->isGranted(HasRoles::ADMIN)) {
                         return $repo->createQueryBuilder('a');
                     }
                     return $repo->createQueryBuilder('a')
                         ->where('a.user = :user')
-                        ->setParameter('user', $user);
+                        ->setParameter('user', $user)
+                    ;
                 }
             ])
             ->add('level', EntityType::class, [
@@ -47,16 +49,15 @@ class TicketFormType extends AbstractType
                 'choice_label' => 'name'
             ])
             ->add('subject', TextType::class, [
-                'label' => 'Sujet',
+                'label' => t('Subject'),
             ])
             ->add('content', TextareaType::class, [
-                'label' => t('Content :'),
-                'empty_data' => '',
-                'attr' => [
-                    'rows' => 10,
-                    'cols' => 30,
-                ],
+                'label' => t("Content :"),
+                'purify_html' => true,
                 'required' => true,
+                'empty_data' => '',
+                'attr' => ['placeholder' => '', 'rows' => 6],
+                'help' => t(''),
             ])
         ;
     }

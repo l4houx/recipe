@@ -2,23 +2,23 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
-use App\Entity\Country;
-use App\Entity\Language;
 use App\Entity\Recipe;
+use App\Entity\Country;
+use App\Entity\Audience;
 use App\Service\SettingService;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Setting\Language;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
-use Vich\UploaderBundle\Form\Type\VichImageType;
-
 use function Symfony\Component\Translation\t;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class RecipeFormType extends AbstractType
 {
@@ -73,7 +73,7 @@ class RecipeFormType extends AbstractType
                 'required' => false,
                 'help' => t('Field must contain an unique value.'),
             ])
-            ->add('category', CategoryAutocompleteField::class, ['label' => t('Categorie :')])
+            ->add('category', CategoryAutocompleteField::class)
             /*
             ->add('category', EntityType::class, [
                 'label' => t('Categorie :'),
@@ -123,9 +123,9 @@ class RecipeFormType extends AbstractType
                 'choices' => ['Enable' => true, 'Disable' => false],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
             ])
-            /*
             ->add('languages', EntityType::class, [
                 'required' => false,
+                'autocomplete' => true,
                 'multiple' => true,
                 'expanded' => false,
                 'class' => Language::class,
@@ -139,6 +139,7 @@ class RecipeFormType extends AbstractType
             ])
             ->add('subtitles', EntityType::class, [
                 'required' => false,
+                'autocomplete' => true,
                 'multiple' => true,
                 'expanded' => false,
                 'class' => Language::class,
@@ -150,7 +151,6 @@ class RecipeFormType extends AbstractType
                     return $this->settingService->getLanguages([]);
                 },
             ])
-            */
             ->add('year', ChoiceType::class, [
                 'required' => false,
                 'label' => t('Year :'),
@@ -158,7 +158,6 @@ class RecipeFormType extends AbstractType
                 'help' => t('If your recipe is a movie for example, select the year of release'),
                 'attr' => ['class' => 'select2', 'data-sort-options' => '0'],
             ])
-            /*
             ->add('audiences', EntityType::class, [
                 'required' => false,
                 'multiple' => true,
@@ -172,6 +171,7 @@ class RecipeFormType extends AbstractType
                     return $this->settingService->getAudiences([]);
                 },
             ])
+            /*
             ->add('country', EntityType::class, [
                 'required' => false,
                 'class' => Country::class,
@@ -184,6 +184,7 @@ class RecipeFormType extends AbstractType
                 'attr' => ['class' => 'select2', 'data-sort-options' => '1']
             ])
             */
+            ->add('country', CountryAutocompleteField::class, ['required' => false])
             ->add('youtubeurl', TextType::class, [
                 'purify_html' => true,
                 'required' => false,

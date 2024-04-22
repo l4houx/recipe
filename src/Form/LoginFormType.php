@@ -18,7 +18,7 @@ class LoginFormType extends AbstractType
             // Profil
             ->add('username', TextType::class, [
                 'label' => t('User name or email :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => [
@@ -29,7 +29,8 @@ class LoginFormType extends AbstractType
             ])
             ->add('password', PasswordType::class, [
                 'label' => t('Password :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
+                'toggle' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => [

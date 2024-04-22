@@ -15,7 +15,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
@@ -34,7 +33,7 @@ class UserFormType extends AbstractType
             // Profil
             ->add('username', TextType::class, [
                 'label' => t('User name :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('User name')],
@@ -47,14 +46,14 @@ class UserFormType extends AbstractType
             ])
             ->add('firstname', TextType::class, [
                 'label' => t('First name :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('First name')],
             ])
             ->add('lastname', TextType::class, [
                 'label' => t('Last name :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
                 'attr' => ['placeholder' => t('Last name')],
@@ -63,7 +62,7 @@ class UserFormType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'options' => [
-                    // 'purify_html' => true,
+                    'purify_html' => true,
                     'toggle' => true,
                     'translation_domain' => 'messages',
                     'attr' => [
@@ -96,7 +95,7 @@ class UserFormType extends AbstractType
             // Contact
             ->add('email', EmailType::class, [
                 'label' => t('Email address :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => true,
                 'attr' => ['placeholder' => t('Email address here')],
             ])
@@ -115,14 +114,14 @@ class UserFormType extends AbstractType
             // Team
             ->add('designation', TextType::class, [
                 'label' => t('Designation :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
                 'attr' => ['placeholder' => ''],
             ])
             ->add('about', TextareaType::class, [
                 'label' => t('About :'),
-                // 'purify_html' => true,
+                'purify_html' => true,
                 'required' => false,
                 'empty_data' => '',
                 'attr' => ['placeholder' => '', 'rows' => 6],
@@ -153,7 +152,10 @@ class UserFormType extends AbstractType
                     new RecaptchaTrue(['groups' => 'User']),
                 ],
             ])
-            ->add(t('Save'), SubmitType::class)
+            ->add('save', SubmitType::class, [
+                'label' => t('Save'),
+                'attr' => ['class' => 'btn btn-primary'],
+            ])
         ;
     }
 

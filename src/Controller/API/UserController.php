@@ -65,7 +65,7 @@ class UserController extends BaseController
     #[Route(path: '/get-user/{slug}', name: 'get_user', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     public function getUserEntity(Request $request, ?string $slug = null): Response
     {
-        if ('get_restautant' == $request->get('_route')) {
+        if ('get_restaurant' == $request->get('_route')) {
             if (!$this->isGranted(HasRoles::ADMINAPPLICATION)) {
                 throw new AccessDeniedHttpException();
             }

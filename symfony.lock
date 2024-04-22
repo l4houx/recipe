@@ -403,6 +403,9 @@
             "config/routes/ux_autocomplete.yaml"
         ]
     },
+    "symfony/ux-dropzone": {
+        "version": "v2.16.0"
+    },
     "symfony/ux-live-component": {
         "version": "2.16",
         "recipe": {
@@ -432,6 +435,9 @@
         "files": [
             "config/packages/twig_component.yaml"
         ]
+    },
+    "symfony/ux-typed": {
+        "version": "v2.16.0"
     },
     "symfony/validator": {
         "version": "7.0",

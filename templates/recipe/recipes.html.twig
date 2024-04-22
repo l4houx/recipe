@@ -1,10 +1,3 @@
-{#  
-{% include "recipe.html.twig" with {
-    pagetitle: 'All Recipes'|trans({}, 'messages'),
-    rows: rows
-} %}
-#}
-
 {% extends 'page.html.twig' %}
 
 {% if category != "all" %}
@@ -47,7 +40,7 @@
 			{% for recipe in rows %}
 				{% for recipedate in recipe.recipedates %}
 					{% if recipedate.isOnSale %}
-						{% if recipedate.venue and setting.getSettings("show_map_button") == "1" %}
+						{% if recipedate.venue and settings["show_map_button"] == "1" %}
 							{% if recipedate.venue.lat and recipedate.venue.lng %}
 								{% if recipesonmap | length == 0 %}
 									{% set recipesonmap = recipesonmap|merge([{"name": recipe.name, "image": recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder, "address": (recipedate.venue.name ~ ": " ~recipedate.venue.stringifyAddress),"date": (recipedate.startdate | format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone)), "price": (recipedate.isFree ? "Free"|trans : recipedate.getCheapestSubscription.getSalePrice), "lat":recipedate.venue.lat, "lng":recipedate.venue.lng, "link": (path('recipe', { slug: recipe.slug })) }]) %}
@@ -61,18 +54,18 @@
 							{% endif %}
 						{% endif %}
 
-						{% if setting.getSettings("show_calendar_button") == "1" %}
+						{% if settings["show_calendar_button"] == "1" %}
 							{% set recipesoncalendar = recipesoncalendar|merge([{"title": recipe.title, "start":recipedate.startdate | date('Y-m-d H:i'), "end": (recipedate.enddate ? recipedate.enddate | date('Y-m-d H:i') : ''), "url": (path('recipe', {slug : recipe.slug})) }]) %}
 						{% endif %}
 					{% endif %}
 				{% endfor %}
 			{% endfor %}
 
-			{% if recipesonmap | length > 0 and setting.getSettings("show_map_button") == "1" and google_maps_api_key != "" %}
+			{% if recipesonmap | length > 0 and settings["show_map_button"] == "1" and google_maps_api_key != "" %}
 				<div class="collapse show mb-4 vh-90" id="collapseEventsMap" data-pin-path="{{ asset('assets/images/icons/pin.png') }}" data-recipes="{{ recipesonmap|json_encode() }}"></div>
 			{% endif %}
 
-			{% if recipesoncalendar | length > 0 and setting.getSettings("show_calendar_button") == "1" %}
+			{% if recipesoncalendar | length > 0 and settings["show_calendar_button"] == "1" %}
 				<div class="collapse show mb-4" id="collapseEventsCalendar" data-default-date="{{ "now"|date('Y-m-d') }}" data-recipes="{{ recipesoncalendar|json_encode() }}"></div>
 			{% endif %}
 
@@ -104,7 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {% if setting.getSettings("show_category_filter") == "1" %}
+                            {% if settings["show_category_filter"] == "1" %}
                                 <div class="card-body border-top py-3">
                                     <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterCategory" role="button" aria-expanded="false" aria-controls="collapseFilterCategory">
                                         {{ "Category"|trans }}
@@ -127,7 +120,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            {% if setting.getSettings("show_location_filter") == "1" %}
+                            {% if settings["show_location_filter"] == "1" %}
                                 <div class="card-body border-top py-3">
                                     <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterLocation" role="button" aria-expanded="false" aria-controls="collapseFilterLocation">
                                         {{ "Location"|trans }}
@@ -139,7 +132,7 @@
                                     </a>
                                     <div class="collapse show" id="collapseFilterLocation">
                                         <div class="mt-3">
-                                            <div class="form-check mb-2">
+                                            <div class="form-check mb-2 filter-online-container">
                                                 <input class="form-check-input" type="checkbox" name="onlineonly" value="1" id="filter-online-only">
                                                 <label class="form-check-label" for="filter-online-only">
                                                     {{ "Online recipes only"|trans }}
@@ -164,7 +157,7 @@
                                         {% endif %}
                                         <div id="filter-country-container" class="mt-3">
                                             <label for="country" class="visually-hidden">{{ "Country"|trans }}</label>
-                                            <select class="form-select" id="country" name="country" data-sort-options="1">
+                                            <select class="form-select" id="country" name="country" data-sort-options="1" autocomplete="on">
                                                 <option value="">&nbsp;</option>
                                                 {% for country in setting.getCountries({}).getQuery().getResult() %}
                                                     <option value="{{ country.slug }}">{{ country.name }}</option>
@@ -178,7 +171,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            {% if setting.getSettings("show_date_filter") == "1" %}
+                            {% if settings["show_date_filter"] == "1" %}
                                 <div class="card-body border-top py-3">
                                     <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterDate" role="button" aria-expanded="false" aria-controls="collapseFilterDate">
                                         {{ "Date"|trans }}
@@ -261,7 +254,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            {% if setting.getSettings("show_subscription_price_filter") == "1" %}
+                            {% if settings["show_subscription_price_filter"] == "1" %}
                                 <div class="card-body border-top py-3">
                                     <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterSubscription" role="button" aria-expanded="false" aria-controls="collapseFilterSubscription">
                                         {{ "Subscription price"|trans }}
@@ -273,12 +266,48 @@
                                     </a>
                                     <div class="collapse show" id="collapseFilterSubscription">
                                         <div class="mt-3">
-                                            
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" name="freeonly" value="1" id="free-recipes-only">
+                                                <label class="form-check-label" for="free-recipes-only">{{ "Today"|trans }}</label>
+                                                <span class="form-check-label float-end">
+													<span class="badge bg-light round">
+                                                        {{ "Free recipes only"|trans }}
+                                                    </span>
+												</span>
+                                            </div>
+											<div class="recipes-price-range-slider-wrapper">
+												<div class="range-slider mb-3" data-min="0" data-max="10000" data-start-left="{{ app.request.get('pricemin') ?? "0" }}" data-start-right="{{ app.request.get('pricemax') ?? "10000" }}">
+                                                </div>
+												<div class="row ranger-slider-inputs">
+													<div class="col-12 col-sm-6">
+														<label for="pricemin">{{"Min"|trans }}</label>
+														<div class="input-group">
+															<div class="input-group-prepend">
+																<span class="input-group-text">
+                                                                    {{ setting.getSettings('currency_symbol') }}
+                                                                </span>
+															</div>
+															<input type="text" id="pricemin" name="pricemin" class="form-control range-slider-min-input" value="{{ app.request.get('pricemin') }}" placeholder="{{ "Min"|trans }}">
+														</div>
+													</div>
+													<div class="col-12 col-sm-6">
+														<label for="pricemax">{{"Max"|trans }}</label>
+														<div class="input-group">
+															<div class="input-group-prepend">
+																<span class="input-group-text">
+                                                                    {{ setting.getSettings('currency_symbol') }}
+                                                                </span>
+															</div>
+															<input type="text" id="pricemax" name="pricemax" class="form-control range-slider-max-input" value="{{ app.request.get('pricemax') }}" placeholder="{{ "Max"|trans }}">
+														</div>
+													</div>
+												</div>
+											</div>
                                         </div>
                                     </div>
                                 </div>
                             {% endif %}
-                            {% if setting.getSettings("show_audience_filter") == "1" %}
+                            {% if settings["show_audience_filter"] == "1" %}
                                 <div class="card-body border-top py-3">
                                     <a class="fs-5 text-dark fw-semibold" data-bs-toggle="collapse" href="#collapseFilterAudience" role="button" aria-expanded="false" aria-controls="collapseFilterAudience">
                                         {{ "Audience"|trans }}
@@ -290,7 +319,14 @@
                                     </a>
                                     <div class="collapse show" id="collapseFilterAudience">
                                         <div class="mt-3">
-                                            
+                                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                                {% for audience in setting.getAudiences({}).getQuery().getResult() %}
+                                                    <input type="radio" class="btn-check" id="{{ audience.slug }}" name="audience" value="{{ audience.slug }}" autocomplete="off" checked>
+                                                    <label class="btn btn-outline-primary" for="{{ audience.slug }}" data-bs-toggle="tooltip" title="{{ audience.name }}">
+                                                        <img src="{{ asset(audience.getImagePath) }}" class="img-15-15" alt="{{ audience.name }}">
+                                                    </label>
+                                                {% endfor %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -318,17 +354,17 @@
                                         </button>
                                     </div>
                                     <div class="ms-3 nav btn-group flex-nowrap">
-                                        {% if recipesonmap | length > 0 and setting.getSettings("show_map_button") == "1" and google_maps_api_key != "" %}
+                                        {% if recipesonmap | length > 0 and settings["show_map_button"] == "1" and google_maps_api_key != "" %}
                                             <a class="btn btn-outline-primary active btn-icon d-flex align-items-center" data-bs-toggle="collapse" href="#collapseEventsMap" role="button" aria-expanded="false" aria-controls="collapseEventsMap" title="{{ "Show recipes on map"|trans }}">
                                                 <span class="bi bi-pin-map-fill"></span>
                                             </a>
                                         {% endif %}
-                                        {% if recipesoncalendar | length > 0 and setting.getSettings("show_calendar_button") == "1" %}
+                                        {% if recipesoncalendar | length > 0 and settings["show_calendar_button"] == "1" %}
                                             <a class="btn btn-outline-primary btn-icon d-flex align-items-center" data-bs-toggle="collapse" href="#collapseEventsCalendar" role="button" aria-expanded="false" aria-controls="collapseEventsCalendar" title="{{ "Show recipes calendar"|trans }}">
                                                 <span class="bi bi-calendar"></span>
                                             </a>
                                         {% endif %}
-                                        {% if setting.getSettings("show_rss_feed_button") == "1" %}
+                                        {% if settings["show_rss_feed_button"] == "1" %}
                                             <a href="{{ setting.getSettings("website_url")~"/rss" }}" class="btn btn-outline-primary btn-icon d-flex align-items-center" bs-data-toggle="tooltip" title="{{ "Recipes RSS feed"|trans }}" target="_blank">
                                                 <span class="bi bi-rss"></span>
                                             </a>
@@ -361,4 +397,13 @@
 			</div>
 		</div>
 	</section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+	{% if settings["show_map_button"] == "1" and google_maps_api_key != "" %}
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initMap"></script>
+		{% include "global/recipe-info-box.html.twig" %}
+	{% endif %}
 {% endblock %}
