@@ -302,9 +302,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         if ($hasboughtsubscriptionforRecipe !== "all") {
-            $qb->join("recipe.translations", "recipetranslations");
+            //$qb->join("recipe.translations", "recipetranslations");
             $qb->andWhere("orders.status = :statuspaid")->setParameter("statuspaid", 1);
-            $qb->andWhere("recipetranslations.slug = :hasboughtsubscriptionforrecipe")->setParameter("hasboughtsubscriptionforrecipe", $hasboughtsubscriptionforRecipe);
+            //$qb->andWhere("recipetranslations.slug = :hasboughtsubscriptionforrecipe")->setParameter("hasboughtsubscriptionforrecipe", $hasboughtsubscriptionforRecipe);
         }
 
         if ($hasboughtsubscriptionforRestaurant !== "all") {
@@ -317,8 +317,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         } else {
             $qb->orderBy($sort, $order);
         }
-
-        //$qb->orderBy($sort, $order);
 
         $qb->andWhere('u.slug != :administrator')->setParameter('administrator', 'administrator');
 

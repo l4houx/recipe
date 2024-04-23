@@ -108,4 +108,14 @@ return [
     'tippy.js' => [
         'version' => '6.3.7',
     ],
+    'flatpickr' => [
+        'version' => '4.6.13',
+    ],
+    'flatpickr/dist/flatpickr.min.css' => [
+        'version' => '4.6.13',
+        'type' => 'css',
+    ],
+    '@yaireo/tagify' => [
+        'version' => '4.24.0',
+    ],
 ];

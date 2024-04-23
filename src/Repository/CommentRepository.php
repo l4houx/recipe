@@ -2,21 +2,19 @@
 
 namespace App\Repository;
 
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\Traits\HasLimit;
 use App\Entity\User;
 use App\Entity\Venue;
-use App\Entity\Recipe;
-use App\Entity\Comment;
+use App\Service\SettingService;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use App\Entity\Traits\HasLimit;
-use App\Service\SettingService;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
-use Knp\Component\Pager\Pagination\PaginationInterface;
 use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -109,11 +107,10 @@ class CommentRepository extends ServiceEntityRepository
             ->setParameter('val', $value->getId())
             ->orderBy('c.id', 'DESC')
 
-
-            //->andWhere('c.isApproved = true')
-            //->orderBy('c.publishedAt', 'DESC')
-            //->join('c.target', 't')
-            //->leftJoin('c.author', 'a')
+            // ->andWhere('c.isApproved = true')
+            // ->orderBy('c.publishedAt', 'DESC')
+            // ->join('c.target', 't')
+            // ->leftJoin('c.author', 'a')
         ;
 
         return $this->paginator->paginate(
@@ -170,5 +167,82 @@ class CommentRepository extends ServiceEntityRepository
             ->where('row.ip LIKE :ip')
             ->setParameter('ip', $ip)
         ;
+    }
+
+    /**
+     * Returns the comments after applying the specified search criterias.
+     *
+     * @param string       $keyword
+     * @param int          $id
+     * @param User|null    $user
+     * @param bool         $isApproved
+     * @param bool         $isRGPD
+     * @param string       $ip
+     * @param Post|null    $post
+     * @param Venue|null   $venue
+     * @param Comment|null $parent
+     * @param int          $limit
+     * @param int          $count
+     * @param string       $sort
+     * @param string       $order
+     */
+    public function getComments($keyword, $id, $user, $isApproved, $isRGPD, $ip, $post, $venue, $parent, $limit, $count, $sort, $order): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        if ($count) {
+            $qb->select('COUNT(DISTINCT c)');
+        } else {
+            $qb->select('DISTINCT c');
+        }
+
+        if ('all' !== $keyword) {
+            $qb->andWhere('c.ip LIKE :keyword or :keyword LIKE c.ip or c.content LIKE :keyword or :keyword LIKE c.content')->setParameter('keyword', '%'.$keyword.'%');
+        }
+
+        if ('all' !== $id) {
+            $qb->andWhere('c.id = :id')->setParameter('id', $id);
+        }
+
+        if ('all' !== $user) {
+            $qb->leftJoin('c.author', 'a');
+            //$qb->andWhere('a.username = :user')->setParameter('user', $user);
+        }
+
+        if ('all' !== $isApproved) {
+            $qb->andWhere('c.isApproved = :isApproved')->setParameter('isApproved', $isApproved);
+        }
+
+        if ('all' !== $isRGPD) {
+            $qb->andWhere('c.isRGPD = :isRGPD')->setParameter('isRGPD', $isRGPD);
+        }
+
+        if ('all' !== $ip) {
+            $qb->andWhere('c.ip = :ip')->setParameter('ip', $ip);
+        }
+
+        if ('all' !== $post || 'all' !== $venue) {
+            $qb->leftJoin('c.post', 'post');
+        }
+
+        if ('all' !== $post) {
+            $qb->leftJoin('c.post', 'p');
+            $qb->andWhere('p.isOnline = true')->setParameter('post', $post);
+        }
+
+        if ('all' !== $venue) {
+            $qb->leftJoin('c.venue', 'v');
+            $qb->andWhere('v.isOnline = true')->setParameter('venue', $venue);
+        }
+
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        if ($sort) {
+            $qb->orderBy('c.'.$sort, $order);
+        }
+
+        return $qb;
     }
 }

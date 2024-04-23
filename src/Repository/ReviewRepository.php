@@ -2,13 +2,13 @@
 
 namespace App\Repository;
 
-use App\Entity\Recipe;
-use App\Entity\Restaurant;
-use App\Entity\Review;
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Recipe;
+use App\Entity\Review;
+use App\Entity\Restaurant;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Review>
@@ -46,28 +46,28 @@ class ReviewRepository extends ServiceEntityRepository
     /**
      * Returns the reviews after applying the specified search criterias.
      *
-     * @param string          $keyword
-     * @param string          $slug
-     * @param User|null       $user
-     * @param Recipe|null     $recipe
-     * @param Restaurant|null $restaurant
-     * @param bool            $isVisible
-     * @param int|null        $rating
-     * @param int             $minrating
-     * @param int             $maxrating
-     * @param int             $limit
-     * @param int             $count
-     * @param string          $sort
-     * @param string          $order
+     * @param string      $keyword
+     * @param string      $slug
+     * @param User        $user
+     * @param Recipe|null $recipe
+     * @param Restaurant  $restaurant
+     * @param bool        $isVisible
+     * @param int|null    $rating
+     * @param int         $minrating
+     * @param int         $maxrating
+     * @param int         $limit
+     * @param int         $count
+     * @param string      $sort
+     * @param string      $order
      */
     public function getReviews($keyword, $slug, $user, $recipe, $restaurant, $isVisible, $rating, $minrating, $maxrating, $limit, $count, $sort, $order): QueryBuilder
     {
         $qb = $this->createQueryBuilder('r');
 
         if ($count) {
-            $qb->select('COUNT(DISTINCT r)');
+            $qb->select('COUNT(r)');
         } else {
-            $qb->select('DISTINCT r');
+            $qb->select('r');
         }
 
         if ('all' !== $keyword) {
@@ -87,13 +87,14 @@ class ReviewRepository extends ServiceEntityRepository
             $qb->leftJoin('r.recipe', 'recipe');
         }
 
+        if ('all' !== $recipe) {
+            $qb->leftJoin('recipe.id', 'recipe');
+            $qb->andWhere('recipe.slug = :recipe')->setParameter('recipe', $recipe);
+        }
+
         if ('all' !== $restaurant) {
             $qb->leftJoin('recipe.restaurant', 'restaurant');
             $qb->andWhere('restaurant.slug = :restaurant')->setParameter('restaurant', $restaurant);
-        }
-
-        if ('all' !== $recipe || 'all' !== $user) {
-            $qb->leftJoin('r.recipe', 'recipe');
         }
 
         if ('all' !== $isVisible) {

@@ -54,7 +54,7 @@
                                 <a href="#" class="d-flex align-items-center text-inherit {{ (response.id ) ? 'active' : '' }}" data-bs-toggle="collapse" data-bs-target="#collapse-{{ response.id }}" aria-expanded="false" aria-controls="#collapse-{{ response.id }}">
                                     <span class="me-auto">
                                         <h5>{{ 'Subject'|trans }} {{ response.ticket.subject }}?</h5>
-                                        {% if ticket.application %}
+                                        {% if response.ticket.application %}
                                             <h6>{{ 'Application'|trans }} {{ response.ticket.application.name }}</h6>
                                         {% endif %}
                                     </span>
@@ -84,6 +84,7 @@
             <hr class="my-5">
             <div>
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                    {{ form_errors(form) }}
                     {{ form_widget(form) }}
                 {{ form_end(form) }}
             </div>

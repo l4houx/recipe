@@ -60,10 +60,12 @@ class PostFormType extends AbstractType
                 'required' => true,
                 'purify_html' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => '', 'rows' => 6],
+                'attr' => ['class' => 'wysiwyg', 'placeholder' => '', 'rows' => 6],
                 'help' => t(''),
             ])
             ->add('author', UserAutocompleteField::class, ['label' => t('Author :')])
+            ->add('category', PostCategoryAutocompleteField::class)
+            /*
             ->add('category', EntityType::class, [
                 'label' => t('Category :'),
                 'class' => PostCategory::class,
@@ -77,12 +79,11 @@ class PostFormType extends AbstractType
                     'data-limit' => 1,
                 ],
                 'help' => t('Make sure you select the correct category to allow users to find it quickly.'),
-                /*
                 'query_builder' => function () {
                     return $this->settingService->getBlogPostCategories([]);
                 },
-                */
-            ])
+                
+            ])*/
             ->add('tags', TextType::class, [
                 'label' => t('Tags :'),
                 'purify_html' => true,

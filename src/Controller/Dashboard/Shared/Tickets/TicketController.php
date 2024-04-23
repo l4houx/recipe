@@ -65,7 +65,7 @@ class TicketController extends BaseController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $status = $this->statusRepository->findOneBy(['name' => $this->translator->trans('New')]);
+                $status = $this->statusRepository->findOneBy(['name' => 'New']);
                 $ticket->setStatus($status);
                 $ticket->setUser($user);
 
@@ -109,7 +109,7 @@ class TicketController extends BaseController
             return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
-        $status = $this->statusRepository->findBy(['close' => true]);
+        $status = $this->statusRepository->findBy(['isClose' => true]);
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
             $criteriaAdmin = Criteria::create()
@@ -134,7 +134,7 @@ class TicketController extends BaseController
     #[Route(path: '/close/{id}', name: 'close', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function close(Ticket $ticket): Response
     {
-        $status = $this->statusRepository->findOneBy(['name' => $this->translator->trans('Clos')]);
+        $status = $this->statusRepository->findOneBy(['name' => 'Closed']);
         $ticket->setStatus($status);
 
         $this->em->flush();

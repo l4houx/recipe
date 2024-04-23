@@ -156,12 +156,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         return false;
     }
 
-    public function getOrdersQuantitySum(int $status = 1, string $upcomingtickets = 'all')
+    public function getOrdersQuantitySum(int $status = 1, string $upcomingsubscriptions = 'all')
     {
         $sum = 0;
         foreach ($this->orders as $order) {
             foreach ($order->getOrderelements() as $orderelement) {
-                if ('all' === $status || $orderelement->getOrder()->getStatus() === $status && ('all' === $upcomingtickets || (1 == $upcomingtickets && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() >= new \DateTime()) || (0 == $upcomingtickets && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() < new \DateTime()))) {
+                if ('all' === $status || $orderelement->getOrder()->getStatus() === $status && ('all' === $upcomingsubscriptions || (1 == $upcomingsubscriptions && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() >= new \DateTime()) || (0 == $upcomingsubscriptions && $orderelement->getRecipeSubscription()->getRecipeDate()->getStartdate() < new \DateTime()))) {
                     $sum += $orderelement->getquantity();
                 }
             }
@@ -332,13 +332,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         } elseif ($this->hasRole(HasRoles::SCANNER)) {
             return '<span class="badge me-2 bg-info-soft">Scanner</span>';
         } elseif ($this->hasRole(HasRoles::SUPERADMIN) || $this->hasRole(HasRoles::ADMINAPPLICATION)) {
-            return '<span class="badge me-2 bg-danger">Administrator</span>';
+            return '<span class="badge me-2 bg-danger-soft">Administrator</span>';
         } elseif ($this->hasRole(HasRoles::ADMIN)) {
-            return '<span class="badge me-2 bg-info">Admin</span>';
+            return '<span class="badge me-2 bg-light-danger-soft">Admin</span>';
         } elseif ($this->hasRole(HasRoles::MODERATOR)) {
-            return '<span class="badge me-2 bg-secondary">Moderator</span>';
+            return '<span class="badge me-2 bg-light-secondary-soft">Moderator</span>';
         } else {
-            return '<span class="badge me-2 bg-primary">N/A</span>';
+            return '<span class="badge me-2 bg-light-warning-soft">N/A</span>';
         }
     }
 

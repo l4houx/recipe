@@ -136,6 +136,11 @@ class Venue
     #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $comments;
 
+    public function __toString(): string
+    {
+        return sprintf('#%d %s', $this->getId(), $this->getName());
+    }
+
     public function __construct()
     {
         $this->images = new ArrayCollection();

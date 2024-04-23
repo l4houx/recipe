@@ -15,7 +15,7 @@ class DateTimePickerType extends AbstractType
             'widget' => 'single_text',
             'html5' => false,
             'attr' => [
-                'class' => 'flatpickr',
+                'class' => 'text-dark flatpickr flatpickr-input active',
                 'data-flatpickr-class' => 'standard',
                 'data-date-locale' => u(\Locale::getDefault())->replace('_', '-')->lower(),
                 'data-date-format' => 'Y-m-d H:i',

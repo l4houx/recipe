@@ -48,7 +48,7 @@ class ReviewController extends BaseController
 
         $restaurant = 'all';
         if ($authChecker->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         $rows = $paginator->paginate(
@@ -58,7 +58,7 @@ class ReviewController extends BaseController
             ['wrap-queries' => true]
         );
 
-        $user = $this->getUserOrThrow();
+        //$user = $this->getUserOrThrow();
 
         return $this->render('dashboard/shared/review/index.html.twig', compact('rows', 'user'));
     }

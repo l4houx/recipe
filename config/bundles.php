@@ -39,4 +39,6 @@ return [
     CMEN\GoogleChartsBundle\CMENGoogleChartsBundle::class => ['all' => true],
     Symfony\UX\Typed\TypedBundle::class => ['all' => true],
     Symfony\UX\Dropzone\DropzoneBundle::class => ['all' => true],
+    Skies\QRcodeBundle\SkiesQRcodeBundle::class => ['all' => true],
+    Http\HttplugBundle\HttplugBundle::class => ['all' => true],
 ];

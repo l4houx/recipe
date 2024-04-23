@@ -13,9 +13,9 @@ Installation en cours:
 
     ✔ composer require dompdf/dompdf @done(24-04-04 16:14)
 
-    ☐ composer require phpoffice/phpspreadsheet (ext-gd: *)
+    ✔ composer require phpoffice/phpspreadsheet (ext-gd: *) @done(24-04-23 15:01)
 
-    ☐ composer require php-http/httplug-bundle
+    ✔ composer require php-http/httplug-bundle @done(24-04-23 15:11)
 
     ✔ composer require cmen/google-charts-bundle @done(24-04-04 16:15)
 
@@ -23,7 +23,7 @@ Installation en cours:
 
     ☐ pugx/autocompleter-bundle Not compatible with sf7
 
-    ☐ composer require yellowskies/qr-code-bundle
+    ✔ composer require yellowskies/qr-code-bundle @done(24-04-23 15:04)
 
 
     // Translate your doctrine objects easily with some helpers
