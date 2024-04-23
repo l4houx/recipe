@@ -140,11 +140,11 @@ class CountryController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_country_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if (true === $country->getIsOnline()) {
-            $country->setIsOnline(false);
+        if (false === $country->getIsOnline()) {
+            $country->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $country->setIsOnline(true);
+            $country->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

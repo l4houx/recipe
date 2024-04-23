@@ -144,11 +144,11 @@ class PostCategoryController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_post_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if (true === $postcategory->getIsOnline()) {
-            $postcategory->setIsOnline(false);
+        if (false === $postcategory->getIsOnline()) {
+            $postcategory->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $postcategory->setIsOnline(true);
+            $postcategory->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

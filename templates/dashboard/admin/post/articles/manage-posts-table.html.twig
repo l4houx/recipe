@@ -71,15 +71,15 @@
 									<i class="bi bi-pencil dropdown-item-icon"></i>
 									{{ 'Edit'|trans }}
 								</a>
-                                {% if post.isOnline %}
-                                    <a class="dropdown-item" href="{{ path('dashboard_admin_post_show', {slug: post.slug}) }}">
-                                        <i class="bi bi-eye dropdown-item-icon"></i>
-                                        {{ "Online"|trans }}
-                                    </a>
-                                {% else %}
+                                {% if post.isOnline == true %}
                                     <a class="dropdown-item" href="{{ path('dashboard_admin_post_hide', {slug: post.slug}) }}">
                                         <i class="bi bi-eye-slash dropdown-item-icon"></i>
                                         {{ "Offline"|trans }}
+                                    </a>
+                                {% else %}
+                                    <a class="dropdown-item" href="{{ path('dashboard_admin_post_show', {slug: post.slug}) }}">
+                                        <i class="bi bi-eye dropdown-item-icon"></i>
+                                        {{ "Online"|trans }}
                                     </a>
                                 {% endif %}
                                 {% if post.deletedAt %}

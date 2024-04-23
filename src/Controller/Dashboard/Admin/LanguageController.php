@@ -138,11 +138,11 @@ class LanguageController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_language_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if (true === $language->getIsOnline()) {
-            $language->setIsOnline(false);
+        if (false === $language->getIsOnline()) {
+            $language->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $language->setIsOnline(true);
+            $language->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

@@ -86,6 +86,17 @@
 									<i class="bi bi-pencil dropdown-item-icon"></i>
 									{{ 'Edit'|trans }}
 								</a>
+								{% if article.isOnline == true %}
+                                    <a class="dropdown-item" href="{{ path('dashboard_admin_help_center_article_hide', { slug : article.slug }) }}">
+                                        <i class="bi bi-eye-slash dropdown-item-icon"></i>
+                                        {{ "Offline"|trans }}
+                                    </a>
+								{% else %}
+                                    <a class="dropdown-item" href="{{ path('dashboard_admin_help_center_article_show', { slug : article.slug }) }}">
+                                        <i class="bi bi-eye dropdown-item-icon"></i>
+                                        {{ "Online"|trans }}
+                                    </a>
+								{% endif %}
 								<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-article-delete-form').submit();" class="dropdown-item">
 									<i class="bi bi-trash dropdown-item-icon"></i>
 									{{ 'Delete'|trans }}

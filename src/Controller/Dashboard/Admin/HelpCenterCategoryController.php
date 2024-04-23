@@ -154,11 +154,11 @@ class HelpCenterCategoryController extends AbstractController
             return $this->redirectToRoute('dashboard_admin_help_center_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if (true === $category->getisOnline()) {
-            $category->setIsOnline(false);
+        if (false === $category->getisOnline()) {
+            $category->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $category->setIsOnline(true);
+            $category->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

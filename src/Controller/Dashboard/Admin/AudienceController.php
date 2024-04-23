@@ -140,11 +140,11 @@ class AudienceController extends AdminBaseController
             return $this->settingService->redirectToReferer('audience');
         }
 
-        if (true === $audience->getIsOnline()) {
-            $audience->setIsOnline(false);
+        if (false === $audience->getIsOnline()) {
+            $audience->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $audience->setIsOnline(true);
+            $audience->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

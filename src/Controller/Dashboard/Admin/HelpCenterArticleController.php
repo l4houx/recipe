@@ -172,11 +172,11 @@ class HelpCenterArticleController extends AbstractController
             return $this->redirectToRoute('dashboard_admin_help_center_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if (true === $article->getIsOnline()) {
-            $article->setIsOnline(false);
+        if (false === $article->getIsOnline()) {
+            $article->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $article->setIsOnline(true);
+            $article->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

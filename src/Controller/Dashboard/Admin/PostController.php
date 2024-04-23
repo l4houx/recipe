@@ -138,11 +138,11 @@ class PostController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_post_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if (true === $post->getIsOnline()) {
-            $post->setIsOnline(false);
+        if (false === $post->getIsOnline()) {
+            $post->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $post->setIsOnline(true);
+            $post->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

@@ -150,8 +150,8 @@ class CategoryController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_recipe_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        if (true === $category->getIsOnline()) {
-            $category->setIsOnline(false);
+        if (false === $category->getIsOnline()) {
+            $category->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
             $category->setIsFeatured(false);

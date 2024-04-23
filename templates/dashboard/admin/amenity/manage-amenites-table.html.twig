@@ -46,15 +46,15 @@
 									<i class="bi bi-pencil dropdown-item-icon"></i>
 									{{ 'Edit'|trans }}
 								</a>
-								{% if amenity.isOnline %}
-									<a class="dropdown-item" href="{{ path('dashboard_admin_amenity_show', { slug : amenity.slug }) }}">
-										<i class="bi bi-eye dropdown-item-icon"></i>
-										{{ "Online"|trans }}
-									</a>
-								{% else %}
+								{% if amenity.isOnline == true %}
 									<a class="dropdown-item" href="{{ path('dashboard_admin_amenity_hide', { slug : amenity.slug }) }}">
 										<i class="bi bi-eye-slash dropdown-item-icon"></i>
 										{{ "Offline"|trans }}
+									</a>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_amenity_show', { slug : amenity.slug }) }}">
+										<i class="bi bi-eye dropdown-item-icon"></i>
+										{{ "Online"|trans }}
 									</a>
 								{% endif %}
 								{% if amenity.deletedAt %}

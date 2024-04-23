@@ -140,11 +140,11 @@ class AmenityController extends AdminBaseController
             return $this->settingService->redirectToReferer('amenity');
         }
 
-        if (true === $amenity->getIsOnline()) {
-            $amenity->setIsOnline(false);
+        if (false === $amenity->getIsOnline()) {
+            $amenity->setIsOnline(true);
             $this->addFlash('success', $this->translator->trans('Content is online'));
         } else {
-            $amenity->setIsOnline(true);
+            $amenity->setIsOnline(false);
             $this->addFlash('danger', $this->translator->trans('Content is offline'));
         }
 

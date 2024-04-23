@@ -59,15 +59,15 @@
 									<i class="bi bi-pencil dropdown-item-icon"></i>
 									{{ 'Edit'|trans }}
 								</a>
-								{% if audience.isOnline %}
-									<a class="dropdown-item" href="{{ path('dashboard_admin_audience_show', { slug : audience.slug }) }}">
-										<i class="bi bi-eye dropdown-item-icon"></i>
-										{{ "Online"|trans }}
-									</a>
-								{% else %}
+								{% if audience.isOnline == true %}
 									<a class="dropdown-item" href="{{ path('dashboard_admin_audience_hide', { slug : audience.slug }) }}">
 										<i class="bi bi-eye-slash dropdown-item-icon"></i>
 										{{ "Offline"|trans }}
+									</a>
+								{% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_audience_show', { slug : audience.slug }) }}">
+										<i class="bi bi-eye dropdown-item-icon"></i>
+										{{ "Online"|trans }}
 									</a>
 								{% endif %}
 								{% if audience.deletedAt %}
