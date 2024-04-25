@@ -47,7 +47,7 @@ class PostFormType extends AbstractType
                 'required' => true,
                 'purify_html' => true,
                 'empty_data' => '',
-                'help' => t('Keep your post titles under 10 characters. Write heading that describe the topic content. Contextualize for Your Audience.'),
+                'help' => t('Keep your post titles under 10 characters. Write heading that describe the topic content. Contextualize for Your Post.'),
             ])
             ->add('slug', TextType::class, [
                 'label' => t('Slug :'),

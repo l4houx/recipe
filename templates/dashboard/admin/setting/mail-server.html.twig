@@ -33,6 +33,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div>
+                        {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+                    </div>
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
                         {{ form_widget(form) }}
                     {{ form_end(form) }}

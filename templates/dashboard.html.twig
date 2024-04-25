@@ -29,29 +29,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div>
-                                    {% if app.request.attributes.get('_route') == 'dashboard_account_profile' %}
-                                        <a href="{{ path('dashboard_creator_account_dashboard') }}" class="btn btn-primary btn-sm d-none d-md-block">
-                                            {{ 'My dashboard'|trans }}
-                                        </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_creator_account_index' %}
-                                        <a href="{{ path('dashboard_creator_account_dashboard') }}" class="btn btn-primary btn-sm d-none d-md-block">
-                                            {{ 'My dashboard'|trans }}
-                                        </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_creator_account_change_password' %}
-                                        <a href="{{ path('dashboard_creator_account_dashboard') }}" class="btn btn-primary btn-sm d-none d-md-block">
-                                            {{ 'My dashboard'|trans }}
-                                        </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_account_recipe_index' %}
-                                        <a href="{{ path('dashboard_account_recipe_new') }}" class="btn btn-primary btn-sm d-none d-md-block">
-                                            {{ 'New recipe'|trans }}
-                                        </a>
-                                    {% elseif app.request.attributes.get('_route') == 'dashboard_creator_account_dashboard' %}
-                                        <a href="{{ path('dashboard_creator_account_index') }}" class="btn btn-primary btn-sm d-none d-md-block">
-                                            {{ 'Account Setting'|trans }}
-                                        </a>
-                                    {% endif %}
-                                </div>
+                                {{ component('btn_account') }}
                             </div>
                         </div>
                     </div>
@@ -60,6 +38,7 @@
                     <div class="col-lg-3 col-md-4 col-12">
                         <nav class="navbar navbar-expand-md shadow-sm mb-4 mb-lg-0 sidenav">
                             {% include "dashboard/shared/global/_nav-account.html.twig" %}
+                            {# {{ component('nav_account') }} #}
                         </nav>
                     </div>
                     <div class="col-lg-9 col-md-8 col-12">

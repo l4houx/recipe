@@ -9,6 +9,9 @@
     </div>
     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
         <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+            </div>
             {% if app.request.attributes.get('_route') == 'dashboard_admin_recipe_edit' %}
                 <div>
                     <h5 class="mb-3">{{ 'Pictures'|trans }}</h5>
@@ -17,14 +20,9 @@
             {% endif %}
             {{ form_widget(form) }}
             <div class="col-12 pt-2">
-                <button type="submit" class="{{ button_css|default("btn btn-primary") }} me-4">
-                    {{ button_label|default('Save'|trans) }}
+                <button type="submit" class="{% if recipe.id %}btn btn-warning{% else %}btn btn-primary{% endif %} me-4">
+                    {% if recipe.id %}{{ 'Update'|trans }}{% else %}{{ 'Save'|trans }}{% endif %}
                 </button>
-                {% if include_back_to_home_link|default(false) %}
-                    <a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary">
-                        {{ 'Return to list'|trans }}
-                    </a>
-                {% endif %}
             </div>
         </div>
     {{ form_end(form) }}

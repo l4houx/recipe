@@ -12,6 +12,7 @@ use function Symfony\Component\Translation\t;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -28,6 +29,18 @@ class TestimonialFormType extends AbstractType
                 'multiple' => false,
                 'expanded' => true,
                 'choices' => ['5 stars' => 5, '4 stars' => 4, '3 stars' => 3, '2 stars' => 2, '1 star' => 1],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+            ])
+            ->add('headline', TextType::class, [
+                'label' => t('Title of your testimonial :'),
+                'purify_html' => true,
+                'required' => true,
+            ])
+            ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
+                'empty_data' => '',
+                'required' => false,
+                'help' => t('Field must contain an unique value.'),
             ])
             ->add('content', TextareaType::class, [
                 'label' => t("Content :"),

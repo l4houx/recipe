@@ -30,9 +30,9 @@ class ReviewController extends BaseController
     ) {
     }
 
-    #[Route(path: '/admin/manage-reviews', name: 'dashboard_admin_review_index', methods: ['GET'])]
-    #[Route(path: '/restaurant/my-reviews', name: 'dashboard_restaurant_review_index', methods: ['GET'])]
     #[Route(path: '/creator/my-reviews', name: 'dashboard_creator_review_index', methods: ['GET'])]
+    #[Route(path: '/restaurant/my-reviews', name: 'dashboard_restaurant_review_index', methods: ['GET'])]
+    #[Route(path: '/admin/manage-reviews', name: 'dashboard_admin_review_index', methods: ['GET'])]
     public function index(Request $request, AuthorizationCheckerInterface $authChecker, PaginatorInterface $paginator): Response
     {
         $keyword = '' == $request->query->get('keyword') ? 'all' : $request->query->get('keyword');

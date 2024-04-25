@@ -6,9 +6,15 @@ use App\Entity\Setting\Language;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppLanguageFixtures extends Fixture implements FixtureGroupInterface
 {
+    public function __construct(
+        private readonly SluggerInterface $slugger
+    ) {
+    }
+
     public static function getGroups(): array
     {
         return ['languages'];
@@ -296,6 +302,7 @@ class AppLanguageFixtures extends Fixture implements FixtureGroupInterface
             $language = new Language();
             $language->setCode($code);
             $language->setName($languagename);
+            $language->setSlug($this->slugger->slug($language->getName())->lower());
             $manager->persist($language);
         }
 

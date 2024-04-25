@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\HasDeletedAtTrait;
 use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasIconTrait;
 use App\Entity\Traits\HasIdGedmoNameSlugAssertTrait;
 use App\Entity\Traits\HasIsOnlineTrait;
 use App\Repository\AudienceRepository;
@@ -24,6 +25,7 @@ class Audience
 {
     use HasIdGedmoNameSlugAssertTrait;
     use HasIsOnlineTrait;
+    use HasIconTrait;
     use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
 

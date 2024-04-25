@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\User;
 use App\Entity\Recipe;
 use App\Service\SettingService;
+use App\Repository\UserRepository;
+use App\Repository\RecipeRepository;
 use Symfony\Component\Form\AbstractType;
 use App\Entity\Setting\HomepageHeroSetting;
 use function Symfony\Component\Translation\t;
@@ -14,9 +16,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -57,24 +59,31 @@ class HomepageHeroSettingFormType extends AbstractType
             ->add('recipes', EntityType::class, [
                 'required' => false,
                 'multiple' => true,
+                'autocomplete' => true,
                 'class' => Recipe::class,
-                'choice_label' => 'name',
-                'attr' => ['class' => 'select2'],
+                'choice_label' => 'title',
+                'placeholder' => t('Choose a recipe'),
+                'attr' => ['class' => 'form-select'],
                 'label' => t('Recipes'),
-                'query_builder' => function () {
-                    return $this->settingService->getRecipes(['elapsed' => 'all']);
+                'query_builder' => function (RecipeRepository $recipeRepository) {
+                    return $recipeRepository->createQueryBuilder('recipe');
                 },
             ])
             ->add('restaurants', EntityType::class, [
                 'required' => false,
                 'multiple' => true,
+                'autocomplete' => true,
                 'class' => User::class,
-                'choice_label' => 'restaurant.name',
-                'attr' => ['class' => 'select2'],
+                'choice_label' => 'username',
+                'placeholder' => t('Choose a restaurant name'),
+                'attr' => ['class' => 'form-select'],
                 'label' => t('Restaurants'),
                 'help' => t('Make sure to select restaurants who have added a cover photo'),
-                'query_builder' => function () {
-                    return $this->settingService->getUsers(['role' => 'restaurant']);
+                'group_by' => 'restaurant.name',
+                'query_builder' => function (UserRepository $userRepository) {
+                    return $userRepository
+                        ->findOneBy(['roles' => 'restaurant'], [])
+                    ;
                 },
             ])
             ->add('customBackgroundFile', VichImageType::class, [
@@ -94,7 +103,7 @@ class HomepageHeroSettingFormType extends AbstractType
                 'download_uri' => false,
                 'image_uri' => false,
                 'imagine_pattern' => 'scale',
-                'label' => t('Custom hero background image'),
+                'label' => t('Custom hero image 1'),
                 'translation_domain' => 'messages',
             ])
             ->add('customBlockTwoFile', VichImageType::class, [
@@ -104,7 +113,7 @@ class HomepageHeroSettingFormType extends AbstractType
                 'download_uri' => false,
                 'image_uri' => false,
                 'imagine_pattern' => 'scale',
-                'label' => t('Custom hero background image'),
+                'label' => t('Custom hero image 2'),
                 'translation_domain' => 'messages',
             ])
             ->add('customBlockThreeFile', VichImageType::class, [
@@ -114,7 +123,7 @@ class HomepageHeroSettingFormType extends AbstractType
                 'download_uri' => false,
                 'image_uri' => false,
                 'imagine_pattern' => 'scale',
-                'label' => t('Custom hero background image'),
+                'label' => t('Custom hero image 3'),
                 'translation_domain' => 'messages',
             ])
             ->add('show_search_box', ChoiceType::class, [

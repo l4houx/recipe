@@ -25,6 +25,7 @@
             <div>
                 <h4 class="mb-0">{{ 'Account details'|trans }}</h4>
                 <p class="mb-4">{{ 'Change your personal information and address.'|trans }}</p>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
                     {{ form_errors(form) }}
                     <div class="mb-3 col-12 col-md-4">

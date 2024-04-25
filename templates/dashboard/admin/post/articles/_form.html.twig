@@ -9,6 +9,9 @@
     </div>
     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
         <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+            </div>
             {% if app.request.attributes.get('_route') == 'dashboard_admin_post_edit' %}
                 <div>
                     <h5 class="mb-3">{{ 'Main post image'|trans }}</h5>

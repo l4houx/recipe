@@ -34,7 +34,7 @@ class RecipeController extends BaseController
     #[Route(path: '/restaurant/my-recipes', name: 'dashboard_restaurant_recipe_index', methods: ['GET'])]
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        //$user = $this->getUserOrThrow();
+        $user = $this->getUserOrThrow();
 
         $slug = '' == $request->query->get('slug') ? 'all' : $request->query->get('slug');
         $category = '' == $request->query->get('category') ? 'all' : $request->query->get('category');
@@ -44,7 +44,7 @@ class RecipeController extends BaseController
 
         $restaurant = 'all';
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         $rows = $paginator->paginate($this->settingService->getRecipes(['slug' => $slug, 'category' => $category, 'venue' => $venue, 'elapsed' => $elapsed, 'isOnline' => $isOnline, 'restaurant' => $restaurant, 'sort' => 'startdate', 'restaurantEnabled' => 'all', 'sort' => 'r.createdAt', 'order' => 'DESC'])->getQuery(), $request->query->getInt('page', 1), HasLimit::RECIPE_LIMIT, ['wrap-queries' => true]);
@@ -58,7 +58,7 @@ class RecipeController extends BaseController
     {
         $restaurant = 'all';
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         if (!$slug) {
@@ -115,7 +115,7 @@ class RecipeController extends BaseController
 
                 if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
                     return $this->redirectToRoute('dashboard_restaurant_recipe_index', [], Response::HTTP_SEE_OTHER);
-                } elseif ($this->authChecker->isGranted(HasRoles::APPLICATION)) {
+                } elseif ($this->authChecker->isGranted(HasRoles::ADMINAPPLICATION)) {
                     return $this->redirectToRoute('dashboard_admin_recipe_index', [], Response::HTTP_SEE_OTHER);
                 }
             } else {
@@ -124,7 +124,7 @@ class RecipeController extends BaseController
         }
 
         $seatingPlansSectionsSeatsCountArray = [];
-        foreach ($this->settingService->getVenuesSeatingPlans(['restaurant' => $this->getUser()->getRestaurant()->getSlug()])->getQuery()->getResult() as $seatingPlan) {
+        foreach ($this->settingService->getVenuesSeatingPlans(['restaurant' => $this->getUser()->getRestaurant()?->getSlug()])->getQuery()->getResult() as $seatingPlan) {
             $seatingPlansSectionsSeatsCountArray[$seatingPlan->getId()] = $seatingPlan->getSectionsSeatsQuantityArray();
         }
 
@@ -136,7 +136,7 @@ class RecipeController extends BaseController
     }
 
     #[Route(path: '/admin/manage-recipes/{slug}/delete-permanently', name: 'dashboard_admin_recipe_delete_permanently', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    #[Route(path: '/admin/manage-recipes/{slug}/delete', name: 'delete', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/admin/manage-recipes/{slug}/delete', name: 'dashboard_admin_recipe_delete', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     #[Route(path: '/restaurant/my-recipes/{slug}/delete-permanently', name: 'dashboard_restaurant_recipe_delete_permanently', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     #[Route(path: '/restaurant/my-recipes/{slug}/delete', name: 'dashboard_restaurant_recipe_delete', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
     public function delete(string $slug): Response
@@ -219,11 +219,11 @@ class RecipeController extends BaseController
             return $this->settingService->redirectToReferer('index');
         }
 
-        if (true === $recipe->getIsOnline()) {
-            $recipe->setIsOnline(false);
+        if (false === $recipe->getIsOnline()) {
+            $recipe->setIsOnline(true);
             $this->addFlash('info', $this->translator->trans('The recipe has been unpublished and will not be included in the search results'));
         } else {
-            $recipe->setIsOnline(true);
+            $recipe->setIsOnline(false);
             $this->addFlash('success', $this->translator->trans('The recipe has been published and will figure in the search results'));
         }
 

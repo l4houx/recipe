@@ -1,1 +1,447 @@
-
+<div class="row">
+    <div class="col-lg-6">
+        <div class="table-responsive overflow-y-hidden">
+            <table class="table table-borderless table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th colspan="2"><i class="fas fa-file-alt fa-fw text-muted"></i> {{ "General information"|trans }}</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <tr>
+                            <td width="30%">{{ "Status"|trans }}</td>
+                            <td><span class="badge bg-{{ recipe.stringifyStatusClass }}">{{ recipe.stringifyStatus|trans }}</span></td>
+                        </tr>
+                        <tr>
+                            <td width="30%">{{ "Title"|trans }}</td>
+                            <td>{{ recipe.name }}</td>
+                        </tr>
+                        {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                            <tr>
+                                <td>{{ "Restaurant"|trans }}</td>
+                                <td>{{ recipe.restaurant.name }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ "Reference"|trans }}</td>
+                            <td>{{ recipe.reference }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "Creation date"|trans }}</td>
+                            <td>{{ recipe.createdAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                        </tr>
+                        {% if recipe.updatedAt %}
+                            <tr>
+                                <td>{{ "Update date"|trans }}</td>
+                                <td>{{ recipe.updatedAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.deletedAt %}
+                            <tr>
+                                <td>{{ "Deletion date"|trans }}</td>
+                                <td>{{ recipe.deletedAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ "Views"|trans }}</td>
+                            <td>{{ recipe.views }} {{ "view(s)"|trans }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "Added to favorites by"|trans }}</td>
+                            <td>{{ recipe.addedtofavoritesby | length }} {{ "user(s)"|trans }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "Category"|trans }}</td>
+                            <td>{{ recipe.category.name }}</td>
+                        </tr>
+                        {% if recipe.languages | length %}
+                            <tr>
+                                <td>{{ "Languages"|trans }}</td>
+                                <td>{{ recipe.displayLanguages }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.subtitles | length %}
+                            <tr>
+                                <td>{{ "Subtitles"|trans }}</td>
+                                <td>{{ recipe.displaySubtitles }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.audiences | length %}
+                            <tr>
+                                <td>{{ "Audiences"|trans }}</td>
+                                <td>{{ recipe.displayAudiences }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.country %}
+                            <tr>
+                                <td>{{ "Country"|trans }}</td>
+                                <td>{{ recipe.country.name }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.authors %}
+                            <tr>
+                                <td>{{ "Authors"|trans }}</td>
+                                <td>{{ recipe.authors }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.tags %}
+                            <tr>
+                                <td>{{ "Tags"|trans }}</td>
+                                <td>{{ recipe.tags }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.year %}
+                            <tr>
+                                <td>{{ "Year"|trans }}</td>
+                                <td>{{ recipe.year }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if recipe.youtubeurl %}
+                            <tr>
+                                <td>{{ "Youtube video"|trans }}</td>
+                                <td>{{ recipe.youtubeurl }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ "Publicly show attendees"|trans }}</td>
+                            <td>{{ recipe.isShowattendees ? 'Yes'|trans : 'No'|trans }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "Allow attendees to leave reviews"|trans }}</td>
+                            <td>{{ recipe.enablereviews ? 'Yes'|trans : 'No'|trans }}</td>
+                        </tr>
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="table-responsive overflow-y-hidden">
+            <table class="table table-borderless table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th colspan="2"><i class="fas fa-image fa-fw text-muted"></i> {{ "Images"|trans }}</th>
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td width="30%">{{ "Main image"|trans }}</td>
+                            <td>
+                                <a class="fancybox" href="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+                                    <img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" class="img-thumbnail img-100-100" />
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ "Gallery"|trans }}</td>
+                            <td>
+                                {{ recipe.images | length }} {{ "image(s)"|trans }}
+                                <div class="gallery photos-gallery clearfix">
+                                    {% for image in recipe.images %}
+                                        <figure>
+                                            <a href="{{ asset(image.getImagePath) }}" data-size="{{ image.imageDimensions[0] }}x{{ image.imageDimensions[1] }}">
+                                                <img class="img-50-50" src="{{ image.getImagePath|imagine_filter('thumbnail') }}" alt="{{ recipe.name }}" />
+                                            </a>
+                                        </figure>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="table-responsive overflow-y-hidden">
+            <table class="table table-borderless table-sm">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-calendar fa-fw text-muted"></i> {{ "Recipe dates"|trans }}</th>
+                        <th><i class="fas fa-subscription-alt fa-fw text-muted"></i> {{ "Subscriptions"|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipedate in recipe.recipedates %}
+                        <tr>
+                            <td width="50%">
+                                <h6>{{ "Recipe date"|trans }} {{ loop.index }}</h6>
+                                <div class="table-responsive overflow-y-hidden">
+                                    <table class="table table-borderless table-striped table-hover table-sm">
+                                        <tbody>
+                                            {% if recipedate.startdate | length %}
+                                                <tr>
+                                                    <td>{{ "Start date"|trans }}</td>
+                                                    <td>{{ recipedate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}}</td>
+                                                </tr>
+                                            {% endif %}
+                                            {% if recipedate.enddate | length %}
+                                                <tr>
+                                                    <td>{{ "End date"|trans }}</td>
+                                                    <td>{{ recipedate.enddate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}}</td>
+                                                </tr>
+                                            {% endif %}
+                                            {% if recipedate.payoutRequested %}
+                                                <tr>
+                                                    <td width="30%">{{ "Payout request"|trans }}</td>
+                                                    <td>
+                                                        <a href="{{ path("dashboard_restaurant_payout_requests", {recipedate: recipedate.reference}) }}"><i class="fas fa-file-invoice-dollar"></i> {{ "View details"|trans }}</a>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <td width="30%">{{ "Status"|trans }}</td>
+                                                <td>
+                                                    <span class="badge bg-{{ recipedate.stringifyStatusClass }}">{{ recipedate.stringifyStatus|trans }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ "Sales"|trans }}</td>
+                                                <td>
+                                                    {{ recipedate.getOrderElementsQuantitySum(1) }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ "Reference"|trans }}</td>
+                                                <td>{{ recipedate.reference }}</td>
+                                            </tr>
+                                            {% if recipedate.venue %}
+                                                <tr>
+                                                    <td width="50%">{{ "Venue"|trans }}</td>
+                                                    <td>{{ recipedate.venue.name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ "Address"|trans }}</td>
+                                                    <td>{{ recipedate.venue.stringifyAddress }}</td>
+                                                </tr>
+                                                {% if recipedate.hasSeatingPlan %}
+                                                    <tr>
+                                                        <td>{{ "Seating plan"|trans }}</td>
+                                                        <td>{{ recipedate.seatingPlan.name }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% else %}
+                                                <tr>
+                                                    <td width="50%">{{ "Where"|trans }}</td>
+                                                    <td>{{ "Online"|trans }}</td>
+                                                </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <td>{{ "Subscriptions types"|trans }}</td>
+                                                <td>{{ recipedate.subscriptions | length }}</td>
+                                            </tr>
+                                            {% if recipedate.scanners | length %}
+                                                <tr>
+                                                    <td>{{ "Scanners"|trans }}</td>
+                                                    <td>{{ recipedate.displayScannersNames }}</td>
+                                                </tr>
+                                            {% endif %}
+                                            {% if recipedate.pointofsales | length %}
+                                                <tr>
+                                                    <td>{{ "Point of sales"|trans }}</td>
+                                                    <td>{{ recipedate.displayPosNames }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                {% for recipesubscription in recipedate.subscriptions %}
+                                    <h6>{{ "Subscription"|trans }} {{ loop.index }}</h6>
+                                    <div class="table-responsive overflow-y-hidden">
+                                        <table class="table table-borderless table-striped table-hover table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="30%">{{ "Name"|trans }}</td>
+                                                    <td>{{ recipesubscription.name }} 
+                                                        <small class="text-muted">#{{ recipesubscription.reference }}</small>
+                                                    </td>
+                                                </tr>
+                                                {% if recipedate.hasSeatingPlan and recipesubscription.seatingPlanSections | length > 0 %}
+                                                    <tr>
+                                                        <td>{{ "Seating plan sections"|trans }}</td>
+                                                        <td>
+                                                            {{ recipesubscription.stringifySections() }}
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td>{{ "Status"|trans }}</td>
+                                                    <td>
+                                                        <span class="badge bg-{{ recipesubscription.stringifyStatusClass }}">
+                                                            {{ recipesubscription.stringifyStatus|trans }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ "Sales"|trans }}</td>
+                                                    <td>
+                                                        {{ recipesubscription.getOrderElementsQuantitySum(1) }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ "Subscriptions left"|trans }}</td>
+                                                    <td>
+                                                        {{ recipesubscription.getSubscriptionsLeftCount(false) }}
+                                                    </td>
+                                                </tr>
+                                                {% if recipesubscription.quantity %}
+                                                    <tr>
+                                                        <td>{{ "Quantity"|trans }}</td>
+                                                        <td>{{ recipesubscription.quantity }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td>{{ "Price"|trans }}</td>
+                                                    <td>
+                                                        {{ recipesubscription.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ recipesubscription.getPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+                                                    </td>
+                                                </tr>
+                                                {% if not recipesubscription.free and recipesubscription.promotionalprice %}
+                                                    <tr>
+                                                        <td>{{ "Promotional price"|trans }}</td>
+                                                        <td>
+                                                            {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ recipesubscription.getPromotionalprice() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if recipesubscription.subscriptionsperattendee %}
+                                                    <tr>
+                                                        <td>{{ "Subscriptions per attendee"|trans }}</td>
+                                                        <td>{{ recipesubscription.subscriptionsperattendee }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if recipesubscription.salesstartdate | length %}
+                                                    <tr>
+                                                        <td>{{ "Sales start date"|trans }}</td>
+                                                        <td>{{ recipesubscription.salesstartdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if recipesubscription.salesenddate | length %}
+                                                    <tr>
+                                                        <td>{{ "Sales end date"|trans }}</td>
+                                                        <td>{{ recipesubscription.salesenddate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td>{{ "Currently in cart"|trans }}</td>
+                                                    <td>{{ recipesubscription.cartelements | length }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% if recipe.hasContactAndSocialMedia %}
+        <div class="col-lg-6">
+            <div class="table-responsive overflow-y-hidden">
+                <table class="table table-borderless table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th colspan="2"><i class="fas fa-at fa-fw text-muted"></i> {{ "Contact & Social media"|trans }}</th>
+                        </tr>
+                        <tbody>
+                            {% if recipe.externallink %}
+                                <tr>
+                                    <td>{{ "External link"|trans }}</td>
+                                    <td>{{ recipe.externallink }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if recipe.email %}
+                                <tr>
+                                    <td>{{ "Email"|trans }}</td>
+                                    <td>{{ recipe.email }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if recipe.phone %}
+                                <tr>
+                                    <td>{{ "Phone number"|trans }}</td>
+                                    <td>{{ recipe.phone }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if recipe.facebookurl %}
+                                <tr>
+                                    <td>{{ "Facebook"|trans }}</td>
+                                    <td>{{ recipe.facebookurl }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if recipe.twitterurl %}
+                                <tr>
+                                    <td>{{ "Twitter"|trans }}</td>
+                                    <td>{{ recipe.twitterurl }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if recipe.googleplusurl %}
+                                <tr>
+                                    <td>{{ "Google plus"|trans }}</td>
+                                    <td>{{ recipe.googleplusurl }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if recipe.instagramurl %}
+                                <tr>
+                                    <td>{{ "Instagram"|trans }}</td>
+                                    <td>{{ recipe.instagramurl }}</td>
+                                </tr>
+                            {% endif %}
+                            {% if recipe.linkedinurl %}
+                                <tr>
+                                    <td>{{ "Linkedin"|trans }}</td>
+                                    <td>{{ recipe.linkedinurl }}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+    <div class="col-lg-6">
+        <div class="table-responsive overflow-y-hidden">
+            <table class="table table-borderless table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th colspan="2"><i class="fas fa-star fa-fw text-muted"></i> {{ "Reviews"|trans }}</th>
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td width="30%">{{ "Count"|trans }}</td>
+                            <td>{{ recipe.reviews | length }}</td>
+                        </tr>
+                        {% if recipe.reviews | length %}
+                            <tr>
+                                <td>{{ "Rating"|trans }}</td>
+                                <td>
+                                    <div class="rating-wrap">
+                                        <ul class="rating-stars">
+                                            <li style="width:{{recipe.getRatingPercentage}}%" class="stars-active">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </li>
+                                        </ul>
+                                        <div class="label-rating">{{ recipe.getRatingAvg }} {{"out of 5 stars"|trans|lower}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>

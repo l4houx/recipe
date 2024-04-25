@@ -227,8 +227,8 @@
 														<i class="bi bi-trash dropdown-item-icon"></i>
 														{{ 'Delete'|trans }}
 													</a>
-													<form id="js-recipe-delete-form" action="{{ path('dashboard_admin_recipe_delete', {id: recipe.id}) }}" method="post" class="">
-														<input type="hidden" name="_token" value="{{ csrf_token('recipe_deletion_' ~ recipe.id) }}">
+													<form id="js-recipe-delete-form" action="{{ path('dashboard_admin_recipe_delete', {slug: recipe.slug}) }}" method="post" class="">
+														<input type="hidden" name="_token" value="{{ csrf_token('recipe_deletion_' ~ recipe.slug) }}">
 														<input type="hidden" name="_method" value="DELETE">
 													</form> 
 												</div>

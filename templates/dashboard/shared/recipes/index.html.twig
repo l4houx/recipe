@@ -47,3 +47,38 @@
         {% endif %}
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            if (getURLParameter("slug")) {
+                var url = "{{ (path('get_recipe', { slug : "recipeslug", isOnline: "all", elapsed: "all" }))|raw }}";
+                url = url.replace("recipeslug", getURLParameter("slug"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_slug').select2('data', {id: data.slug, text: data.text});
+                    $('#slug').val(data.slug).change();
+                });
+            }
+
+            if (getURLParameter('category') != "null") {
+                $('#category').val(getURLParameter('category')).trigger("change");
+            }
+
+            if (getURLParameter('venue') != "null") {
+                $('#venue').val(getURLParameter('venue')).trigger("change");
+            }
+
+            if (getURLParameter('elapsed') != "null") {
+                $('input[type="radio"][name="elapsed"][value="' + getURLParameter('elapsed') + '"]').attr("checked", "checked");
+            }
+
+            if (getURLParameter('isOnline') != "null") {
+                $('input[type="radio"][name="isOnline"][value="' + getURLParameter('isOnline') + '"]').attr("checked", "checked");
+            }
+        });
+    </script>
+{% endblock %}

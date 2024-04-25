@@ -9,12 +9,13 @@ use App\Entity\Status;
 use App\Entity\Ticket;
 use App\Entity\Response;
 use App\Entity\Application;
-use App\DataFixtures\FakerTrait;
 use App\Entity\Traits\HasRoles;
+use App\DataFixtures\FakerTrait;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class AppTicketingFixtures extends Fixture
+class AppTicketingFixtures extends Fixture implements DependentFixtureInterface
 {
     use FakerTrait;
 
@@ -85,7 +86,7 @@ class AppTicketingFixtures extends Fixture
                 ->setStatus($this->faker()->randomElement($openStatus))
                 ->setLevel($this->faker()->randomElement($lowLevels))
                 ->setApiId($this->faker()->randomDigit())
-                ->setAuthor($this->faker()->name())
+                ->setAuthor($this->faker()->userName())
             ;
 
             $manager->persist($ticket);
@@ -108,5 +109,15 @@ class AppTicketingFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    /**
+     * @return array<array-key, class-string<Fixture>>
+     */
+    public function getDependencies(): array
+    {
+        return [
+            AppAdminTeamUserFixtures::class,
+        ];
     }
 }

@@ -1,8 +1,8 @@
 <div class="table-responsive overflow-y-hidden">
 	<table class="table mb-0 text-nowrap table-hover table-centered">
-		<thead class="">
+		<thead class="table-light">
 			<tr>
-				<th># {# {{ knp_pagination_sortable(rows, '#', 't.id') }} #}</th>
+				<th>#</th>
 				<th>{{ 'User name / Email'|trans }}</th>
 				<th>{{ 'Full name / Premium'|trans }}</th>
 				<th>{{ 'Content'|trans }}</th>
@@ -18,12 +18,15 @@
 				<tr>
 					<td>{{ testimonial.id }}</td>
 					<td>
-						<a href="{{ link }}" class="text-inherit">
+						<a href="{{ link }}" class="text-inherit" target="_blank">
 							<div class="d-flex align-items-center">
+								<div>
+									{% include "global/user-avatar.html.twig" with { user: testimonial.author, type: "xl" } %}
+								</div>
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">
-                                        {{ testimonial.author.username | lower | capitalize }}
-                                    <br>
+                                        {{ testimonial.author.username }} 
+										<br>
 										{{ testimonial.author.email }}
                                     </h4>
 									<span>

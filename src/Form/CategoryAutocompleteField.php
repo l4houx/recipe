@@ -23,7 +23,7 @@ class CategoryAutocompleteField extends AbstractType
             'placeholder' => t('Choose a category'),
             'choice_label' => 'name',
             'query_builder' => function (CategoryRepository $categoryRepository) {
-                return $categoryRepository->createQueryBuilder('category');
+                return $categoryRepository->createQueryBuilder('c');
             },
         ]);
     }

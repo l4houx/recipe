@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\HasContentTrait;
+use App\Entity\Traits\HasDeletedAtTrait;
 use App\Entity\Traits\HasGedmoTimestampTrait;
 use App\Entity\Traits\HasIdGedmoHeadlineAndSlugTrait;
 use App\Entity\Traits\HasIsOnlineTrait;
@@ -10,10 +11,11 @@ use App\Entity\Traits\HasLimit;
 use App\Entity\Traits\HasRatingTrait;
 use App\Repository\TestimonialRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TestimonialRepository::class)]
-// #[UniqueEntity('headline')]
-// #[UniqueEntity('slug')]
+#[UniqueEntity('headline')]
+#[UniqueEntity('slug')]
 class Testimonial
 {
     use HasIdGedmoHeadlineAndSlugTrait;
@@ -21,6 +23,7 @@ class Testimonial
     use HasRatingTrait;
     use HasIsOnlineTrait;
     use HasGedmoTimestampTrait;
+    use HasDeletedAtTrait;
 
     public const TESTIMONIAL_LIMIT = HasLimit::TESTIMONIAL_LIMIT;
 

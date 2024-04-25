@@ -4,7 +4,7 @@
 {% block title pagetitle %}
 
 {% block breadcrumb %}
-	{% set breadcrumb = [{ "dashboard_testimonial_new": ('Testimonials'|trans), "current":(pagetitle) }] %}
+	{% set breadcrumb = [{ "dashboard_creator_testimonial_new": ('Testimonials'|trans), "current":(pagetitle) }] %}
 	{% include "global/breadcrumb.html.twig" with breadcrumb %}
 {% endblock %}
 
@@ -16,15 +16,23 @@
                 <span></span>
             </div>
             <div>
-                <a href="{{ path('dashboard_testimonial_index') }}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ path('dashboard_creator_testimonial_index') }}" class="btn btn-outline-primary btn-sm">
                     {{ 'Return to list'|trans }}
                 </a>
             </div>
         </div>
         <div class="card-body">
             <div>
-                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                    {{ form_widget(form._token) }}
                     {{ form_errors(form) }}
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.headline) }}
+                    </div>
+                    <div class="mb-3 col-12 col-md-6">
+                        {{ form_row(form.slug) }}
+                    </div>
                     <div class="mb-3 col-12 col-md-12">
                         {{ form_row(form.rating) }}
                     </div>

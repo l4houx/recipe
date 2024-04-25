@@ -37,4 +37,41 @@
             </div>
         </div>
     </div>
+    <div id="seating-plans-sections-seats-count" data-seating-plans-sections-seats-count="{{ seatingPlansSectionsSeatsCountArrayJson }}">
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            {% if recipe.id %}
+                {% for recipeDate in recipe.recipedates %}
+                    {% if recipeDate.payoutRequested %}
+                        $('.recipe-date-reference').each(function () {
+                            if ($(this).val() == "{{recipeDate.reference}}") {
+                                $(this).closest("fieldset").prop('disabled', true);
+                                $(this).closest("fieldset").prepend('<p class="alert alert-danger alert-icon"><i class="fas fa-exclamation-circle"></i> {{ "This recipe date is locked because a payout request has been submitted"|trans }}</p>');
+                            }
+                        });
+                    {% endif %}
+                {% endfor %}
+                {% for recipeDate in recipe.recipedates %}
+                    {% for recipeDateSubscription in recipeDate.subscriptions %}
+                        {% if recipeDateSubscription.isOnSale and recipeDateSubscription.getOrderElementsQuantitySum() > 0 %}
+                            $('.recipe-date-subscription-reference').each(function () {
+                            if ($(this).val() == "{{recipeDateSubscription.reference}}") {
+                                $(this).closest("fieldset").find('.recipe-date-subscription-quantity').trigger("touchspin.updatesettings", {min: {{ recipeDateSubscription.getOrderElementsQuantitySum() }}});
+                                    $(this).closest("fieldset").find('.recipe-date-subscription-quantity').attr("data-min", {{ recipeDateSubscription.getOrderElementsQuantitySum() }});
+                                    }
+                                });
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            $(document).on('submit', 'form[name="recipe"]', function () {
+                $('form[name="recipe"]').find('fieldset').prop('disabled', false);
+            });
+        });
+    </script>
 {% endblock %}

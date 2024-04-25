@@ -90,6 +90,7 @@ class TestimonialRepository extends ServiceEntityRepository
      *
      * @param string      $keyword
      * @param int         $id
+     * @param string      $slug
      * @param User|null   $user
      * @param bool        $isOnline
      * @param int|null    $rating
@@ -100,14 +101,14 @@ class TestimonialRepository extends ServiceEntityRepository
      * @param string      $sort
      * @param string      $order
      */
-    public function getTestimonials($keyword, $id, $user, $isOnline, $rating, $minrating, $maxrating, $limit, $count, $sort, $order): QueryBuilder
+    public function getTestimonials($keyword, $id, $slug, $user, $isOnline, $rating, $minrating, $maxrating, $limit, $count, $sort, $order): QueryBuilder
     {
         $qb = $this->createQueryBuilder('t');
 
         if ($count) {
-            $qb->select('COUNT(DISTINCT t)');
+            $qb->select('COUNT(t)');
         } else {
-            $qb->select('DISTINCT t');
+            $qb->select('t');
         }
 
         if ('all' !== $keyword) {
@@ -116,6 +117,10 @@ class TestimonialRepository extends ServiceEntityRepository
 
         if ('all' !== $id) {
             $qb->andWhere('t.id = :id')->setParameter('id', $id);
+        }
+
+        if ('all' !== $slug) {
+            $qb->andWhere('r.slug = :slug')->setParameter('slug', $slug);
         }
 
         if ('all' !== $user) {

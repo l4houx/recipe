@@ -541,7 +541,7 @@ class SettingService
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
             /** @var User $user */
             $user = $this->security->getUser();
-            $restaurant = $user->getRestaurant()->getSlug();
+            $restaurant = $user->getRestaurant()?->getSlug();
         }
 
         return $this->em->getRepository("App\Entity\Order")->getOrders($status, $user, $restaurant, $recipe, $recipeDate, $recipeSubscription, $reference, $upcomingSubscriptions, $datefrom, $dateto, $paymentgateway, $sort, $order, $limit, $count, $ordersQuantityByDateStat, $sumOrderElements);
@@ -583,6 +583,7 @@ class SettingService
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $id = array_key_exists('id', $criterias) ? $criterias['id'] : 'all';
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $user = array_key_exists('user', $criterias) ? $criterias['user'] : 'all';
         $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $rating = array_key_exists('rating', $criterias) ? $criterias['rating'] : 'all';
@@ -593,7 +594,7 @@ class SettingService
         $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'createdAt';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
 
-        return $this->em->getRepository("App\Entity\Testimonial")->getTestimonials($keyword, $id, $user, $isOnline, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
+        return $this->em->getRepository("App\Entity\Testimonial")->getTestimonials($keyword, $id, $slug, $user, $isOnline, $rating, $minrating, $maxrating, $limit, $count, $sort, $order);
     }
 
     // Returns the help center categories after applying the specified search criterias

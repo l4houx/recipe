@@ -1,58 +1,83 @@
 {% extends 'dashboard.html.twig' %}
 
-{% if is_granted('ROLE_USER') %}
+{% if is_granted('ROLE_CREATOR') %}
 	{% set pagetitle = 'My reviews' | trans %}
-{% elseif is_granted('ROLE_ADMIN') %}
+{% elseif is_granted('ROLE_RESTAURANT') %}
+    {% set pagetitle = 'Reviews' | trans %}
+{% elseif is_granted('ROLE_ADMIN_APPLICATION') %}
 	{% set pagetitle = 'Manage reviews' | trans %}
 {% endif %}
-
 {% block title pagetitle %}
 
 {% block content %}
 	<div class="card mb-4">
-		{% if rows | length > 0 %}
-			<div class="card-header d-lg-flex align-items-center justify-content-between">
-				<div class="mb-3 mb-lg-0">
-					<h3 class="mb-0">{{ pagetitle }}</h3>
-					<span>{{ 'You have full control to manage your own account setting.'|trans }}</span>
-				</div>
+		<div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
+			<div class="mb-3 mb-lg-0">
+				<h3 class="mb-0">{{ pagetitle }}</h3>
+				{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_RESTAURANT') or is_granted('ROLE_ADMIN_APPLICATION') %}
+					<span>{{ "%resultsCount% reviews(s) found"|trans({'%resultsCount%': reviews.getTotalItemCount }) }}</span>
+				{% endif %}
+			</div>
+			{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_RESTAURANT') or is_granted('ROLE_ADMIN_APPLICATION') %}
 				<div>
 					<a href="#" class="btn btn-outline-primary btn-sm">{{ 'Export To CSV...'|trans }}</a>
 				</div>
-			</div>
+			{% endif %}
+		</div>
+		{% if rows.getTotalItemCount > 0  %}
 			<div class="card-body">
-				<form class="row mb-4 gx-2">
-					<div class="col-xl-7 col-lg-6 col-md-4 col-12 mb-2 mb-lg-0">
-						<select class="form-select">
-							<option value="">ALL</option>
-							<option value="How to easily create a website">How to easily create a website</option>
-							<option value="Grunt: The JavaScript Task...">Grunt: The JavaScript Task...</option>
-							<option value="Vue js: The JavaScript Task...">Vue js: The JavaScript Task...</option>
-						</select>
+				{% if is_granted('ROLE_RESTAURANT') or is_granted('ROLE_ADMIN_APPLICATION') %}
+					<form class="row mb-4 gx-2">
+						<div class="col-xl-7 col-lg-6 col-md-4 col-12 mb-2 mb-lg-0">
+							<select class="form-select">
+								<option value="">{{ "Select an option"|trans }}</option>
+								<option value="">{{ knp_pagination_sortable(reviews, "Rating"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.rating", {"direction": "desc", "criteria": "r.rating"}) }}</option>
+								<option value="">{{ knp_pagination_sortable(reviews, "Rating"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.rating", {"direction": "asc", "criteria": "r.rating"}) }}</option>
+								<option value="">{{ knp_pagination_sortable(reviews, "Review date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.createdAt", {"direction": "desc", "criteria": "r.createdAt"}) }}</option>
+								<option value="">{{ knp_pagination_sortable(reviews, "Review date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.createdAt", {"direction": "asc", "criteria": "r.createdAt"}) }}</option>
+							</select>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
+							<select class="form-select">
+								<option value="">Rating</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+							</select>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-4 col-12 mb-2 mb-lg-0">
+							<select class="form-select">
+								<option value="">Sort by</option>
+								<option value="Newest">Newest</option>
+								<option value="Oldest">Oldest</option>
+							</select>
+						</div>
+					</form>
+				{% endif %}
+				<hr class="my-5">
+				<div class="mb-3">
+					<div class="d-lg-flex align-items-center justify-content-between mb-5">
+						<div class="mb-3 mb-lg-0">
+							<h3 class="mb-0">{{ 'Reviews'|trans }}</h3>
+						</div>
+						<div>
+							<form class="form-inline">
+								<div class="d-flex align-items-center me-2">
+									<span class="position-absolute ps-3">
+										<i class="bi bi-search"></i>
+									</span>
+									<label for="search" class="visually-hidden"></label>
+									<input type="search" id="search" class="form-control ps-6" placeholder="Search Courses">
+								</div>
+							</form>
+						</div>
 					</div>
-					<div class="col-xl-2 col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
-						<select class="form-select">
-							<option value="">Rating</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-					</div>
-					<div class="col-xl-3 col-lg-3 col-md-4 col-12 mb-2 mb-lg-0">
-						<select class="form-select">
-							<option value="">Sort by</option>
-							<option value="Newest">Newest</option>
-							<option value="Oldest">Oldest</option>
-						</select>
-					</div>
-				</form>
-				<ul class="list-group list-group-flush border-top">
 					{% for review in rows %}
 						{% include "global/user-review.html.twig" with {review: review, showuser: 1} %}
 					{% endfor %}
-				</ul>
+				</div>
 				<div class="card-footer">
 					{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
 				</div>
@@ -63,4 +88,31 @@
 			</div>
         {% endif %}
 	</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            if (getURLParameter("recipe")) {
+                var url = "{{ (path('get_recipe', { slug : "recipeslug", isOnline: "all", elapsed: "all" }))|raw }}";
+                url = url.replace("recipeslug", getURLParameter("recipe"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_recipe').select2('data', {id: data.slug, text: data.text});
+                    $('#rrecipe').val(data.slug).change();
+                });
+            }
+
+            if (getURLParameter('isVisible') != "null") {
+                $('input[type="radio"][name="isVisible"][value="' + getURLParameter('isVisible') + '"]').attr("checked", "checked");
+            }
+
+            if (getURLParameter('rating') != "null") {
+                $('input[type="radio"][name="rating"][value="' + getURLParameter('rating') + '"]').attr("checked", "checked");
+            }
+        });
+    </script>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Recipe;
 use App\Entity\Country;
 use App\Entity\Audience;
+use App\Entity\Category;
 use App\Service\SettingService;
 use App\Entity\Setting\Language;
 use Symfony\Component\Form\AbstractType;
@@ -14,8 +15,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -30,11 +34,6 @@ class RecipeFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            /*
-            ->add('imageFile', VichFileType::class, [
-                'label' => t('Image :'),
-            ])
-            */
             ->add('imageFile', VichImageType::class, [
                 'required' => true,
                 'allow_delete' => false,
@@ -65,7 +64,7 @@ class RecipeFormType extends AbstractType
                 'required' => true,
                 'purify_html' => true,
                 'empty_data' => '',
-                'help' => t('Keep your recipe titles under 10 characters. Write heading that describe the topic content. Contextualize for Your Audience.'),
+                'help' => t('Keep your recipe titles under 10 characters. Write heading that describe the topic content. Contextualize for Your Recipe.'),
             ])
             ->add('slug', TextType::class, [
                 'label' => t('Slug :'),
@@ -87,8 +86,9 @@ class RecipeFormType extends AbstractType
             ->add('content', TextareaType::class, [
                 'label' => t('Content :'),
                 'required' => true,
+                'purify_html' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => '', 'rows' => 6],
+                'attr' => ['class' => 'wysiwyg', 'placeholder' => '', 'rows' => 6],
                 'help' => t(''),
             ])
             ->add('duration', null, [
@@ -185,56 +185,56 @@ class RecipeFormType extends AbstractType
             ])
             */
             ->add('country', CountryAutocompleteField::class, ['required' => false])
-            ->add('youtubeurl', TextType::class, [
+            ->add('youtubeurl', UrlType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Youtube video url :'),
                 'help' => t('If you have an Youtube video that represents your activities as an recipe restaurant, add it in the standard format: https://www.youtube.com/watch?v=FzG4uDgje3M'),
             ])
-            ->add('externallink', TextType::class, [
+            ->add('externallink', UrlType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('External link :'),
                 'help' => t('If your recipe has a dedicated website, enter its url here'),
             ])
-            ->add('phone', TextType::class, [
+            ->add('phone', TelType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Contact phone number :'),
                 'help' => t('Enter the phone number to be called for inquiries'),
             ])
-            ->add('email', TextType::class, [
+            ->add('email', EmailType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Contact email address :'),
                 'help' => t('Enter the email address to be reached for inquiries'),
             ])
-            ->add('twitterurl', TextType::class, [
+            ->add('twitterurl', UrlType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Twitter :'),
             ])
-            ->add('instagramurl', TextType::class, [
+            ->add('instagramurl', UrlType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Instagram :'),
             ])
-            ->add('facebookurl', TextType::class, [
+            ->add('facebookurl', UrlType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Facebook :'),
             ])
-            ->add('googleplusurl', TextType::class, [
+            ->add('googleplusurl', UrlType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Google plus :'),
             ])
-            ->add('linkedinurl', TextType::class, [
+            ->add('linkedinurl', UrlType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('LinkedIn :'),
             ])
-            ->add('author', TextType::class, [
+            ->add('authors', TextType::class, [
                 'purify_html' => true,
                 'required' => false,
                 'label' => t('Authors :'),

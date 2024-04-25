@@ -9,6 +9,9 @@
     </div>
     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
         <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+            </div>
             {{ form_widget(form) }}
             <div class="col-12 pt-2">
                 <button type="submit" class="{% if status.id %}btn btn-warning{% else %}btn btn-primary{% endif %} me-4">

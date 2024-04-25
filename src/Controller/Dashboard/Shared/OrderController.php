@@ -425,8 +425,8 @@ class OrderController extends BaseController
 
         // Export current orders query results into Excel / Csv
         if (($authChecker->isGranted(HasRoles::ADMINAPPLICATION) || $authChecker->isGranted(HasRoles::RESTAURANT) || $authChecker->isGranted(HasRoles::POINTOFSALE)) && ('1' == $request->query->get('excel') || '1' == $request->query->get('csv') || '1' == $request->query->get('pdf'))) {
-            $orders = $ordersQuery->getResult();
-            if (!count($orders)) {
+            $rows = $ordersQuery->getResult();
+            if (!count($rows)) {
                 $this->addFlash('danger', $this->translator->trans('No orders found to be included in the report'));
 
                 return $this->settingService->redirectToReferer('orders');
@@ -462,7 +462,7 @@ class OrderController extends BaseController
                 $totalAttendees = 0;
 
                 /** @var Order $order */
-                foreach ($orders as $order) {
+                foreach ($rows as $order) {
                     foreach ($order->getOrderElements() as $orderElement) {
                         if ($authChecker->isGranted(HasRoles::ADMINAPPLICATION) || ($authChecker->isGranted(HasRoles::RESTAURANT) && $this->getUser()->getRestaurant() == $orderElement->getRecipeSubscription()->getRecipeDate()->getRecipe()->getRestaurant()) || $this->isGranted(HasRoles::POINTOFSALE)) {
                             if ('all' == $recipe || 'all' != $recipe && $orderElement->getRecipeSubscription()->getRecipeDate()->getRecipe()->getSlug()) {
@@ -539,7 +539,7 @@ class OrderController extends BaseController
                 $dompdf = new Dompdf($pdfOptions);
                 $html = $this->renderView('dashboard/shared/order/creators-pdf.html.twig', [
                     'recipe' => $recipe,
-                    'orders' => $orders,
+                    'rows' => $rows,
                 ]);
                 $dompdf->loadHtml($html);
                 $dompdf->setPaper('A4', 'portrait');
@@ -553,7 +553,7 @@ class OrderController extends BaseController
         $ordersPagination = $paginator->paginate($ordersQuery, $request->query->getInt('page', 1), 10, ['wrap-queries' => true]);
 
         return $this->render('dashboard/shared/order/orders.html.twig', [
-            'orders' => $ordersPagination,
+            'rows' => $ordersPagination,
         ]);
     }
 

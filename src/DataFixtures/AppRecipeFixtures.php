@@ -2,33 +2,34 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
-use App\Entity\Venue;
-use App\Entity\Recipe;
-use App\Entity\Review;
+use App\Entity\CartElement;
+use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Country;
-use App\Entity\Scanner;
-use App\Entity\Category;
-use App\Entity\Quantity;
 use App\Entity\Ingredient;
-use App\Entity\RecipeDate;
-use App\Entity\Restaurant;
-use App\Entity\VenueImage;
-use App\Entity\CartElement;
 use App\Entity\PointOfSale;
+use App\Entity\Quantity;
+use App\Entity\Recipe;
+use App\Entity\RecipeDate;
 use App\Entity\RecipeImage;
-use App\Entity\Testimonial;
-use App\Entity\Setting\Language;
-use App\Entity\VenueSeatingPlan;
 use App\Entity\RecipeSubscription;
-use Doctrine\Persistence\ObjectManager;
+use App\Entity\Restaurant;
+use App\Entity\Review;
+use App\Entity\Scanner;
 use App\Entity\Setting\HomepageHeroSetting;
+use App\Entity\Setting\Language;
+use App\Entity\Testimonial;
+use App\Entity\Traits\HasRoles;
+use App\Entity\User;
+use App\Entity\Venue;
+use App\Entity\VenueImage;
+use App\Entity\VenueSeatingPlan;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 use FakerRestaurant\Provider\fr_FR\Restaurant as FakerRestaurant;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -62,9 +63,10 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
         /** @var array<HomepageHeroSetting> $homepages */
         $homepages = $manager->getRepository(HomepageHeroSetting::class)->findAll();
 
-        /** @var array<User> $users */
-        $users = $manager->getRepository(User::class)->findBy(['isVerified' => true]);
+        /** @var array<User> $restauranters */
+        $restauranters = $manager->getRepository(User::class)->findAll();
 
+        // Provider Restaurant
         $this->faker()->addProvider(new FakerRestaurant($this->faker()));
 
         $ingredients = array_map(fn (string $name) => (new Ingredient())
@@ -175,8 +177,8 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
             $recipeimages[] = $recipeimage;
         }
 
-        // Create 10 Testimonial by User
-        for ($i = 0; $i <= 10; ++$i) {
+        // Create 20 Testimonial by User
+        for ($i = 0; $i <= 20; ++$i) {
             $testimonial = new Testimonial();
             $testimonial
                 ->setAuthor($this->getReference('user-'.$this->faker()->numberBetween(1, 10)))
@@ -190,8 +192,8 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($testimonial);
         }
 
-        // Create 10 Review by Recipe
-        for ($i = 0; $i <= 10; ++$i) {
+        // Create 20 Review by Recipe
+        for ($i = 0; $i <= 20; ++$i) {
             $review = new Review();
             $review
                 ->setAuthor($this->getReference('user-'.$this->faker()->numberBetween(1, 10)))
@@ -208,46 +210,49 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
 
         // Create 20 Restaurants
         $restaurants = [];
-        foreach ($countries as $country) {
-            for ($i = 0; $i <= 20; ++$i) {
-                $restaurant = new Restaurant();
-                $restaurant
-                    ->setName($this->faker()->sentence())
-                    ->setSlug($this->slugger->slug($restaurant->getName())->lower())
-                    ->setContent(1 === mt_rand(0, 1) ? $this->faker()->paragraphs(10, true) : null)
-                    ->setViews(rand(10, 160))
-                    ->setExternallink(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setWebsite(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setEmail(1 === mt_rand(0, 1) ? $this->faker()->email() : null)
-                    ->setPhone(1 === mt_rand(0, 1) ? $this->faker()->phoneNumber() : null)
-                    ->setYoutubeurl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setTwitterUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setInstagramUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setFacebookUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setGoogleplusUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setLinkedinUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
-                    ->setIsShowvenuesmap($this->faker()->numberBetween(0, 1))
-                    ->setIsShowfollowers($this->faker()->numberBetween(0, 1))
-                    ->setIsShowreviews($this->faker()->numberBetween(0, 1))
-                    ->setAllowTapToCheckInOnScannerApp($this->faker()->numberBetween(0, 1))
-                    ->setShowRecipeDateStatsOnScannerApp($this->faker()->numberBetween(0, 1))
-                    // ->setUser($this->getReference('user-'.$this->faker()->numberBetween(1, 10)))
-                    ->setCountry($country)
-                    ->addRecipe($this->faker()->randomElement($recipes))
-                    ->addCategory($this->faker()->randomElement($categories))
-                    // ->addPointOfSale($this->getReference('pointofsale-'.$this->faker()->numberBetween(1, 10)))
-                    // ->addScanner($this->getReference('scanner-'.$this->faker()->numberBetween(1, 10)))
-                ;
+        for ($i = 0; $i <= 20; ++$i) {
+            $restaurant = new Restaurant();
+            $restaurant
+                ->setName($this->faker()->sentence())
+                ->setSlug($this->slugger->slug($restaurant->getName())->lower())
+                ->setContent(1 === mt_rand(0, 1) ? $this->faker()->paragraphs(10, true) : null)
+                ->setViews(rand(10, 160))
+                ->setExternallink(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setWebsite(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setEmail(1 === mt_rand(0, 1) ? $this->faker()->email() : null)
+                ->setPhone(1 === mt_rand(0, 1) ? $this->faker()->phoneNumber() : null)
+                ->setYoutubeurl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setTwitterUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setInstagramUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setFacebookUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setGoogleplusUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setLinkedinUrl(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
+                ->setIsShowvenuesmap($this->faker()->numberBetween(0, 1))
+                ->setIsShowfollowers($this->faker()->numberBetween(0, 1))
+                ->setIsShowreviews($this->faker()->numberBetween(0, 1))
+                ->setAllowTapToCheckInOnScannerApp($this->faker()->numberBetween(0, 1))
+                ->setShowRecipeDateStatsOnScannerApp($this->faker()->numberBetween(0, 1))
+                ->setCountry($this->faker()->randomElement($countries))
+                ->addRecipe($this->faker()->randomElement($recipes))
+                ->addCategory($this->faker()->randomElement($categories))
+            ;
 
-                $this->addReference('restaurant-'.$this->counter, $restaurant);
-                ++$this->counter;
+            $this->addReference('restaurant-'.$i, $restaurant);
 
-                $followedby = $this->getReference('user-'.$this->faker()->numberBetween(1, 10));
-                $restaurant->addFollowedby($followedby);
+            $followedby = $this->getReference('user-'.$this->faker()->numberBetween(1, 10));
+            $restaurant->addFollowedby($followedby);
 
-                $manager->persist($restaurant);
-                $restaurants[] = $restaurant;
-            }
+            $pointofsale = $this->getReference('pointofsale-'.$this->faker()->numberBetween(1, 20));
+            $restaurant->addPointOfSale($pointofsale);
+
+            $scanner = $this->getReference('scanner-'.$this->faker()->numberBetween(1, 20));
+            $restaurant->addScanner($scanner);
+
+            //$restauranter = $this->getReference('restauranter-'.$this->faker()->numberBetween(1, 20));
+            //$restaurant->setUser($restauranter);
+
+            $manager->persist($restaurant);
+            $restaurants[] = $restaurant;
         }
 
         // Create 20 Venues
@@ -291,7 +296,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 $comment = (new Comment())
                     ->setIp($this->faker()->ipv4)
                     ->setContent($this->faker()->paragraph())
-                    ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                    ->setAuthor($this->getReference('user-'.$this->faker()->numberBetween(1, 10)))
                     ->setVenue($venue)
                     ->setParent(null)
                     ->setIsApproved($this->faker()->numberBetween(0, 1))
@@ -333,8 +338,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
         // Create 20 Recipe Date
         $recipedates = [];
         for ($i = 0; $i <= 20; ++$i) {
-            $recipedate = (new RecipeDate());
-            $recipedate
+            $recipedate = (new RecipeDate())
                 ->setReference($this->faker()->vat(false))
                 ->setStartdate($this->faker()->dateTime())
                 ->setEnddate($this->faker()->dateTime())
@@ -345,8 +349,8 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 ->setIsActive($this->faker()->numberBetween(0, 1))
                 ->setIsOnline($this->faker()->numberBetween(0, 1))
                 // ->addPayoutRequest()
-                // ->addPointOfSale($this->getReference('pointofsale-'.$this->faker()->numberBetween(1, 10)))
-                // ->addScanner($this->getReference('scanner-'.$this->faker()->numberBetween(1, 10)))
+                ->addPointOfSale($this->getReference('pointofsale-'.$this->faker()->numberBetween(1, 20)))
+                ->addScanner($this->getReference('scanner-'.$this->faker()->numberBetween(1, 20)))
                 // ->addSubscription($this->getReference('recipesubscription-'.$this->faker()->numberBetween(1, 20)))
             ;
 
@@ -357,8 +361,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
         // Create 20 Recipe Subscription
         $recipesubscriptions = [];
         for ($i = 0; $i <= 20; ++$i) {
-            $recipesubscription = (new RecipeSubscription());
-            $recipesubscription
+            $recipesubscription = (new RecipeSubscription())
                 ->setReference($this->faker()->vat(false))
                 ->setName($this->faker()->word())
                 ->setDescription($this->faker()->paragraphs(10, true))
@@ -379,54 +382,16 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 // ->addSubscriptionReservation()
             ;
 
-            $this->addReference('recipesubscription-'.$this->counter, $recipesubscription);
-            ++$this->counter;
+            $this->addReference('recipesubscription-'.$i, $recipesubscription);
 
             $manager->persist($recipesubscription);
             $recipesubscriptions[] = $recipesubscription;
         }
 
-        // Create 10 Scanner
-        $scanners = [];
-        for ($i = 0; $i <= 10; ++$i) {
-            $scanner = (new Scanner());
-            $scanner
-                ->setName($this->faker()->word())
-                ->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
-                // ->setUser($this->getReference('user-'.$this->faker()->numberBetween(1, 10)))
-                ->addRecipedate($this->faker()->randomElement($recipedates))
-            ;
-
-            $this->addReference('scanner-'.$this->counter, $scanner);
-            ++$this->counter;
-
-            $manager->persist($scanner);
-            $scanners[] = $scanner;
-        }
-
-        // Create 10 Point Of Sale
-        $pointofsales = [];
-        for ($i = 0; $i <= 10; ++$i) {
-            $pointofsale = (new PointOfSale());
-            $pointofsale
-                ->setName($this->faker()->word())
-                ->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
-                // ->setUser($this->getReference('user-'.$this->faker()->numberBetween(1, 10)))
-                ->addRecipedate($this->faker()->randomElement($recipedates))
-            ;
-
-            $this->addReference('pointofsale-'.$this->counter, $pointofsale);
-            ++$this->counter;
-
-            $manager->persist($pointofsale);
-            $pointofsales[] = $pointofsale;
-        }
-
-        // Create 10 Cart Element
+        // Create 20 Cart Element
         $cartelements = [];
-        for ($i = 0; $i <= 10; ++$i) {
-            $cartelement = (new CartElement());
-            $cartelement
+        for ($i = 0; $i <= 20; ++$i) {
+            $cartelement = (new CartElement())
                 ->setQuantity(1 === mt_rand(0, 1) ? $this->faker()->numberBetween(10, 250) : null)
                 ->setSubscriptionFee(1 === mt_rand(0, 1) ? $this->faker()->numberBetween(10, 50) : null)
                 // ->setReservedSeats()
@@ -434,8 +399,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 ->setRecipeSubscription($this->faker()->randomElement($recipesubscriptions))
             ;
 
-            $this->addReference('cartelement-'.$this->counter, $cartelement);
-            ++$this->counter;
+            $this->addReference('cartelement-'.$i, $cartelement);
 
             $manager->persist($cartelement);
             $cartelements[] = $cartelement;
@@ -456,6 +420,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
             AppAmenityFixtures::class,
             AppAudienceFixtures::class,
             AppVenueTypeFixtures::class,
+            //AppRolesFixtures::class
         ];
     }
 }

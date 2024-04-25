@@ -16,24 +16,18 @@ class AmenityFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('translations', TranslationsType::class, [
-                'label' => 'Translation',
-                'fields' => [
-                    'name' => [
-                        'purify_html' => true,
-                        'locale_options' => [
-                            'en' => ['label' => 'Name'],
-                            'fr' => ['label' => 'Nom'],
-                            'es' => ['label' => 'Nombre'],
-                            'ar' => ['label' => 'اسم'],
-                            'pt' => ['label' => 'Nome'],
-                            'de' => ['label' => 'Name'],
-                            'it' => ['label' => 'Nome'],
-                            'br' => ['label' => 'Nome'],
-                        ],
-                    ],
-                ],
-                'excluded_fields' => ['slug'],
+            ->add('name', TextType::class, [
+                'label' => t('Name :'),
+                'required' => true,
+                'purify_html' => true,
+                'empty_data' => '',
+                'help' => t('Keep your post names under 10 characters. Write heading that describe the topic content. Contextualize for Your Amenity.'),
+            ])
+            ->add('slug', TextType::class, [
+                'label' => t('Slug :'),
+                'empty_data' => '',
+                'required' => false,
+                'help' => t('Field must contain an unique value.'),
             ])
             ->add('icon', TextType::class, [
                 'purify_html' => true,

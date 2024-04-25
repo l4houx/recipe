@@ -33,13 +33,26 @@
             <div class="d-lg-flex">
                 {# <p class="mb-0">Was this comment helpful?</p> #}
                 {% if app.user == comment.author %}
-                    <form name="comment_delete" method="POST" action="{{ path('post_comment_delete', {'id': comment.id}) }}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-                        <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
-                            {{ 'Delete'|trans }}
-                        </button>
-                    </form>
+                    {% if comment.post or comment.venue %}
+                        {% if comment.post %}
+                            <form name="comment_delete" method="POST" action="{{ path('post_comment_delete', {'id': comment.id}) }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
+                                    {{ 'Delete'|trans }}
+                                </button>
+                            </form>
+                        {% endif %}
+                        {% if comment.venue %}
+                            <form name="comment_delete" method="POST" action="{{ path('venue_comment_delete', {'id': comment.id}) }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
+                                    {{ 'Delete'|trans }}
+                                </button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
                 {% endif %}
                 {% if is_granted('ROLE_USER') %}
                     <a href="#add-comment" class="btn btn-xs btn-outline-secondary ms-1" type="button" data-reply data-id="{{comment.id}}">
@@ -83,13 +96,26 @@
                 <p>{{ reply.content | markdown_to_html | sanitize_html }}</p>
                 <div class="d-lg-flex">
                     {% if app.user == reply.author %}
-                        <form name="comment_delete" method="POST" action="{{ path('post_comment_delete', {'id': reply.id}) }}">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reply.id) }}">
-                            <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
-                                {{ 'Delete'|trans }}
-                            </button>
-                        </form>
+                        {% if reply.post or reply.venue %}
+                            {% if reply.post %}
+                                <form name="comment_delete" method="POST" action="{{ path('post_comment_delete', {'id': reply.id}) }}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reply.id) }}">
+                                    <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
+                                        {{ 'Delete'|trans }}
+                                    </button>
+                                </form>
+                            {% endif %}
+                            {% if reply.venue %}
+                                <form name="comment_delete" method="POST" action="{{ path('venue_comment_delete', {'id': reply.id}) }}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reply.id) }}">
+                                    <button type="submit" class="btn btn-xs btn-primary ms-lg-3">
+                                        {{ 'Delete'|trans }}
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

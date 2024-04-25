@@ -6,9 +6,15 @@ use App\Entity\Country;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppCountryFixtures extends Fixture implements FixtureGroupInterface
 {
+    public function __construct(
+        private readonly SluggerInterface $slugger
+    ) {
+    }
+
     public static function getGroups(): array
     {
         return ['countries'];
@@ -524,6 +530,7 @@ class AppCountryFixtures extends Fixture implements FixtureGroupInterface
             $country = new Country();
             $country->setCode($code);
             $country->setName($countryname);
+            $country->setSlug($this->slugger->slug($country->getName())->lower());
             $manager->persist($country);
         }
 

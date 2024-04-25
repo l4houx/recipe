@@ -323,7 +323,10 @@
                                                 {% for audience in setting.getAudiences({}).getQuery().getResult() %}
                                                     <input type="radio" class="btn-check" id="{{ audience.slug }}" name="audience" value="{{ audience.slug }}" autocomplete="off" checked>
                                                     <label class="btn btn-outline-primary" for="{{ audience.slug }}" data-bs-toggle="tooltip" title="{{ audience.name }}">
+                                                        {#  
                                                         <img src="{{ asset(audience.getImagePath) }}" class="img-15-15" alt="{{ audience.name }}">
+                                                        #}
+                                                        <i class="icon {{ audience.icon }} fa-fw"></i>
                                                     </label>
                                                 {% endfor %}
                                             </div>

@@ -685,7 +685,7 @@ class AppSettingsFixtures extends Fixture
         foreach ($menuelements as $key => $value) {
             $menuelement = (new MenuElement())
                 ->setId($key)
-                ->setMenu($this->faker()->randomElement($this->getReference('menu-'.$this->faker()->numberBetween(1, 4))))
+                ->setMenu($this->getReference('menu-'.$this->faker()->numberBetween(1, 4)))
                 ->setLabel($value['label'])
                 ->setSlug($value['slug'])
                 ->setIcon($value['icon'])

@@ -1,0 +1,9 @@
+<div>
+	{% for route in routes %}
+		{% if app.request.attributes.get('_route') == route.current %}
+			<a href="{{ path(route.path) }}" class="btn btn-primary d-none d-md-block">
+				{{ route.label|trans }}
+			</a>
+		{% endif %}
+	{% endfor %}
+</div>

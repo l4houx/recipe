@@ -21,17 +21,18 @@ class AppAudienceFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // Create of 5 audiences
-        $this->createAudience('Family', true, $manager);
-        $this->createAudience('Group', true, $manager);
-        $this->createAudience('Youth', true, $manager);
-        $this->createAudience('Adults', true, $manager);
-        $this->createAudience('Children', true, $manager);
+        $this->createAudience('Family', 'fas fa-people-roof', true, $manager);
+        $this->createAudience('Group', 'fas fa-people-group', true, $manager);
+        $this->createAudience('Youth', 'fas fa-people-pulling', true, $manager);
+        $this->createAudience('Adults', 'fas fa-person', true, $manager);
+        $this->createAudience('Children', 'fas fa-child', true, $manager);
 
         $manager->flush();
     }
 
     public function createAudience(
         string $name,
+        string $icon,
         bool $isOnline,
         ObjectManager $manager
     ) {
@@ -39,6 +40,7 @@ class AppAudienceFixtures extends Fixture
         $audience
             ->setName($name)
             ->setSlug($this->slugger->slug($audience->getName())->lower())
+            ->setIcon($icon)
             ->setIsOnline($isOnline)
         ;
         $manager->persist($audience);
