@@ -53,10 +53,10 @@
                         {{ 'Following'|trans }}
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if routename == "dashboard_creator_orders" %}active{% endif %}" href="{{ path('dashboard_creator_orders') }}">
-                        <i class="bi bi-basket nav-icon"></i>
-                        {{ 'My orders'|trans }}
+                <li class="nav-item {% if routename == "dashboard_creator_orders" or routename == "dashboard_creator_order_details" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_creator_orders') }}">
+                        <i class="bi bi-ticket nav-icon"></i>
+                        {{ 'My subscriptions'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
@@ -85,6 +85,12 @@
                         {{ 'My recipes'|trans }}
                     </a>
                 </li>
+                <li class="nav-item {% if routename == "dashboard_restaurant_venue_index" or routename == "dashboard_restaurant_venue_new"  or routename == "dashboard_restaurant_venue_edit" or routename == "dashboard_restaurant_venue_seating_plans_index" or routename == "dashboard_restaurant_venue_seating_plans_new" or routename == "dashboard_restaurant_venue_seating_plans_edit" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_restaurant_venue_index') }}">
+                        <i class="bi bi-pin-map-fill nav-icon"></i>
+                        {{ 'My venues'|trans }}
+                    </a>
+                </li>
                 <li class="nav-item {% if routename == "dashboard_restaurant_review_index" %}active{% endif %}">
                     <a class="nav-link" href="{{ path('dashboard_creator_review_index') }}">
                         <i class="bi bi-star nav-icon"></i>
@@ -104,15 +110,13 @@
                     </a>
                 </li>
             {% elseif is_granted('ROLE_POINTOFSALE') %}
-                <li class="nav-item">
-                    <a class="nav-link" href="">
+                <li class="nav-item {% if routename == "dashboard_pointofsale_orders" or routename == "dashboard_pointofsale_order_details" %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('dashboard_pointofsale_orders') }}">
                         <i class="bi bi-basket nav-icon"></i>
                         {{ 'My orders'|trans }}
                     </a>
                 </li>
             {% endif %}
-
-
 
             <li class="nav-item {% if routename == "dashboard_ticket_index" or routename == "dashboard_ticket_new"  or routename == "dashboard_ticket_edit" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_ticket_index') }}">
@@ -188,7 +192,7 @@
                     <i class="bi bi-lock nav-icon"></i>
                     {{ 'Profile privacy'|trans }}
                 </a>
-            </li
+            </li>
             {% if is_granted('IS_IMPERSONATOR') %}
                 <li class="nav-item">
                     <a href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();" class="nav-link">
