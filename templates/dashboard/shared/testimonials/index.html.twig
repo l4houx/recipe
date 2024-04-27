@@ -1,9 +1,9 @@
 {% extends 'dashboard.html.twig' %}
 
-{% if is_granted('ROLE_ATTENDEE') %}
-	{% set pagetitle = 'My testimonials' | trans %}
+{% if is_granted('ROLE_CREATOR') %}
+	{% set pagetitle = 'My testimonials'|trans %}
 {% elseif is_granted('ROLE_ADMIN_APPLICATION') %}
-	{% set pagetitle = 'Manage testimonials' | trans %}
+	{% set pagetitle = 'Manage testimonials'|trans %}
 {% endif %}
 {% block title pagetitle %}
 
@@ -78,7 +78,7 @@
 						</div>
 					</div>
 					{% for testimonial in rows %}
-						{% include "global/testimonials-list.html.twig" with {testimonial: testimonial, showuser: 1} %}
+						{% include "global/testimonials-list.html.twig" with {testimonial: testimonial, showuser: 1, index: loop.index} %}
 					{% endfor %}
 				</div>
 				<div class="card-footer">

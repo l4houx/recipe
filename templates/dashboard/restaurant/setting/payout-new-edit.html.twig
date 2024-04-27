@@ -1,0 +1,86 @@
+{% extends 'dashboard.html.twig' %}
+
+{% if paymentgateway.id %}
+    {% set pagetitle = 'Update your %payoutMethodName% payout method'|trans({'%payoutMethodName%': paymentgateway.name}) %}
+{% else %}
+    {% if app.request.get('factoryName') == "paypal_rest" %}
+        {% set payoutMethodName = "Paypal" %}
+    {% elseif app.request.get('factoryName') == "stripe_checkout" %}
+        {% set payoutMethodName = "Stripe" %}
+    {% endif %}
+    {% set pagetitle = 'Set your %payoutMethodName% payout method'|trans({'%payoutMethodName%': payoutMethodName}) %}
+{% endif %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "dashboard_admin_setting_payment": ('Payment settings'|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="d-lg-flex justify-content-between align-items-center card-header">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span></span>
+            </div>
+            <div>
+                <a href="{{ path('dashboard_admin_setting_payment') }}" class="btn btn-outline-primary btn-sm">
+                    {{ 'Return to list'|trans }}
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+                {% include "global/message.html.twig" with { type: "info", message: ('Make sure that the currency setting of your payout method matches the one currently used which is %currency%'|trans({'%currency%': setting.getSetting('currency_ccy')})), icon: "bi bi-exclamation-circle" } %}
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                    {{ form_widget(form._token) }}
+                    {{ form_errors(form) }}
+                    {{ form_widget(form) }}
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            if (getURLParameter('factoryName') == null) {
+                var factoryName = "{{ paymentgateway.factoryName }}";
+            } else {
+                var factoryName = getURLParameter('factoryName');
+            }
+            $("#restaurant_payout_payment_gateway_save").click(function (e) {
+                e.preventDefault();
+                var danger = false;
+                if (factoryName == "paypal_rest") {
+                    if ($("input[name='restaurant_payout_payment_gateway[config][sandbox]']:checked").val() == undefined || $("#restaurant_payout_payment_gateway_config_client_id").val() == "" || $("#restaurant_payout_payment_gateway_config_client_secret").val() == "") {
+                        danger = true;
+                    }
+                } else if (factoryName == "stripe_checkout") {
+                    if ($("#restaurant_payout_payment_gateway_config_publishable_key").val() == "" || $("#restaurant_payout_payment_gateway_config_secret_key").val() == "") {
+                        danger = true;
+                    }
+                }
+                if (danger) {
+                    showStackBarTop('danger', '', '{{ "Please enter your payout method details"|trans }}');
+                } else {
+                    $("#restaurant_payout_payment_gateway_save").closest("form").submit();
+                }
+            });
+            $(".payment_config_field").each(function () {
+                if ($(this).hasClass(factoryName)) {
+                    $(this).closest(".form-group").show();
+                } else {
+                    $(this).closest(".form-group").hide();
+                }
+            });
+        });
+    </script>
+{% endblock %}

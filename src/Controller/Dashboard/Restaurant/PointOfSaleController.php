@@ -112,7 +112,7 @@ class PointOfSaleController extends BaseController
                 $this->em->persist($pointofsale);
                 $this->em->flush();
 
-                return $this->redirectToRoute('dashboard_restaurant_pointofsale_index_index');
+                return $this->redirectToRoute('dashboard_restaurant_pointofsale_index');
             } else {
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
@@ -150,7 +150,7 @@ class PointOfSaleController extends BaseController
     public function enabledisable(Request $request, ?string $slug = null): RedirectResponse
     {
         /** @var User $pointofsale */
-        $pointofsale = $this->settingService->getUsers(['role' => 'pointofsale', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()->getSlug(), 'enabled' => 'all', 'slug' => $slug])->getQuery()->getOneOrNullResult();
+        $pointofsale = $this->settingService->getUsers(['role' => 'pointofsale', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()->getSlug(), 'isVerified' => 'all', 'slug' => $slug])->getQuery()->getOneOrNullResult();
         if (!$pointofsale) {
             $this->addFlash('danger', $this->translator->trans('The point of sale can not be found'));
 

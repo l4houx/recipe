@@ -34,6 +34,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[IsGranted(HasRoles::DEFAULT)]
+#[Route(path: '/%website_dashboard_path%')]
 class OrderController extends BaseController
 {
     public function __construct(
@@ -45,8 +46,8 @@ class OrderController extends BaseController
     ) {
     }
 
-    #[Route(path: '/%website_dashboard_path%/creator/checkout', name: 'dashboard_creator_checkout', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/pointofsale/checkout', name: 'dashboard_pointofsale_checkout', methods: ['GET'])]
+    #[Route(path: '/creator/checkout', name: 'dashboard_creator_checkout', methods: ['GET'])]
+    #[Route(path: '/pointofsale/checkout', name: 'dashboard_pointofsale_checkout', methods: ['GET'])]
     public function checkout(Request $request, RouterInterface $router): Response
     {
         if ($this->isGranted(HasRoles::CREATOR)) {
@@ -213,7 +214,7 @@ class OrderController extends BaseController
                 if ($this->isGranted(HasRoles::CREATOR)) {
                     return $this->render('dashboard/creator/order/checkout.html.twig', compact('form', 'order', 'paymentGateways'));
                 } else {
-                    return $this->render('dashboard/pointOfSale/order/checkout.html.twig', compact('form', 'order'));
+                    return $this->render('dashboard/pointofsale/order/checkout.html.twig', compact('form', 'order'));
                 }
             }
         } else {
@@ -306,12 +307,12 @@ class OrderController extends BaseController
         if ($this->isGranted(HasRoles::CREATOR)) {
             return $this->render('dashboard/creator/order/checkout.html.twig', compact('form', 'paymentGateways', 'order'));
         } else {
-            return $this->render('dashboard/pointOfSale/order/checkout.html.twig', compact('form', 'order'));
+            return $this->render('dashboard/pointofsale/order/checkout.html.twig', compact('form', 'order'));
         }
     }
 
-    #[Route(path: '/%website_dashboard_path%/creator/checkout/done', name: 'dashboard_creator_checkout_done', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/pointofsale/checkout/done', name: 'dashboard_pointofsale_checkout_done', methods: ['GET'])]
+    #[Route(path: '/creator/checkout/done', name: 'dashboard_creator_checkout_done', methods: ['GET'])]
+    #[Route(path: '/pointofsale/checkout/done', name: 'dashboard_pointofsale_checkout_done', methods: ['GET'])]
     public function done(Request $request): Response
     {
         // Remove subscription reservations
@@ -381,7 +382,7 @@ class OrderController extends BaseController
         }
     }
 
-    #[Route(path: '/%website_dashboard_path%/creator/checkout/failure/{number}', name: 'dashboard_creator_checkout_failure', methods: ['GET'])]
+    #[Route(path: '/creator/checkout/failure/{number}', name: 'dashboard_creator_checkout_failure', methods: ['GET'])]
     public function failure(Request $request, $number): Response
     {
         $referer = $request->headers->get('referer');
@@ -401,10 +402,10 @@ class OrderController extends BaseController
         ]);
     }
 
-    #[Route(path: '/%website_dashboard_path%/creator/my-subscriptions', name: 'dashboard_creator_orders', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/pointofsale/my-orders', name: 'dashboard_pointofsale_orders', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/admin/manage-orders', name: 'dashboard_admin_orders', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/restaurant/manage-orders', name: 'dashboard_restaurant_orders', methods: ['GET'])]
+    #[Route(path: '/creator/my-subscriptions', name: 'dashboard_creator_orders', methods: ['GET'])]
+    #[Route(path: '/pointofsale/my-orders', name: 'dashboard_pointofsale_orders', methods: ['GET'])]
+    #[Route(path: '/admin/manage-orders', name: 'dashboard_admin_orders', methods: ['GET'])]
+    #[Route(path: '/restaurant/manage-orders', name: 'dashboard_restaurant_orders', methods: ['GET'])]
     public function orders(Request $request, PaginatorInterface $paginator, AuthorizationCheckerInterface $authChecker): Response
     {
         //$upcomingsubscriptions = ($request->query->get('upcomingsubscriptions')) == "" ? 1 : intval($request->query->get('upcomingsubscriptions'));
@@ -557,10 +558,10 @@ class OrderController extends BaseController
         ]);
     }
 
-    #[Route(path: '/%website_dashboard_path%/creator/my-subscriptions/{reference}', name: 'dashboard_creator_order_details', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/pointofsale/my-orders/{reference}', name: 'dashboard_pointofsale_order_details', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/admin/manage-orders/{reference}', name: 'dashboard_admin_order_details', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/restaurant/recent-orders/{reference}', name: 'dashboard_restaurant_order_details', methods: ['GET'])]
+    #[Route(path: '/creator/my-subscriptions/{reference}', name: 'dashboard_creator_order_details', methods: ['GET'])]
+    #[Route(path: '/pointofsale/my-orders/{reference}', name: 'dashboard_pointofsale_order_details', methods: ['GET'])]
+    #[Route(path: '/admin/manage-orders/{reference}', name: 'dashboard_admin_order_details', methods: ['GET'])]
+    #[Route(path: '/restaurant/recent-orders/{reference}', name: 'dashboard_restaurant_order_details', methods: ['GET'])]
     /*
     public function details(Request $request, string $reference): Response
     {
@@ -587,7 +588,7 @@ class OrderController extends BaseController
     }
     */
 
-    #[Route(path: '/%website_dashboard_path%/admin/manage-orders/{reference}/cancel', name: 'dashboard_admin_order_cancel', methods: ['GET'])]
+    #[Route(path: '/admin/manage-orders/{reference}/cancel', name: 'dashboard_admin_order_cancel', methods: ['GET'])]
     public function cancel(Request $request, string $reference): RedirectResponse
     {
         /** @var Order $order */
@@ -618,7 +619,7 @@ class OrderController extends BaseController
         return $this->settingService->redirectToReferer('orders');
     }
 
-    #[Route(path: '/%website_dashboard_path%/admin/manage-orders/{reference}/delete', name: 'dashboard_admin_order_delete', methods: ['GET'])]
+    #[Route(path: '/admin/manage-orders/{reference}/delete', name: 'dashboard_admin_order_delete', methods: ['GET'])]
     public function delete(Request $request, string $reference): RedirectResponse
     {
         /** @var Order $order */
@@ -652,7 +653,7 @@ class OrderController extends BaseController
         return $this->settingService->redirectToReferer('orders');
     }
 
-    #[Route(path: '/%website_dashboard_path%/admin/manage-orders/{reference}/restore', name: 'dashboard_admin_order_restore', methods: ['GET'])]
+    #[Route(path: '/admin/manage-orders/{reference}/restore', name: 'dashboard_admin_order_restore', methods: ['GET'])]
     public function restore(string $reference): RedirectResponse
     {
         /** @var Order $order */
@@ -717,8 +718,8 @@ class OrderController extends BaseController
         exit(0);
     }
 
-    #[Route(path: '/%website_dashboard_path%/restaurant/recent-orders/{reference}/resend-confirmation-email', name: 'dashboard_restaurant_order_resend_confirmation_email', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/admin/manage-orders/{reference}/resend-confirmation-email', name: 'dashboard_admin_order_resend_confirmation_email', methods: ['GET'])]
+    #[Route(path: '/restaurant/recent-orders/{reference}/resend-confirmation-email', name: 'dashboard_restaurant_order_resend_confirmation_email', methods: ['GET'])]
+    #[Route(path: '/admin/manage-orders/{reference}/resend-confirmation-email', name: 'dashboard_admin_order_resend_confirmation_email', methods: ['GET'])]
     public function resendConfirmationEmail(Request $request, string $reference)
     {
         /** @var Order $order */
@@ -735,7 +736,7 @@ class OrderController extends BaseController
         return $this->settingService->redirectToReferer('orders');
     }
 
-    #[Route(path: '/%website_dashboard_path%/creator/my-subscriptions/{reference}/contact-restaurant', name: 'dashboard_creator_order_contactRestaurant', methods: ['GET'])]
+    #[Route(path: '/creator/my-subscriptions/{reference}/contact-restaurant', name: 'dashboard_creator_order_contactRestaurant', methods: ['GET'])]
     public function contactRestaurant(Request $request, string $reference)
     {
         /** @var Order $order */
@@ -781,7 +782,7 @@ class OrderController extends BaseController
         return $this->settingService->redirectToReferer('orders');
     }
 
-    #[Route(path: '/%website_dashboard_path%/restaurant/recent-orders/{reference}/contact-creator', name: 'dashboard_restaurant_order_contactCreator', methods: ['GET'])]
+    #[Route(path: '/restaurant/recent-orders/{reference}/contact-creator', name: 'dashboard_restaurant_order_contactCreator', methods: ['GET'])]
     public function contactCreator(Request $request, string $reference)
     {
         /** @var Order $order */
@@ -822,8 +823,8 @@ class OrderController extends BaseController
         return $this->settingService->redirectToReferer('orders');
     }
 
-    #[Route(path: '/%website_dashboard_path%/restaurant/recent-orders/{reference}/validate', name: 'dashboard_restaurant_order_validate', methods: ['GET'])]
-    #[Route(path: '/%website_dashboard_path%/admin/manage-orders/{reference}/validate', name: 'dashboard_admin_order_validate', methods: ['GET'])]
+    #[Route(path: '/restaurant/recent-orders/{reference}/validate', name: 'dashboard_restaurant_order_validate', methods: ['GET'])]
+    #[Route(path: '/admin/manage-orders/{reference}/validate', name: 'dashboard_admin_order_validate', methods: ['GET'])]
     public function validate(string $reference): RedirectResponse
     {
         /** @var Order $order */

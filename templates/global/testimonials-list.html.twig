@@ -1,5 +1,5 @@
 {% if testimonial.isOnline %}
-    <div class="d-flex align-items-start {{ testimonial.id is odd ? 'border-bottom pb-4 mb-4' }}">
+    <div class="d-flex align-items-start {{ index is odd ? 'border-bottom pb-4 mb-4' }}">
         {% if showuser is defined %}
             {% include "global/user-avatar.html.twig" with { user: testimonial.author, type: "lg" } %}
         {% endif %}

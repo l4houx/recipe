@@ -1,105 +1,99 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'dashboard.html.twig' %}
 
-{% set pagetitle = 'Payout methods' | trans %}
+{% set pagetitle = 'Payout methods'|trans %}
+{% block title pagetitle %}
 
-{% block title %}{{pagetitle}}{% endblock %}
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
+	<div class="card mb-4">
+		<div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
+			<div class="mb-3 mb-lg-0">
+				<h3 class="mb-0">{{ pagetitle }}</h3>
+				<span></span>
+			</div>
+			<div>
+				<a href="" class="btn btn-outline-primary btn-sm">
+					{{ 'Create'|trans }}
+				</a>
+			</div>
+		</div>
+        <div class="card-body">
+            {% set paymentgateways = setting.getPaymentGateways({"restaurant": app.user.restaurant.slug}).getQuery().getResult() %}
 
-    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
-    <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
-            <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
-                <div class="col-lg-9 mt-4 mt-lg-0">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6 class="b mb-0 float-lg-left">{{ pagetitle }}</h6>
-                        </div>
-                        <div class="card-body">
-                            {% set paymentgateways = services.getPaymentGateways({"organizer": app.user.organizer.slug}).getQuery().getResult() %}
-
-                            {% set paypalInformationProvided = false %}
-                            {% set paypalPaymentGatewaySlug = null %}
-                            {% set stripeInformationProvided = false %}
-                            {% set stripePaymentGatewaySlug = null %}
-                            {% for paymentgateway in paymentgateways %}
-                                {% if paymentgateway.factoryName == "paypal_rest" %}
-                                    {% set paypalInformationProvided = true %}
-                                    {% set paypalPaymentGatewaySlug = paymentgateway.slug %}
-                                {% elseif paymentgateway.factoryName == "stripe_checkout" %}
-                                    {% set stripeInformationProvided = true %}
-                                    {% set stripePaymentGatewaySlug = paymentgateway.slug %}
-                                {% endif %}
-                            {% endfor %}
-                            <table class="table table-hover table-vcenter text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th>{{'Payout method'|trans}}</th>
-                                        <th>{{'Status'|trans}}</th>
-                                        <th class="text-center"><i class="fas fa-cog"></i></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    {% if services.getSetting("organizer_payout_paypal_enabled") == "yes" %}
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('assets/img/icons/payment/paypal.svg') }}">
-                                            </td>
-                                            <td>
-                                                {% if paypalInformationProvided %}
-                                                    <span class="badge badge-success">{{ "Information provided"|trans }}</span>
-                                                {% else %}
-                                                    <span class="badge badge-warning">{{ "Information not provided"|trans }}</span>
-                                                {% endif %}
-                                            </td>
-                                            <td class="text-center">
-                                                {% if paypalInformationProvided %}
-                                                    <a href="{{ path('dashboard_organizer_settings_payouts_edit', { slug : paypalPaymentGatewaySlug }) }}" class="btn btn-primary"><i class="fas fa-edit fa-fw"></i> {{ "Edit"|trans }}</a>
-                                                    <a href="{{ path('dashboard_organizer_settings_payouts_unset', { slug : paypalPaymentGatewaySlug }) }}" class="btn btn-outline-primary"><i class="fas fa-times fa-fw"></i> {{ "Uset"|trans }}</a>
-                                                {% else %}
-                                                    <a href="{{ path('dashboard_organizer_settings_payouts_add', { factoryName : "paypal_rest" }) }}" class="btn btn-primary"><i class="fas fa-plus fa-fw"></i> {{ "Set"|trans }}</a>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
+            {% set paypalInformationProvided = false %}
+            {% set paypalPaymentGatewaySlug = null %}
+            {% set stripeInformationProvided = false %}
+            {% set stripePaymentGatewaySlug = null %}
+            {% for paymentgateway in paymentgateways %}
+                {% if paymentgateway.factoryName == "paypal_rest" %}
+                    {% set paypalInformationProvided = true %}
+                    {% set paypalPaymentGatewaySlug = paymentgateway.slug %}
+                {% elseif paymentgateway.factoryName == "stripe_checkout" %}
+                    {% set stripeInformationProvided = true %}
+                    {% set stripePaymentGatewaySlug = paymentgateway.slug %}
+                {% endif %}
+            {% endfor %}
+            <div class="table-responsive overflow-y-hidden">
+                <table class="table mb-0 text-nowrap table-hover table-centered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>{{ 'Payout method'|trans }}</th>
+                            <th>{{ 'Status'|trans }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if '1' == settings["restaurant_payout_paypal_enabled"] %}
+                            <tr>
+                                <td>
+                                    <img src="{{ asset('images/icons/payment/paypal.svg') }}" alt="" class="mb-2">
+                                </td>
+                                <td>
+                                    {% if paypalInformationProvided %}
+                                        <span class="badge bg-success-soft">{{ "Information provided"|trans }}</span>
+                                    {% else %}
+                                        <span class="badge bg-warning-soft">{{ "Information not provided"|trans }}</span>
                                     {% endif %}
-
-                                    {% if services.getSetting("organizer_payout_stripe_enabled") == "yes" %}
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('assets/img/icons/payment/stripe.svg') }}">
-                                            </td>
-                                            <td>
-                                                {% if stripeInformationProvided %}
-                                                    <span class="badge badge-success">{{ "Information provided"|trans }}</span>
-                                                {% else %}
-                                                    <span class="badge badge-warning">{{ "Information not provided"|trans }}</span>
-                                                {% endif %}
-                                            </td>
-                                            <td class="text-center">
-                                                {% if stripeInformationProvided %}
-                                                    <a href="{{ path('dashboard_organizer_settings_payouts_edit', { slug : stripePaymentGatewaySlug }) }}" class="btn btn-primary"><i class="fas fa-edit fa-fw"></i> {{ "Edit"|trans }}</a>
-                                                    <a href="{{ path('dashboard_organizer_settings_payouts_unset', { slug : stripePaymentGatewaySlug }) }}" class="btn btn-outline-primary"><i class="fas fa-times fa-fw"></i> {{ "Uset"|trans }}</a>
-                                                {% else %}
-                                                    <a href="{{ path('dashboard_organizer_settings_payouts_add', { factoryName : "stripe_checkout" }) }}" class="btn btn-primary"><i class="fas fa-plus fa-fw"></i> {{ "Set"|trans }}</a>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
+                                </td>
+                                <td class="text-center">
+                                    {% if paypalInformationProvided %}
+                                        <a href="{{ path('dashboard_restaurant_setting_payouts_edit', { slug : paypalPaymentGatewaySlug }) }}" class="btn btn-primary"><i class="bi bi-pencil"></i> {{ "Edit"|trans }}</a>
+                                        <a href="{{ path('dashboard_restaurant_setting_payouts_unset', { slug : paypalPaymentGatewaySlug }) }}" class="btn btn-outline-primary"><i class="bi bi-alarm"></i> {{ "Uset"|trans }}</a>
+                                    {% else %}
+                                        <a href="{{ path('dashboard_restaurant_setting_payouts_new', { factoryName : "paypal_rest" }) }}" class="btn btn-primary"><i class="bi bi-plus"></i> {{ "Set"|trans }}</a>
                                     {% endif %}
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if '1' == settings["restaurant_payout_stripe_enabled"] %}
+                            <tr>
+                                <td>
+                                    <img src="{{ asset('images/icons/payment/stripe.svg') }}" alt="" class="mb-2">
+                                </td>
+                                <td>
+                                    {% if stripeInformationProvided %}
+                                        <span class="badge bg-success-soft">{{ "Information provided"|trans }}</span>
+                                    {% else %}
+                                        <span class="badge bg-warning-soft">{{ "Information not provided"|trans }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if stripeInformationProvided %}
+                                        <a href="{{ path('dashboard_restaurant_setting_payouts_edit', { slug : stripePaymentGatewaySlug }) }}" class="btn btn-primary"><i class="bi bi-pencil"></i> {{ "Edit"|trans }}</a>
+                                        <a href="{{ path('dashboard_restaurant_setting_payouts_unset', { slug : stripePaymentGatewaySlug }) }}" class="btn btn-outline-primary"><i class="bi bi-alarm"></i> {{ "Uset"|trans }}</a>
+                                    {% else %}
+                                        <a href="{{ path('dashboard_restaurant_setting_payouts_new', { factoryName : "stripe_checkout" }) }}" class="btn btn-primary"><i class="bi bi-plus"></i> {{ "Set"|trans }}</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
-
         </div>
-    </section>
-
+	</div>
 {% endblock %}

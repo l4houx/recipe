@@ -1,141 +1,143 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'dashboard.html.twig' %}
 
-{% set pagetitle = 'Dashboard' | trans %}
+{% set pagetitle = 'Dashboard'|trans %}
+{% block title pagetitle %}
 
-{% block title %}{{pagetitle}}{% endblock %}
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
+    <div class="card mb-4">
+        <div class="d-lg-flex justify-content-between align-items-center card-header">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span></span>
+            </div>
+            <div>
+                <a href="" class="btn btn-outline-primary btn-sm">
+                    {{ 'Return to list'|trans }}
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
 
-    {% set navigation = [{"current":(pagetitle)}] %}
-    {% include "Global/navigation.html.twig" with navigation %}
+            Here
 
-    <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
-            <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
-                <div class="col-lg-9 mt-4 mt-lg-0">
-                    <div class="card box">
-                        <div class="card-body">
 
-                            <header class="section-heading mb-3">
-                                <h4 class="title-section float-left"><i class="fas fa-calendar-alt"></i> {{ "Events summary"|trans }}</h4>
-                                <a href="{{ path('dashboard_organizer_event') }}" class="float-right"><i class="fas fa-cog"></i> {{ "My events"|trans }}</a>
-                                <div class="clearfix"></div>
-                            </header>
-                            <div class="row mb-3 pl-2 pr-2">
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <h4>{{ services.getEvents({"organizer": app.user.organizer.slug, "count": true, "published": "all", "elapsed": "all"}).getQuery().getSingleScalarResult() }}</h4>
-                                        <h5 class="mb-0">{{ "Events added"|trans }}</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <h4>{{ services.getEvents({"organizer": app.user.organizer.slug, "count": true, "published": true, "elapsed": "all"}).getQuery().getSingleScalarResult() }}</h4>
-                                        <h5 class="mb-0">{{ "Published events"|trans }}</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <h4>{{ services.getEvents({"organizer": app.user.organizer.slug, "count": true, "published": true, "elapsed": false}).getQuery().getSingleScalarResult() }}</h4>
-                                        <h5 class="mb-0">{{ "Upcoming events"|trans }}</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <h4>{{ services.getEventDates({"organizer": app.user.organizer.slug, "count": true}).getQuery().getSingleScalarResult() }}</h4>
-                                        <h5 class="mb-0">{{ "Event dates"|trans }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            {% set events = services.getEvents({"organizer": app.user.organizer.slug,"published": "all", "elapsed": "all", "limit": 3}).getQuery().getResult() %}
-                            {% if events|length > 0 %}
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            {% include "Dashboard/Shared/Event/manage-events-table.html.twig" with {events: events} %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            <header class="section-heading mb-3 mt-5">
-                                <h4 class="title-section float-left"><i class="fas fa-cart-arrow-down"></i> {{ "Attendees summary"|trans }}</h4>
-                                <a href="{{ path('dashboard_organizer_orders') }}" class="float-right"><i class="fas fa-users"></i> {{ "Manage attendees"|trans }}</a>
-                                <div class="clearfix"></div>
-                            </header>
-                            <div class="row mb-3 pl-2 pr-2">
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-cart-arrow-down"></i>
-                                        <h4>{{ services.getOrders({"organizer": app.user.organizer.slug, "count": true, "status": "all"}).getQuery().getSingleScalarResult() }}</h4>
-                                        <h5 class="mb-0">{{ "Orders placed"|trans }}</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-cart-arrow-down"></i>
-                                        <h4>{{ services.getOrders({"organizer": app.user.organizer.slug, "count": true, "status": 1}).getQuery().getSingleScalarResult() }}</h4>
-                                        <h5 class="mb-0">{{ "Paid orders"|trans }}</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-cart-arrow-down"></i>
-                                        <h4>{{ services.getOrders({"organizer": app.user.organizer.slug, "count": true, "status": 0}).getQuery().getSingleScalarResult() }}</h4>
-                                        <h5 class="mb-0">{{ "Awaiting payment"|trans }}</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-6 col-12 p-1">
-                                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                                        <i class="fas fa-ticket-alt"></i>
-                                        {% set ticketsSold = services.getOrders({"organizer": app.user.organizer.slug, "sumOrderElements": true, "status": 1}).getQuery().getSingleScalarResult() %}
-                                        <h4>{{ ticketsSold ? ticketsSold : 0 }}</h4>
-                                        <h5 class="mb-0">{{ "Tickets sold"|trans }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-5">
-                                <div class="col-12">
-                                    <div id="ticketsSalesByDateLineChart">
-                                    </div>
-                                </div>
-                            </div>
-
-                            {% set orders = services.getOrders({"organizer": app.user.organizer.slug, "status": "all", "limit": 3}).getQuery().getResult() %}
-                            {% if orders|length > 0 %}
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            {% include "Dashboard/Shared/Order/manage-orders-table.html.twig" with {events: events} %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-
+            <header class="section-heading mb-3">
+                <h4 class="title-section float-left"><i class="fas fa-calendar-alt"></i> {{ "Recipes summary"|trans }}</h4>
+                <a href="{{ path('dashboard_restaurant_recipe_index') }}" class="float-right"><i class="fas fa-cog"></i> {{ "My recipes"|trans }}</a>
+                <div class="clearfix"></div>
+            </header>
+            <div class="row mb-3 pl-2 pr-2">
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h4>{{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": "all", "elapsed": "all"}).getQuery().getSingleScalarResult() }}</h4>
+                        <h5 class="mb-0">{{ "Recipes added"|trans }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h4>{{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": true, "elapsed": "all"}).getQuery().getSingleScalarResult() }}</h4>
+                        <h5 class="mb-0">{{ "Published recipes"|trans }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h4>{{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": true, "elapsed": false}).getQuery().getSingleScalarResult() }}</h4>
+                        <h5 class="mb-0">{{ "Upcoming recipes"|trans }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h4>{{ setting.getRecipeDates({"restaurant": app.user.restaurant.slug, "count": true}).getQuery().getSingleScalarResult() }}</h4>
+                        <h5 class="mb-0">{{ "Recipe dates"|trans }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% set rows = setting.getRecipes({"restaurant": app.user.restaurant.slug,"isOnline": "all", "elapsed": "all", "limit": 3}).getQuery().getResult() %}
+            {% if rows | length > 0 %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            {% include "dashboard/shared/recipe/manage-recipes-table.html.twig" with {rows: rows} %}
                         </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <header class="section-heading mb-3 mt-5">
+                <h4 class="title-section float-left"><i class="fas fa-cart-arrow-down"></i> {{ "Creators summary"|trans }}</h4>
+                <a href="{{ path('dashboard_restaurant_orders') }}" class="float-right"><i class="fas fa-users"></i> {{ "Manage creators"|trans }}</a>
+                <div class="clearfix"></div>
+            </header>
+            <div class="row mb-3 pl-2 pr-2">
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <h4>{{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": "all"}).getQuery().getSingleScalarResult() }}</h4>
+                        <h5 class="mb-0">{{ "Orders placed"|trans }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <h4>{{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": 1}).getQuery().getSingleScalarResult() }}</h4>
+                        <h5 class="mb-0">{{ "Paid orders"|trans }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <h4>{{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": 0}).getQuery().getSingleScalarResult() }}</h4>
+                        <h5 class="mb-0">{{ "Awaiting payment"|trans }}</h5>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 p-1">
+                    <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
+                        <i class="fas fa-subscription-alt"></i>
+                        {% set subscriptionsSold = setting.getOrders({"restaurant": app.user.restaurant.slug, "sumOrderElements": true, "status": 1}).getQuery().getSingleScalarResult() %}
+                        <h4>{{ subscriptionsSold ? subscriptionsSold : 0 }}</h4>
+                        <h5 class="mb-0">{{ "subscriptions sold"|trans }}</h5>
                     </div>
                 </div>
             </div>
 
-        </div>
-    </section>
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div id="subscriptionsSalesByDateLineChart">
+                    </div>
+                </div>
+            </div>
 
+            {% set rows = setting.getOrders({"restaurant": app.user.restaurant.slug, "status": "all", "limit": 3}).getQuery().getResult() %}
+            {% if rows | length > 0 %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            {% include "dashboard/shared/order/manage-orders-table.html.twig" with {rows: rows} %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         {{ gc_language(app.request.locale) }}
-        {% if ticketsSalesByDateLineChart is not null %}
-            {{ gc_draw(ticketsSalesByDateLineChart, 'ticketsSalesByDateLineChart') }}
+        {% if subscriptionsSalesByDateLineChart is not null %}
+            {{ gc_draw(subscriptionsSalesByDateLineChart, 'subscriptionsSalesByDateLineChart') }}
         {% endif %}
     </script>
 {% endblock %}

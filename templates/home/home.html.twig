@@ -367,7 +367,7 @@
                     </div>
                     <div class="row">
                         {% for testimonial in latestTestimonials %}
-                            {% include "global/testimonial-card.html.twig" with {testimonial: testimonial} %}
+                            {% include "global/testimonial-card.html.twig" with {testimonial: testimonial, showuser: 1, index: loop.index} %}
                         {% endfor %}
                     </div>
                 </div>

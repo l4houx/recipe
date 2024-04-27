@@ -1,5 +1,5 @@
 <div class="table-responsive overflow-y-hidden">
-	<table class="table mb-0 text-nowrap table-hover table-centered text-nowrap">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
 		{% if header is not defined or header != false %}
 			<thead class="table-light">
 				<tr>
@@ -70,7 +70,7 @@
 					<td>
 						{% if revise.status == -1 %}
 							<span class="badge bg-danger-soft">{{ 'Rejected'|trans }}</span>
-						{% elseif revise.status == 0%}
+						{% elseif revise.status == 0 %}
 							<span class="badge bg-danger-soft">{{ 'Pending'|trans }}</span>
 						{% else %}
 							<span class="badge bg-success-soft">{{ 'Accepted'|trans }}</span>

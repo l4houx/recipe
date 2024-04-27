@@ -1,11 +1,11 @@
 {% extends 'dashboard.html.twig' %}
 
 {% if is_granted('ROLE_CREATOR') %}
-	{% set pagetitle = 'My reviews' | trans %}
+	{% set pagetitle = 'My reviews'|trans %}
 {% elseif is_granted('ROLE_RESTAURANT') %}
-    {% set pagetitle = 'Reviews' | trans %}
+    {% set pagetitle = 'Reviews'|trans %}
 {% elseif is_granted('ROLE_ADMIN_APPLICATION') %}
-	{% set pagetitle = 'Manage reviews' | trans %}
+	{% set pagetitle = 'Manage reviews'|trans %}
 {% endif %}
 {% block title pagetitle %}
 
@@ -15,7 +15,7 @@
 			<div class="mb-3 mb-lg-0">
 				<h3 class="mb-0">{{ pagetitle }}</h3>
 				{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_RESTAURANT') or is_granted('ROLE_ADMIN_APPLICATION') %}
-					<span>{{ "%resultsCount% reviews(s) found"|trans({'%resultsCount%': reviews.getTotalItemCount }) }}</span>
+					<span>{{ "%resultsCount% reviews(s) found"|trans({'%resultsCount%': rows.getTotalItemCount }) }}</span>
 				{% endif %}
 			</div>
 			{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_RESTAURANT') or is_granted('ROLE_ADMIN_APPLICATION') %}

@@ -11,38 +11,15 @@
                     </a>
 					<div class="">
 						<div class="dropdown">
-							<button class="btn btn-light btn-icon rounded-circle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-								<i class="bi theme-icon-active">
-									<i class="bi theme-icon bi-moon-stars-fill"></i>
-								</i>
-								<span class="visually-hidden bs-theme-text">Toggle theme</span>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bs-theme-text">
-								<li>
-									<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-										<i class="bi theme-icon bi-sun-fill"></i>
-										<span class="ms-2">Clair</span>
-									</button>
-								</li>
-								<li>
-									<button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="dark" aria-pressed="true">
-										<i class="bi theme-icon bi-moon-stars-fill"></i>
-										<span class="ms-2">Foncé</span>
-									</button>
-								</li>
-								<li>
-									<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="false">
-										<i class="bi theme-icon bi-circle-half"></i>
-										<span class="ms-2">Auto</span>
-									</button>
-								</li>
-							</ul>
+							{% include "global/_bs-theme-text.html.twig" %}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-        {% block content '' %}
+		<div class="row align-items-center justify-content-center g-0 h-lg-100 py-10">
+			{% block content '' %}
+		</div>
 		<div class="row">
 			<div class="offset-xl-1 col-xl-10 col-lg-12 col-md-12 col-12">
 				<div class="row align-items-center my-6">

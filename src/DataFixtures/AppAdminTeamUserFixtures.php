@@ -69,6 +69,7 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
         $superadmin = (new User());
         $superadmin
             ->setId(1)
+            ->setTeamName('superadmin.jpg')
             ->setRoles([HasRoles::ADMINAPPLICATION])
             ->setLastname('Cameron')
             ->setFirstname('Williamson')
@@ -102,6 +103,7 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
         $admin = (new User());
         $admin
             ->setId(2)
+            ->setTeamName('admin.jpg')
             ->setRoles([HasRoles::ADMIN])
             ->setLastname('Wade')
             ->setFirstname('Warren')
@@ -135,6 +137,7 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
         $moderator = (new User());
         $moderator
             ->setId(3)
+            ->setTeamName('moderator.jpg')
             ->setRoles([HasRoles::MODERATOR])
             ->setLastname('Jane')
             ->setFirstname('Cooper')

@@ -1,117 +1,116 @@
-<div class="modal fade {% if eventdate.hasSeatingPlan %}has-seating-plan{% endif %}" id="buy-tickets-modal-eventDate-{{ eventdate.reference }}" style="z-index: 1111111;">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
+<div class="modal fade {% if recipedate.hasSeatingPlan %}has-seating-plan{% endif %}" id="buy-subscriptions-modal-recipeDate-{{ recipedate.reference }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">
-                    {% if eventdate.hasSeatingPlan %}
-                        <i class="fas fa-braille"></i> {{ "Pick your seats"|trans }}
+                <h5 class="modal-title" id="buy-subscriptions-modal-recipeDate-{{ recipedate.reference }}">
+                    {% if recipedate.hasSeatingPlan %}
+                        {{ "Pick your seats"|trans }}
                     {% else %}
-                        <i class="fas fa-ticket-alt"></i> {{ "Tickets"|trans }}
+                        {{ "Subscriptions"|trans }}
                     {% endif %}
-                </h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <h6 class="b">{{ eventdate.event.name }}</h6>
-                <p class="text-sm mb-1 text-muted"><i class="fas fa-clock fa-fw"></i> {{ eventdate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</p>
-
-                <p class="text-sm text-muted"><i class="fas fa-map-marker-alt fa-fw"></i>
-                    {% if eventdate.venue %}
-                        {{ eventdate.venue.name }}: {{ eventdate.venue.stringifyAddress }}
+                <h6 class="mb-3 fw-bold">{{ recipedate.recipe.name }}</h6>
+                <p class="mb-0 fs-4">{{ recipedate.startdate | ago }}</p>
+                <p class="mb-0 fs-4">
+                    {% if recipedate.venue %}
+                        {{ recipedate.venue.name }}: {{ recipedate.venue.stringifyAddress }}
                     {% else %}
                         {{ "Online"|trans }}
                     {% endif %}
                 </p>
-
-                {% if eventdate.hasSeatingPlan %}
+                {% if recipedate.hasSeatingPlan %}
                     <div class="mb-3">
-                        {% include "Dashboard/Shared/Venue/SeatingPlans/seating-plan-seats.html.twig" with {seatingPlan: eventdate.seatingPlan} %}
+                        {% include "dashboard/sShared/venue/seatingPlans/seating-plan-seats.htms.twig" with {seatingPlan: recipedate.seatingPlan} %}
                     </div>
                 {% endif %}
-
-                <div class="table-responsive">
-                    <table class="table table-hover table-condensed mb-0">
+                <div class="table-responsive table-card">
+                    <table class="table mb-0 text-nowrap">
                         <tbody>
-                            {% for ticket in eventdate.tickets %}
-                                {% if ticket.active %}
+                            {% for subscription in recipedate.subscriptions %}
+                                {% if subscription.isActive %}
                                     <tr class="bg-gray">
                                         <td class="border-top-white">
                                             <div>
-                                                {{ ticket.name }}
-                                                {% if ticket.description %}
-                                                    <i class="fas fa-info-circle text-primary ml-2" data-toggle="tooltip" title="{{ ticket.description }}"></i>
+                                                {{ subscription.name }}
+                                                {% if subscription.description %}
+                                                    <i class="bi bi-exclamation-circle text-primary ms-2" data-toggle="tooltip" title="{{ subscription.description }}"></i>
                                                 {% endif %}
-
-                                                {% set eventTicketInCartSum = app.user.isEventticketInCart(ticket) %}
-
-                                                {% if eventTicketInCartSum %}
-                                                    <i class="fas fa-cart-plus ml-2 animated infinite flash text-danger" data-toggle="tooltip" title="{{ "You have added %tickets% ticket(s) to your cart"|trans({"%tickets%": eventTicketInCartSum}) }}"></i>
+                                                {% set recipeSubscriptionInCartSum = app.user.isRecipesubscriptionInCart(subscription) %}
+                                                {% if recipeSubscriptionInCartSum %}
+                                                    <i class="bi bi-cart-plus ms-2 animated infinite flash text-danger" data-toggle="tooltip" title="{{ "You have added %subscriptions% subscription(s) to your cart"|trans({"%subscriptions%": recipeSubscriptionInCartSum}) }}"></i>
                                                 {% endif %}
-
-                                                {% set validTicketReservationsQuantitySumForUser = ticket.getValidTicketReservationsQuantitySum(app.user) %}
-
-                                                {% if validTicketReservationsQuantitySumForUser %}
-                                                    <i class="fas fa-hourglass-half ml-2 animated infinite flash text-danger" data-toggle="tooltip" title="{{ "%tickets% ticket(s) are still reserved for you, please wait until the reservation expires at %expirationDate% in order to purchase more tickets"|trans({"%tickets%": validTicketReservationsQuantitySumForUser, "%expirationDate%":  ticket.getValidTicketReservationExpirationDate(app.user)|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}) }}"></i>
+                                                {% set validSubscriptionReservationsQuantitySumForUser = subscription.getValidSubscriptionReservationsQuantitySum(app.user) %}
+                                                {% if validSubscriptionReservationsQuantitySumForUser %}
+                                                    <i class="bi bi-hourglass ms-2 animated infinite flash text-danger" data-toggle="tooltip" title="{{ "%subscriptions% subscription(s) are still reserved for you, please wait until the reservation expires at %expirationDate% in order to purchase more subscriptions"|trans({"%subscriptions%": validSubscriptionReservationsQuantitySumForUser, "%expirationDate%":  subscription.getValidSubscriptionReservationExpirationDate(app.user) | ago}) }}"></i>
                                                 {% endif %}
-
-                                                {% set paidOrderElementsQuantitySum = ticket.getOrderElementsQuantitySum(1, app.user) %}
-
+                                                {% set paidOrderElementsQuantitySum = subscription.getOrderElementsQuantitySum(1, app.user) %}
                                                 {% if paidOrderElementsQuantitySum %}
-                                                    <i class="fas fa-ticket-alt ml-2 animated infinite flash text-info" data-toggle="tooltip" title="{{ "You have already bought %tickets% ticket(s)"|trans({"%tickets%": paidOrderElementsQuantitySum}) }}"></i>
+                                                    <i class="bi bi-ticket ms-2 animated infinite flash text-info" data-toggle="tooltip" title="{{ "You have already bought %subscriptions% subscription(s)"|trans({"%subscriptions%": paidOrderElementsQuantitySum}) }}"></i>
                                                 {% endif %}
-
                                             </div>
-                                            {% if not ticket.isOnSale %}
-                                                <span class="badge badge-{{ ticket.stringifyStatusClass }} mt-1">{{ ticket.stringifyStatus|trans }}</span>
+                                            {% if not subscription.isOnSale %}
+                                                <span class="badge bg-{{ subscription.stringifyStatusClass }} mt-1">
+                                                    {{ subscription.stringifyStatus|trans }}
+                                                </span>
                                             {% endif %}
                                             <div class="clearfix"></div>
-                                            <div class="b mt-1">
-                                                {{ ticket.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getSalePrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
-                                                {% if ticket.promotionalprice and not ticket.free %}
-                                                    <del class="price-old">{{ (services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '') }}</del>
+                                            <div class="mt-1">
+                                                {{ subscription.isFree ? "Free"|trans : ((settings['currency_position'] == 'left' ? settings['currency_symbol'] : '') ~ subscription.getSalePrice() ~ (settings['currency_position'] == 'right' ? settings['currency_symbol'] : '')) }}
+                                                {% if subscription.promotionalprice and not subscription.isFree %}
+                                                    <del class="price-old">{{ (settings['currency_position'] == 'left' ? settings['currency_symbol'] : '') ~ subscription.getPrice() ~ (settings['currency_position'] == 'right' ? settings['currency_symbol'] : '') }}</del>
                                                 {% endif %}
                                             </div>
-                                            {% if ticket.salesstartdate %}
+                                            {% if subscription.salesstartdate %}
                                                 <div class="clearfix"></div>
-                                                {% if ticket.salesstartdate|date("Y/m/d H:i") > "now"|date("Y/m/d H:i") %}
-                                                    <small class="text-danger font-size-10px mt-1">
+                                                {% if subscription.salesstartdate | date("Y/m/d H:i") > "now" | date("Y/m/d H:i") %}
+                                                    <small class="text-danger fs-4 mt-1">
                                                         {{ "Sales start in"|trans }}
-                                                        <span class="countdown" data-count-down-to="{{ ticket.salesstartdate|date('Y/m/d H:i') }}"></span>
+                                                        <span class="countdown" data-count-down-to="{{ subscription.salesstartdate | date('Y/m/d H:i') }}"></span>
                                                     </small>
                                                 {% else %}
-                                                    <small class="text-success font-size-10px mt-1">
+                                                    <small class="text-success fs-4 mt-1">
                                                         {{ "Sales started on"|trans }}
-                                                        {{ ticket.salesstartdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                        {{ subscription.salesstartdate | ago }}
                                                     </small>
                                                 {% endif %}
                                             {% endif %}
-
-                                            {% if ticket.salesenddate and ticket.salesstartdate|date("Y/m/d H:i") <= "now"|date("Y/m/d H:i") %}
+                                            {% if subscription.salesenddate and subscription.salesstartdate | date("Y/m/d H:i") <= "now" | date("Y/m/d H:i") %}
                                                 <div class="clearfix"></div>
-                                                {% if ticket.salesenddate|date("Y/m/d H:i") < "now"|date("Y/m/d H:i") %}
-                                                    <small class="text-danger font-size-10px  mt-1">
+                                                {% if subscription.salesenddate | date("Y/m/d H:i") < "now" | date("Y/m/d H:i") %}
+                                                    <small class="text-danger fs-4 mt-1">
                                                         {{ "Sales ended on"|trans }}
-                                                        <span>{{ ticket.salesenddate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</span>
+                                                        <span>{{ subscription.salesenddate | ago }}</span>
                                                     </small>
                                                 {% else %}
-                                                    <small class="text-danger font-size-10px  mt-1">
+                                                    <small class="text-danger fs-4 mt-1">
                                                         {{ "Sales end in"|trans }}
-                                                        <span class="countdown" data-count-down-to="{{ ticket.salesenddate|date('Y/m/d H:i') }}"></span>
+                                                        <span class="countdown" data-count-down-to="{{ subscription.salesenddate | date('Y/m/d H:i') }}"></span>
                                                     </small>
                                                 {% endif %}
                                             {% endif %}
                                         </td>
                                         <td class="border-top-white text-right">
-                                            <input type="text" class="form-control touchspin-integer bg-white eventdate-ticket-qte" name="{{ ticket.reference }}" data-ticket-id="{{ ticket.id }}" data-min="0" data-max="{{ ticket.getMaxTicketsForSaleCount(app.user) }}" {% if eventTicketInCartSum or validTicketReservationsQuantitySumForUser or (not ticket.isOnSale) %}disabled{% endif %} />
-                                            {% if services.getSetting("show_tickets_left_on_cart_modal") == "yes" %}
-                                                <span class="badge badge-info mt-2">{{ ticket.getTicketsLeftCount }} {{ "tickets left"|trans }}</span>
+                                            <input type="text" class="form-control touchspin-integer bg-white recipedate-subscription-qte" name="{{ subscription.reference }}" data-subscription-id="{{ subscription.id }}" data-min="0" data-max="{{ subscription.getMaxSubscriptionsForSaleCount(app.user) }}" 
+                                            {% if recipeSubscriptionInCartSum or validSubscriptionReservationsQuantitySumForUser or (not subscription.isOnSale) %}disabled{% endif %}>
+                                            {% if '1' == settings["show_subscriptions_left_on_cart_modal"] %}
+                                                <span class="badge bg-info mt-2">
+                                                    {{ subscription.getSubscriptionsLeftCount }} 
+                                                    {{ "subscriptions left"|trans }}
+                                                </span>
                                             {% endif %}
-                                            {% if ticket.ticketsperattendee %}
-                                                <span class="badge badge-info ml-3 mt-2">{{ ticket.ticketsperattendee }} {{ "tickets per attendee"|trans }}</span>
+                                            {% if subscription.subscriptionspercreator %}
+                                                <span class="badge bg-info ms-3 mt-2">
+                                                    {{ subscription.subscriptionspercreator }} 
+                                                    {{ "subscriptions per creator"|trans }}
+                                                </span>
                                             {% endif %}
                                         </td>
                                     </tr>
-
                                 {% endif %}
                             {% endfor %}
                         </tbody>
@@ -119,13 +118,13 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal"><i class="far fa-window-close"></i> {{ "Close"|trans }}</button>
-                {% if not event.hasTwoOrMoreEventDatesOnSale %}
-                    <button id="add-to-cart-button" type="button" class="btn btn-primary {% if eventdate.hasSeatingPlan %}event-date-has-seating-plan{% endif %}"><i class="fas fa-cart-plus"></i> {{ "Add to cart"|trans }}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
+                {% if not recipe.hasTwoOrMoreRecipeDatesOnSale %}
+                    <button type="button" id="add-to-cart-button" class="btn btn-primary {% if recipedate.hasSeatingPlan %}recipe-date-has-seating-plan{% endif %}">
+                        {{ "Add to cart"|trans }}
+                    </button>
                 {% endif %}
             </div>
-
         </div>
     </div>
 </div>
-

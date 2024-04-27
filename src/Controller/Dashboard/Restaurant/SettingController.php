@@ -19,9 +19,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route(path: '/%website_dashboard_path%/restaurant/settings', name: 'dashboard_restaurant_settings_')]
+#[Route(path: '/%website_dashboard_path%/restaurant/settings', name: 'dashboard_restaurant_setting_')]
 #[IsGranted(HasRoles::RESTAURANT)]
-class SettingsController extends BaseController
+class SettingController extends BaseController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -80,13 +80,13 @@ class SettingsController extends BaseController
             $form->get('allowTapToCheckInOnScannerApp')->setData($this->getUser()->getRestaurant()->getAllowTapToCheckInOnScannerApp());
         }
 
-        return $this->render('dashboard/restaurant/settings/scanner-app.html.twig', compact('form'));
+        return $this->render('dashboard/restaurant/setting/scanner-app.html.twig', compact('form'));
     }
 
     #[Route(path: '/payouts', name: 'payouts', methods: ['GET', 'POST'])]
     public function payout(): Response
     {
-        return $this->render('dashboard/restaurant/settings/payout-methods.html.twig');
+        return $this->render('dashboard/restaurant/setting/payout-methods.html.twig');
     }
 
     #[Route(path: '/payouts/new', name: 'payouts_new', methods: ['GET', 'POST'])]
@@ -99,12 +99,12 @@ class SettingsController extends BaseController
             if ('paypal_rest' != $factoryName && 'stripe_checkout' != $factoryName) {
                 $this->addFlash('danger', $this->translator->trans('The payout method can not be found'));
 
-                return $this->redirectToRoute('dashboard_restaurant_settings_payouts');
+                return $this->redirectToRoute('dashboard_restaurant_setting_payouts');
             }
             if (('paypal_rest' == $factoryName && 'no' == $this->settingService->getSettings('restaurant_payout_paypal_enabled')) || ('stripe_checkout' == $factoryName && 'no' == $this->settingService->getSettings('restaurant_payout_stripe_enabled'))) {
                 $this->addFlash('danger', $this->translator->trans('This payout method is currently disabled'));
 
-                return $this->redirectToRoute('dashboard_restaurant_settings_payouts');
+                return $this->redirectToRoute('dashboard_restaurant_setting_payouts');
             }
             $paymentgateway = new PaymentGateway();
             $form = $this->createForm(RestaurantPayoutPaymentGatewayType::class, $paymentgateway)->handleRequest($request);
@@ -114,7 +114,7 @@ class SettingsController extends BaseController
             if (!$paymentgateway) {
                 $this->addFlash('danger', $this->translator->trans('The payout method can not be found'));
 
-                return $this->redirectToRoute('dashboard_restaurant_settings_payouts');
+                return $this->redirectToRoute('dashboard_restaurant_setting_payouts');
             }
             $form = $this->createForm(RestaurantPayoutPaymentGatewayType::class, $paymentgateway)->handleRequest($request);
         }
@@ -143,13 +143,13 @@ class SettingsController extends BaseController
                     $this->addFlash('success', $this->translator->trans('The payout method has been successfully updated'));
                 }
 
-                return $this->redirectToRoute('dashboard_restaurant_settings_payouts');
+                return $this->redirectToRoute('dashboard_restaurant_setting_payouts');
             } else {
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
         }
 
-        return $this->render('dashboard/restaurant/settings/payout-add-edit.html.twig', compact('form', 'paymentgateway'));
+        return $this->render('dashboard/restaurant/setting/payout-new-edit.html.twig', compact('form', 'paymentgateway'));
     }
     */
 
@@ -161,7 +161,7 @@ class SettingsController extends BaseController
         if (!$paymentgateway) {
             $this->addFlash('danger', $this->translator->trans('The payout method can not be found'));
 
-            return $this->redirectToRoute('dashboard_restaurant_settings_payouts');
+            return $this->redirectToRoute('dashboard_restaurant_setting_payouts');
         }
 
         $paymentgateway->setIsOnline(false);
@@ -171,6 +171,6 @@ class SettingsController extends BaseController
 
         $this->addFlash('notice', $this->translator->trans('The payout method is unset'));
 
-        return $this->redirectToRoute('dashboard_restaurant_settings_payouts');
+        return $this->redirectToRoute('dashboard_restaurant_setting_payouts');
     }
 }

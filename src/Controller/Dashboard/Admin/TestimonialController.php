@@ -105,6 +105,7 @@ class TestimonialController extends AdminBaseController
         return $this->render('dashboard/admin/testimonials/new-edit.html.twig', compact('form', 'testimonial'));
     }
 
+    /*
     #[Route(path: '/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Testimonial $testimonial): Response
     {
@@ -117,4 +118,5 @@ class TestimonialController extends AdminBaseController
 
         return $this->redirectToRoute('dashboard_admin_testimonial_index', [], Response::HTTP_SEE_OTHER);
     }
+    */
 }

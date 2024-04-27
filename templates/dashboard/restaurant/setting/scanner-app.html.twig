@@ -1,32 +1,39 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'dashboard.html.twig' %}
 
-{% set pagetitle = 'Scanner App settings' | trans %}
+{% set pagetitle = 'Scanner App settings'|trans %}
+{% block title pagetitle %}
 
-{% block title %}{{pagetitle}}{% endblock %}
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
-
-    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
-    <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
-            <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
-                <div class="col-lg-9 mt-4 mt-lg-0">
-                    <div class="card box">
-                        <div class="card-body">
-                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}, 'name': 'scanner_app_settings'}) }}
-                            {{ form_widget(form) }}
-                            {{ form_end(form) }}
-                        </div>
-                    </div>
-                </div>
+    <div class="card mb-4">
+        <div class="d-lg-flex justify-content-between align-items-center card-header">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span></span>
             </div>
-
+            <div>
+                <a href="" class="btn btn-outline-primary btn-sm">
+                    {{ 'Return to list'|trans }}
+                </a>
+            </div>
         </div>
-    </section>
-
+        <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+                {% include "global/message.html.twig" with { type: "info", message: ('Make sure that the currency setting of your payout method matches the one currently used which is %currency%'|trans({'%currency%': setting.getSetting('currency_ccy')})), icon: "bi bi-exclamation-circle" } %}
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation', 'name': 'scanner_app_settings'} }) }}
+                    {{ form_widget(form._token) }}
+                    {{ form_errors(form) }}
+                    {{ form_widget(form) }}
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">{{ 'Create'|trans }}</button>
+                    </div>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

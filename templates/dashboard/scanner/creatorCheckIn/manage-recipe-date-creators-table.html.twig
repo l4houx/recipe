@@ -1,0 +1,54 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="table-light">
+			<tr>
+				<th>{{ 'Creator Name / Email'|trans }}</th>
+				<th>{{ 'Subscription type'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for subscription in rows %}
+				<tr>
+                    <td>
+                        {{ subscription.reference }}
+                        <br>
+                        <span class="text-sm text-muted">
+                            {{ "Order"|trans }}# {{ subscription.orderelement.order.reference }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ subscription.orderelement.order.payment.firstname ~ " " ~ subscription.orderelement.order.payment.lastname }}
+                        <br>
+                        <span class="text-sm text-muted">
+                            {{ subscription.orderelement.order.payment.clientEmail }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ subscription.orderelement.recipesubscription.name }}
+                        <br>
+                        <span class="text-sm text-muted">
+                            {{ "Bought on"|trans }} {{ subscription.createdAt | ago }}
+                        </span>
+                    </td>
+					<td>
+						{% if recipe.isScanned %}
+							<span class="badge bg-success-soft" data-toggle="tooltip" title="{{ "Checked In At"|trans ~ " " ~ subscription.updatedAt | ago }}">
+								<i class="bi bi-check"></i>
+								{{ "checked In"|trans }}
+							</span>
+						{% else %}
+							<a href="{{ path('dashboard_scanner_subscription_check_in', {recipeDateReference: recipeDate.reference, subscriptionReference: subscription.reference}) }}" class="text-inherit">
+                                {{ "Check In"|trans }}
+                            </a>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="card-footer">
+		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+	</div>
+</div>

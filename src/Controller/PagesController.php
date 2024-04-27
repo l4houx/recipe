@@ -48,15 +48,15 @@ class PagesController extends AbstractController
     #[Route(path: '/team', name: 'team', methods: ['GET'])]
     public function team(UserRepository $userRepository): Response
     {
-        $teams = $userRepository->findTeam(6);
+        $rows = $userRepository->findTeam(6);
 
-        if (!$teams) {
+        if (!$rows) {
             $this->addFlash('danger', $this->translator->trans('The team can not be found'));
 
             return $this->redirectToRoute('home', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('pages/team-detail.html.twig', compact('teams'));
+        return $this->render('pages/team-detail.html.twig', compact('rows'));
     }
 
     #[Route('/testimonial', name: 'testimonial', methods: ['GET'])]

@@ -35,7 +35,7 @@
 							</div>
 						</a>
 					</td>
-					<td>{{ testimonial.author.getFullName() }}</td>
+					<td>{{ testimonial.author.getFullName | lower | capitalize }}</td>
                     <td>{{ testimonial.content | html_markdown_excerpt(40) }}</td>
                     <td>
 						{% include 'global/rating.html.twig' with {'rating' : testimonial.rating, 'class' : 'fs-6 align-top'} %}
@@ -55,14 +55,12 @@
 								{{ "Online"|trans }}
 							</span>
 						{% endif %}
-						{#  
 						{% if testimonial.deletedAt %}
 							<span class="badge bg-danger-soft">
 								<i class="bi bi-alarm"></i>
 								{{ "Deleted"|trans }}
 							</span>
 						{% endif %}
-						#}
 					</td>
 					<td>
 						<div class="dropdown dropstart">
@@ -75,6 +73,7 @@
 									<i class="bi bi-pencil dropdown-item-icon"></i>
 									{{ 'Edit'|trans }}
 								</a>
+								{#  
 								<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-testimonial-delete-form').submit();" class="dropdown-item">
 									<i class="bi bi-trash dropdown-item-icon"></i>
 									{{ 'Delete'|trans }}
@@ -83,6 +82,7 @@
 									<input type="hidden" name="_token" value="{{ csrf_token('testimonial_deletion_' ~ testimonial.id) }}">
 									<input type="hidden" name="_method" value="DELETE">
 								</form>
+								#}
 							</div>
 						</div>
 					</td>

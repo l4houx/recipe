@@ -1,18 +1,16 @@
 {% extends 'empty.html.twig' %}
 
 {% block content %}
-	<div class="row align-items-center justify-content-center g-0 h-lg-100 py-10">
-		<div class="offset-xl-1 col-xl-4 col-lg-6 col-md-12 col-12 text-center text-lg-start">
-			<h1 class="display-1 mb-3">{% block code '' %}</h1>
-			<p class="mb-5 lead px-4 px-md-0">
-				{% block title  '' %}
-                {% block description '' %}
-				<a href="{{ path('contact') }}" class="btn-link">{{ 'Contact us'|trans }}</a>
-			</p>
-			<a href="{{ path('home') }}" class="btn btn-primary me-2">{{ 'Go back home'|trans }}</a>
-		</div>
-		<div class="offset-xl-1 col-xl-6 col-lg-6 col-md-12 col-12 mt-8 mt-lg-0">
-			<img src="{{ asset('images/error/404-error-img.svg') }}" alt="error" class="w-100">
-		</div>
+	<div class="offset-xl-1 col-xl-4 col-lg-6 col-md-12 col-12 text-center text-lg-start">
+		<h1 class="display-1 mb-3">{% block code '' %}</h1>
+		<p class="mb-5 lead px-4 px-md-0">
+			{% block title  '' %}
+			{% block description '' %}
+			<a href="{{ path('contact') }}" class="btn-link">{{ 'Contact us'|trans }}</a>
+		</p>
+		<a href="{{ path('home') }}" class="btn btn-primary me-2">{{ 'Go back home'|trans }}</a>
+	</div>
+	<div class="offset-xl-1 col-xl-6 col-lg-6 col-md-12 col-12 mt-8 mt-lg-0">
+		<img src="{{ asset('images/error/404-error-img.svg') }}" alt="error" class="w-100">
 	</div>
 {% endblock %}

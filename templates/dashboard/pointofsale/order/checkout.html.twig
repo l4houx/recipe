@@ -1,50 +1,50 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'page.html.twig' %}
 
-{% set pagetitle = 'Checkout' | trans %}
+{% set bodyClass = 'bg-white' %}
+{% set pagetitle = 'Checkout'|trans %}
+{% block title pagetitle %}
 
-{% block title %}{{pagetitle}}{% endblock %}
+{% block pageheader %}
+    <section class="py-4 py-lg-6 bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="offset-lg-1 col-lg-10 col-md-12 col-12">
+                    <div class="d-lg-flex align-items-center justify-content-between">
+                        <div class="mb-4 mb-lg-0">
+                            <h1 class="text-white mb-1">{{ pagetitle }}</h1>
+                            <p class="mb-0 text-white lead"></p>
+                        </div>
+                        <div>
+                            <a href="" class="btn btn-white">Back to Order</a>
+                            <a href="" class="btn btn-dark">{{ 'Save'|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
-
-    {% set navigation = [{"current":(pagetitle)}] %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
-    <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
+    <section class="py-6">
+        <div class="container">
             <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
-                <div class="col-lg-9 mt-4 mt-lg-0">
-
-                    <div class="checkout-timer-wrapper">
-                        {% set secondsLeft = 0 %}
-
-                        {% for orderElement in order.orderelements %}
-                            {% for ticketReservation in orderElement.ticketsReservations if not ticketReservation.isExpired %}
-
-                                {% set dateInterval = ticketReservation.expiresAt|date_modify("+"~ services.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
-                                {% set secondsLeft = dateInterval|date("%i") * 60 + dateInterval|date("%s") %}
-
-                            {% endfor %}
-                        {% endfor %}
-
-                        {% if secondsLeft > 0 %}
-                            {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-hourglass-half', message: '%mins% left before tickets are released'|trans({"%mins%" : "<span class='checkout-timer' data-seconds-left='"~secondsLeft~"'></span>"}) } %}
-                        {% endif %}
-
-                    </div>
-
-                    <div class="card">
+                <div class="col-xl-8 col-lg-8 col-md-12 col-12">
+                    <div class="card mb-4">
                         <div class="card-header">
-                            <h6 class="b mb-0">{{ "Order summary"|trans }}</h6>
+                            <h4 class="mb-0">{{ "Order Summary"|trans }}</h4>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover shopping-cart-wrap">
-                                    <thead class="text-muted">
+                            <div class="table-responsive table-card">
+                                <table class="table mb-0 text-nowrap">
+                                    <thead class="table-light">
                                         <tr>
-                                            <th scope="col">{{ "Event / Ticket"|trans }}</th>
+                                            <th scope="col">{{ "Recipe / Subscription"|trans }}</th>
                                             <th scope="col" width="100">{{ "Price"|trans }}</th>
                                             <th scope="col" width="100">{{ "Quantity"|trans }}</th>
                                             <th scope="col" class="text-right" width="100">{{ "Subtotal"|trans }}</th>
@@ -54,23 +54,29 @@
                                         {% for orderelement in order.orderelements %}
                                             <tr>
                                                 <td>
-                                                    {% include "Global/event-preview-horizontal.html.twig" with { eventticket: orderelement.eventticket } %}
-                                                    {% if orderelement.reservedSeats and orderelement.reservedSeats|length > 0 %}
-                                                        <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
+                                                    {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription:
+                                                    orderelement.recipesubscription } %}
+                                                    {% if orderelement.reservedSeats and orderelement.reservedSeats | length > 0 %}
+                                                        <h6 class='text-primary mb-0'>
+                                                            <i class="bi bi-collection"></i> 
+                                                            {{ "Reserved seats"|trans }}
+                                                        </h6>
                                                         <ul class='list-check'>
                                                             {% for reservedSeat in orderelement.reservedSeats %}
                                                                 <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
-                                                                {% endfor %}
+                                                            {% endfor %}
                                                         </ul>
                                                     {% endif %}
                                                 </td>
                                                 <td>
                                                     <div class="price-wrap">
-                                                        {% if orderelement.eventticket.eventdate.event.isFree %}
+                                                        {% if orderelement.recipesubscription.recipedate.recipe.isFree %}
                                                             <span class="price-new">{{ "Free"|trans }}</span>
                                                         {% else %}
-                                                            {% if orderelement.eventticket.eventdate %}
-                                                                <span class="price-new">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.eventticket.getSalePrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</span>
+                                                            {% if orderelement.recipesubscription.recipedate %}
+                                                                <span class="price-new">
+                                                                    {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.recipesubscription.getSalePrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                                                </span>
                                                             {% endif %}
                                                         {% endif %}
                                                     </div>
@@ -80,7 +86,9 @@
                                                 </td>
                                                 <td class="text-right">
                                                     <div class="price-wrap">
-                                                        <var class="price">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.getPrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                        <var class="price">
+                                                            {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                                        </var>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -90,58 +98,85 @@
                             </div>
                         </div>
                     </div>
-
-                    {{ form_start(form, {'attr': { 'novalidate': 'novalidate' } }) }}
-
-                    {{ form_widget(form.orderReference, { value: order.reference }) }}
-
-                    <div class="card mt-4 mb-5">
-                        <div class="card-header">
-                            <h6 class="b mb-0">{{ "Optional attendee information"|trans }}</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    {{ form_label(form.firstname, null, {'label_attr': {'class': 'not-required'}}) }}
-                                    {{ form_widget(form.firstname) }}
-                                    {{ form_errors(form.firstname) }}
-                                </div>
-                                <div class="col form-group">
-                                    {{ form_label(form.lastname, null, {'label_attr': {'class': 'not-required'}}) }}
-                                    {{ form_widget(form.lastname) }}
-                                    {{ form_errors(form.lastname) }}
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                        {{ form_widget(form._token) }}
+                        {{ form_widget(form.orderReference, { value: order.reference }) }}
+                        <div class="card mb-3 mb-lg-0">
+                            <div class="card-header">
+                                <h4 class="mb-0">{{ "Optional creator information"|trans }}</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.firstname, null, {'label_attr': {'class': 'not-required'}}) }}
+                                        {{ form_widget(form.firstname) }}
+                                        {{ form_errors(form.firstname) }}
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.lastname, null, {'label_attr': {'class': 'not-required'}}) }}
+                                        {{ form_widget(form.lastname) }}
+                                        {{ form_errors(form.lastname) }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <dl class="dlist-align">
-                        <dt>{{ "Tickets"|trans }}</dt>
-                        <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
-                        </dd>
-                    </dl>
-                    <dl class="dlist-align">
-                        <dt>{{ "Fees"|trans }}</dt>
-                        <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getTotalFees() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</dd>
-                    </dl>
-                    <dl class="dlist-align h4">
-                        <dt>{{ "Total"|trans }}</dt>
-                        <dd class="text-right ml-5"><strong>{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</strong></dd>
-                    </dl>
-
-                    {% if order.getOrderElementsPriceSum(true) > 0 %}
-                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-money-check"></i> {{ "Confirm payment and place order"|trans }}</button>
-                    {% else %}
-                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-edit"></i> {{ "Register attendees"|trans }}</button>
-                    {% endif %}
-                    {{ form_widget(form._token) }}
-
+                        <hr class="m-0">
+                        <div class="card mb-3 mb-lg-0">
+                            <div class="card-body">
+                                <div class="p-5">
+                                    <h4 class="fw-bold mb-4"></h4>
+                                    <ul class="list-group list-group-flush mb-0">
+                                        <li class="list-group-item px-0 d-flex justify-content-between fs-5 text-dark fw-medium">
+                                            <span>{{ "Subscriptions"|trans }} :</span>
+                                            <span>
+                                                {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ order.getOrderElementsPriceSum() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item px-0 d-flex justify-content-between fs-5 text-dark fw-medium">
+                                            <span>{{ "Fees"|trans }} :</span>
+                                            <span>
+                                                {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ order.getTotalFees() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item px-0 d-flex justify-content-between fs-5 text-dark fw-medium">
+                                            <span>{{ "Total"|trans }} :</span>
+                                            <span>
+                                                {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% if order.getOrderElementsPriceSum(true) > 0 %}
+                            <button type="submit" class="btn btn-primary mt-6" id="checkout_submit">
+                                {{ "Confirm payment and place order"|trans }}
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary mt-6" id="checkout_submit">
+                                {{ "Register creators"|trans }}
+                            </button>
+                        {% endif %}
                     {{ form_end(form, {'render_rest': false}) }}
+                </div>
+                <div class="col-lg-4 col-md-12 col-12">
+                    <div class="card border-0 mb-3">
+                        <div class="p-5 text-center">
+                            {% set secondsLeft = 0 %}
+                            {% for orderElement in order.orderelements %}
+                                {% for subscriptionReservation in orderElement.subscriptionsReservations if not subscriptionReservation.isExpired %}
+                                    {% set dateInterval = subscriptionReservation.expiresAt|date_modify("+"~ settings.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
+                                    {% set secondsLeft = dateInterval | date("%i") * 60 + dateInterval|date("%s") %}
+                                {% endfor %}
+                            {% endfor %}
 
+                            {% if secondsLeft > 0 %}
+                                {% include 'global/message.html.twig' with { type: 'warning',icon: 'bi bi-hourglass-split', message: '%mins% left before subscriptions are released'|trans({"%mins%" : "<span class='checkout-timer' data-seconds-left='"~secondsLeft~"'></span>"}) } %}
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
     </section>
-
 {% endblock %}

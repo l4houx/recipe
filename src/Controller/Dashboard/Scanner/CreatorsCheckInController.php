@@ -23,7 +23,7 @@ class CreatorsCheckInController extends BaseController
     ) {
     }
 
-    #[Route(path: '/recipe-date/{reference}/creators-check-in', name: 'dashboard_recipe_date_creators_check_in', methods: ['GET'])]
+    #[Route(path: '/recipe-date/{reference}/creators-check-in', name: 'dashboard_scanner_recipe_date_creators_check_in', methods: ['GET'])]
     public function recipeDateCreators($reference, Request $request, PaginatorInterface $paginator): Response
     {
         /** @var RecipeDate $recipeDate */
@@ -37,12 +37,12 @@ class CreatorsCheckInController extends BaseController
         $keyword = '' == $request->query->get('keyword') ? 'all' : $request->query->get('keyword');
         $checkedin = '' == $request->query->get('checkedin') ? 'all' : $request->query->get('checkedin');
 
-        $subscriptions = $paginator->paginate($this->settingService->getOrderSubscriptions(['recipedate' => $reference, 'keyword' => $keyword, 'checkedin' => $checkedin])->getQuery(), $request->query->getInt('page', 1), 20, ['wrap-queries' => true]);
+        $rows = $paginator->paginate($this->settingService->getOrderSubscriptions(['recipedate' => $reference, 'keyword' => $keyword, 'checkedin' => $checkedin])->getQuery(), $request->query->getInt('page', 1), 20, ['wrap-queries' => true]);
 
-        return $this->render('dashboard/scanner/creatorsCheckIn/recipe-date-creators.html.twig', compact('recipeDate', 'subscriptions'));
+        return $this->render('dashboard/scanner/creatorsCheckIn/recipe-date-creators.html.twig', compact('recipeDate', 'rows'));
     }
 
-    #[Route(path: '/recipe-date/{recipeDateReference}/creators-check-in/{subscriptionReference}/check-in', name: 'dashboard_recipe_subscription_check_in', methods: ['GET'])]
+    #[Route(path: '/recipe-date/{recipeDateReference}/creators-check-in/{subscriptionReference}/check-in', name: 'dashboard_scanner_subscription_check_in', methods: ['GET'])]
     public function subscriptionCheckIn(string $recipeDateReference, string $subscriptionReference)
     {
         /** @var RecipeDate $recipeDate */

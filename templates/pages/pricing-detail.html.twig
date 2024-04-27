@@ -239,8 +239,8 @@
 											{% include "global/user-avatar.html.twig" with { user: testimonial.author, type: "md"} %}
 											<div class="ms-2">
 												<h5 class="text-primary mb-0">{{ testimonial.author.getFullName | lower | capitalize }}</h5>
-												{% if testimonial.author.designation %}
-													<p class="mb-0 fs-6">{{ testimonial.author.designation | lower | raw | capitalize }}</p>
+												{% if testimonial.author.getRole %}
+													<p class="mb-0 fs-6">{{ testimonial.author.getRole|trans|raw }}</p>
 												{% endif %}
 											</div>
 										</div>

@@ -1,56 +1,84 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'page.html.twig' %}
 
-{% set pagetitle = 'Checkout' | trans %}
+{% set bodyClass = 'bg-white' %}
+{% set pagetitle = 'Checkout'|trans %}
+{% block title pagetitle %}
 
-{% block title %}{{pagetitle}}{% endblock %}
+{% block pageheader %}
+    <section class="py-4 py-lg-6 bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="offset-lg-1 col-lg-10 col-md-12 col-12">
+                    <div class="d-lg-flex align-items-center justify-content-between">
+                        <div class="mb-4 mb-lg-0">
+                            <h1 class="text-white mb-1">{{ pagetitle }}</h1>
+                            <p class="mb-0 text-white lead"></p>
+                        </div>
+                        <div>
+                            <a href="" class="btn btn-white">Back to Order</a>
+                            <a href="" class="btn btn-dark">{{ 'Save'|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "dashboard_creator_cart": ("My cart"|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
-
-    {% set navigation = [{"dashboard_index": "Dashboard"|trans, "dashboard_attendee_cart": ("My cart"|trans), "current":(pagetitle)}] %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
-    <section class="section-content bg-white padding-y">
-
-        <div class="{{ services.getSetting("app_layout") }}">
-
+    <section class="py-6">
+        <div class="container">
             <div class="row">
-                <main class="col-lg-8 order-1 order-lg-0 mt-4 mt-lg-0">
-                    <div class="card">
+                <div class="col-xl-8 col-lg-8 col-md-12 col-12">
+                    <div class="card mb-4">
                         <div class="card-header">
-                            <h6 class="b mb-0">{{ "Order summary"|trans }}</h6>
+                            <h4 class="mb-0">{{ "Order Summary"|trans }}</h4>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover shopping-cart-wrap">
-                                    <thead class="text-muted">
+                            <div class="table-responsive table-card">
+                                <table class="table mb-0 text-nowrap">
+                                    <thead class="table-light">
                                         <tr>
-                                            <th style="width:55%;" scope="col">{{ "Event / Ticket"|trans }}</th>
+                                            <th style="width:55%;" scope="col">{{ "Recipe / Subscription"|trans }}</th>
                                             <th style="width:15%;" scope="col" width="100">{{ "Price"|trans }}</th>
                                             <th style="width:15%;" scope="col" width="100">{{ "Quantity"|trans }}</th>
-                                            <th style="width:15%;" scope="col" class="text-right" width="100">{{ "Subtotal"|trans }}</th>
+                                            <th style="width:15%;" scope="col" class="text-right" width="100">
+                                                {{ "Subtotal"|trans }}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for orderelement in order.orderelements %}
                                             <tr>
                                                 <td width="55%">
-                                                    {% include "Global/event-preview-horizontal.html.twig" with { eventticket: orderelement.eventticket } %}
-                                                    {% if orderelement.reservedSeats and orderelement.reservedSeats|length > 0 %}
-                                                        <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
+                                                    {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription:
+                                                    orderelement.recipesubscription } %}
+                                                    {% if orderelement.reservedSeats and orderelement.reservedSeats | length > 0 %}
+                                                        <h6 class='text-primary mb-0'>
+                                                            <i class="bi bi-collection"></i> 
+                                                            {{ "Reserved seats"|trans }}
+                                                        </h6>
                                                         <ul class='list-check'>
                                                             {% for reservedSeat in orderelement.reservedSeats %}
                                                                 <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
-                                                                {% endfor %}
+                                                            {% endfor %}
                                                         </ul>
                                                     {% endif %}
                                                 </td>
                                                 <td width="15%">
                                                     <div class="price-wrap">
-                                                        {% if orderelement.eventticket.eventdate.event.isFree %}
+                                                        {% if orderelement.recipesubscription.recipedate.recipe.isFree %}
                                                             <span class="price-new">{{ "Free"|trans }}</span>
                                                         {% else %}
-                                                            {% if orderelement.eventticket.eventdate %}
-                                                                <span class="price-new">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.eventticket.getSalePrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</span>
+                                                            {% if orderelement.recipesubscription.recipedate %}
+                                                                <span class="price-new">
+                                                                    {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.recipesubscription.getSalePrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                                                </span>
                                                             {% endif %}
                                                         {% endif %}
                                                     </div>
@@ -60,7 +88,9 @@
                                                 </td>
                                                 <td width="15%" class="text-right">
                                                     <div class="price-wrap">
-                                                        <var class="price">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ orderelement.getPrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</var>
+                                                        <var class="price">
+                                                            {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                                        </var>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -70,206 +100,331 @@
                             </div>
                         </div>
                     </div>
-
-                    {{ form_start(form, {'attr': { 'novalidate': 'novalidate' } }) }}
-
-                    {{ form_widget(form.orderReference, { value: order.reference }) }}
-
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h6 class="b mb-0">{{ "Billing information"|trans }}</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    {{ form_label(form.firstname) }}
-                                    {{ form_widget(form.firstname, { value: app.user.firstname }) }}
-                                    {{ form_errors(form.firstname) }}
-                                </div>
-                                <div class="col form-group">
-                                    {{ form_label(form.lastname) }}
-                                    {{ form_widget(form.lastname, { value: app.user.lastname }) }}
-                                    {{ form_errors(form.lastname) }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    {{ form_label(form.email) }}
-                                    {{ form_widget(form.email, { value: app.user.email }) }}
-                                    {{ form_errors(form.email) }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    {{ form_label(form.country) }}
-                                    {{ form_widget(form.country) }}
-                                    {{ form_errors(form.country) }}
-                                </div>
-                                <div class="col form-group">
-                                    {{ form_label(form.state) }}
-                                    {{ form_widget(form.state, { value: app.user.state }) }}
-                                    {{ form_errors(form.state) }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    {{ form_label(form.city) }}
-                                    {{ form_widget(form.city, { value: app.user.city }) }}
-                                    {{ form_errors(form.city) }}
-                                </div>
-                                <div class="col form-group">
-                                    {{ form_label(form.postalcode) }}
-                                    {{ form_widget(form.postalcode, { value: app.user.postalcode }) }}
-                                    {{ form_errors(form.postalcode) }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col form-group">
-                                    {{ form_label(form.street) }}
-                                    {{ form_widget(form.street, { value: app.user.street }) }}
-                                    {{ form_errors(form.street) }}
-                                </div>
-                                <div class="col form-group">
-                                    {{ form_label(form.street2) }}
-                                    {{ form_widget(form.street2, { value: app.user.street2 }) }}
-                                    {{ form_errors(form.street2) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if order.getOrderElementsPriceSum(true) > 0 %}
-                        <div class="card mt-4">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                        {{ form_widget(form.orderReference, { value: order.reference }) }}
+                        <div class="card mb-3 mb-lg-0">
                             <div class="card-header">
-                                <h6 class="b mb-0">{{ "Payment method"|trans }}</h6>
+                                <h4 class="mb-0">{{ "Billing information"|trans }}</h4>
                             </div>
                             <div class="card-body">
-                                <div class="form-row">
-                                    {% for paymentGateway in paymentGateways %}
-                                        <div class="col-6 form-group">
-
-                                            <div class="custom-control custom-radio custom-control-inline">
-                                                <input data-paymentGateway-id="{{ paymentGateway.id }}" class="custom-control-input" id="{{ paymentGateway.factoryName }}" type="radio" name="payment_gateway" value="{{ paymentGateway.factoryName }}" {{ loop.first ? "checked"}}/>
-                                                <label class="custom-control-label required" for="{{ paymentGateway.factoryName }}"><img src="{{  asset(paymentGateway.getLogoPath) }}" class="img-80-80 mr-3 ml-3" />{{ paymentGateway.name }}</label>
-                                            </div>
-
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.firstname) }}
+                                        {{ form_widget(form.firstname, { value: app.user.firstname }) }}
+                                        {{ form_errors(form.firstname) }}
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.lastname) }}
+                                        {{ form_widget(form.lastname, { value: app.user.lastname }) }}
+                                        {{ form_errors(form.lastname) }}
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.email) }}
+                                        {{ form_widget(form.email, { value: app.user.email }) }}
+                                        {{ form_errors(form.email) }}
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        {{ form_label(form.street) }}
+                                        {{ form_widget(form.street, { value: app.user.street }) }}
+                                        {{ form_errors(form.street) }}
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        {{ form_label(form.street2) }}
+                                        {{ form_widget(form.street2, { value: app.user.street2 }) }}
+                                        {{ form_errors(form.street2) }}
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.state) }}
+                                        {{ form_widget(form.state, { value: app.user.state }) }}
+                                        {{ form_errors(form.state) }}
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.country) }}
+                                        {{ form_widget(form.country) }}
+                                        {{ form_errors(form.country) }}
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        {{ form_label(form.postalcode) }}
+                                        {{ form_widget(form.postalcode, { value: app.user.postalcode }) }}
+                                        {{ form_errors(form.postalcode) }}
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="shippingAddress" required="">
+                                            <label class="form-check-label" for="shippingAddress">Shipping address is the same as my billing address</label>
                                         </div>
-                                    {% endfor %}
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="saveCard" required="">
+                                            <label class="form-check-label" for="saveCard">Save this information for next time</label>
+                                        </div>
+                                    </div>
                                 </div>
-                                {% for paymentGateway in paymentGateways %}
-                                    {% if paymentGateway.instructions %}
-
-                                        <div id="paymentGateway{{ paymentGateway.id }}-instructions" class="form-row paymentGateways-instructions">
-                                            <div class="col-12 form-group">
-
-                                                {% include "Global/message.html.twig" with { type: "info", message: (paymentGateway.instructions|raw), icon: "fas fa-info-circle" } %}
-
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
                             </div>
                         </div>
-                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-money-check"></i> {{ "Pay now"|trans }}</button>
-                    {% else %}
-                        <button id="checkout_submit" type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-edit"></i> {{ "Register"|trans }}</button>
-                    {% endif %}
+                        {% if order.getOrderElementsPriceSum(true) > 0 %}
+                            <div class="card mb-3 mb-lg-0">
+                                <div class="card-header">
+                                    <h4 class="mb-0">{{ "Payment method"|trans }}</h4>
+                                </div>
+                                <div class="card-body">
+                                    {% for paymentGateway in paymentGateways %}
+                                        <div class="d-inline-flex">
+                                            <div class="form-check me-3">
+                                                <input type="radio" data-paymentGateway-id="{{ paymentGateway.id }}" id="{{ paymentGateway.factoryName }}" name="payment_gateway" class="form-check-input" value="{{ paymentGateway.factoryName }}" {{ loop.first ? "checked" }}>
+                                                <label class="form-check-label required" for="{{ paymentGateway.factoryName }}">
+                                                    <img src="{{ asset(paymentGateway.getLogoPath) }}" class="img-80-80 me-3 mr-3">
+                                                    {{ paymentGateway.name }}
+                                                </label>
+                                            </div>
+                                            <!-- Radio -->
+                                            <div class="form-check">
+                                                <input type="radio" id="cardRadioTwo" name="cardRadioone" class="form-check-input" required="">
+                                                <label class="form-check-label" for="cardRadioTwo">PayPal</label>
+                                            </div>
+                                        </div>
+                                        <!-- Form -->
+                                        <div class="row g-3" id="cardpayment">
+                                            <!-- Card number -->
+                                            <div class="col-12 mt-6">
+                                                <!-- Card Number -->
+                                                <label class="d-flex justify-content-between align-items-center form-label" for="card-mask">
+                                                    Card Number
+                                                    <span>
+                                                        <svg width="18" height="18" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="cc-amex" class="svg-inline--fa fa-cc-amex text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                            <path fill="currentColor" d="M325.1 167.8c0-16.4-14.1-18.4-27.4-18.4l-39.1-.3v69.3H275v-25.1h18c18.4 0 14.5 10.3 14.8 25.1h16.6v-13.5c0-9.2-1.5-15.1-11-18.4 7.4-3 11.8-10.7 11.7-18.7zm-29.4 11.3H275v-15.3h21c5.1 0 10.7 1 10.7 7.4 0 6.6-5.3 7.9-11 7.9zM279 268.6h-52.7l-21 22.8-20.5-22.8h-66.5l-.1 69.3h65.4l21.3-23 20.4 23h32.2l.1-23.3c18.9 0 49.3 4.6 49.3-23.3 0-17.3-12.3-22.7-27.9-22.7zm-103.8 54.7h-40.6v-13.8h36.3v-14.1h-36.3v-12.5h41.7l17.9 20.2zm65.8 8.2l-25.3-28.1L241 276zm37.8-31h-21.2v-17.6h21.5c5.6 0 10.2 2.3 10.2 8.4 0 6.4-4.6 9.2-10.5 9.2zm-31.6-136.7v-14.6h-55.5v69.3h55.5v-14.3h-38.9v-13.8h37.8v-14.1h-37.8v-12.5zM576 255.4h-.2zm-194.6 31.9c0-16.4-14.1-18.7-27.1-18.7h-39.4l-.1 69.3h16.6l.1-25.3h17.6c11 0 14.8 2 14.8 13.8l-.1 11.5h16.6l.1-13.8c0-8.9-1.8-15.1-11-18.4 7.7-3.1 11.8-10.8 11.9-18.4zm-29.2 11.2h-20.7v-15.6h21c5.1 0 10.7 1 10.7 7.4 0 6.9-5.4 8.2-11 8.2zm-172.8-80v-69.3h-27.6l-19.7 47-21.7-47H83.3v65.7l-28.1-65.7H30.7L1 218.5h17.9l6.4-15.3h34.5l6.4 15.3H100v-54.2l24 54.2h14.6l24-54.2v54.2zM31.2 188.8l11.2-27.6 11.5 27.6zm477.4 158.9v-4.5c-10.8 5.6-3.9 4.5-156.7 4.5 0-25.2.1-23.9 0-25.2-1.7-.1-3.2-.1-9.4-.1 0 17.9-.1 6.8-.1 25.3h-39.6c0-12.1.1-15.3.1-29.2-10 6-22.8 6.4-34.3 6.2 0 14.7-.1 8.3-.1 23h-48.9c-5.1-5.7-2.7-3.1-15.4-17.4-3.2 3.5-12.8 13.9-16.1 17.4h-82v-92.3h83.1c5 5.6 2.8 3.1 15.5 17.2 3.2-3.5 12.2-13.4 15.7-17.2h58c9.8 0 18 1.9 24.3 5.6v-5.6c54.3 0 64.3-1.4 75.7 5.1v-5.1h78.2v5.2c11.4-6.9 19.6-5.2 64.9-5.2v5c10.3-5.9 16.6-5.2 54.3-5V80c0-26.5-21.5-48-48-48h-480c-26.5 0-48 21.5-48 48v109.8c9.4-21.9 19.7-46 23.1-53.9h39.7c4.3 10.1 1.6 3.7 9 21.1v-21.1h46c2.9 6.2 11.1 24 13.9 30 5.8-13.6 10.1-23.9 12.6-30h103c0-.1 11.5 0 11.6 0 43.7.2 53.6-.8 64.4 5.3v-5.3H363v9.3c7.6-6.1 17.9-9.3 30.7-9.3h27.6c0 .5 1.9.3 2.3.3H456c4.2 9.8 2.6 6 8.8 20.6v-20.6h43.3c4.9 8-1-1.8 11.2 18.4v-18.4h39.9v92h-41.6c-5.4-9-1.4-2.2-13.2-21.9v21.9h-52.8c-6.4-14.8-.1-.3-6.6-15.3h-19c-4.2 10-2.2 5.2-6.4 15.3h-26.8c-12.3 0-22.3-3-29.7-8.9v8.9h-66.5c-.3-13.9-.1-24.8-.1-24.8-1.8-.3-3.4-.2-9.8-.2v25.1H151.2v-11.4c-2.5 5.6-2.7 5.9-5.1 11.4h-29.5c-4-8.9-2.9-6.4-5.1-11.4v11.4H58.6c-4.2-10.1-2.2-5.3-6.4-15.3H33c-4.2 10-2.2 5.2-6.4 15.3H0V432c0 26.5 21.5 48 48 48h480.1c26.5 0 48-21.5 48-48v-90.4c-12.7 8.3-32.7 6.1-67.5 6.1zm36.3-64.5H575v-14.6h-32.9c-12.8 0-23.8 6.6-23.8 20.7 0 33 42.7 12.8 42.7 27.4 0 5.1-4.3 6.4-8.4 6.4h-32l-.1 14.8h32c8.4 0 17.6-1.8 22.5-8.9v-25.8c-10.5-13.8-39.3-1.3-39.3-13.5 0-5.8 4.6-6.5 9.2-6.5zm-57 39.8h-32.2l-.1 14.8h32.2c14.8 0 26.2-5.6 26.2-22 0-33.2-42.9-11.2-42.9-26.3 0-5.6 4.9-6.4 9.2-6.4h30.4v-14.6h-33.2c-12.8 0-23.5 6.6-23.5 20.7 0 33 42.7 12.5 42.7 27.4-.1 5.4-4.7 6.4-8.8 6.4zm-42.2-40.1v-14.3h-55.2l-.1 69.3h55.2l.1-14.3-38.6-.3v-13.8H445v-14.1h-37.8v-12.5zm-56.3-108.1c-.3.2-1.4 2.2-1.4 7.6 0 6 .9 7.7 1.1 7.9.2.1 1.1.5 3.4.5l7.3-16.9c-1.1 0-2.1-.1-3.1-.1-5.6 0-7 .7-7.3 1zm20.4-10.5h-.1zm-16.2-15.2c-23.5 0-34 12-34 35.3 0 22.2 10.2 34 33 34h19.2l6.4-15.3h34.3l6.6 15.3h33.7v-51.9l31.2 51.9h23.6v-69h-16.9v48.1l-29.1-48.1h-25.3v65.4l-27.9-65.4h-24.8l-23.5 54.5h-7.4c-13.3 0-16.1-8.1-16.1-19.9 0-23.8 15.7-20 33.1-19.7v-15.2zm42.1 12.1l11.2 27.6h-22.8zm-101.1-12v69.3h16.9v-69.3z"></path>
+                                                        </svg>
+                                                        <svg width="18" height="18" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="cc-mastercard" class="svg-inline--fa fa-cc-mastercard text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                            <path fill="currentColor" d="M482.9 410.3c0 6.8-4.6 11.7-11.2 11.7-6.8 0-11.2-5.2-11.2-11.7 0-6.5 4.4-11.7 11.2-11.7 6.6 0 11.2 5.2 11.2 11.7zm-310.8-11.7c-7.1 0-11.2 5.2-11.2 11.7 0 6.5 4.1 11.7 11.2 11.7 6.5 0 10.9-4.9 10.9-11.7-.1-6.5-4.4-11.7-10.9-11.7zm117.5-.3c-5.4 0-8.7 3.5-9.5 8.7h19.1c-.9-5.7-4.4-8.7-9.6-8.7zm107.8.3c-6.8 0-10.9 5.2-10.9 11.7 0 6.5 4.1 11.7 10.9 11.7 6.8 0 11.2-4.9 11.2-11.7 0-6.5-4.4-11.7-11.2-11.7zm105.9 26.1c0 .3.3.5.3 1.1 0 .3-.3.5-.3 1.1-.3.3-.3.5-.5.8-.3.3-.5.5-1.1.5-.3.3-.5.3-1.1.3-.3 0-.5 0-1.1-.3-.3 0-.5-.3-.8-.5-.3-.3-.5-.5-.5-.8-.3-.5-.3-.8-.3-1.1 0-.5 0-.8.3-1.1 0-.5.3-.8.5-1.1.3-.3.5-.3.8-.5.5-.3.8-.3 1.1-.3.5 0 .8 0 1.1.3.5.3.8.3 1.1.5s.2.6.5 1.1zm-2.2 1.4c.5 0 .5-.3.8-.3.3-.3.3-.5.3-.8 0-.3 0-.5-.3-.8-.3 0-.5-.3-1.1-.3h-1.6v3.5h.8V426h.3l1.1 1.4h.8l-1.1-1.3zM576 81v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V81c0-26.5 21.5-48 48-48h480c26.5 0 48 21.5 48 48zM64 220.6c0 76.5 62.1 138.5 138.5 138.5 27.2 0 53.9-8.2 76.5-23.1-72.9-59.3-72.4-171.2 0-230.5-22.6-15-49.3-23.1-76.5-23.1-76.4-.1-138.5 62-138.5 138.2zm224 108.8c70.5-55 70.2-162.2 0-217.5-70.2 55.3-70.5 162.6 0 217.5zm-142.3 76.3c0-8.7-5.7-14.4-14.7-14.7-4.6 0-9.5 1.4-12.8 6.5-2.4-4.1-6.5-6.5-12.2-6.5-3.8 0-7.6 1.4-10.6 5.4V392h-8.2v36.7h8.2c0-18.9-2.5-30.2 9-30.2 10.2 0 8.2 10.2 8.2 30.2h7.9c0-18.3-2.5-30.2 9-30.2 10.2 0 8.2 10 8.2 30.2h8.2v-23zm44.9-13.7h-7.9v4.4c-2.7-3.3-6.5-5.4-11.7-5.4-10.3 0-18.2 8.2-18.2 19.3 0 11.2 7.9 19.3 18.2 19.3 5.2 0 9-1.9 11.7-5.4v4.6h7.9V392zm40.5 25.6c0-15-22.9-8.2-22.9-15.2 0-5.7 11.9-4.8 18.5-1.1l3.3-6.5c-9.4-6.1-30.2-6-30.2 8.2 0 14.3 22.9 8.3 22.9 15 0 6.3-13.5 5.8-20.7.8l-3.5 6.3c11.2 7.6 32.6 6 32.6-7.5zm35.4 9.3l-2.2-6.8c-3.8 2.1-12.2 4.4-12.2-4.1v-16.6h13.1V392h-13.1v-11.2h-8.2V392h-7.6v7.3h7.6V416c0 17.6 17.3 14.4 22.6 10.9zm13.3-13.4h27.5c0-16.2-7.4-22.6-17.4-22.6-10.6 0-18.2 7.9-18.2 19.3 0 20.5 22.6 23.9 33.8 14.2l-3.8-6c-7.8 6.4-19.6 5.8-21.9-4.9zm59.1-21.5c-4.6-2-11.6-1.8-15.2 4.4V392h-8.2v36.7h8.2V408c0-11.6 9.5-10.1 12.8-8.4l2.4-7.6zm10.6 18.3c0-11.4 11.6-15.1 20.7-8.4l3.8-6.5c-11.6-9.1-32.7-4.1-32.7 15 0 19.8 22.4 23.8 32.7 15l-3.8-6.5c-9.2 6.5-20.7 2.6-20.7-8.6zm66.7-18.3H408v4.4c-8.3-11-29.9-4.8-29.9 13.9 0 19.2 22.4 24.7 29.9 13.9v4.6h8.2V392zm33.7 0c-2.4-1.2-11-2.9-15.2 4.4V392h-7.9v36.7h7.9V408c0-11 9-10.3 12.8-8.4l2.4-7.6zm40.3-14.9h-7.9v19.3c-8.2-10.9-29.9-5.1-29.9 13.9 0 19.4 22.5 24.6 29.9 13.9v4.6h7.9v-51.7zm7.6-75.1v4.6h.8V302h1.9v-.8h-4.6v.8h1.9zm6.6 123.8c0-.5 0-1.1-.3-1.6-.3-.3-.5-.8-.8-1.1-.3-.3-.8-.5-1.1-.8-.5 0-1.1-.3-1.6-.3-.3 0-.8.3-1.4.3-.5.3-.8.5-1.1.8-.5.3-.8.8-.8 1.1-.3.5-.3 1.1-.3 1.6 0 .3 0 .8.3 1.4 0 .3.3.8.8 1.1.3.3.5.5 1.1.8.5.3 1.1.3 1.4.3.5 0 1.1 0 1.6-.3.3-.3.8-.5 1.1-.8.3-.3.5-.8.8-1.1.3-.6.3-1.1.3-1.4zm3.2-124.7h-1.4l-1.6 3.5-1.6-3.5h-1.4v5.4h.8v-4.1l1.6 3.5h1.1l1.4-3.5v4.1h1.1v-5.4zm4.4-80.5c0-76.2-62.1-138.3-138.5-138.3-27.2 0-53.9 8.2-76.5 23.1 72.1 59.3 73.2 171.5 0 230.5 22.6 15 49.5 23.1 76.5 23.1 76.4.1 138.5-61.9 138.5-138.4z"></path>
+                                                        </svg>
 
+                                                        <svg width="18" height="18" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="cc-discover" class="svg-inline--fa fa-cc-discover text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                            <path fill="currentColor" d="M520.4 196.1c0-7.9-5.5-12.1-15.6-12.1h-4.9v24.9h4.7c10.3 0 15.8-4.4 15.8-12.8zM528 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h480c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-44.1 138.9c22.6 0 52.9-4.1 52.9 24.4 0 12.6-6.6 20.7-18.7 23.2l25.8 34.4h-19.6l-22.2-32.8h-2.2v32.8h-16zm-55.9.1h45.3v14H444v18.2h28.3V217H444v22.2h29.3V253H428zm-68.7 0l21.9 55.2 22.2-55.2h17.5l-35.5 84.2h-8.6l-35-84.2zm-55.9-3c24.7 0 44.6 20 44.6 44.6 0 24.7-20 44.6-44.6 44.6-24.7 0-44.6-20-44.6-44.6 0-24.7 20-44.6 44.6-44.6zm-49.3 6.1v19c-20.1-20.1-46.8-4.7-46.8 19 0 25 27.5 38.5 46.8 19.2v19c-29.7 14.3-63.3-5.7-63.3-38.2 0-31.2 33.1-53 63.3-38zm-97.2 66.3c11.4 0 22.4-15.3-3.3-24.4-15-5.5-20.2-11.4-20.2-22.7 0-23.2 30.6-31.4 49.7-14.3l-8.4 10.8c-10.4-11.6-24.9-6.2-24.9 2.5 0 4.4 2.7 6.9 12.3 10.3 18.2 6.6 23.6 12.5 23.6 25.6 0 29.5-38.8 37.4-56.6 11.3l10.3-9.9c3.7 7.1 9.9 10.8 17.5 10.8zM55.4 253H32v-82h23.4c26.1 0 44.1 17 44.1 41.1 0 18.5-13.2 40.9-44.1 40.9zm67.5 0h-16v-82h16zM544 433c0 8.2-6.8 15-15 15H128c189.6-35.6 382.7-139.2 416-160zM74.1 191.6c-5.2-4.9-11.6-6.6-21.9-6.6H48v54.2h4.2c10.3 0 17-2 21.9-6.4 5.7-5.2 8.9-12.8 8.9-20.7s-3.2-15.5-8.9-20.5z"></path>
+                                                        </svg>
 
+                                                        <svg width="18" height="18" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="cc-visa" class="svg-inline--fa fa-cc-visa text-primary" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                            <path fill="currentColor" d="M470.1 231.3s7.6 37.2 9.3 45H446c3.3-8.9 16-43.5 16-43.5-.2.3 3.3-9.1 5.3-14.9l2.8 13.4zM576 80v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h480c26.5 0 48 21.5 48 48zM152.5 331.2L215.7 176h-42.5l-39.3 106-4.3-21.5-14-71.4c-2.3-9.9-9.4-12.7-18.2-13.1H32.7l-.7 3.1c15.8 4 29.9 9.8 42.2 17.1l35.8 135h42.5zm94.4.2L272.1 176h-40.2l-25.1 155.4h40.1zm139.9-50.8c.2-17.7-10.6-31.2-33.7-42.3-14.1-7.1-22.7-11.9-22.7-19.2.2-6.6 7.3-13.4 23.1-13.4 13.1-.3 22.7 2.8 29.9 5.9l3.6 1.7 5.5-33.6c-7.9-3.1-20.5-6.6-36-6.6-39.7 0-67.6 21.2-67.8 51.4-.3 22.3 20 34.7 35.2 42.2 15.5 7.6 20.8 12.6 20.8 19.3-.2 10.4-12.6 15.2-24.1 15.2-16 0-24.6-2.5-37.7-8.3l-5.3-2.5-5.6 34.9c9.4 4.3 26.8 8.1 44.8 8.3 42.2.1 69.7-20.8 70-53zM528 331.4L495.6 176h-31.1c-9.6 0-16.9 2.8-21 12.9l-59.7 142.5H426s6.9-19.2 8.4-23.3H486c1.2 5.5 4.8 23.3 4.8 23.3H528z"></path>
+                                                        </svg>
+                                                    </span>
+                                                </label>
+                                                <div class="input-group mb-2">
+                                                    <input type="text" class="form-control" id="card-mask" placeholder="xxxx-xxxx-xxxx-xxxx" required="">
+                                                    <span class="input-group-text" id="basic-addon2"><i class="fe fe-lock"></i></span>
+                                                    <div class="invalid-feedback">Please enter card number.</div>
+                                                </div>
+                                                <small>Full name as displayed on card.</small>
+                                            </div>
+                                            <!-- Month -->
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label" for="courseMonth">Month</label>
+                                                <select class="form-select" id="courseMonth" required="">
+                                                    <option value="">Month</option>
+                                                    <option value="June">June</option>
+                                                    <option value="July">July</option>
+                                                    <option value="August">August</option>
+                                                    <option value="Sep">Sep</option>
+                                                    <option value="Oct">Oct</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please choose a Month.</div>
+                                            </div>
+                                            <!-- Year -->
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label" for="year">Year</label>
+                                                <select class="form-select" id="year" required="">
+                                                    <option value="">Year</option>
+                                                    <option value="June">2018</option>
+                                                    <option value="July">2019</option>
+                                                    <option value="August">2020</option>
+                                                    <option value="Sep">2021</option>
+                                                    <option value="Oct">2022</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please choose a Year.</div>
+                                            </div>
+                                            <!-- CVV Code -->
+                                            <div class="col-12 col-md-4">
+                                                <label for="digit-mask" class="form-label">
+                                                    CVV Code
+                                                    <i class="fe fe-help-circle ms-1 fs-6" data-bs-toggle="tooltip" data-placement="right" aria-label="A 3 - digit number, typically printed on the back of a card." data-bs-original-title="A 3 - digit number, typically printed on the back of a card."></i>
+                                                </label>
+                                                <input type="password" class="form-control" name="cvv" id="digit-mask" placeholder="xxx" maxlength="3" required="">
+                                                <div class="invalid-feedback">Please enter a code.</div>
+                                            </div>
+                                            <!-- Name on card -->
+                                            <div class="col-12">
+                                                <label for="nameoncard" class="form-label">Name on Card</label>
+                                                <input id="nameoncard" type="text" class="form-control" name="nameoncard" placeholder="Name" required="">
+                                                <div class="invalid-feedback">Please enter a card name.</div>
+                                            </div>
+                                            <!-- Country -->
+                                            <div class="mb-3 col-6">
+                                                <label class="form-label" for="courseCountry2">Country</label>
+                                                <select class="form-select" id="courseCountry2" required="">
+                                                    <option value="">Choose</option>
+                                                    <option value="India">India</option>
+                                                    <option value="uk">UK</option>
+                                                    <option value="usa">USA</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please choose a country.</div>
+                                            </div>
+                                            <!-- Zip Code -->
+                                            <div class="mb-3 col-6">
+                                                <label for="postalcode" class="form-label">Zip/Postal Code</label>
+                                                <input id="postalcode" type="text" class="form-control" name="postalcode" placeholder="Zipcode" required="">
+                                                <div class="invalid-feedback">Please enter postal code.</div>
+                                            </div>
+                                            <!-- CheckBox -->
+                                            <div class="col-12 mb-5">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck1" required="">
+                                                    <label class="form-check-label" for="customCheck1">Remember this card</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-12">
+                                                <!-- Button -->
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary mb-3 mb-lg-0 me-4">Make a Payment</button>
+                                                </div>
+                                            </div>
+                                            <!-- Text -->
+                                            <div class="col-md-8 col-12 d-flex align-items-center justify-content-end">
+                                                <small class="mb-0">
+                                                    By click start learning, you agree to our
+                                                    <a href="#">Terms of Service and Privacy Policy.</a>
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <!-- Paypal -->
+                                        <div id="internetpayment" class="row g-3" style="display: none;">
+                                            <div class="col-12 mt-6">
+                                                <label for="paypalemail" class="form-label">PayPal</label>
+                                                <input type="email" id="paypalemail" name="paypalemail" placeholder="Enter your PayPal email" class="form-control" required="" style="background-size: auto, 25px; background-image: none, url(&quot;data:image/svg+xml;utf8,<svg width='26' height='28' viewBox='0 0 26 28' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M23.8958 6.1084L13.7365 0.299712C13.3797 0.103027 12.98 0 12.5739 0C12.1678 0 11.7682 0.103027 11.4113 0.299712L1.21632 6.1084C0.848276 6.31893 0.54181 6.62473 0.328154 6.99462C0.114498 7.36452 0.00129162 7.78529 7.13608e-05 8.21405V19.7951C-0.00323007 20.2248 0.108078 20.6474 0.322199 21.0181C0.53632 21.3888 0.845275 21.6938 1.21632 21.9008L11.3756 27.6732C11.7318 27.8907 12.1404 28.0037 12.556 27.9999C12.9711 27.9989 13.3784 27.8861 13.7365 27.6732L23.8958 21.9008C24.2638 21.6903 24.5703 21.3845 24.7839 21.0146C24.9976 20.6447 25.1108 20.2239 25.112 19.7951V8.21405C25.1225 7.78296 25.0142 7.35746 24.7994 6.98545C24.5845 6.61343 24.2715 6.30969 23.8958 6.1084Z' fill='url(%23paint0_linear_714_179)'/><path d='M5.47328 17.037L4.86515 17.4001C4.75634 17.4613 4.66062 17.5439 4.58357 17.643C4.50652 17.7421 4.4497 17.8558 4.4164 17.9775C4.3831 18.0991 4.374 18.2263 4.38963 18.3516C4.40526 18.4768 4.44531 18.5977 4.50743 18.707C4.58732 18.8586 4.70577 18.9857 4.85046 19.0751C4.99516 19.1645 5.16081 19.2129 5.33019 19.2153C5.49118 19.2139 5.64992 19.1767 5.79522 19.1064L6.40335 18.7434C6.51216 18.6822 6.60789 18.5996 6.68493 18.5004C6.76198 18.4013 6.8188 18.2876 6.8521 18.166C6.8854 18.0443 6.8945 17.9171 6.87887 17.7919C6.86324 17.6666 6.82319 17.5458 6.76107 17.4364C6.70583 17.3211 6.62775 17.2185 6.53171 17.1352C6.43567 17.0518 6.32374 16.9895 6.20289 16.952C6.08205 16.9145 5.95489 16.9027 5.82935 16.9174C5.70382 16.932 5.5826 16.9727 5.47328 17.037ZM9.19357 14.8951L7.94155 15.6212C7.83273 15.6824 7.73701 15.7649 7.65996 15.8641C7.58292 15.9632 7.52609 16.0769 7.49279 16.1986C7.4595 16.3202 7.4504 16.4474 7.46603 16.5726C7.48166 16.6979 7.5217 16.8187 7.58383 16.9281C7.66371 17.0797 7.78216 17.2068 7.92686 17.2962C8.07155 17.3856 8.23721 17.434 8.40658 17.4364C8.56757 17.435 8.72631 17.3978 8.87162 17.3275L10.1236 16.6014C10.2325 16.5402 10.3282 16.4576 10.4052 16.3585C10.4823 16.2594 10.5391 16.1457 10.5724 16.024C10.6057 15.9024 10.6148 15.7752 10.5992 15.6499C10.5835 15.5247 10.5435 15.4038 10.4814 15.2944C10.4261 15.1791 10.348 15.0766 10.252 14.9932C10.156 14.9099 10.044 14.8475 9.92318 14.8101C9.80234 14.7726 9.67518 14.7608 9.54964 14.7754C9.42411 14.7901 9.30289 14.8308 9.19357 14.8951ZM14.2374 13.1198C14.187 13.0168 14.1167 12.9251 14.0307 12.8503C13.9446 12.7754 13.8446 12.7189 13.7366 12.6842V5.38336C13.7371 5.2545 13.7124 5.12682 13.6641 5.00768C13.6157 4.88854 13.5446 4.78029 13.4548 4.68917C13.365 4.59806 13.2583 4.52587 13.1409 4.47678C13.0235 4.42769 12.8977 4.40266 12.7708 4.40314C12.6457 4.40355 12.522 4.42946 12.407 4.47933C12.292 4.52919 12.188 4.602 12.1013 4.69343C12.0145 4.78485 11.9467 4.89304 11.902 5.01156C11.8572 5.13007 11.8364 5.25651 11.8407 5.38336V12.7168C11.7327 12.7516 11.6327 12.8081 11.5466 12.883C11.4606 12.9578 11.3903 13.0495 11.3399 13.1525C11.2727 13.2801 11.2346 13.4213 11.2284 13.5659C11.2222 13.7104 11.2481 13.8545 11.3041 13.9875C11.2481 14.1205 11.2222 14.2646 11.2284 14.4091C11.2346 14.5536 11.2727 14.6949 11.3399 14.8225C11.3903 14.9255 11.4606 15.0172 11.5466 15.092C11.6327 15.1669 11.7327 15.2233 11.8407 15.2581V22.5916C11.8407 22.8516 11.9425 23.1009 12.1236 23.2847C12.3047 23.4686 12.5504 23.5718 12.8065 23.5718C13.0627 23.5718 13.3084 23.4686 13.4895 23.2847C13.6706 23.1009 13.7724 22.8516 13.7724 22.5916V15.2218C13.8804 15.187 13.9804 15.1305 14.0664 15.0557C14.1525 14.9809 14.2228 14.8892 14.2732 14.7862C14.3404 14.6586 14.3785 14.5173 14.3847 14.3728C14.3909 14.2283 14.365 14.0842 14.309 13.9512C14.3917 13.6751 14.3661 13.3772 14.2374 13.1198ZM16.6735 10.6112L15.4215 11.3373C15.3127 11.3985 15.2169 11.481 15.1399 11.5802C15.0628 11.6793 15.006 11.793 14.9727 11.9147C14.9394 12.0363 14.9303 12.1635 14.946 12.2887C14.9616 12.414 15.0016 12.5348 15.0638 12.6442C15.1436 12.7958 15.2621 12.9229 15.4068 13.0123C15.5515 13.1017 15.7171 13.1501 15.8865 13.1525C16.0475 13.1511 16.2062 13.1139 16.3515 13.0436L17.6036 12.3175C17.7124 12.2563 17.8081 12.1737 17.8851 12.0746C17.9622 11.9755 18.019 11.8617 18.0523 11.7401C18.0856 11.6184 18.0947 11.4913 18.0791 11.366C18.0635 11.2408 18.0234 11.1199 17.9613 11.0105C17.906 10.8952 17.828 10.7927 17.7319 10.7093C17.6359 10.626 17.524 10.5636 17.4031 10.5261C17.2823 10.4887 17.1551 10.4769 17.0296 10.4915C16.904 10.5061 16.7828 10.5469 16.6735 10.6112ZM19.639 10.9742C19.8 10.9728 19.9587 10.9357 20.104 10.8653L20.7122 10.5023C20.8208 10.4406 20.9164 10.3578 20.9935 10.2586C21.0705 10.1593 21.1275 10.0456 21.1611 9.92394C21.1947 9.80228 21.2043 9.67508 21.1893 9.54965C21.1744 9.42421 21.1351 9.30302 21.0739 9.19302C21.0126 9.08303 20.9305 8.9864 20.8324 8.90869C20.7342 8.83098 20.6219 8.77372 20.5019 8.7402C20.3818 8.70667 20.2564 8.69755 20.1329 8.71335C20.0094 8.72915 19.8902 8.76957 19.7821 8.83227L19.174 9.19531C19.0651 9.25651 18.9694 9.33909 18.8924 9.43822C18.8153 9.53735 18.7585 9.65106 18.7252 9.77271C18.6919 9.89436 18.6828 10.0215 18.6984 10.1468C18.7141 10.272 18.7541 10.3929 18.8162 10.5023C18.8981 10.6494 19.018 10.7711 19.163 10.8543C19.308 10.9374 19.4725 10.9789 19.639 10.9742ZM20.7122 17.4001L20.104 17.037C19.8859 16.9133 19.6284 16.8823 19.3878 16.9508C19.1472 17.0193 18.9432 17.1816 18.8202 17.4024C18.6973 17.6231 18.6655 17.8843 18.7318 18.1288C18.798 18.3733 18.957 18.5812 19.174 18.707L19.7821 19.0701C19.9274 19.1404 20.0861 19.1776 20.2471 19.179C20.4165 19.1766 20.5821 19.1282 20.7268 19.0388C20.8715 18.9494 20.99 18.8223 21.0699 18.6707C21.1339 18.5648 21.1755 18.4466 21.1921 18.3235C21.2087 18.2003 21.1999 18.0751 21.1662 17.9556C21.1326 17.8361 21.0749 17.7251 20.9967 17.6294C20.9185 17.5338 20.8216 17.4557 20.7122 17.4001ZM17.6 15.6212L16.348 14.8951C16.2399 14.8324 16.1207 14.792 15.9971 14.7762C15.8736 14.7604 15.7482 14.7695 15.6282 14.803C15.5082 14.8365 15.3958 14.8938 15.2977 14.9715C15.1995 15.0492 15.1174 15.1458 15.0562 15.2558C14.9949 15.3658 14.9557 15.487 14.9407 15.6125C14.9257 15.7379 14.9353 15.8651 14.9689 15.9868C15.0026 16.1084 15.0595 16.2221 15.1366 16.3214C15.2136 16.4206 15.3092 16.5035 15.4179 16.5651L16.6699 17.2912C16.8152 17.3615 16.974 17.3987 17.135 17.4001C17.3043 17.3977 17.47 17.3493 17.6147 17.2599C17.7594 17.1705 17.8778 17.0434 17.9577 16.8918C18.0228 16.7862 18.0653 16.6679 18.0825 16.5445C18.0997 16.4212 18.0911 16.2955 18.0574 16.1757C18.0237 16.0559 17.9655 15.9447 17.8867 15.8491C17.8079 15.7536 17.7103 15.6759 17.6 15.6212ZM7.94155 12.2812L9.19357 13.0073C9.33888 13.0776 9.49761 13.1148 9.6586 13.1162C9.82798 13.1138 9.99363 13.0654 10.1383 12.976C10.283 12.8866 10.4015 12.7595 10.4814 12.6079C10.5435 12.4985 10.5835 12.3777 10.5992 12.2524C10.6148 12.1272 10.6057 12 10.5724 11.8784C10.5391 11.7567 10.4823 11.643 10.4052 11.5439C10.3282 11.4447 10.2325 11.3622 10.1236 11.301L8.87162 10.5749C8.76383 10.5118 8.64476 10.4712 8.52134 10.4553C8.39792 10.4395 8.27262 10.4487 8.15275 10.4825C8.03288 10.5163 7.92084 10.574 7.82317 10.6521C7.72549 10.7303 7.64413 10.8275 7.58383 10.9379C7.46399 11.166 7.43428 11.4319 7.50073 11.6814C7.56719 11.9309 7.72481 12.1454 7.94155 12.2812ZM6.40335 9.19531L5.79522 8.83227C5.68714 8.76957 5.56791 8.72915 5.44439 8.71335C5.32087 8.69755 5.19549 8.70667 5.07546 8.7402C4.95542 8.77372 4.8431 8.83098 4.74493 8.90869C4.64676 8.9864 4.56469 9.08303 4.50343 9.19302C4.44217 9.30302 4.40293 9.42421 4.38796 9.54965C4.37299 9.67508 4.38259 9.80228 4.4162 9.92394C4.44981 10.0456 4.50677 10.1593 4.58382 10.2586C4.66087 10.3578 4.75647 10.4406 4.86515 10.5023L5.47328 10.8653C5.61859 10.9357 5.77732 10.9728 5.93831 10.9742C6.10769 10.9718 6.27334 10.9234 6.41804 10.834C6.56273 10.7447 6.68118 10.6176 6.76107 10.466C6.82193 10.3592 6.861 10.2411 6.87592 10.1187C6.89085 9.99635 6.88134 9.87216 6.84796 9.75358C6.81457 9.635 6.758 9.52446 6.68161 9.42854C6.60523 9.33263 6.51059 9.25331 6.40335 9.19531Z' fill='%2320133A'/><defs><linearGradient id='paint0_linear_714_179' x1='7.13608e-05' y1='14.001' x2='25.1156' y2='14.001' gradientUnits='userSpaceOnUse'><stop stop-color='%239059FF'/><stop offset='1' stop-color='%23F770FF'/></linearGradient></defs></svg>&quot;); background-repeat: repeat, no-repeat; background-position: 0% 0%, right calc(50% + 0px); background-origin: padding-box, content-box;">
+                                            <button type="button" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; margin: 0px -1px -1px 0px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;">Générer un nouvel alias</button></div>
+                                            <div class="col-12 mt-6">
+                                                <button type="submit" class="btn btn-primary">PayPal Checkout</button>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    {% for paymentGateway in paymentGateways %}
+                                        {% if paymentGateway.instructions %}
+                                            <div id="paymentGateway{{ paymentGateway.id }}-instructions"
+                                                class="form-row paymentGateways-instructions">
+                                                <div class="col-12 form-group">
+                                                    {% include "global/message.html.twig" with { type: "dark", message: (paymentGateway.instructions | raw), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-6" id="checkout_submit">{{ "Pay now"|trans }}</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary mt-6" id="checkout_submit">{{ "Register"|trans }}</button>
+                        {% endif %}
                     {{ form_end(form) }}
-
-                </main>
-                <aside class="col-lg-4 pt-3 pt-lg-0 order-0 order-lg-1">
-                    <div class="sticky-top sticky-sidebar">
-                        <div class="checkout-timer-wrapper">
-
+                </div>
+                <div class="col-lg-4 col-md-12 col-12">
+                    <div class="card border-0 mb-3">
+                        <div class="p-5 text-center">
                             {% set secondsLeft = 0 %}
-
                             {% for orderElement in order.orderelements %}
-
-                                {% for ticketReservation in orderElement.ticketsReservations if not ticketReservation.isExpired %}
-
-                                    {% set dateInterval = ticketReservation.createdAt|date_modify("+"~ services.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
-                                    {% set secondsLeft = dateInterval|date("%i") * 60 + dateInterval|date("%s") %}
-
+                                {% for subscriptionReservation in orderElement.subscriptionsReservations if not subscriptionReservation.isExpired %}
+                                    {% set dateInterval = subscriptionReservation.createdAt | date_modify("+"~
+                                    setting.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
+                                    {% set secondsLeft = dateInterval | date("%i") * 60 + dateInterval|date("%s") %}
                                 {% endfor %}
-
                             {% endfor %}
 
                             {% if secondsLeft > 0 %}
-                                {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-hourglass-half', message: '%mins% left before tickets are released'|trans({"%mins%" : "<span class='checkout-timer' data-seconds-left='"~secondsLeft~"'></span>"}) } %}
+                                {% include 'global/message.html.twig' with { type: 'warning',icon: 'bi bi-hourglass-split',
+                                message: '%mins% left before subscriptions are released'|trans({"%mins%" : "<span class='checkout-timer' data-seconds-left='"~secondsLeft~"'></span>"}) } %}
                             {% endif %}
-
                         </div>
-                        <dl class="dlist-align">
-                            <dt>{{ "Tickets"|trans }}</dt>
-                            <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
-                            </dd>
-                        </dl>
-                        <dl class="dlist-align">
-                            <dt>{{ "Fees"|trans }}</dt>
-                            <dd class="text-right ml-5">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getTotalFees() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</dd>
-                        </dl>
-                        <dl class="dlist-align h4">
-                            <dt>{{ "Total"|trans }}</dt>
-                            <dd class="text-right ml-5"><strong>{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</strong></dd>
-                        </dl>
+                        <hr class="m-0">
+                        <div class="p-5">
+                            <h4 class="fw-bold mb-4"></h4>
+                            <ul class="list-group list-group-flush mb-0">
+                                <li class="list-group-item px-0 d-flex justify-content-between fs-5 text-dark fw-medium">
+                                    <span>{{ "Subscriptions"|trans }} :</span>
+                                    <span>
+                                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ order.getOrderElementsPriceSum() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                    </span>
+                                </li>
+                                <li class="list-group-item px-0 d-flex justify-content-between fs-5 text-dark fw-medium">
+                                    <span>{{ "Fees"|trans }} :</span>
+                                    <span>
+                                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ order.getTotalFees() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                    </span>
+                                </li>
+                                <li class="list-group-item px-0 d-flex justify-content-between fs-5 text-dark fw-medium">
+                                    <span>{{ "Total"|trans }} :</span>
+                                    <span>
+                                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <hr class="m-0">
                         {% if order.getOrderElementsPriceSum(true) > 0 %}
-                            <hr>
                             {% for paymentGateway in paymentGateways %}
-
                                 {% if paymentGateway.factoryName == "paypal_express_checkout" %}
-
                                     <div class="row">
                                         <div class="col">
-                                            <img src="{{ asset('assets/img/icons/payment/americanexpress-dark.svg') }}" class="width-auto img-fluid">
+                                            <img src="{{ asset('images/icons/payment/americanexpress-dark.svg') }}"
+                                                class="width-auto img-fluid">
                                         </div>
                                         <div class="col">
-                                            <img src="{{ asset('assets/img/icons/payment/visa-dark.svg') }}" class="width-auto img-fluid">
+                                            <img src="{{ asset('images/icons/payment/visa-dark.svg') }}"
+                                                class="width-auto img-fluid">
                                         </div>
                                         <div class="col">
-                                            <img src="{{ asset('assets/img/icons/payment/mastercard-dark.svg') }}" class="width-auto img-fluid">
+                                            <img src="{{ asset('images/icons/payment/mastercard-dark.svg') }}"
+                                                class="width-auto img-fluid">
                                         </div>
                                         <div class="col">
-                                            <img src="{{ asset('assets/img/icons/payment/discover-dark.svg') }}" class="width-auto img-fluid">
+                                            <img src="{{ asset('images/icons/payment/discover-dark.svg') }}"
+                                                class="width-auto img-fluid">
                                         </div>
                                         <div class="col">
-                                            <img src="{{ asset('assets/img/icons/payment/paypal-dark.svg') }}" class="width-auto img-fluid">
+                                            <img src="{{ asset('images/icons/payment/paypal-dark.svg') }}"
+                                                class="width-auto img-fluid">
                                         </div>
                                     </div>
-
                                 {% endif %}
-
                             {% endfor %}
                         {% endif %}
                     </div>
-                </aside>
+                    <div class="card border-0 mb-3 mb-lg-0">
+                        <div class="card-body">
+                            <h3 class="mb-2">Discount Codes</h3>
+                            <form>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Enter your code" aria-describedby="couponCode">
+                                    <button class="btn btn-secondary" id="couponCode">Apply</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
     </section>
-
 {% endblock %}
 
 {% block javascripts %}
-
+    {{ parent() }}
     <script>
-
         $(document).ready(function () {
-        {% if app.user.country %}
+            {% if app.user.country %}
                 $('#checkout_country').val('{{ app.user.country.id }}');
                 $('#checkout_country').trigger('change');
-        {% endif %}
-
-                $('input[name="payment_gateway"]').on('change', function () {
-                    if ($(this).is(':checked')) {
-                        $('.paymentGateways-instructions').hide();
-                        $('#paymentGateway' + $(this).attr('data-paymentGateway-id') + '-instructions').show();
-                    }
-                });
-                $('input[name="payment_gateway"]').trigger('change');
-
+            {% endif %}
+            $('input[name="payment_gateway"]').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $('.paymentGateways-instructions').hide();
+                    $('#paymentGateway' + $(this).attr('data-paymentGateway-id') + '-instructions').show();
+                }
             });
+            $('input[name="payment_gateway"]').trigger('change');
+        });
     </script>
-
 {% endblock %}

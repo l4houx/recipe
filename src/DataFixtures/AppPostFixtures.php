@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Comment;
+use App\Entity\Country;
 use App\Entity\Keyword;
 use App\Entity\PostCategory;
 use App\Entity\Traits\HasRoles;
@@ -27,6 +28,9 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        /** @var array<Country> $countries */
+        $countries = $manager->getRepository(Country::class)->findAll();
+
         // Create 1 User Admin
         $authors = [];
 
@@ -34,6 +38,7 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
         /** @var User $author */
         $author = (new User());
         $author
+            ->setTeamName('author.jpg')
             ->setRoles([HasRoles::ADMIN])
             ->setLastname('Tom')
             ->setFirstname('Doe')
@@ -47,6 +52,13 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
             ->setDesignation('Admin Staff')
             ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
             ->setLastLoginIp($this->faker()->ipv4())
+            ->setBirthdate(\DateTime::createFromInterface($this->faker()->dateTime()))
+            ->setStreet($this->faker()->streetAddress())
+            ->setStreet2($this->faker()->secondaryAddress())
+            ->setCity($this->faker()->city())
+            ->setState($this->faker()->region())
+            ->setPostalcode($this->faker()->postcode())
+            ->setCountry($this->faker()->randomElement($countries))
         ;
 
         $manager->persist(

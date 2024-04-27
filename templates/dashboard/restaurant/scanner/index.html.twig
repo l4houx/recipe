@@ -1,172 +1,87 @@
-{% extends "Global/layout.html.twig" %}
+{% extends 'dashboard.html.twig' %}
 
-{% set pagetitle = 'My scanners' | trans %}
+{% set pagetitle = 'My scanners'|trans %}
+{% block title pagetitle %}
 
-{% block title %}{{pagetitle}}{% endblock %}
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
 
 {% block content %}
-
-    {% set navigation = [{"current":(pagetitle)}] %}
-    {% include "Global/navigation.html.twig" with navigation %}
-
-    <section class="section-content padding-y bg-white">
-        <div class="{{ services.getSetting("app_layout") }}">
-            <div class="row">
-                <aside class="col-lg-3 pt-3 pt-lg-0">
-                    {% include "Dashboard/sidebar.html.twig" %}
-                </aside>
-                <div class="col-lg-9 mt-4 mt-lg-0">
-
-                    <div class="box shadow-none bg-gray mb-4">
-                        <div class="row">
-                            <div class="col-sm-12 col-lg-2 text-center text-lg-left mb-3 mb-lg-0">
-                                <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': scanners.getTotalItemCount}) }}</span>
-                            </div>
-                            <div class="col-sm-12 col-lg-4 text-center mb-3 mb-lg-0">
-                                <form>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ "Search"|trans }}</a>
-                                            <div class="dropdown-menu dropdown-menu-arrow p-3" style="min-width:300px;max-width:500px;">
-                                                <label for="username">{{ "Username"|trans }}</label>
-                                                <input id="username" name="username" type="text" class="form-control" value="{{ app.request.get('username') }}">
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ "Enabled"|trans }}</a>
-                                            <div class="dropdown-menu dropdown-menu-arrow p-3" style="min-width:450px;max-width:550px;">
-                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input type="radio" class="custom-control-input" id="enabled-all" name="enabled" value="all">
-                                                    <label class="custom-control-label" for="enabled-all">{{ 'All'|trans }}</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input type="radio" class="custom-control-input" id="enabled-yes" name="enabled" value="1">
-                                                    <label class="custom-control-label" for="enabled-yes">{{ 'Enabled only'|trans }}</label>
-                                                </div>
-                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input type="radio" class="custom-control-input" id="enabled-no" name="enabled" value="0">
-                                                    <label class="custom-control-label" for="enabled-no">{{ 'Disabled only'|trans }}</label>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-inline-item ml-3"><button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button></li>
-                                    </ul>
-                                </form>
-                            </div>
-                            <div class="col-sm-12 col-lg-6 text-center text-lg-right">
-                                <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
-                                    <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
-                                        <option value="">{{ knp_pagination_sortable(scanners, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "u.createdAt", {"direction": "desc", "criteria": "u.createdAt"}) }}</option>
-                                        <option value="">{{ knp_pagination_sortable(scanners, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "u.createdAt", {"direction": "asc", "criteria": "u.createdAt"}) }}</option>
-                                    </select>
-                                </label>
-                                <a href="{{ path('dashboard_organizer_scanner_add') }}" class="btn btn-primary ml-3" data-toggle="tooltip" title="{{'Add a new scanner' | trans}}"><i class="fas fa-plus"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if scanners.getTotalItemCount > 0 %}
-
-                        <div class="row">
-
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-vcenter text-nowrap">
-                                            <thead>
-                                                <tr>
-                                                    <th>{{'Name / Username' | trans}}</th>
-                                                    <th>{{'Creation date / Last login' | trans}}</th>
-                                                    <th>{{'Events count' | trans}}</th>
-                                                    <th>{{'Status' | trans}}</th>
-                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                {% for user in scanners %}
-
-                                                    <tr>
-                                                        <td>
-                                                            {{ user.scanner.name }} / {{ user.username }}
-                                                        </td>
-                                                        <td>
-                                                            <small>{{ user.createdAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</small>
-                                                            <br>
-                                                            {% if user.lastLogin %}
-                                                                <small>{{ user.lastLogin|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</small>
-                                                            {% else %}
-                                                                {{ "N/A"|trans }}
-                                                            {% endif %}
-                                                        </td>
-                                                        <td>
-                                                            {{ user.scanner.eventdates|length }}
-                                                        </td>
-                                                        <td>
-                                                            {% if user.enabled %}
-                                                                <span class="badge badge-success"><i class="fas fa-user-check fa-fw"></i> {{ "Enabled"|trans }}</span>
-                                                            {% else %}
-                                                                <span class="badge badge-danger"><i class="fas fa-user-slash fa-fw"></i> {{ "Disabled"|trans }}</span>
-                                                            {% endif %}
-                                                            {% if user.deletedAt %}
-                                                                <br>
-                                                                <br>
-                                                                <span class="badge badge-danger"><i class="fas fa-times fa-fw"></i> {{ "Deleted"|trans }}</span>
-                                                            {% endif %}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <div class="item-action dropdown">
-                                                                <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a href="{{ path('dashboard_organizer_scanner_edit', { slug : user.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
-                                                                    {% if user.enabled %}
-                                                                        <a href="{{ path('dashboard_organizer_scanner_disable', { slug : user.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-user-slash fa-fw text-muted"></i> {{ "Disable"|trans }}</a>
-                                                                    {% else %}
-                                                                        <a href="{{ path('dashboard_organizer_scanner_enable', { slug : user.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-user-check fa-fw text-muted"></i> {{ "Enable"|trans }} </a>
-                                                                    {% endif %}
-                                                                    {% if user.deletedAt %}
-                                                                        <span data-target="{{ path('dashboard_organizer_scanner_delete_permanently', { slug : user.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the scanner PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-user-times fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
-                                                                    {% else %}
-                                                                        <span data-target="{{ path('dashboard_organizer_scanner_delete', { slug : user.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the scanner"|trans }}"><i class="dropdown-icon fas fa-user-times fa-fw text-muted"></i> {{ "Delete"|trans }}</span>
-                                                                    {% endif %}
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
+	<div class="card mb-4">
+		<div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
+			<div class="mb-3 mb-lg-0">
+				<h3 class="mb-0">{{ pagetitle }}</h3>
+				<span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
+			</div>
+			<div>
+				<a href="{{ path('dashboard_restaurant_scanner_new') }}" class="btn btn-outline-primary btn-sm">
+					{{ 'Create'|trans }}
+				</a>
+			</div>
+			<div class="row align-items-center">
+				<div class="col-lg-6 col-md-6 pe-md-0 mb-2 mb-lg-0">
+                    <form>
+                        <ul class="list-inline">
+                            <li class="list-inline-item dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ "Search"|trans }}</a>
+                                <div class="dropdown-menu dropdown-menu-arrow p-3" style="min-width:300px;max-width:500px;">
+                                    <label for="username">{{ "Username"|trans }}</label>
+                                    <input id="username" name="username" type="text" class="form-control" value="{{ app.request.get('username') }}">
+                                </div>
+                            </li>
+                            <li class="list-inline-item dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ "Enabled"|trans }}</a>
+                                <div class="dropdown-menu dropdown-menu-arrow p-3" style="min-width:450px;max-width:550px;">
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="enabled-all" name="enabled" value="all">
+                                        <label class="custom-control-label" for="enabled-all">{{ 'All'|trans }}</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="enabled-yes" name="enabled" value="1">
+                                        <label class="custom-control-label" for="enabled-yes">{{ 'Enabled only'|trans }}</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="enabled-no" name="enabled" value="0">
+                                        <label class="custom-control-label" for="enabled-no">{{ 'Disabled only'|trans }}</label>
                                     </div>
                                 </div>
-                                {{ knp_pagination_render(scanners, null, {}, {'align': 'center'}) }}
-                            </div>
-
-                        </div>
-
-                    {% else %}
-
-                        {% include "Global/message.html.twig" with { type: "info", message: ('No scanners found'|trans), icon: "fas fa-exclamation-circle" } %}
-
-                    {% endif %}
-                </div>
-            </div>
-
-        </div>
-    </section>
-
+                            </li>
+                            <li class="list-inline-item ml-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </form>
+				</div>
+				<div class="col-lg-6 col-md-6 pe-md-0 mb-2 mb-lg-0">
+					<select class="form-select">
+						<option value="">{{ "Select an option"|trans }}</option>
+						<option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "u.createdAt", {"direction": "desc", "criteria": "u.createdAt"}) }}</option>
+						<option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "u.createdAt", {"direction": "asc", "criteria": "u.createdAt"}) }}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		{% if rows.getTotalItemCount > 0 %}
+			{% include "dashboard/restaurant/scanner/manage-scanners-table.html.twig" with {rows: rows} %}
+		{% else %}
+			<div class="card-footer">
+				{% include "global/message.html.twig" with { type: "dark", message: ('No scanners found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-
+    {{ parent() }}
     <script>
-
         $(document).ready(function () {
-
-            if (getURLParameter('enabled')) {
-                $('input[type="radio"][name="enabled"][value="' + getURLParameter('enabled') + '"]').attr("checked", "checked");
+            if (getURLParameter('isVerified')) {
+                $('input[type="radio"][name="isVerified"][value="' + getURLParameter('isVerified') + '"]').attr("checked", "checked");
             }
-
         });
-
     </script>
-
 {% endblock %}

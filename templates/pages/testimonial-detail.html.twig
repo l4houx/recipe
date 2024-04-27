@@ -16,7 +16,7 @@
             {% if testimonials | length > 0 %}
                 <div class="row">
                     {% for testimonial in testimonials %}
-                        {% include "global/testimonial-card.html.twig" with {testimonial: testimonial, showuser: 1} %}
+                        {% include "global/testimonial-card.html.twig" with {testimonial: testimonial, showuser: 1, index: loop.index} %}
                     {% endfor %}
                 </div>
             {% else %}

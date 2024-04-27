@@ -1,38 +1,68 @@
-{% extends 'dashboard.html.twig' %}
+{% extends 'page.html.twig' %}
 
+{% set bodyClass = 'bg-white' %}
 {% set pagetitle = 'My cart'|trans %}
 {% block title pagetitle %}
 
+{% block pageheader %}
+    {% if app.user.cartelements | length %}
+        <section class="py-4 py-lg-6 bg-primary">
+            <div class="container">
+                <div class="row">
+                    <div class="offset-lg-1 col-lg-10 col-md-12 col-12">
+                        <div class="d-lg-flex align-items-center justify-content-between">
+                            <div class="mb-4 mb-lg-0">
+                                <h1 class="text-white mb-1">{{ pagetitle }}</h1>
+                                <p class="mb-0 text-white lead"></p>
+                            </div>
+                            <div>
+                                <a href="" class="btn btn-white">Back to Order</a>
+                                <a href="" class="btn btn-dark">{{ 'Save'|trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}
+
 {% block breadcrumb %}
-	{% set breadcrumb = [{ "current":(pagetitle) }] %}
-	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+    {% if app.user.cartelements | length %}
+        {% set breadcrumb = [{ "current":(pagetitle) }] %}
+        {% include "global/breadcrumb.html.twig" with breadcrumb %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-    <section class="section-content padding-y bg-white">
-        <div class="">
-            <div class="row">
-                <div class="col-lg-9 mt-4 mt-lg-0">
-
-                    {% if app.user.cartelements|length %}
-
+    {% if app.user.cartelements | length %}
+        <section class="py-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mb-2">
                         {% include 'global/message.html.twig' with { type: 'warning',icon: 'bi bi-exclamation-circle', message: "Your subscriptions are not reserved until checkout, the quantity you intend to buy might not be available if you do not proceed to checkout right away"|trans } %}
-
+                    </div>
+                    <div class="col-lg-8">
                         <div class="card">
                             <div class="card-header">
-                                <h6 class="b mb-0">{{ app.user.getSubscriptionsInCartQuantitySum }} {{ "subscriptions found in your cart"|trans }}</h6>
+                                <div class="d-flex">
+                                    <h4 class="mb-0">
+                                        {{ app.user.getSubscriptionsInCartQuantitySum }}
+                                        <span>({{ "subscriptions found in your cart"|trans }})</span>
+                                    </h4>
+                                </div>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
+                                <div class="table-responsive table-card">
                                     <form method="post">
-                                        <table class="table table-hover shopping-cart-wrap">
-                                            <thead class="text-muted">
+                                        <table class="table mb-0 text-nowrap">
+                                            <thead class="table-light">
                                                 <tr>
-                                                    <th scope="col">{{ "Recipe"|trans ~ " / " ~ "Subscription"|trans }}</th>
-                                                    <th scope="col" width="100">{{ "Price"|trans }}</th>
-                                                    <th scope="col" width="100">{{ "Quantity"|trans }}</th>
-                                                    <th scope="col" width="100">{{ "Subtotal"|trans }}</th>
-                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                                                    <th>{{ "Recipe"|trans ~ " / " ~ "Subscription"|trans }}</th>
+                                                    <th>{{ "Price"|trans }}</th>
+                                                    <th>{{ "Quantity"|trans }}</th>
+                                                    <th>{{ "Subtotal"|trans }}</th>
+                                                    <th>{{ 'Status'|trans }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -40,8 +70,11 @@
                                                     <tr>
                                                         <td>
                                                             {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription: cartelement.recipesubscription } %}
-                                                            {% if cartelement.reservedSeats and cartelement.reservedSeats|length > 0 %}
-                                                                <h6 class='text-primary'><i class="fas fa-braille"></i> {{ "Reserved seats"|trans }}</h6>
+                                                            {% if cartelement.reservedSeats and cartelement.reservedSeats | length > 0 %}
+                                                                <h6 class='text-primary mb-0'>
+                                                                    <i class="bi bi-collection"></i> 
+                                                                    {{ "Reserved seats"|trans }}
+                                                                </h6>
                                                                 <ul class='list-check'>
                                                                     {% for reservedSeat in cartelement.reservedSeats %}
                                                                         <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
@@ -61,7 +94,9 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control touchspin-integer bg-white recipedate-subscription-qte {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}cart-recipedate-subscription-qte-hasSeatingPlan{% endif %}" {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}readonly{% endif %} name="{{ cartelement.recipesubscription.reference }}" data-min="0" data-max="{{ cartelement.recipesubscription.getMaxSubscriptionsForSaleCount(app.user) }}" value="{{ cartelement.quantity }}" />
+                                                            <input type="text" class="form-control touchspin-integer bg-white recipedate-subscription-qte {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}cart-recipedate-subscription-qte-hasSeatingPlan{% endif %}" 
+                                                            {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}readonly
+                                                            {% endif %} name="{{ cartelement.recipesubscription.reference }}" data-min="0" data-max="{{ cartelement.recipesubscription.getMaxSubscriptionsForSaleCount(app.user) }}" value="{{ cartelement.quantity }}">
                                                         </td>
                                                         <td class="text-right">
                                                             <div class="price-wrap">
@@ -69,7 +104,9 @@
                                                             </div>
                                                         </td>
                                                         <td class="text-center">
-                                                            <a href="{{ path('dashboard_creator_cart_remove', { id: cartelement.id }) }}" data-toggle="tooltip" title="{{ "Remove"|trans }}"><i class="far fa-minus-square"></i></a>
+                                                            <a href="{{ path('dashboard_creator_cart_remove', { id: cartelement.id }) }}" data-toggle="tooltip" title="{{ "Remove"|trans }}">
+                                                                <i class="bi bi-file-minus-fill"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
@@ -91,16 +128,23 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="5" class="text-right">
-                                                        <a href="{{ path('recipes') }}" class="btn btn-outline-primary mr-3"><i class="fas fa-subscription-alt"></i> {{ "Buy more subscriptions"|trans }}</a>
-                                                        <button type="submit" class="btn btn-outline-primary mr-3"><i class="fas fa-sync"></i> {{ "Update cart"|trans }}</button>
-                                                        <span data-target="{{ path('dashboard_creator_cart_empty') }}" class="btn btn-outline-primary mr-3 requires-confirmation"  data-confirmation-text="{{ "You are about to empty your cart"|trans }}"><i class="far fa-minus-square"></i> {{ "Empty cart"|trans }}</span>
+                                                        <a href="{{ path('recipes') }}" class="btn btn-outline-primary mr-3">
+                                                            <i class="bi bi-ticket"></i> {{ "Buy more subscriptions"|trans }}
+                                                        </a>
+                                                        <button type="submit" class="btn btn-outline-primary mr-3">
+                                                            <i class="bi bi-arrow-repeat"></i> {{ "Update cart"|trans }}
+                                                        </button>
+                                                        <span data-target="{{ path('dashboard_creator_cart_empty') }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to empty your cart"|trans }}">
+                                                            <i class="bi bi-file-minus-fill"></i> {{ "Empty cart"|trans }}
+                                                        </span>
                                                         <a href="{{ path('dashboard_creator_checkout') }}" class="btn btn-primary">
                                                             {% if app.user.getSubscriptionsInCartPriceSum(true) > 0 %}
                                                                 {{ "Checkout"|trans }}
                                                             {% else %}
                                                                 {{ "Register"|trans }}
                                                             {% endif %}
-                                                            <i class="fas fa-chevron-right ml-2"></i></a>
+                                                            <i class="bi bi-chevron-right me-2"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -109,11 +153,25 @@
                                 </div>
                             </div>
                         </div>
-                    {% else %}
-                        {% include "global/message.html.twig" with { icon: "bi bi-shop", type: "dark", class: "my-2", message: ('Your cart is empty'|trans) } %}
-                    {% endif %}
+                        <div class="mt-4 d-flex justify-content-between">
+                            <a href="" class="btn btn-outline-primary">Continue Shopping</a>
+                            <a href="" class="btn btn-primary">Checkout</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4"></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    {% else %}
+        {#  
+        {% include "global/message.html.twig" with { icon: "bi bi-shop", type: "dark", class: "my-2", message: ('Your cart is empty'|trans) } %}
+        #}
+        <section class="container d-flex flex-column vh-100">
+            <div class="row align-items-center justify-content-center g-0 h-lg-100 py-8">
+                <div class="offset-xl-1 col-xl-5 col-lg-6 col-md-12 col-12 text-center text-lg-start">
+                    <h1 class="display-3 mb-2 fw-bold">{{ 'Your cart is empty'|trans }}</h1>
+                </div>
+            </div>
+        </section>
+    {% endif %}
 {% endblock %}

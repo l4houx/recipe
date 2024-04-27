@@ -53,7 +53,7 @@ class TwigUrlExtension extends AbstractExtension
     public function avatarName(User $user): ?string
     {
         if (null === $user->getAvatarName()) {
-            return '/images/user/default.png';
+            return '/uploads/user/default.png';
         }
 
         return sprintf(
