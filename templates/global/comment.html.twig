@@ -6,7 +6,7 @@
                 {{ comment.author.username }}
                 <span class="ms-1 fs-6">
                     <a href="#c{{ comment.id }}" class="text-inherit">
-                        {{ comment.publishedAt | ago }}
+                        {{ comment.publishedAt | localizeddate('medium', 'short', app.request.locale, date_timezone, date_format) }}
                     </a>
                 </span>
             </h4>
@@ -70,7 +70,7 @@
                     @{{ reply.author.username }}
                     <span class="ms-1 fs-6">
                         <a href="#c{{ reply.id }}" class="text-inherit">
-                            {{ reply.publishedAt | ago }}
+                            {{ reply.publishedAt | localizeddate('medium', 'short', app.request.locale, date_timezone, date_format) }}
                         </a>
                     </span>
                 </h4>

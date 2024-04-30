@@ -109,11 +109,16 @@ Entity:
     ✔ RecipeImage @done(24-03-30 14:51)
     ✔ RecipeSubscription @done(24-04-01 20:29)
     ✔ RecipeDate @done(24-04-01 21:37)
+
+    ✔ PostType (Image, Film, File, Link) @done(24-04-28 16:36)
+    ☐ PostImage
+
     Roles:
         ✔ Restaurant @done(24-03-30 03:30)
         ✔ PointOfSale @done(24-03-30 03:30)
         ✔ Scanner @done(24-03-30 03:30)
 
+// Future version
 EntityTranslation:
     ☐ PaymentGatewayTranslation
     ☐ ResponseTranslation
@@ -151,5 +156,5 @@ Rename:
 Add:
     ☐ Comment paginate script
     ✔ Comment pagination @done(24-04-10 20:29)
-    ☐ Comment Venue
-    ☐ Comment Post
+    ✔ Comment Venue @done(24-04-29 00:16)
+    ✔ Comment Post @done(24-04-29 00:16)

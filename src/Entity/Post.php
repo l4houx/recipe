@@ -68,6 +68,35 @@ class Post
     #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $comments;
 
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    private ?PostType $type = null;
+
+    public function stringifyStatus(): string
+    {
+        if (!$this->isOnline) {
+            return 'Offline';
+        } elseif (!$this->isOnline) {
+            return 'Draft';
+        } elseif (!$this->isOnline) {
+            return 'Schedule';
+        } else {
+            return 'Online';
+        }
+    }
+
+    public function stringifyStatusClass(): string
+    {
+        if (!$this->isOnline) {
+            return 'danger';
+        } elseif (!$this->isOnline) {
+            return 'warning';
+        } elseif (!$this->isOnline) {
+            return 'info';
+        } else {
+            return 'success';
+        }
+    }
+
     public function __toString(): string
     {
         return sprintf('#%d %s', $this->getId(), $this->getTitle());
@@ -200,5 +229,17 @@ class Post
         }
 
         return false;
+    }
+
+    public function getType(): ?PostType
+    {
+        return $this->type;
+    }
+
+    public function setType(?PostType $type): static
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

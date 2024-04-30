@@ -149,11 +149,21 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function queryLatest(int $maxResults): Query
+    public function queryLatest($value, int $maxResults): Query
     {
+        if ($value instanceof Post) {
+            $object = 'post';
+        }
+
+        if ($value instanceof Venue) {
+            $object = 'venue';
+        }
+
         return $this->createQueryBuilder('c')
+            ->andWhere('c.'.$object.' = :val')
+            ->setParameter('val', $value->getId())
             ->orderBy('c.publishedAt', 'DESC')
-            ->join('c.target', 't')
+            //->join('c.target', 't')
             ->leftJoin('c.author', 'a')
             ->addSelect('t', 'a')
             ->setMaxResults($maxResults)

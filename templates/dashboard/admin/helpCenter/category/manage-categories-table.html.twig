@@ -83,16 +83,25 @@
                                         {{ "Online"|trans }}
                                     </a>
 								{% endif %}
-
-
-								<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-category-delete-form').submit();" class="dropdown-item">
-									<i class="bi bi-trash dropdown-item-icon"></i>
-									{{ 'Delete'|trans }}
-								</a>
-								<form id="js-category-delete-form" action="{# {{ path('dashboard_admin_help_center_category_delete', {id: category.id}) }} #}" method="post" class="">
-									<input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.id) }}">
-									<input type="hidden" name="_method" value="DELETE">
-								</form>
+                                {% if category.deletedAt %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_help_center_category_restore', { slug : category.slug }) }}">
+										<i class="bi bi-trash-fill dropdown-item-icon"></i>
+										{{ 'Restore'|trans }}
+									</a>
+                                    <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-category-delete-form').submit();" class="dropdown-item">
+                                        <i class="bi bi-trash dropdown-item-icon"></i>
+                                        {{ 'Delete permanently'|trans }}
+                                    </a>
+                                    <form id="js-category-delete-form" action="{{ path('dashboard_admin_help_center_category_delete', { slug : article.slug }) }}" method="post" class="">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('category_deletion_' ~ category.slug) }}">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                    </form>
+                                {% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_help_center_category_disable', { slug : category.slug }) }}">
+										<i class="bi bi-alarm dropdown-item-icon"></i>
+										{{ 'Delete'|trans }}
+									</a>
+                                {% endif %}
 							</div>
 						</div>
 					</td>

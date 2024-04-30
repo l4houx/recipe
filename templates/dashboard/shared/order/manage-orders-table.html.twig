@@ -1,17 +1,19 @@
 <div class="table-responsive overflow-y-hidden">
 	<table class="table mb-0 text-nowrap table-hover table-centered">
-		<thead class="table-light">
-			<tr>
-				<th>{{ 'Reference'|trans }}</th>
-				<th>{{ 'Restaurant / Recipe / Date / Subscription '|trans }}</th>
-                {% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_CREATOR") %}
-                    <th>{{'Creator / POS'|trans}}</th>
-                {% endif %}
-				<th>{{ 'Order date'|trans }}</th>
-				<th>{{ 'Status'|trans }}</th>
-				<th></th>
-			</tr>
-		</thead>
+        {% if header is not defined or header != false %}
+            <thead class="table-light">
+                <tr>
+                    <th>{{ 'Reference'|trans }}</th>
+                    <th>{{ 'Restaurant / Recipe / Date / Subscription '|trans }}</th>
+                    {% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_CREATOR") %}
+                        <th>{{'Creator / POS'|trans}}</th>
+                    {% endif %}
+                    <th>{{ 'Order date'|trans }}</th>
+                    <th>{{ 'Status'|trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+        {% endif %}
 		<tbody>
 			{% for order in rows %}
                 {% if is_granted("ROLE_ADMIN_APPLICATION") %}

@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Post;
 use App\Entity\User;
+use App\Entity\Revise;
 use App\Entity\Comment;
 use App\Entity\Country;
 use App\Entity\Keyword;
@@ -76,10 +77,10 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i <= 20; ++$i) {
             $post = new Post();
             $post
-                ->setTitle($this->faker()->unique()->sentence())
+                ->setTitle($this->faker()->unique()->sentence(5, true))
                 ->setSlug($this->slugger->slug($post->getTitle())->lower())
                 ->setContent($this->faker()->paragraphs(10, true))
-                ->setReadtime(mt_rand(0, 1) === 1 ? rand(10, 160) : null)
+                ->setReadtime(rand(100, 5000))
                 ->setViews(rand(10, 160))
                 ->setAuthor($author)
                 ->setIsOnline($this->faker()->numberBetween(0, 1))
@@ -88,6 +89,9 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
 
             $category = $this->getReference('category-' . $this->faker()->numberBetween(1, 16));
             $post->setCategory($category);
+
+            $type = $this->getReference('type-'.$this->faker()->numberBetween(1, 4));
+            $post->setType($type);
 
             $manager->persist($post);
             $posts[] = $post;
@@ -109,6 +113,21 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
             }
         }
 
+        // Create 20 Revises
+        $revises = [];
+        for ($i = 0; $i <= 20; ++$i) {
+            $revise = (new Revise())
+                ->setStatus(mt_rand(0, 2) === 1 ? Revise::ACCEPTED : Revise::REJECTED)
+                ->setContent($this->faker()->paragraph(5, true))
+                ->setComment($this->faker()->realText(100))
+                ->setAuthor($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                ->setTarget($this->faker()->randomElement($posts))
+            ;
+
+            $manager->persist($revise);
+            $revises[] = $revise;
+        }
+
         $manager->flush();
     }
 
@@ -119,7 +138,8 @@ class AppPostFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             AppAdminTeamUserFixtures::class,
-            AppPostCategoryFixtures::class
+            AppPostCategoryFixtures::class,
+            AppPostTypeFixtures::class
         ];
     }
 }

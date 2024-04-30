@@ -1,6 +1,7 @@
 <div class="alert alert-{{ type }} alert-dismissible fade show d-flex align-items-center {% if icon is defined %}alert-icon{% endif %} {% if class is defined %}{{ class }}{% endif %}" role="alert">
-    {% if icon is defined %}<i class="{{icon}} fs-xl pe-1 me-2"></i>{% endif %} 
+    {% if icon is defined %}<i class="{{ icon }} fs-xl pe-1 me-2"></i>{% endif %} 
     <div>{{ message | raw }}</div>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ 'Close'|trans }}">
-    </button>
+    {% if close is defined %}
+        <button type="button" class="btn-{{ close }}" data-bs-dismiss="alert" aria-label="{{ 'Close'|trans }}"></button>
+    {% endif %} 
 </div>

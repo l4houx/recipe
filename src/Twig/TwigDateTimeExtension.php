@@ -28,7 +28,7 @@ class TwigDateTimeExtension extends AbstractExtension
             new TwigFilter('ago', $this->ago(...), ['is_safe' => ['html']]),
             new TwigFilter('countdown', $this->countdown(...), ['is_safe' => ['html']]),
             new TwigFilter('duration_short', $this->shortDuration(...), ['is_safe' => ['html']]),
-            new TwigFilter('format_datetime', $this->formatDateTime(...), ['is_safe' => ['html']]),
+            new TwigFilter('localizeddate', $this->localizedDate(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -82,7 +82,7 @@ class TwigDateTimeExtension extends AbstractExtension
      * 
      * @throws \Twig\Error\RuntimeError
      */
-    public function formatDateTime(
+    public function localizedDate(
         \DateTimeInterface|string|null $dateTime,
         ?string $dateFormat = 'long',
         ?string $timeFormat = 'short',

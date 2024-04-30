@@ -3,16 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Repository\CommentRepository;
 use App\Service\SettingService;
+use App\Repository\PostRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PostController extends AbstractController
 {
@@ -20,6 +22,7 @@ class PostController extends AbstractController
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
         private readonly CommentRepository $commentRepository,
+        private readonly PostRepository $postRepository,
         private readonly SettingService $settingService
     ) {
     }
@@ -48,11 +51,14 @@ class PostController extends AbstractController
         $comments = $this->commentRepository->findForPagination($post, $page);
         //$comments = $this->commentRepository->findRecentComments($post);
 
+        $previous = $this->postRepository->findPrevious($post);
+        $next = $this->postRepository->findNext($post);
+
         $post->viewed();
 
         $this->em->persist($post);
         $this->em->flush();
 
-        return $this->render('post/post-article.html.twig', compact('comments', 'post'));
+        return $this->render('post/post-article.html.twig', compact('comments', 'post', 'previous', 'next'));
     }
 }

@@ -27,19 +27,11 @@
                 <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
             </form>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-lg-6">
             <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
                 <option selected="">{{ "Sort by"|trans }}</option>
                 <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "l.createdAt", {"direction": "desc", "criteria": "l.createdAt"}) }}</option>
                 <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "l.createdAt", {"direction": "asc", "criteria": "l.createdAt"}) }}</option>
-            </select>
-        </div>
-        <div class="col-6 col-lg-3">
-            <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
-                <option selected="">{{ "Sort by"|trans }}</option>
-                <option value="1">Shipped</option>
-                <option value="2">Cancelled</option>
-                <option value="3">Processing</option>
             </select>
         </div>
     </div>

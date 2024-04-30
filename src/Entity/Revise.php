@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\HasIdTrait;
 use App\Repository\ReviseRepository;
 use App\Validator\NotTheSameContent;
+use App\Entity\Traits\HasStatusTrait;
 use App\Entity\Traits\HasGedmoTimestampTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,14 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Revise
 {
     use HasIdTrait;
+    use HasStatusTrait;
     use HasGedmoTimestampTrait;
-
-    final public const PENDING = 0;
-    final public const ACCEPTED = 1;
-    final public const REJECTED = -1;
-
-    #[ORM\Column(type: Types::INTEGER, length: 1, options: ['default' => 0])]
-    private int $status = self::PENDING;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
@@ -39,16 +34,9 @@ class Revise
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Post $target;
 
-    public function getStatus(): int
+    public function __toString(): string
     {
-        return $this->status;
-    }
-
-    public function setStatus(int $status): static
-    {
-        $this->status = $status;
-
-        return $this;
+        return sprintf('#%d %s', $this->getId(), $this->getTarget()->getTitle());
     }
 
     public function getContent(): string

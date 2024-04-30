@@ -38,7 +38,7 @@ class VenueController extends BaseController
 
         $restaurant = 'all';
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         $rows = $paginator->paginate($this->settingService->getVenues(['restaurant' => $restaurant, 'keyword' => $keyword, 'directory' => $directory, 'isOnline' => 'all', 'restaurantEnabled' => 'all']), $request->query->getInt('page', 1), 10, ['wrap-queries' => true]);
@@ -54,7 +54,7 @@ class VenueController extends BaseController
     {
         $restaurant = 'all';
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         if (!$slug) {

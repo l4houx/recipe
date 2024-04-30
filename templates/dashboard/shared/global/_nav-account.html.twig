@@ -109,6 +109,30 @@
                         {{ 'My points of sale'|trans }}
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if routename == "dashboard_restaurant_scanner_index" or routename == "dashboard_restaurant_scanner_new" or routename == "dashboard_restaurant_scanner_edit" %}active{% endif %}" href="{{ path('dashboard_restaurant_scanner_index') }}">
+                        <i class="bi bi-qr-code-scan nav-icon"></i>
+                        {{ 'My scanners'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if routename == "dashboard_restaurant_setting_scanner_app" %}active{% endif %}" href="{{ path('dashboard_restaurant_setting_scanner_app') }}">
+                        <i class="bi bi-qr-code-scan nav-icon"></i>
+                        {{ 'Scanner App settings'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">
+                        <i class="bi bi-person-badge nav-icon"></i>
+                        {{ 'Payout requests'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">
+                        <i class="bi bi-person-badge nav-icon"></i>
+                        {{ 'Payout methods'|trans }}
+                    </a>
+                </li>
             {% elseif is_granted('ROLE_POINTOFSALE') %}
                 <li class="nav-item {% if routename == "dashboard_pointofsale_orders" or routename == "dashboard_pointofsale_order_details" %}active{% endif %}">
                     <a class="nav-link" href="{{ path('dashboard_pointofsale_orders') }}">

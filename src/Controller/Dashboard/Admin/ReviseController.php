@@ -21,8 +21,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
 class ReviseController extends AdminBaseController
 {
-    #[Route(path: '/{id<\d+>}', name: 'show', methods: ['GET', 'POST'])]
-    public function show(Request $request, TranslatorInterface $translator, Revise $revise, EventDispatcherInterface $dispatcher): Response
+    #[Route(path: '/{id<\d+>}', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, TranslatorInterface $translator, Revise $revise, EventDispatcherInterface $dispatcher): Response
     {
         if ('POST' === $request->getMethod()) {
             $isDeleteRequest = null !== $request->get('delete');
@@ -41,6 +41,6 @@ class ReviseController extends AdminBaseController
             return $this->redirectToRoute('dashboard_admin_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/admin/blog/articles/revise.html.twig', compact('revise'));
+        return $this->render('dashboard/admin/post/articles/revise.html.twig', compact('revise'));
     }
 }

@@ -727,7 +727,7 @@ class Recipe
 
     public function stringifyStatus(): string
     {
-        if (!$this->restaurant->getUser()->isVerified()) {
+        if (!$this->restaurant->getUser()?->isVerified()) {
             return 'Restaurant is disabled';
         } elseif (!$this->isOnline) {
             return 'Recipe is not published';
@@ -740,7 +740,7 @@ class Recipe
 
     public function stringifyStatusClass(): string
     {
-        if (!$this->restaurant->getUser()->isVerified()) {
+        if (!$this->restaurant->getUser()?->isVerified()) {
             return 'danger';
         } elseif (!$this->isOnline) {
             return 'warning';
@@ -754,9 +754,9 @@ class Recipe
     public function isOnSale(): bool
     {
         return
-        $this->hasAnRecipeDateOnSale()
-            && $this->restaurant->getUser()->isVerified()()
-            && $this->isOnline
+            $this->hasAnRecipeDateOnSale() &&
+            $this->restaurant->getUser()->isVerified()  &&
+            $this->isOnline
         ;
     }
 

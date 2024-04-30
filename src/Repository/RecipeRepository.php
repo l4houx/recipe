@@ -174,78 +174,6 @@ class RecipeRepository extends ServiceEntityRepository
         ;
     }
 
-    /**
-     * Returns the recipes after applying the specified search criterias.
-     *
-     * @param string                   $keyword
-     * @param string                   $slug
-     * @param Collection               $addedtofavoritesby
-     * @param HomepageHeroSetting|null $isOnHomepageSlider
-     * @param bool                     $isOnline
-     * @param User|null                $user
-     * @param bool                     $userEnabled
-     * @param string                   $sort
-     * @param string                   $order
-     * @param int                      $limit
-     * @param int                      $count
-     */
-    public function getRecipe($keyword, $slug, $addedtofavoritesby, $isOnHomepageSlider, $isOnline, $otherthan, $user, $userEnabled, $sort, $order, $limit, $count): QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('r');
-
-        if ($count) {
-            $qb->select('COUNT(r)');
-        } else {
-            $qb->select('DISTINCT r');
-        }
-
-        if ('all' !== $keyword) {
-            $qb->andWhere('r.title LIKE :keyword or :keyword LIKE r.title or :keyword LIKE r.content or r.content LIKE :keyword')->setParameter('keyword', '%'.$keyword.'%');
-        }
-
-        if ('all' !== $slug) {
-            $qb->andWhere('r.slug = :slug')->setParameter('slug', $slug);
-        }
-
-        if ('all' !== $addedtofavoritesby) {
-            $qb->andWhere(':addedtofavoritesbyuser MEMBER OF r.addedtofavoritesby')->setParameter('addedtofavoritesbyuser', $addedtofavoritesby);
-        }
-
-        if (true === $isOnHomepageSlider) {
-            $qb->andWhere('r.isonhomepageslider IS NOT NULL');
-        }
-
-        if ('all' !== $isOnline) {
-            $qb->andWhere('r.isOnline = :isOnline')->setParameter('isOnline', $isOnline);
-        }
-
-        if ('all' !== $otherthan) {
-            $qb->andWhere('r.slug != :otherthan')->setParameter('otherthan', $otherthan);
-            $qb->andWhere('r.slug = :otherthan')->setParameter('otherthan', $otherthan);
-        }
-
-        if ('all' !== $user || 'all' !== $userEnabled) {
-            $qb->leftJoin('r.user', 'user');
-        }
-
-        if ('all' !== $user) {
-            $qb->andWhere('user.slug = :user')->setParameter('user', $user);
-        }
-
-        if ('all' !== $userEnabled) {
-            $qb->leftJoin('user', 'user');
-            $qb->andWhere('user.enabled = :userEnabled')->setParameter('userEnabled', $userEnabled);
-        }
-
-        $qb->orderBy($sort, $order);
-
-        if ('all' !== $limit) {
-            $qb->setMaxResults($limit);
-        }
-
-        return $qb;
-    }
-
     public function getRecipes($category, $venue, $country, $location, $restaurant, $keyword, $slug, $freeonly, $onlineonly, $pricemin, $pricemax, $audience, $startdate, $startdatemin, $startdatemax, $isOnline, $elapsed, $restaurantEnabled, $addedtofavoritesby, $onsalebypos, $canbescannedby, $isOnHomepageSlider, $otherthan, $notId, $sort, $order, $limit, $count): QueryBuilder
     {
         $qb = $this->createQueryBuilder('r');
@@ -265,7 +193,7 @@ class RecipeRepository extends ServiceEntityRepository
         if ('all' !== $category) {
             $qb->leftJoin('r.category', 'category');
             //$qb->join('category.translations', 'categorytranslations');
-            //$qb->andWhere('categorytranslations.slug = :category')->setParameter('category', $category);
+            $qb->andWhere('category.slug = :category')->setParameter('category', $category);
         }
 
         if ('all' !== $venue || 'all' !== $country || 'all' !== $location || 'all' !== $pricemin || 'all' !== $pricemax || 'all' != $startdate || 'all' != $startdatemin || 'all' != $startdatemax || 'recipedates.startdate' === $sort || 'all' !== $elapsed || 'all' !== $onsalebypos || 'all' !== $onlineonly) {
@@ -306,8 +234,8 @@ class RecipeRepository extends ServiceEntityRepository
 
         if ('all' !== $audience) {
             $qb->leftJoin('r.audiences', 'audiences');
-            $qb->leftJoin('audiences.translations', 'audiencestranslations');
-            $qb->andWhere('audiencestranslations.slug = :audience')->setParameter('audience', $audience);
+            //$qb->leftJoin('audiences.translations', 'audiencestranslations');
+            $qb->andWhere('audiences.slug = :audience')->setParameter('audience', $audience);
         }
 
         if ('all' !== $venue) {

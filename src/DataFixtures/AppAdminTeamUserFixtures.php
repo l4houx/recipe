@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Country;
 use App\Entity\Scanner;
 use App\Entity\PointOfSale;
+use App\Entity\Notification;
 use App\Entity\Traits\HasRoles;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Setting\HomepageHeroSetting;
@@ -36,7 +37,7 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
         $scanners = [];
         for ($i = 0; $i <= 20; ++$i) {
             $scanner = (new Scanner())
-                ->setName($this->faker()->name())
+                ->setName($this->faker()->word(4, true))
                 //->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
                 //->setUser($this->faker()->randomElement($users))
                 //->addRecipedate($this->faker()->randomElement($recipedates))
@@ -52,7 +53,7 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
         $pointofsales = [];
         for ($i = 0; $i <= 20; ++$i) {
             $pointofsale = (new PointOfSale())
-                ->setName($this->faker()->name())
+                ->setName($this->faker()->word(4, true))
                 //->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
                 //->setUser($this->faker()->randomElement($users))
                 //->addRecipedate($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
@@ -294,6 +295,21 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
                 )
             );
             $restauranters[] = $restauranter;
+        }
+
+        // Create 10 Notifications
+        $notifications = [];
+        for ($i = 0; $i <= 10; ++$i) {
+            $notification = (new Notification());
+            $notification
+                ->setUser($this->getReference('user-' . $this->faker()->numberBetween(1, 10)))
+                ->setUrl($this->faker()->url())
+                ->setChannel($this->slugger->slug($notification->getUrl())->lower())
+                ->setMessage($this->faker()->sentence(1))
+            ;
+
+            $manager->persist($notification);
+            $notifications[] = $notification;
         }
 
         $manager->flush();

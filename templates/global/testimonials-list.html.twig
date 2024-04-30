@@ -8,8 +8,8 @@
                 <h4 class="mb-1">
                     {{ testimonial.author.getFullName | lower | capitalize }}
                     <span class="ms-1 fs-6">
-                        {{ 'Published'|trans }}
-                        {{ testimonial.createdAt | ago() }}
+                        {{ 'Published the'|trans }}
+                        {{ testimonial.createdAt | format_date('long') }}
                     </span>
                 </h4>
             {% endif %}

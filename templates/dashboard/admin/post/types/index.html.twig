@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% set pagetitle = 'Manage amenities'|trans %}
+{% set pagetitle = 'Manage posts types'|trans %}
 {% block title pagetitle %}
 
 {% block breadcrumb %}
@@ -10,7 +10,7 @@
                 {% set breadcrumb = [{ "current":(pagetitle) }] %}
                 {% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_amenity_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                    <a href="{{ path('dashboard_admin_post_type_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -30,8 +30,8 @@
         <div class="col-12 col-lg-6">
             <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
                 <option selected="">{{ "Sort by"|trans }}</option>
-                <option value>{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "a.createdAt", {"direction": "desc", "criteria": "a.createdAt"}) }}</option>
-                <option value>{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "a.createdAt", {"direction": "asc", "criteria": "a.createdAt"}) }}</option>
+                <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.createdAt", {"direction": "desc", "criteria": "p.createdAt"}) }}</option>
+                <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "p.createdAt", {"direction": "asc", "criteria": "p.createdAt"}) }}</option>
             </select>
         </div>
     </div>
@@ -45,10 +45,10 @@
                     <p class="mb-0"></p>
                 </div>
                 {% if rows.getTotalItemCount > 0 %}
-                    {% include "dashboard/admin/amenity/manage-amenites-table.html.twig" with {rows: rows} %}
+                    {% include "dashboard/admin/post/types/manage-types-table.html.twig" with {rows: rows} %}
                 {% else %}
                     <div class="card-footer">
-                        {% include "global/message.html.twig" with { type: "dark", message: ('No amenites found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                        {% include "global/message.html.twig" with { type: "dark", message: ('No post types found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
                     </div>
                 {% endif %}
             </div>

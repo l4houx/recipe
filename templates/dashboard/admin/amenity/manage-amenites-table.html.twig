@@ -14,7 +14,7 @@
 				{% set link = path('dashboard_admin_amenity_edit', { slug : amenity.slug }) %}
 				<tr>
 					<td>{{ amenity.name }}</td>
-					<td>{{ amenity.venues|length }}</td>
+					<td>{{ amenity.venues | length }}</td>
 					<td><i class="{{ amenity.icon }} fa-2x fa-fw"></i></td>
 					<td>
 						{% if amenity.isOnline == false %}

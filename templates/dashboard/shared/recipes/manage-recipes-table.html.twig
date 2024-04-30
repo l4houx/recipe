@@ -1,19 +1,20 @@
 <div class="table-responsive overflow-y-hidden">
 	<table class="table mb-0 text-nowrap table-hover table-centered">
-		<thead class="table-light">
-			<tr>
-				<th>{{ 'Recipe'|trans }}</th>
-				{% if is_granted('ROLE_ADMIN_APPLICATION') %}
-					<th>{{ 'Restaurant'|trans }}</th>
-				{% endif %}
-				<th>{{ 'Category'|trans }}</th>
-				<th>{{ 'Rating'|trans }}</th>
-				<th>{{ 'Sales'|trans}}</th>
-				<th>{{ 'Status'|trans }}</th>
-				<th>{{ 'Attendance'|trans}}</th>
-				<th></th>
-			</tr>
-		</thead>
+        {% if header is not defined or header != false %}
+            <thead class="">
+                <tr>
+                    <th>{{ 'Recipe'|trans }}</th>
+                    {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                        <th>{{ 'Restaurant'|trans }}</th>
+                    {% endif %}
+                    <th>{{ 'Category'|trans }}</th>
+                    <th>{{ 'Sales'|trans}}</th>
+                    <th>{{ 'Status'|trans }}</th>
+                    <th>{{ 'Attendance'|trans}}</th>
+                    <th></th>
+                </tr>
+            </thead>
+        {% endif %}
 		<tbody>
 			{% for recipe in rows %}
 				<tr>
@@ -30,33 +31,30 @@
 									<a href="{{ link }}" data-toggle="tooltip" title="{{ "View recipe"|trans }}" target="_blank" class="text-inherit">
 										{{ recipe.title }}
 									</a>
+                                    <span class="small text-muted ms-1">#{{ recipe.reference }}</span>
 								</h4>
 								<ul class="list-inline fs-6 mb-0">
 									<li class="list-inline-item">
 										<span class="align-text-bottom">
-											<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-clock" viewbox="0 0 16 16">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewbox="0 0 16 16">
 												<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
 												<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
 											</svg>
 										</span>
-										<span>{{ recipe.duration }}</span>
+										<span>{{ recipe.duration | duration }}</span>
 									</li>
-									<li class="list-inline-item">
-										<svg class="me-1 mt-n1" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<rect x="3" y="8" width="2" height="6" rx="1" fill="#754FFE"></rect>
-											<rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
-											<rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
-										</svg>
-										#{{ recipe.reference }}
-									</li>
-									<li class="list-inline-item">
-										<svg class="me-1 mt-n1" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<rect x="3" y="8" width="2" height="6" rx="1" fill="#754FFE"></rect>
-											<rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
-											<rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
-										</svg>
-										Beginner
-									</li>
+                                    {% include 'global/level.html.twig' with {content: recipe, small: true} %}
+                                    {% if recipe.premium %}
+                                        <li class="list-inline-item">
+                                            <span class="align-text-bottom">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-award" viewBox="0 0 16 16">
+                                                    <path d="M9.669.864 8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68zm1.196 1.193.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702z"/>
+                                                    <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1z"/>
+                                                </svg>
+                                            </span>
+                                            <span>{{ 'Premium'|trans }}</span>
+                                        </li>
+                                    {% endif %}
 								</ul>
 							</div>
 						</div>
@@ -71,30 +69,24 @@
 							{{ recipe.category.name | default('') }}
 						</span>
 					</td>
+                    <td>
+						<div class="clearfix">
+							<span class="fw-semibold">
+								({{ recipe.getTotalSalesPercentage }}%)
+							</span>
+							<span class="ms-1 fw-medium">
+                                {{ recipe.getTotalOrderElementsQuantitySum }}
+								{{ "subscription(s) sold"|trans }}
+							</span>
+						</div>
+                        <div class="d-flex align-items-center">
+                            <div class="progress w-100" style="height: 6px">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ recipe.getTotalSalesPercentage }}%" aria-valuenow="{{ recipe.getTotalSalesPercentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="ms-2"><span>{{ recipe.getTotalSalesPercentage }}%</span></div>
+                        </div>
+                    </td>
 					<td>
-						<span class="lh-1">
-							<span class="text-warning">4.5</span>
-							<span class="mx-1 align-text-top">
-								<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-									<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-								</svg>
-							</span>
-							(3,250)
-						</span>
-					</td>
-					<td></td>
-					<td>
-						{% if recipe.isOnline == false %}
-							<span class="badge bg-danger-soft">
-								<i class="bi bi-eye-slash"></i>
-								{{ "Offline"|trans }}
-							</span>
-						{% else %}
-							<span class="badge bg-success-soft">
-								<i class="bi bi-eye"></i>
-								{{ "Online"|trans }}
-							</span>
-						{% endif %}
 						<span class="badge bg-{{ recipe.stringifyStatusClass }}-soft">{{ recipe.stringifyStatus|trans }}</span>
 						{% if recipe.deletedAt %}
 							<span class="badge bg-danger-soft">
@@ -102,6 +94,11 @@
 								{{ "Deleted"|trans }}
 							</span>
 						{% endif %}
+					</td>
+					<td class="text-center">
+						<div class="mx-auto chart-circle chart-circle-xs" data-value="{{ recipe.getTotalCheckInPercentage/100 }}" data-thickness="3">
+							<div class="chart-circle-value">{{ recipe.getTotalCheckInPercentage }}%</div>
+						</div>
 					</td>
 					<td>
 						<span class="dropdown dropstart">
@@ -111,41 +108,41 @@
 							<span class="dropdown-menu" aria-labelledby="Dropdown1" style="">
 								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
 								<a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#recipe-{{ recipe.reference }}-dates">
-									<i class="bi bi-pencil fas fa-chart-line fa-fw dropdown-item-icon"></i>
+									<i class="bi bi-bar-chart-line dropdown-item-icon"></i>
 									{{ 'Statistics'|trans }}
 								</a>
                                 {% if recipe.hasRecipeDateWithSeatingPlan %}
                                     <a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#recipe-{{ recipe.reference }}-datesWithSeatingPlan">
-                                        <i class="bi bi-pencil fas fa-braille fa-fw dropdown-item-icon"></i>
+                                        <i class="bi bi-bricks dropdown-item-icon"></i>
                                         {{ 'View reserved seats'|trans }}
                                     </a>
                                 {% endif %}
 								{% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                                    <a class="dropdown-item ajax-loading" href="{{ path('dashboard_admin_recipe_details', {slug : recipe.slug}) }}">
-                                        <i class="bi bi-eye fas fa-file-alt fa-fw dropdown-item-icon"></i>
+                                    <a class="dropdown-item ajax-loading" href="{{ path('dashboard_admin_recipe_details', {slug : recipe.slug}) }}" data-title="{{ recipe.title }}">
+                                        <i class="bi bi-file dropdown-item-icon"></i>
                                         {{ 'Details'|trans }}
                                     </a>
                                     <a class="dropdown-item" href="{{ path('dashboard_admin_orders', {recipe : recipe.slug, status: 1}) }}">
-                                        <i class="bi bi-eye fas fa-users fa-fw dropdown-item-icon"></i>
+                                        <i class="bi bi-people dropdown-item-icon"></i>
                                         {{ 'Attendees'|trans }}
                                     </a>
-                                    <a class="dropdown-item" href="{{ path('dashboard_admin_review_index', {slug : recipe.slug}) }}">
-                                        <i class="bi bi-eye fas fa-star fa-fw dropdown-item-icon"></i>
+                                    <a class="dropdown-item" href="{{ path('dashboard_admin_review_index', {recipe : recipe.slug}) }}">
+                                        <i class="bi bi-star dropdown-item-icon"></i>
                                         {{ 'Reviews'|trans }}
                                     </a>
                                     {% if recipe.deletedAt %}
-									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_restore', { slug : recipe.slug }) }}">
-										<i class="bi bi-trash-fill dropdown-item-icon"></i>
-										{{ 'Restore'|trans }}
-									</a>
-                                    <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-recipe-delete-form').submit();" class="dropdown-item">
-                                        <i class="bi bi-trash dropdown-item-icon"></i>
-                                        {{ 'Delete permanently'|trans }}
-                                    </a>
-                                    <form id="js-recipe-delete-form" action="{{ path('dashboard_admin_recipe_delete_permanently', { slug : recipe.slug }) }}" method="post" class="">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('recipe_deletion_' ~ recipe.slug) }}">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                    </form>
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_recipe_restore', { slug : recipe.slug }) }}">
+                                            <i class="bi bi-trash-fill dropdown-item-icon"></i>
+                                            {{ 'Restore'|trans }}
+                                        </a>
+                                        <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-recipe-delete-form').submit();" class="dropdown-item">
+                                            <i class="bi bi-trash dropdown-item-icon"></i>
+                                            {{ 'Delete permanently'|trans }}
+                                        </a>
+                                        <form id="js-recipe-delete-form" action="{{ path('dashboard_admin_recipe_delete_permanently', { slug : recipe.slug }) }}" method="post" class="">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('recipe_deletion_' ~ recipe.slug) }}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                        </form>
                                     {% else %}
                                         <a class="dropdown-item" href="{{ path('dashboard_admin_recipe_delete', { slug : recipe.slug }) }}">
                                             <i class="bi bi-alarm dropdown-item-icon"></i>
@@ -155,12 +152,12 @@
 								{% elseif is_granted('ROLE_RESTAURANT') %}
                                     {% if not recipe.isFree %}
                                         <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#recipe-{{ recipe.reference }}-payout-request">
-                                            <i class="bi bi-pencil fas fa-file-invoice-dollar fa-fw dropdown-item-icon"></i>
+                                            <i class="bi bi-currency-dollar dropdown-item-icon"></i>
                                             {{ 'Request payout'|trans }}
                                         </a>
                                     {% endif %}
                                     <a class="dropdown-item ajax-loading" href="{{ path('dashboard_restaurant_recipe_details', {slug : recipe.slug}) }}" data-title="{{ recipe.title }}">
-                                        <i class="bi bi-eye fas fa-file-alt fa-fw dropdown-item-icon"></i>
+                                        <i class="bi bi-file dropdown-item-icon"></i>
                                         {{ 'Details'|trans }}
                                     </a>
                                     <a class="dropdown-item" href="{{ path('dashboard_restaurant_recipe_edit', {slug : recipe.slug}) }}">
@@ -168,11 +165,11 @@
                                         {{ 'Edit'|trans }}
                                     </a>
                                     <a class="dropdown-item" href="{{ path('dashboard_restaurant_orders', {recipe : recipe.slug, status: 1}) }}">
-                                        <i class="bi bi-eye fas fa-users fa-fw dropdown-item-icon"></i>
+                                        <i class="bi bi-people dropdown-item-icon"></i>
                                         {{ 'Attendees'|trans }}
                                     </a>
-                                    <a class="dropdown-item" href="{{ path('dashboard_restaurant_review_index', {slug : recipe.slug}) }}">
-                                        <i class="bi bi-eye fas fa-star fa-fw dropdown-item-icon"></i>
+                                    <a class="dropdown-item" href="{{ path('dashboard_restaurant_review_index', {recipe : recipe.slug}) }}">
+                                        <i class="bi bi-star dropdown-item-icon"></i>
                                         {{ 'Reviews'|trans }}
                                     </a>
                                     {% if recipe.isOnline == true %}
@@ -223,14 +220,14 @@
                                     {% if recipeDate.hasSeatingPlan %}
                                         <div>
                                             <b class="float-start">
-                                                {{ recipeDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                {{ recipeDate.startdate | ago }}
                                             </b>
                                             {% if is_granted("ROLE_ADMIN_APPLICATION") %}
-                                                <a href="{{ path("dashboard_admin_recipe_date_reservedSeats", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
+                                                <a href="{{ path("dashboard_admin_recipe_date_statistics_reservedSeats", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
                                                     {{ "View reserved seats"|trans }}
                                                 </a>
                                             {% elseif is_granted("ROLE_RESTAURANT") %}
-                                                <a href="{{ path("dashboard_restaurant_recipe_date_reservedSeats", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
+                                                <a href="{{ path("dashboard_restaurant_recipe_date_statistics_reservedSeats", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
                                                     {{ "View reserved seats"|trans }}
                                                 </a>
                                             {% endif %}
@@ -262,14 +259,14 @@
                                 {% for recipeDate in recipe.recipedates %}
                                     <div>
                                         <b class="float-start">
-                                            {{ recipeDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                            {{ recipeDate.startdate | ago }}
                                         </b>
                                         {% if is_granted("ROLE_ADMIN_APPLICATION") %}
-                                            <a href="{{ path("dashboard_admin_recipe_date_statistics", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
+                                            <a href="{{ path("dashboard_admin_recipe_date_statistics_index", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
                                                 {{ "View stats"|trans }}
                                             </a>
                                         {% elseif is_granted("ROLE_RESTAURANT") %}
-                                            <a href="{{ path("dashboard_restaurant_recipe_date_statistics", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
+                                            <a href="{{ path("dashboard_restaurant_recipe_date_statistics__index", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
                                                 {{ "View stats"|trans }}
                                             </a>
                                         {% endif %}
@@ -302,7 +299,7 @@
                                         {% if not recipeDate.isFree %}
                                             <div>
                                                 <b class="float-start">
-                                                    {{ recipeDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                    {{ recipeDate.startdate | ago }}
                                                 </b>
                                                 {% if recipeDate.isFree %}
                                                     <span class="badge bg-info float-end">{{ "Free"|trans }}</span>
@@ -333,7 +330,4 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<div class="card-footer">
-		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-	</div>
 </div>

@@ -7,6 +7,7 @@ use App\Entity\Post;
 use App\Entity\PostCategory;
 use App\Entity\User;
 use App\Form\Type\SwitchType;
+use App\Entity\PostType as Type;
 use App\Service\SettingService;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -62,6 +63,18 @@ class PostFormType extends AbstractType
                 'empty_data' => '',
                 'attr' => ['class' => 'wysiwyg', 'placeholder' => '', 'rows' => 6],
                 'help' => t(''),
+            ])
+            ->add('type', EntityType::class, [
+                'required' => true,
+                'class' => Type::class,
+                'placeholder' => t('Choose a type'),
+                'choice_label' => 'name',
+                'autocomplete' => true,
+                'label' => t('Type :'),
+                'attr' => ['data-limit' => 1],
+                'query_builder' => function () {
+                    return $this->settingService->getPostsTypes([]);
+                },
             ])
             ->add('author', UserAutocompleteField::class, ['label' => t('Author :')])
             ->add('category', PostCategoryAutocompleteField::class)

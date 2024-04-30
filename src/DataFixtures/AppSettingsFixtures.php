@@ -217,8 +217,8 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Facebook Enabled', 'social_login_facebook_enabled', 0, CheckboxType::class);
 
         // Comment
-        $settings[] = new Setting('Venue Comments Enabled', 'venue_comments_enabled', true, CheckboxType::class);
-        $settings[] = new Setting('Post Comments Enabledd', 'post_comments_enabled', true, CheckboxType::class);
+        $settings[] = new Setting('Venue Comments Enabled', 'venue_comments_enabled', 'no', CheckboxType::class);
+        $settings[] = new Setting('Post Comments Enabledd', 'post_comments_enabled', 'native', CheckboxType::class);
         $settings[] = new Setting('Facebook Comments Enabled', 'facebook_app_id', '', TextType::class);
         $settings[] = new Setting('Disqus Comments Enabled', 'disqus_subdomain', '', TextType::class);
 
@@ -238,22 +238,6 @@ class AppSettingsFixtures extends Fixture
                 'custom_block_three_name' => 'hero-block-3.svg',
                 'show_search_box' => 1,
             ],
-            /*
-            2 => [
-                'title' => 'Discover Recipe',
-                'paragraph' => 'Uncover the best recipes',
-                'content' => 'recipes',
-                'custom_background_name' => 'homepage.jpg',
-                'show_search_box' => 1,
-            ],
-            3 => [
-                'title' => 'Discover Restaurant',
-                'paragraph' => 'Uncover the best restaurants',
-                'content' => 'restaurants',
-                'custom_background_name' => 'homepage.jpg',
-                'show_search_box' => 1,
-            ],
-            */
         ];
 
         foreach ($homepages as $key => $value) {

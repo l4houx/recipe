@@ -24,7 +24,7 @@ class ReportsController extends BaseController
         $recipe = '' == $request->query->get('recipe') ? 'all' : $request->query->get('recipe');
 
         if ($this->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         $rows = $paginator->paginate($settingService->getRecipeDates(['reference' => $reference, 'restaurant' => $restaurant, 'recipe' => $recipe]), $request->query->getInt('page', 1), 10, ['wrap-queries' => true]);

@@ -97,14 +97,36 @@
                                         {{ "Online"|trans }}
                                     </a>
 								{% endif %}
-								<a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-article-delete-form').submit();" class="dropdown-item">
-									<i class="bi bi-trash dropdown-item-icon"></i>
-									{{ 'Delete'|trans }}
-								</a>
-								<form id="js-article-delete-form" action="{# {{ path('dashboard_admin_help_center_article_delete', {id: article.id}) }} #}" method="post" class="">
-									<input type="hidden" name="_token" value="{{ csrf_token('article_deletion_' ~ article.id) }}">
-									<input type="hidden" name="_method" value="DELETE">
-								</form>
+								{% if article.isFeatured == true %}
+                                    <a class="dropdown-item" href="{{ path('dashboard_admin_help_center_article_notfeatured', { slug : article.slug }) }}">
+                                        <i class="bi bi-pin dropdown-item-icon"></i>
+                                        {{ "Mark as not featured"|trans }}
+                                    </a>
+								{% else %}
+                                    <a class="dropdown-item" href="{{ path('dashboard_admin_help_center_article_featured', { slug : article.slug }) }}">
+                                        <i class="bi bi-star dropdown-item-icon"></i>
+                                        {{ "Mark as featured"|trans }}
+                                    </a>
+								{% endif %}
+                                {% if article.deletedAt %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_help_center_article_restore', { slug : article.slug }) }}">
+										<i class="bi bi-trash-fill dropdown-item-icon"></i>
+										{{ 'Restore'|trans }}
+									</a>
+                                    <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-article-delete-form').submit();" class="dropdown-item">
+                                        <i class="bi bi-trash dropdown-item-icon"></i>
+                                        {{ 'Delete permanently'|trans }}
+                                    </a>
+                                    <form id="js-article-delete-form" action="{{ path('dashboard_admin_help_center_article_delete', { slug : article.slug }) }}" method="post" class="">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('article_deletion_' ~ article.slug) }}">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                    </form>
+                                {% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_help_center_article_disable', { slug : article.slug }) }}">
+										<i class="bi bi-alarm dropdown-item-icon"></i>
+										{{ 'Delete'|trans }}
+									</a>
+                                {% endif %}
 							</div>
 						</div>
 					</td>

@@ -31,7 +31,7 @@ class StatisticsController extends BaseController
     {
         $restaurant = 'all';
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         /** @var RecipeDate $recipeDate */
@@ -190,7 +190,7 @@ class StatisticsController extends BaseController
     {
         $restaurant = 'all';
         if ($this->authChecker->isGranted(HasRoles::RESTAURANT)) {
-            $restaurant = $this->getUser()->getRestaurant()->getSlug();
+            $restaurant = $this->getUser()->getRestaurant()?->getSlug();
         }
 
         /** @var RecipeDate $recipeDate */

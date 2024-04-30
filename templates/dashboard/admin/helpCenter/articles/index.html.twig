@@ -18,25 +18,6 @@
 {% endblock %}
 
 {% block content %}
-    {#  
-    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
-        <div class="col-xl-2 col-lg-4 col-md-6 col-12">
-            <div class="mb-lg-4 mb-2">
-                <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control" placeholder="{{ 'Search...'|trans }}">
-            </div>
-        </div>
-        <div class="col-xxl-1 col-lg-2 col-md-6 col-12">
-            <select class="form-select">
-                <option value="">{{ "Select an option"|trans }}</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Pending">Pending</option>
-                <option value="Modified">Modified</option>
-                <option value="Finished">Finished</option>
-                <option value="Cancel">Cancel</option>
-            </select>
-        </div>
-    </div>
-    #}
     <div class="p-4 row justify-content-md-between mb-4 mb-xl-0 gx-3">
         <div class="col-12 col-lg-6 mb-3 mb-lg-0">
             <form class="d-flex align-items-center">
@@ -46,20 +27,13 @@
                 <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
             </form>
         </div>
-        <div class="col-6 col-lg-3">
+        <div class="col-12 col-lg-6">
             <select class="form-select">
                 <option selected="">{{ "Select an option"|trans }}</option>
-                <option value="1">Shipped</option>
-                <option value="2">Cancelled</option>
-                <option value="3">Return</option>
-            </select>
-        </div>
-        <div class="col-6 col-lg-3">
-            <select class="form-select">
-                <option selected="">{{ "Select an option"|trans }}</option>
-                <option value="1">Shipped</option>
-                <option value="2">Cancelled</option>
-                <option value="3">Processing</option>
+                <option value="">{{ knp_pagination_sortable(rows, "Update date"|trans ~ ' (' ~ "desc"|trans ~ ')', "a.updatedAt", {"direction": "desc", "criteria": "a.updatedAt"}) }}</option>
+                <option value="">{{ knp_pagination_sortable(rows, "Update date"|trans ~ ' (' ~ "asc"|trans ~ ')', "a.updatedAt", {"direction": "asc", "criteria": "a.updatedAt"}) }}</option>
+                <option value="">{{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "desc"|trans ~ ')', "a.views", {"direction": "desc", "criteria": "a.views"}) }}</option>
+                <option value="">{{ knp_pagination_sortable(rows, "Popularity"|trans ~ ' (' ~ "asc"|trans ~ ')', "a.views", {"direction": "asc", "criteria": "a.views"}) }}</option>
             </select>
         </div>
     </div>

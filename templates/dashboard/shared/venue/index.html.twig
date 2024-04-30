@@ -1,9 +1,9 @@
 {% extends 'dashboard.html.twig' %}
 
 {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-    {% set pagetitle = 'Manage venues' | trans %}
+    {% set pagetitle = 'Manage venues'|trans %}
 {% else %}
-    {% set pagetitle = 'My venues' | trans %}
+    {% set pagetitle = 'My venues'|trans %}
 {% endif %}
 {% block title pagetitle %}
 
@@ -72,6 +72,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script>
         $(document).ready(function () {
             if (getURLParameter('directory') != "null") {

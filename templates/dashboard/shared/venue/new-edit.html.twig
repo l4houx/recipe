@@ -26,16 +26,14 @@
                 {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
                     {{ form_errors(form) }}
+                    {{ form_widget(form._token) }}
 
                     {{ form_row(form.type) }}
                     {{ form_row(form.amenities) }}
-                    {{ form_row(form.seatedguests) }}
-                    {{ form_row(form.standingguests) }}
                     {{ form_row(form.neighborhoods) }}
                     {{ form_row(form.pricing) }}
                     {{ form_row(form.availibility) }}
-                    {{ form_row(form.foodbeverage) }}
-                    {{ form_row(form.quoteform) }}
+                    {{ form_row(form.isQuoteform) }}
                     {{ form_row(form.contactemail) }}
 
                     {{ form_row(form.street) }}
@@ -44,7 +42,7 @@
                     {{ form_row(form.postalcode) }}
                     {{ form_row(form.state) }}
                     {{ form_row(form.country) }}
-                    {{ form_row(form.showmap) }}
+                    {{ form_row(form.isShowmap) }}
 
                     {{ form_row(form.images) }}
                     <div class="col-12">
@@ -57,8 +55,9 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     {% if google_maps_api_key != "" %}
-        <script type="text/javascript" src="{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps/api/js?sensor=false&key={{google_maps_api_key}}"></script>
+        <script type="text/javascript" src="{{ setting.getCurrentRequestProtocol() }}://maps.google.com/maps/api/js?sensor=false&key={{google_maps_api_key}}"></script>
     {% endif %}
     <script>
         $(document).ready(function () {
@@ -83,20 +82,20 @@
             }
             $('#venue_street, #venue_street2, #venue_city, #venue_postalcode, #venue_state').blur(function () {
                 if (getVenueAddress() != "") {
-                    $('.venue-map').attr('src', '{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q=' + getVenueAddress() + '&t=&z=13&ie=UTF8&iwloc=&output=embed');
+                    $('.venue-map').attr('src', '{{ setting.getCurrentRequestProtocol() }}://maps.google.com/maps?q=' + getVenueAddress() + '&t=&z=13&ie=UTF8&iwloc=&output=embed');
                     $('.venue-map').show();
                 }
             });
             $('#venue_country').on("select2-blur", function (e) {
                 if (getVenueAddress() != "") {
-                    $('.venue-map').attr('src', '{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q=' + getVenueAddress() + '&t=&z=13&ie=UTF8&iwloc=&output=embed');
+                    $('.venue-map').attr('src', '{{ setting.getCurrentRequestProtocol() }}://maps.google.com/maps?q=' + getVenueAddress() + '&t=&z=13&ie=UTF8&iwloc=&output=embed');
                     $('.venue-map').show();
                 }
             });
-        {% if venue.id %}
-            $('#venue_country').trigger('blur');
-        {% endif %}
-        {% if google_maps_api_key != "" %}
+            {% if venue.id %}
+                $('#venue_country').trigger('blur');
+            {% endif %}
+            {% if google_maps_api_key != "" %}
                 $('#venue_save').click(function (e) {
                     if (getVenueAddress() != "") {
                         e.preventDefault();
@@ -110,7 +109,7 @@
                         });
                     }
                 });
-        {% endif %}
-            });
+            {% endif %}
+        });
     </script>
 {% endblock %}

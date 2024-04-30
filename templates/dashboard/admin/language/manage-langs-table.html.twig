@@ -13,7 +13,7 @@
 				{% set link = path('dashboard_admin_language_edit', { slug : language.slug }) %}
 				<tr>
 					<td>{{ language.name }}</td>
-					<td>{{ language.venues|length }}</td>
+					<td>{{ language.recipes | length }}</td>
 					<td>
 						{% if language.isOnline == false %}
 							<span class="badge bg-danger-soft">

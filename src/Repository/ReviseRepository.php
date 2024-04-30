@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Revise;
-use App\Entity\Content;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -41,12 +40,20 @@ class ReviseRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return Revise[] Returns an array of Revise objects
+     */
     public function findLatest(int $maxResults): array
     {
         return $this->createQueryBuilder('r')
-            ->where('r.status = :status')
+            ->andWhere('r.status = :status')
+            ->andWhere('r.createdAt <= :now')
+            ->orderBy('r.createdAt', 'DESC')
+            ->setParameters([
+                'status' => Revise::ACCEPTED,
+                'now' => new \DateTime(),
+            ])
             ->setMaxResults($maxResults)
-            ->setParameter('status', Revise::PENDING)
             ->getQuery()
             ->getResult()
         ;
@@ -68,8 +75,8 @@ class ReviseRepository extends ServiceEntityRepository
     public function queryAllForUser(User $user): QueryBuilder
     {
         return $this->createQueryBuilder('r')
-            ->addSelect('c')
-            ->leftJoin('r.target', 'c')
+            ->addSelect('p')
+            ->leftJoin('r.target', 'p')
             ->where('r.author = :user')
             ->orderBy('r.createdAt', 'DESC')
             ->setMaxResults(10)

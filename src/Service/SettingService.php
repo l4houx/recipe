@@ -557,24 +557,24 @@ class SettingService
         $restaurantname = array_key_exists('restaurantname', $criterias) ? $criterias['restaurantname'] : 'all';
         $restaurantslug = array_key_exists('restaurantslug', $criterias) ? $criterias['restaurantslug'] : 'all';
         $username = array_key_exists('username', $criterias) ? $criterias['username'] : 'all';
-        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $email = array_key_exists('email', $criterias) ? $criterias['email'] : 'all';
         $firstname = array_key_exists('firstname', $criterias) ? $criterias['firstname'] : 'all';
         $lastname = array_key_exists('lastname', $criterias) ? $criterias['lastname'] : 'all';
         $isVerified = array_key_exists('isVerified', $criterias) ? $criterias['isVerified'] : true;
         $isSuspended = array_key_exists('isSuspended', $criterias) ? $criterias['isSuspended'] : false;
-        $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
         $countryslug = array_key_exists('countryslug', $criterias) ? $criterias['countryslug'] : 'all';
         $followedby = array_key_exists('followedby', $criterias) ? $criterias['followedby'] : 'all';
         $hasboughtsubscriptionforRecipe = array_key_exists('hasboughtsubscriptionfor', $criterias) ? $criterias['hasboughtsubscriptionfor'] : "all";
         $hasboughtsubscriptionforRestaurant = array_key_exists('hasboughtsubscriptionforrestaurant', $criterias) ? $criterias['hasboughtsubscriptionforrestaurant'] : "all";
         $apiKey = array_key_exists('apikey', $criterias) ? $criterias['apikey'] : "all";
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $isOnHomepageSlider = array_key_exists('isOnHomepageSlider', $criterias) ? $criterias['isOnHomepageSlider'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
         $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'u.createdAt';
         $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
         $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
 
-        return $this->em->getRepository("App\Entity\User")->getUsers(/*$role, */$keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $slug, $email, $firstname, $lastname, $isVerified, $isSuspended, $isOnHomepageSlider, $countryslug, $followedby, $hasboughtsubscriptionforRecipe, $hasboughtsubscriptionforRestaurant, $apiKey, $limit, $sort, $order, $count);
+        return $this->em->getRepository("App\Entity\User")->getUsers($role, $keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $email, $firstname, $lastname, $isVerified, $isSuspended, $countryslug, $slug, $followedby, $hasboughtsubscriptionforRecipe, $hasboughtsubscriptionforRestaurant, $apiKey, $isOnHomepageSlider, $limit, $sort, $order, $count);
     }
 
     // Returns the testimonials after applying the specified search criterias
@@ -635,7 +635,7 @@ class SettingService
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
         $selecttags = array_key_exists('selecttags', $criterias) ? $criterias['selecttags'] : false;
-        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $category = array_key_exists('category', $criterias) ? $criterias['category'] : 'all';
@@ -651,7 +651,7 @@ class SettingService
     public function getBlogPostCategories($criterias): QueryBuilder
     {
         $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
-        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : false;
+        $isOnline = \array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
         $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
         $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
         $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
@@ -659,6 +659,21 @@ class SettingService
         $sort = \array_key_exists('sort', $criterias) ? $criterias['sort'] : 'ASC';
 
         return $this->em->getRepository("App\Entity\PostCategory")->getBlogPostCategories($isOnline, $keyword, $slug, $limit, $order, $sort);
+    }
+
+    // Returns the posts types after applying the specified search criterias
+    public function getPostsTypes($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        $isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
+        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $slug = array_key_exists('slug', $criterias) ? $criterias['slug'] : 'all';
+        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'p.name';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'ASC';
+        $hasvenues = array_key_exists('hasvenues', $criterias) ? $criterias['hasvenues'] : 'all';
+
+        return $this->em->getRepository("App\Entity\PostType")->getPostsTypes($isOnline, $keyword, $slug, $limit, $sort, $order, $hasvenues);
     }
 
     // Removes all the specified user cart elements

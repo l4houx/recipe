@@ -2,7 +2,7 @@
 
 {# {% form_theme form 'form/jquery.collection.html.twig' %} #}
 
-{% set pagetitle = 'Add a new recipes'|trans %}
+{% set pagetitle = 'Add a new recipe'|trans %}
 {% if recipe.id %}{% set pagetitle = 'Update the recipe'|trans %}{% endif %}
 {% block title pagetitle %}
 
@@ -51,7 +51,7 @@
                         $('.recipe-date-reference').each(function () {
                             if ($(this).val() == "{{recipeDate.reference}}") {
                                 $(this).closest("fieldset").prop('disabled', true);
-                                $(this).closest("fieldset").prepend('<p class="alert alert-danger alert-icon"><i class="fas fa-exclamation-circle"></i> {{ "This recipe date is locked because a payout request has been submitted"|trans }}</p>');
+                                $(this).closest("fieldset").prepend('<p class="alert alert-danger alert-icon"><i class="bi bi-exclamation-circle"></i> {{ "This recipe date is locked because a payout request has been submitted"|trans }}</p>');
                             }
                         });
                     {% endif %}

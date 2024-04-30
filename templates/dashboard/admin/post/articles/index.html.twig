@@ -19,7 +19,7 @@
 
 {% block content %}
     <div class="p-4 row justify-content-md-between mb-4 mb-xl-0 gx-3">
-        <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
             <form class="d-flex align-items-center">
                 <span class="position-absolute ps-3 search-icon">
                     <i class="bi bi-search"></i>
@@ -27,7 +27,7 @@
                 <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
             </form>
         </div>
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-lg-6">
             <select class="form-select">
                 <option selected="">{{ "Select an option"|trans }}</option>
                 <option selected="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.createdAt", {"direction": "desc", "criteria": "p.createdAt"}) }}</option>

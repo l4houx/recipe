@@ -94,6 +94,73 @@ class UserController extends AdminBaseController
         return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route(path: '/{slug}/restore', name: 'restore', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function restore(string $slug): Response
+    {
+        /** @var User $user */
+        $user = $this->settingService->getUsers(['slug' => $slug, 'isVerified' => 'all'])->getQuery()->getOneOrNullResult();
+        if (!$user) {
+            $this->addFlash('danger', $this->translator->trans('The user can not be found'));
+
+            return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $user->setDeletedAt(null);
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        $this->addFlash('success', $this->translator->trans('Content was restored successfully.'));
+
+        return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route(path: '/{slug}/enable', name: 'enable', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/{slug}/disable', name: 'disable', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function enabledisable(string $slug): Response
+    {
+        /** @var User $user */
+        $user = $this->settingService->getUsers(['slug' => $slug, 'isVerified' => 'all'])->getQuery()->getOneOrNullResult();
+        if (!$user) {
+            $this->addFlash('danger', $this->translator->trans('The user can not be found'));
+
+            return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        if ($user->isVerified()) {
+            $user->setIsVerified(false);
+            if ($user->hasRole(HasRoles::RESTAURANT)) {
+                foreach ($user->getRestaurant()->getScanners() as $scanner) {
+                    $scanner->getUser()->setIsVerified(false);
+                    $this->em->persist($scanner->getUser());
+                }
+                foreach ($user->getRestaurant()->getPointofsales() as $pointofsale) {
+                    $pointofsale->getUser()->setIsVerified(false);
+                    $this->em->persist($pointofsale->getUser());
+                }
+            }
+            $this->addFlash('info', $this->translator->trans('The user has been disabled'));
+        } else {
+            $user->setIsVerified(true);
+            if ($user->hasRole(HasRoles::RESTAURANT)) {
+                foreach ($user->getRestaurant()->getScanners() as $scanner) {
+                    $scanner->getUser()->setIsVerified(true);
+                    $this->em->persist($scanner->getUser());
+                }
+                foreach ($user->getRestaurant()->getPointofsales() as $pointofsale) {
+                    $pointofsale->getUser()->setIsVerified(true);
+                    $this->em->persist($pointofsale->getUser());
+                }
+            }
+            $this->addFlash('success', $this->translator->trans('The user has been enabled'));
+        }
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route(path: '/{id}/suspended', name: 'suspended', methods: ['POST', 'DELETE'], requirements: ['id' => Requirement::DIGITS])]
     public function suspended(Request $request, User $user, AccountSuspendedService $accountSuspendedService): Response
     {
@@ -128,8 +195,8 @@ class UserController extends AdminBaseController
         return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route(path: '/{slug}/more-information', name: 'user_information', methods: ['GET'], requirements: ['id' => Requirement::ASCII_SLUG])]
-    public function details(Request $request, string $slug): Response
+    #[Route(path: '/{slug}/more-information', name: 'information', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function informations(Request $request, string $slug): Response
     {
         /** @var User $user */
         $user = $this->settingService->getUsers(['slug' => $slug, 'isVerified' => 'all'])->getQuery()->getOneOrNullResult();
@@ -140,6 +207,24 @@ class UserController extends AdminBaseController
         }
 
         return $this->render('dashboard/admin/user/information.html.twig', compact('user'));
+    }
+
+    #[Route(path: '/{slug}/empty-cart', name: 'empty_cart', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
+    public function emptyCart(string $slug): Response
+    {
+        /** @var User $user */
+        $user = $this->settingService->getUsers(['slug' => $slug, 'isVerified' => 'all'])->getQuery()->getOneOrNullResult();
+        if (!$user) {
+            $this->addFlash('danger', $this->translator->trans('The user can not be found'));
+
+            return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $this->settingService->emptyCart($user);
+
+        $this->addFlash('info', $this->translator->trans('The user cart has been emptied'));
+
+        return $this->redirectToRoute('dashboard_admin_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route(path: '/search', name: 'autocomplete')]

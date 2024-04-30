@@ -241,7 +241,7 @@ class SettingController extends AdminBaseController
                 'multiple' => false,
                 'expanded' => true,
                 'label' => t('Enable comments'),
-                'choices' => ['No' => 'no', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
+                'choices' => ['No' => 'no', 'Native comments' => 'native', 'Facebook comments' => 'facebook', 'Disqus comments' => 'disqus'],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
                 'constraints' => [
                     new NotNull(),

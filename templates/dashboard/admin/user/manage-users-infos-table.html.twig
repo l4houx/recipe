@@ -18,7 +18,6 @@
 			<tr>
 				<td width="30%">{{ "Role"|trans }}</td>
 				<td>
-					{#{% include "global/user-roles.html.twig" %} #}
 					{{ user.getRole|trans|raw }}
 				</td>
 			</tr>
@@ -87,7 +86,7 @@
 			<tr>
 				<td width="30%">{{ "Registration date"|trans }}</td>
 				<td>
-					{{ user.createdAt ? user.createdAt | ago() }}
+					{{ user.createdAt | format_date('long') }}
 				</td>
 			</tr>
 			<tr>
@@ -99,7 +98,7 @@
 			<tr>
 				<td width="30%">{{ "Update date"|trans }}</td>
 				<td>
-					{{ user.updatedAt ? user.updatedAt | ago() }}
+					{{ user.updatedAt | localizeddate('medium', 'short', app.request.locale, date_timezone, date_format) }}
 				</td>
 			</tr>
 			<tr>
@@ -125,16 +124,14 @@
 					</td>
 				</tr>
 			{% endif %}
-			{#
             {% if user.avatarName %}
                 <tr>
                     <td width="30%">{{ "Avatar"|trans }}</td>
                     <td>
-                        <img src="{{ asset(user.getAvatarPath) }}" class="img-thumbnail img-50-50" />
+                        <img src="{{ asset(user.getAvatarPath) }}" class="rounded-circle avatar-lg">
                     </td>
                 </tr>
             {% endif %}
-            #}
 			{% if user.facebookId %}
 				<tr>
 					<td width="30%">{{ "Registered using Facebook"|trans }}
@@ -161,8 +158,8 @@
 				<tr>
 					<td width="30%">{{ "Facebook profile picture"|trans }}</td>
 					<td>
-						<a class="fancybox" href="{{ user.facebookProfilePicture }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
-							<img src="{{ user.facebookProfilePicture }}" class="img-thumbnail img-50-50"/>
+						<a class="glightbox" href="{{ user.facebookProfilePicture }}" data-bs-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+							<img src="{{ user.facebookProfilePicture }}" class="rounded-3 img-fluid"/>
 						</a>
 					</td>
 				</tr>
@@ -198,14 +195,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#  
-				                <tr>
-				                    <td width="30%">{{ "Avatar"|trans }}</td>
-				                    <td>
-				                        {% include "global/user-avatar.html.twig" with { user: user, type: "xl" } %}
-				                    </td>
-				                </tr>
-				                #}
 				<tr>
 					<td width="30%">{{ "Cart elements"|trans }}</td>
 					<td>
@@ -256,8 +245,8 @@
 					<tr>
 						<td width="30%">{{ "Logo"|trans }}</td>
 						<td>
-							<a class="fancybox" href="{{ asset(user.restaurant.getLogoPath) }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
-								<img src="{{ asset(user.restaurant.getLogoPath) }}" class="img-thumbnail img-50-50"/>
+							<a class="glightbox" href="{{ asset(user.restaurant.getLogoPath) }}" data-bs-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+								<img src="{{ asset(user.restaurant.getLogoPath) }}" class="rounded-3 img-fluid">
 							</a>
 						</td>
 					</tr>
@@ -266,8 +255,8 @@
 					<tr>
 						<td width="30%">{{ "Cover picture"|trans }}</td>
 						<td>
-							<a class="fancybox" href="{{ asset(user.restaurant.getCoverPath) }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
-								<img src="{{ asset(user.restaurant.getCoverPath) }}" class="img-thumbnail img-50-50"/>
+							<a class="glightbox" href="{{ asset(user.restaurant.getCoverPath) }}" data-bs-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+								<img src="{{ asset(user.restaurant.getCoverPath) }}" class="rounded-3 img-fluid"/>
 							</a>
 						</td>
 					</tr>

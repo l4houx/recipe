@@ -195,20 +195,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @param string                   $restaurantname
      * @param string                   $restaurantslug
      * @param string                   $username
-     * @param string                   $slug
-     * @param string                   $followedby
      * @param string                   $email
      * @param string                   $firstname
      * @param string                   $lastname
      * @param bool                     $isVerified
      * @param bool                     $isSuspended
+     * @param string                   $countryslug
+     * @param string                   $slug
+     * @param string                   $followedby
+     * @param                          $hasboughtsubscriptionforRecipe
+     * @param                          $hasboughtsubscriptionforRestaurant
+     * @param string                   $apiKey
      * @param HomepageHeroSetting|null $isOnHomepageSlider
      * @param int                      $limit
      * @param string                   $sort
      * @param string                   $order
      * @param int                      $count
      */
-    public function getUsers($role, $keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $slug, $followedby, $email, $firstname, $lastname, $isVerified, $isSuspended, $hasboughtsubscriptionforRecipe, $hasboughtsubscriptionforRestaurant, $apiKey,$isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
+    public function getUsers($role, $keyword, $createdbyrestaurantslug, $restaurantname, $restaurantslug, $username, $email, $firstname, $lastname, $isVerified, $isSuspended, $countryslug, $slug, $followedby, $hasboughtsubscriptionforRecipe, $hasboughtsubscriptionforRestaurant, $apiKey, $isOnHomepageSlider, $limit, $sort, $order, $count): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -253,10 +257,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->andWhere('u.username = :username')->setParameter('username', $username);
         }
 
-        if ('all' !== $slug) {
-            $qb->andWhere('u.slug = :slug')->setParameter('slug', $slug);
-        }
-
         if ('all' !== $email) {
             $qb->andWhere('u.email = :email')->setParameter('email', $email);
         }
@@ -277,20 +277,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->andWhere('u.isSuspended = :isSuspended')->setParameter('isSuspended', $isSuspended);
         }
 
-        if (true === $isOnHomepageSlider) {
-            $qb->andWhere('u.isrestaurantonhomepageslider IS NOT NULL');
+        if ($countryslug !== "all") {
+            $qb->leftJoin("u.country", "country");
+            //$qb->join("country.translations", "countrytranslations");
+            $qb->andWhere("country.slug = :countryslug")->setParameter("countryslug", $countryslug);
+        }
+
+        if ('all' !== $slug) {
+            $qb->andWhere('u.slug = :slug')->setParameter('slug', $slug);
         }
 
         if ($followedby !== "all") {
             $qb->andWhere(":followedby MEMBER OF restaurant.followedby")->setParameter("followedby", $followedby);
-        }
-
-        if ('all' !== $limit) {
-            $qb->setMaxResults($limit);
-        }
-
-        if ($apiKey !== "all") {
-            $qb->andWhere("u.apiKey = :apiKey")->setParameter("apiKey", $apiKey);
         }
 
         if ($hasboughtsubscriptionforRecipe !== "all" || $hasboughtsubscriptionforRestaurant != "all") {
@@ -312,13 +310,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->andWhere("recipeRestaurant.slug = :hasboughtsubscriptionforrestaurant")->setParameter("hasboughtsubscriptionforrestaurant", $hasboughtsubscriptionforRestaurant);
         }
 
+        if ($apiKey !== "all") {
+            $qb->andWhere("u.apiKey = :apiKey")->setParameter("apiKey", $apiKey);
+        }
+
+        if (true === $isOnHomepageSlider) {
+            $qb->andWhere('u.isrestaurantonhomepageslider IS NOT NULL');
+        }
+
+        if ('all' !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
         if ($hasboughtsubscriptionforRecipe !== "all") {
             $qb->orderBy("orders.createdAt", "DESC");
         } else {
             $qb->orderBy($sort, $order);
         }
 
-        $qb->andWhere('u.slug != :administrator')->setParameter('administrator', 'administrator');
+        $qb->andWhere('u.slug != :superadmin')->setParameter('superadmin', 'superadmin');
 
         return $qb;
     }

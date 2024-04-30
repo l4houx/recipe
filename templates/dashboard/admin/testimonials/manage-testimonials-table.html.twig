@@ -2,7 +2,7 @@
 	<table class="table mb-0 text-nowrap table-hover table-centered">
 		<thead class="">
 			<tr>
-				<th># {# {{ knp_pagination_sortable(rows, '#', 'u.id') }} #}</th>
+				<th>#{# {{ knp_pagination_sortable(rows, '#', 'u.id') }} #}</th>
 				<th>{{ 'User name / Email'|trans }}</th>
 				<th>{{ 'Full name / Premium'|trans }}</th>
 				<th>{{ 'Content'|trans }}</th>
@@ -28,8 +28,8 @@
 										{{ testimonial.author.username }} / {{ testimonial.author.email }}
 									</h4>
 									<span>
-										{{ 'Published'|trans }}
-										{{ testimonial.createdAt ? testimonial.createdAt | ago() }}
+										{{ 'Published the'|trans }}
+										{{ testimonial.createdAt | format_date('long') }}
 									</span>
 								</div>
 							</div>
@@ -41,7 +41,7 @@
 						{% include 'global/rating.html.twig' with {'rating' : testimonial.rating, 'class' : 'fs-6 align-top'} %}
                     </td>
 					<td>
-						{{ testimonial.updatedAt ? testimonial.updatedAt | ago() : '' }}
+						{{ testimonial.updatedAt | localizeddate('medium', 'short', app.request.locale, date_timezone, date_format) }}
 					</td>
 					<td>
 						{% if testimonial.isOnline == false %}

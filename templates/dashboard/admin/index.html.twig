@@ -4,24 +4,25 @@
 {% block title pagetitle %}
 
 {% block content %}
+	{#  
 	<div class="row">
 		<div class="col-xl-3 col-lg-6 col-md-12 col-12">
 			<div class="card mb-4">
 				<div class="card-body">
 					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
 						<div>
-							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Users"|trans }}</span>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "User creators"|trans }}</span>
 						</div>
 						<div>
 							<span class="bi bi-person-check fs-3 text-primary"></span>
 						</div>
 					</div>
-					<h2 class="fw-bold mb-1">{{ setting.getUsers({"roles": "user", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}</h2>
+					<h2 class="fw-bold mb-1">{{ setting.getUsers({"role": "creator", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}</h2>
 					<span class="text-success fw-semibold">
 						<i class="bi bi-graph-up-arrow me-1"></i>
-						+{{ setting.getUsers({"roles": "user", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}
+						+{{ setting.getUsers({"role": "creator", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}
 					</span>
-					<span class="ms-1 fw-medium">{{ "Enabled users"|trans }}</span>
+					<span class="ms-1 fw-medium">{{ "Active creators"|trans }}</span>
 				</div>
 			</div>
 		</div>
@@ -30,18 +31,18 @@
 				<div class="card-body">
 					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
 						<div>
-							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Users"|trans }}</span>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "User restauranters"|trans }}</span>
 						</div>
 						<div>
 							<span class="bi bi-person-slash fs-3 text-primary"></span>
 						</div>
 					</div>
-					<h2 class="fw-bold mb-1">{{ setting.getUsers({"roles": "user", "count": true, "isVerified": false}).getQuery().getSingleScalarResult() }}</h2>
+					<h2 class="fw-bold mb-1">{{ setting.getUsers({"role": "restaurant", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}</h2>
 					<span class="text-danger fw-semibold">
 						<i class="bi bi-graph-down-arrow me-1"></i>
-						+{{ setting.getUsers({"roles": "user", "count": true, "isVerified": false}).getQuery().getSingleScalarResult() }}
+						+{{ setting.getUsers({"role": "restaurant", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}
 					</span>
-					<span class="ms-1 fw-medium">{{ "Disabled users"|trans }}</span>
+					<span class="ms-1 fw-medium">{{ "Active restauranters"|trans }}</span>
 				</div>
 			</div>
 		</div>
@@ -50,18 +51,18 @@
 				<div class="card-body">
 					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
 						<div>
-							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Users"|trans }}</span>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Points of sale"|trans }}</span>
 						</div>
 						<div>
-							<span class="bi bi-person-lock fs-3 text-primary"></span>
+							<span class="bi bi-printer fs-3 text-primary"></span>
 						</div>
 					</div>
-					<h2 class="fw-bold mb-1">{{ setting.getUsers({"roles": "user", "count": true, "isSuspended": true}).getQuery().getSingleScalarResult() }}</h2>
+					<h2 class="fw-bold mb-1">{{ setting.getUsers({"role": "creator", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult() }}</h2>
 					<span class="text-success fw-semibold">
-						<i class="bi bi-graph-up-arrowp me-1"></i>
-						+{{ setting.getUsers({"roles": "user", "count": true, "isSuspended": true}).getQuery().getSingleScalarResult() }}
+						<i class="bi bi-graph-up-arrow me-1"></i>
+						+{{ setting.getUsers({"role": "pointofsale", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult() }}
 					</span>
-					<span class="ms-1 fw-medium">{{ "Suspended users"|trans }}</span>
+					<span class="ms-1 fw-medium">{{ "Points of sale"|trans }}</span>
 				</div>
 			</div>
 		</div>
@@ -70,18 +71,103 @@
 				<div class="card-body">
 					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
 						<div>
-							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Users"|trans }}</span>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Scanners"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-qr-code-scan fs-3 text-primary"></span>
+						</div>
+					</div>
+					<h2 class="fw-bold mb-1">{{ setting.getUsers({"role": "creator", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult() }}</h2>
+					<span class="text-success fw-semibold">
+						<i class="bi bi-graph-up-arrow me-1"></i>
+						+{{ setting.getUsers({"role": "scanner", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult() }}
+					</span>
+					<span class="ms-1 fw-medium">{{ "Scanners"|trans }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	#}
+
+
+	<div class="row">
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "User creators"|trans }}</span>
 						</div>
 						<div>
 							<span class="bi bi-person-check fs-3 text-primary"></span>
 						</div>
 					</div>
-					<h2 class="fw-bold mb-1">22,786</h2>
-					<span class="text-success fw-semibold">
-						<i class="bi bi-graph-up-arrow me-1"></i>
-						+200
-					</span>
-					<span class="ms-1 fw-medium">Instructor</span>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-primary mb-0 fw-bold">
+							{{ setting.getUsers({"role": "creator", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}
+						</h1>
+						<p class="mb-0">{{ "Active creators"|trans }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "User restauranters"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-person-vcard fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-info mb-0 fw-bold">
+							{{ setting.getUsers({"role": "restaurant", "count": true, "isVerified": true}).getQuery().getSingleScalarResult() }}
+						</h1>
+						<p class="mb-0">{{ "Active restauranters"|trans }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Points of sale"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-printer fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-success mb-0 fw-bold">
+							{{ dump(setting.getUsers({"role": "pointofsale", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult()) }}
+						</h1>
+						<p class="mb-0">{{ "Points of sale"|trans }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Scanners"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-qr-code-scan fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-danger mb-0 fw-bold">
+							{{ dump(setting.getUsers({"role": "scanner", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult()) }}
+						</h1>
+						<p class="mb-0">{{ "Scanners"|trans }}</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -92,9 +178,9 @@
 			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
 				<div class="card h-100">
 					<div class="card-header d-flex align-items-center justify-content-between card-header-height">
-						<h4 class="mb-0">{{ 'Users'|trans }}</h4>
+						<h4 class="mb-0">{{ 'Users summary'|trans }}</h4>
 						<a href="{{ path('dashboard_admin_user_index') }}" class="btn btn-outline-secondary btn-sm">
-							{{ 'View all'|trans }}
+							{{ 'Manage users'|trans }}
 						</a>
 					</div>
 					<div class="card-body">
@@ -108,9 +194,9 @@
 			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
 				<div class="card h-100">
 					<div class="card-header d-flex align-items-center justify-content-between card-header-height">
-						<h4 class="mb-0">{{ 'Testimonials'|trans }}</h4>
+						<h4 class="mb-0">{{ 'Testimonials summary'|trans }}</h4>
 						<a href="{{ path('dashboard_admin_testimonial_index') }}" class="btn btn-outline-secondary btn-sm">
-							{{ 'View all'|trans }}
+							{{ 'Manage testimonials'|trans }}
 						</a>
 					</div>
 					<div class="card-body">
@@ -120,13 +206,177 @@
 			</div>
 		{% endif %}
 	</div>
+
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-12 mb-2">
+			<div class="d-lg-flex align-items-center justify-content-between">
+				<h4 class="mb-0">{{ "Recipes summary"|trans }}</h4>
+				<a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary btn-sm">
+					{{ "Manage recipes"|trans }}
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Recipes added"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-calendar fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-primary mb-0 fw-bold">
+							{{ setting.getRecipes({"count": true, "isOnline": "all", "elapsed": "all"}).getQuery().getSingleScalarResult() }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Published recipes"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-calendar fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-info mb-0 fw-bold">
+							{{ setting.getRecipes({"count": true, "isOnline": true, "elapsed": "all"}).getQuery().getSingleScalarResult() }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Upcoming recipes"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-calendar fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-success mb-0 fw-bold">
+							{{ setting.getRecipes({"count": true, "isOnline": true, "elapsed": false}).getQuery().getSingleScalarResult() }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Recipe dates"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-calendar fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-danger mb-0 fw-bold">
+							{{ setting.getRecipeDates({"count": true}).getQuery().getSingleScalarResult() }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{# {% set recipes = setting.getRecipes({"isOnline": "all", "elapsed": "all", "limit": 3}).getQuery().getResult() %} #}
+	{% if recipes | length > 0 %}
+		<div class="row">
+			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
+				<div class="card">
+					{% include "dashboard/shared/recipes/manage-recipes-table.html.twig" with {rows: recipes} %}
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="row">
+		<div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-4">
+			<div class="card h-100">
+				<div class="card-header d-flex align-items-center justify-content-between card-header-height">
+					<h4 class="mb-0">{{ 'Subscriptions'|trans }}</h4>
+					<a href="#" class="btn btn-outline-secondary btn-sm">{{ 'Manage subscriptions'|trans }}</a>
+				</div>
+				<div class="card-body">
+					<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" id="pills-daily-tab" data-bs-toggle="pill" href="#pills-daily" role="tab" aria-controls="pills-daily" aria-selected="true">{{ 'Last 30 days'|trans }}</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" id="pills-monthly-tab" data-bs-toggle="pill" href="#pills-monthly" role="tab" aria-controls="pills-monthly" aria-selected="false">{{ 'Last 24 months'|trans }}</a>
+						</li>
+					</ul>
+					<div class="tab-content" id="pills-tabContent">
+						<div class="tab-pane fade show active" id="pills-daily" role="tabpanel" aria-labelledby="pills-daily-tab">
+							<line-chart id="daily" points="{{ days | json_encode }}" x="date" y="amount"></line-chart>
+							<div id="daily" points="{{ days | json_encode }}" x="date" y="amount" class="apex-charts"></div>
+						</div>
+						<div class="tab-pane fade" id="pills-monthly" role="tabpanel" aria-labelledby="pills-monthly-tab">
+							<line-chart id="monthly" points="{{ months | json_encode }}" x="date" y="amount" hidden></line-chart>
+							<div id="monthly" points="{{ months | json_encode }}" x="date" y="amount" hidden class="apex-charts"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-4">
+			<div class="card h-100">
+				<div class="card-header d-flex align-items-center justify-content-between card-header-height">
+					<h4 class="mb-0">{{ 'Test emails'|trans }}</h4>
+					<a href="https://www.mail-tester.com/" rel="noreferrer" target="_blank" class="btn btn-outline-secondary btn-sm">
+						{{ 'Send'|trans }}
+					</a>
+				</div>
+				<div class="card-body">
+					<form action="{{ path('dashboard_admin_testmail') }}" method="post" class="row">
+						<div class="mb-3 col-12 col-md-12">
+							<input name="email" class="form-control" placeholder="{{ 'Email'|trans }}">
+						</div>
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary">
+								{{ 'Send'|trans }}
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-4">
+			<div class="card h-100">
+				<div class="card-header d-flex align-items-center justify-content-between card-header-height">
+					<h4 class="mb-0">{{ 'Notify'|trans }}</h4>
+					<a href="#" class="btn btn-outline-secondary btn-sm">{{ 'Manage notifications'|trans }}</a>
+				</div>
+				<div class="card-body">
+
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="row">
 		{% if revises is not empty %}
-			<div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-4">
+			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
 				<div class="card h-100">
 					<div class="card-header d-flex align-items-center justify-content-between card-header-height">
-						<h4 class="mb-0">{{ 'Revisions'|trans }}</h4>
-						<a href="#" class="btn btn-outline-secondary btn-sm">{{ 'View all'|trans }}</a>
+						<h4 class="mb-0">{{ 'Revisions summary'|trans }}</h4>
+						<a href="#" class="btn btn-outline-secondary btn-sm">{{ 'Manage revisions'|trans }}</a>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive overflow-y-hidden">
@@ -140,7 +390,7 @@
 								</thead>
 								<tbody>
 									{% for revise in revises %}
-										{% set link = path('dashboard_admin_revise_show', { id : revise.id }) %}
+										{% set link = path('dashboard_admin_revise_edit', { id : revise.id }) %}
 										<tr>
 											<td>
 												<a href="{{ link }}" class="text-inherit">
@@ -150,15 +400,18 @@
 																{{ revise.target.title }}
 															</h4>
 															<span>
-																{{ 'Published'|trans }}
-																{{ revise.createdAt ? revise.createdAt | ago }}
+																{{ 'Published the'|trans }}
+																{{ revise.createdAt | format_date('long') }}
 															</span>
 														</div>
 													</div>
 												</a>
 											</td>
 											<td>
-												{{ revise.author.username }}
+												<div class="d-flex align-items-center">
+													{% include "global/user-avatar.html.twig" with { user: revise.author, type: "xs", class: "me-2" } %}
+													<h5 class="mb-0">{{ revise.author.getFullName | lower | capitalize }}</h5>
+												</div>
 											</td>
 											<td>
 												<div class="dropdown dropstart">
@@ -183,13 +436,14 @@
 				</div>
 			</div>
 		{% endif %}
+		{#  
 		{% if recipes is not empty %}
 			<div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-4">
 				<div class="card h-100">
 					<div class="card-header d-flex align-items-center justify-content-between card-header-height">
-						<h4 class="mb-0">{{ 'Recipes'|trans }}</h4>
+						<h4 class="mb-0">{{ 'Recipes summary'|trans }}</h4>
 						<a href="{{ path('dashboard_admin_recipe_index') }}" class="btn btn-outline-secondary btn-sm">
-							{{ 'View all'|trans }}
+							{{ 'Manage recipes'|trans }}
 						</a>
 					</div>
 					<div class="card-body">
@@ -242,11 +496,12 @@
 				</div>
 			</div>
 		{% endif %}
+		#}
 		{% if reports is not empty %}
-			<div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-4">
+			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
 				<div class="card h-100">
 					<div class="card-header card-header-height d-flex align-items-center">
-						<h4 class="mb-0">{{ 'Reports'|trans }}</h4>
+						<h4 class="mb-0">{{ 'Reports summary'|trans }}</h4>
 					</div>
 					<div class="card-body">
 						<ul class="list-group list-group-flush list-timeline-activity">
@@ -286,4 +541,120 @@
 			</div>
 		{% endif %}
 	</div>
+
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-12 mb-2">
+			<div class="d-lg-flex align-items-center justify-content-between">
+				<h4 class="mb-0">{{ "Orders summary"|trans }}</h4>
+				<a href="{{ path('dashboard_admin_orders') }}" class="btn btn-outline-secondary btn-sm">
+					{{ "Manage orders"|trans }}
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Orders placed"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-cart fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-primary mb-0 fw-bold">
+							{{ setting.getOrders({"count": true, "status": "all"}).getQuery().getSingleScalarResult() }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Paid orders"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-cart fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-info mb-0 fw-bold">
+							{{ setting.getOrders({"count": true, "status": 1}).getQuery().getSingleScalarResult() }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Awaiting payment"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-cart fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-success mb-0 fw-bold">
+							{{ setting.getOrders({"count": true, "status": 0}).getQuery().getSingleScalarResult() }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xl-3 col-12">
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex align-items-center justify-content-between mb-3 lh-1">
+						<div>
+							<span class="fs-6 text-uppercase fw-semibold ls-md">{{ "Subscriptions sold"|trans }}</span>
+						</div>
+						<div>
+							<span class="bi bi-ticket fs-3 text-primary"></span>
+						</div>
+					</div>
+					<div class="text-center my-4">
+						<h1 class="display-3 text-danger mb-0 fw-bold">
+							{% set subscriptionsSold = setting.getOrders({"sumOrderElements": true, "status": 1}).getQuery().getSingleScalarResult() %}
+							{{ subscriptionsSold ? subscriptionsSold : 0 }}
+						</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% set rows = setting.getOrders({"status": "all", "limit": 3}).getQuery().getResult() %}
+	{% if rows | length > 0 %}
+		<div class="row mb-5">
+			<div class="col-12">
+				<div id="subscriptionsSalesByDateLineChart"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-12 mb-4">
+				<div class="card">
+					{% include "dashboard/shared/order/manage-orders-table.html.twig" with {rows: rows, header: false} %}
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		{{ gc_language(app.request.locale) }}
+		{% if subscriptionsSalesByDateLineChart is not null %}
+			{{ gc_draw(subscriptionsSalesByDateLineChart, 'subscriptionsSalesByDateLineChart') }}
+		{% endif %}
+	</script>
 {% endblock %}

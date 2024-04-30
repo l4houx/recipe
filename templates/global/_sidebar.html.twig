@@ -34,18 +34,33 @@
 								<li class="nav-item">
 									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#recipe-submenu-{{random}}" aria-expanded="false" aria-controls="recipe-submenu-{{random}}">
 										<i class="nav-icon bi bi-book me-2"></i>
-										{{ 'Recipe'|trans }}
+										{{ 'Recipes'|trans }}
 									</a>
-									<div id="recipe-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_recipe_category_index" or routename == "dashboard_admin_recipe_category_new" or routename == "dashboard_admin_recipe_category_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
+									<div id="recipe-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_recipe_date_statistics" or routename == "dashboard_admin_recipe_category_index" or routename == "dashboard_admin_recipe_category_new" or routename == "dashboard_admin_recipe_category_edit" or routename ==  "dashboard_admin_country_index" or routename == "dashboard_admin_country_new" or routename == "dashboard_admin_country_edit" or routename == "dashboard_admin_language_index" or routename == "dashboard_admin_language_new" or routename == "dashboard_admin_language_edit" or routename == "dashboard_admin_audience_index" or routename == "dashboard_admin_audience_new" or routename == "dashboard_admin_audience_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" %}active{% endif %}" href="{{ path('dashboard_admin_recipe_index') }}">
-													{{ 'Recipe'|trans }}
+												<a class="nav-link {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_recipe_date_statistics" %}active{% endif %}" href="{{ path('dashboard_admin_recipe_index') }}">
+													{{ 'Manage recipes'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
 												<a class="nav-link {% if routename == "dashboard_admin_recipe_category_index" or routename == "dashboard_admin_recipe_category_new" or routename == "dashboard_admin_recipe_category_edit" %}active{% endif %}" href="{{ path('dashboard_admin_recipe_category_index') }}">
-													{{ 'Category'|trans }}
+													{{ 'Categories'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_country_index" or routename == "dashboard_admin_country_new" or routename == "dashboard_admin_country_edit" %}active{% endif %}" href="{{ path('dashboard_admin_country_index') }}">
+													{{ 'Countries'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_language_index" or routename == "dashboard_admin_language_new" or routename == "dashboard_admin_language_edit" %}active{% endif %}" href="{{ path('dashboard_admin_language_index') }}">
+													{{ 'Languages'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_audience_index" or routename == "dashboard_admin_audience_new" or routename == "dashboard_admin_audience_edit" %}active{% endif %}" href="{{ path('dashboard_admin_audience_index') }}">
+													{{ 'Audiences'|trans }}
 												</a>
 											</li>
 										</ul>
@@ -56,11 +71,16 @@
 										<i class="nav-icon bi bi-newspaper me-2"></i>
 										{{ 'Blog'|trans }}
 									</a>
-									<div id="blog-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_post_index" or routename == "dashboard_admin_post_new" or routename == "dashboard_admin_post_edit" or routename == "dashboard_admin_post_category_index" or routename == "dashboard_admin_post_category_new" or routename == "dashboard_admin_post_category_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
+									<div id="blog-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_post_index" or routename == "dashboard_admin_post_new" or routename == "dashboard_admin_post_edit" or routename == "dashboard_admin_post_type_index" or routename == "dashboard_admin_post_type_new" or routename == "dashboard_admin_post_type_edit" or routename == "dashboard_admin_post_category_index" or routename == "dashboard_admin_post_category_new" or routename == "dashboard_admin_post_category_edit" or routename == "dashboard_admin_comment_index" %}show{% endif %}" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
 												<a class="nav-link {% if routename == "dashboard_admin_post_index" or routename == "dashboard_admin_post_new" or routename == "dashboard_admin_post_edit" %}active{% endif %}" href="{{ path('dashboard_admin_post_index') }}">
 													{{ 'Articles'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_post_type_index" or routename == "dashboard_admin_post_type_new" or routename == "dashboard_admin_post_type_edit" %}active{% endif %}" href="{{ path('dashboard_admin_post_type_index') }}">
+													{{ 'Post types'|trans }}
 												</a>
 											</li>
 											<li class="nav-item">
@@ -69,7 +89,7 @@
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="">
+												<a class="nav-link {% if routename == "dashboard_admin_comment_index" %}active{% endif %}" href="{{ path('dashboard_admin_comment_index') }}">
 													{{ 'Comments'|trans }}
 												</a>
 											</li>
@@ -187,40 +207,74 @@
 									</div>
 								</li>
 								<li class="nav-item">
-									<div class="navbar-heading">{{ 'Premium'|trans }}</div>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link {% if routename == "dashboard_admin_user_index" %}active{% endif %}" href="{{ path('dashboard_admin_user_index') }}">
-										<i class="nav-icon bi bi-person me-2"></i>
-										{{ 'Users'|trans }}
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#venues-submenu-{{random}}" aria-expanded="false" aria-controls="venues-submenu-{{random}}">
+										<i class="nav-icon bi bi-pin-map me-2"></i>
+										{{'Venues'|trans}}
 									</a>
+									<div id="venues-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_venue_index" or routename == "dashboard_admin_venue_new" or routename == "dashboard_admin_venue_edit" or routename == "dashboard_admin_venuetype_index" or routename == "dashboard_admin_venuetype_new" or routename == "dashboard_admin_venuetype_edit" or routename == "dashboard_admin_amenity_index" or routename == "dashboard_admin_amenity_new" or routename == "dashboard_admin_amenity_edit" %}show{% endif %}" data-bs-parent="#sideNavbar" style="">
+										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_venue_index" or routename == "dashboard_admin_venue_new" or routename == "dashboard_admin_venue_edit" %}active{% endif %}" href="{{ path('dashboard_admin_venue_index') }}">
+													{{ 'Manage venues'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_venuetype_index" or routename == "dashboard_admin_venuetype_new" or routename == "dashboard_admin_venuetype_edit" %}active{% endif %}" href="{{ path('dashboard_admin_venuetype_index') }}">
+													{{ 'Venue types'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_amenity_index" or routename == "dashboard_admin_amenity_new" or routename == "dashboard_admin_amenity_edit" %}active{% endif %}" href="{{ path('dashboard_admin_amenity_index') }}">
+													{{ 'Amenities'|trans }}
+												</a>
+											</li>
+										</ul>
+									</div>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#!">
-										<i class="nav-icon bi bi-arrows-angle-contract me-2"></i>
-										{{ 'Transactions'|trans }}
-									</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link {% if routename == "dashboard_admin_pricing_index" %}active{% endif %}" href="{{ path('dashboard_admin_pricing_index') }}">
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#premium-submenu-{{random}}" aria-expanded="false" aria-controls="premium-submenu-{{random}}">
 										<i class="nav-icon bi bi-award me-2"></i>
-										{{ 'Formulas'|trans }}
+										{{ 'Premium'|trans }}
 									</a>
+									<div id="premium-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_pricing_index" or routename == "dashboard_admin_pricing_new" or routename == "dashboard_admin_pricing_edit" or routename == "dashboard_admin_user_index" %}show{% endif %}" data-bs-parent="#sideNavbar">
+										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_pricing_index" or routename == "dashboard_admin_pricing_new" or routename == "dashboard_admin_pricing_edit" %}active{% endif %}" href="{{ path('dashboard_admin_pricing_index') }}">
+													{{ 'Formulas'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="#">
+													{{ 'Transactions'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_user_index" %}active{% endif %}" href="{{ path('dashboard_admin_user_index') }}">
+													{{ 'Users'|trans }}
+												</a>
+											</li>
+										</ul>
+									</div>
 								</li>
 								<li class="nav-item">
-									<div class="navbar-heading">{{ 'Ticketing'|trans }}</div>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link {% if routename == "dashboard_admin_level_index" %}active{% endif %}" href="{{ path('dashboard_admin_level_index') }}">
-										<i class="nav-icon bi bi-reception-4 me-2"></i>
-										{{ 'Levels'|trans }}
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#ticket-submenu-{{random}}" aria-expanded="false" aria-controls="ticket-submenu-{{random}}">
+										<i class="nav-icon bi bi-ticket me-2"></i>
+										{{ 'Ticketing'|trans }}
 									</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link {% if routename == "dashboard_admin_status_index" %}active{% endif %}" href="{{ path('dashboard_admin_status_index') }}">
-										<i class="nav-icon bi bi-app me-2"></i>
-										{{ 'Status'|trans }}
-									</a>
+									<div id="ticket-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_level_index" or routename == "dashboard_admin_level_new" or routename == "dashboard_admin_level_edit" or routename == "dashboard_admin_status_index" or routename == "dashboard_admin_status_new" or routename == "dashboard_admin_status_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
+										<ul class="nav flex-column">
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_level_index" or routename == "dashboard_admin_level_new" or routename == "dashboard_admin_level_edit" %}active{% endif %}" href="{{ path('dashboard_admin_level_index') }}">
+													{{ 'Levels'|trans }}
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link {% if routename == "dashboard_admin_status_index" or routename == "dashboard_admin_status_new" or routename == "dashboard_admin_status_edit" %}active{% endif %}" href="{{ path('dashboard_admin_status_index') }}">
+													{{ 'Status'|trans }}
+												</a>
+											</li>
+										</ul>
+									</div>
 								</li>
 								<li class="nav-item">
 									<div class="navbar-heading">{{ 'Others'|trans }}</div>
@@ -244,9 +298,21 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#!">
-										<i class="nav-icon bi bi-bar-chart me-2"></i>
-										{{ 'Stats'|trans }}
+									<a class="nav-link {% if routename == "dashboard_admin_orders" or routename == "dashboard_admin_order_details" %}active{% endif %}" href="{{ path('dashboard_admin_orders') }}">
+										<i class="nav-icon bi bi-cart me-2"></i>
+										{{ 'Orders'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {% if routename == "dashboard_admin_reports_index" %}active{% endif %}" href="{{ path('dashboard_admin_reports_index') }}">
+										<i class="nav-icon bi bi-currency-dollar me-2"></i>
+										{{ 'Reports'|trans }}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {% if routename == "dashboard_admin_translation_index" %}active{% endif %}" href="{{ path('dashboard_admin_translation_index') }}">
+										<i class="nav-icon bi bi-currency-dollar me-2"></i>
+										{{ 'Translations'|trans }}
 									</a>
 								</li>
 							</ul>

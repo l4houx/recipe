@@ -2,7 +2,7 @@
 	<table class="table mb-0 text-nowrap table-hover table-centered">
 		<thead class="">
 			<tr>
-				<th># {# {{ knp_pagination_sortable(rows, '#', 'u.id') }} #}</th>
+				<th>#{# {{ knp_pagination_sortable(rows, '#', 'u.id') }} #}</th>
 				<th>{{ 'User name / Email'|trans }}</th>
 				<th>{{ 'Full name / Premium'|trans }}</th>
 				<th>{{ 'Last login / IP'|trans}}</th>
@@ -29,8 +29,8 @@
 										<i class="flag flag-{{user.country.code|lower}} me-1 fs-6 me-2 mb-1"></i>
 									{% endif %}
 									<span>
-										{{ 'Joined'|trans }}
-										{{ user.createdAt ? user.createdAt | ago() }}
+										{{ 'Joined the'|trans }}
+										{{ user.createdAt | format_date('long') }}
 									</span>
 								</div>
 							</div>
@@ -53,7 +53,6 @@
 						{% endif %}
 					</td>
 					<td>
-						{# {% include "global/user-roles.html.twig" %} #}
 						{{ user.getRole|trans|raw }}
 					</td>
 					<td>{{ user.registerDuration }}s</td>
@@ -85,19 +84,6 @@
 							</a>
 							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
 								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
-								{% if user.isVerified == false %}
-									<form action="{{ path('dashboard_admin_user_verified', {id: user.id}) }}" method="post" class="">
-										<button class="dropdown-item" type="submit">
-											<i class="bi bi-check dropdown-item-icon"></i>
-											{{ 'Confirm'|trans }}
-										</button>
-									</form>
-								{% else %}
-									<a class="dropdown-item" href="/?_ninja={{ user.email }}">
-										<i class="bi bi-incognito dropdown-item-icon"></i>
-										{{ 'Ninja'|trans }}
-									</a>
-								{% endif %}
 								<form action="{{ path('dashboard_admin_user_suspended', {id: user.id}) }}" method="post" onsubmit="return confirm("{{'Are you sure you want to suspend this user ?'|trans }}")">
 									<button class="dropdown-item" type="submit" {{ user.premium or user.suspended ? 'disabled' : '' }}>
 										<i class="bi bi-person-lock dropdown-item-icon"></i>
@@ -112,10 +98,63 @@
 									<input type="hidden" name="_token" value="{{ csrf_token('user_deletion_' ~ user.id) }}">
 									<input type="hidden" name="_method" value="DELETE">
 								</form>
-								<a href="{{ path('dashboard_admin_user_user_information', { slug : user.slug }) }}" class="dropdown-item">
+								<a href="{{ path('dashboard_admin_user_information', { slug : user.slug }) }}" class="dropdown-item">
 									<i class="bi bi-file dropdown-item-icon"></i>
 									{{ 'More information'|trans }}
+								</a> 
+								{% if user.hasRole('ROLE_RESTAURANT') %}
+									<a href="{# {{ path('restaurant', { slug: (user.restaurant.slug) }) }} #}" class="dropdown-item">
+										<i class="bi bi-person-vcard dropdown-item-icon"></i>
+										{{ 'Restauranter profile'|trans }}
+									</a>
+								{% endif %}
+								{% if user.hasRole('ROLE_USER') or user.hasRole('ROLE_CREATOR') %}
+									<a href="{{ path('dashboard_admin_user_empty_cart', {slug: (user.slug)}) }}" class="dropdown-item">
+										<i class="bi bi-basket dropdown-item-icon"></i>
+										{{ 'Empty cart'|trans }}
+										<span class="badge bg-info float-start ms-2" data-bs-toggle="tooltip" title="{{ "%cartElementsCount% recipe(s) currently in cart"|trans({"%cartElementsCount%": user.cartelements | length }) }}">
+											{{ user.cartelements | length }}
+										</span>
+									</a>
+								{% endif %}
+								<a href="{{ path('dashboard_main', {'_switch_user': (user.username)}) }}" class="dropdown-item">
+									<i class="bi bi-incognito dropdown-item-icon"></i>
+									{{ 'Impersonate'|trans }}
 								</a>
+								{% if user.isVerified == false %}
+									<form action="{{ path('dashboard_admin_user_verified', {id: user.id}) }}" method="post" class="">
+										<button class="dropdown-item" type="submit">
+											<i class="bi bi-check dropdown-item-icon"></i>
+											{{ 'Confirm'|trans }}
+										</button>
+									</form>
+								{% else %}
+									<a class="dropdown-item" href="/?_ninja={{ user.email }}">
+										<i class="bi bi-incognito dropdown-item-icon"></i>
+										{{ 'Ninja'|trans }}
+									</a>
+								{% endif %}
+								{#  
+                                {% if user.deletedAt %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_user_restore', { slug : user.slug }) }}">
+										<i class="bi bi-trash-fill dropdown-item-icon"></i>
+										{{ 'Restore'|trans }}
+									</a>
+                                    <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-user-delete-form').submit();" class="dropdown-item">
+                                        <i class="bi bi-trash dropdown-item-icon"></i>
+                                        {{ 'Delete permanently'|trans }}
+                                    </a>
+                                    <form id="js-user-delete-form" action="{{ path('dashboard_admin_user_delete_permanently', { slug : user.slug }) }}" method="post" class="">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('user_deletion_' ~ user.slug) }}">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                    </form>
+                                {% else %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_user_delete', { slug : user.slug }) }}">
+										<i class="bi bi-alarm dropdown-item-icon"></i>
+										{{ 'Delete'|trans }}
+									</a>
+                                {% endif %}
+								#}
 							</div>
 						</div>
 					</td>

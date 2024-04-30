@@ -120,7 +120,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 ->setTitle($this->faker()->foodName())
                 ->setSlug($this->slugger->slug($recipe->getTitle())->lower())
                 ->setContent($this->faker()->paragraphs(10, true))
-                ->setDuration($this->faker()->numberBetween(2, 60))
+                ->setDuration(rand(100, 5000))
                 ->setViews(rand(10, 160))
                 ->setExternallink(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
                 ->setWebsite(1 === mt_rand(0, 1) ? $this->faker()->url() : null)
@@ -142,6 +142,8 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 ->addLanguage($this->faker()->randomElement($languages))
                 ->addSubtitle($this->faker()->randomElement($subtitles))
                 ->setIsonhomepageslider($this->faker()->randomElement($homepages))
+                ->setLevel($this->faker()->numberBetween(0, 2))
+                ->setPremium($this->faker()->numberBetween(0, 1))
             ;
 
             $category = $this->getReference('cat-'.$this->faker()->numberBetween(1, 8));
@@ -182,7 +184,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
             $testimonial = new Testimonial();
             $testimonial
                 ->setAuthor($this->getReference('user-'.$this->faker()->numberBetween(1, 10)))
-                ->setHeadline($this->faker()->unique()->sentence())
+                ->setHeadline($this->faker()->unique()->sentence(5, true))
                 ->setSlug($this->slugger->slug($testimonial->getHeadline())->lower())
                 ->setContent($this->faker()->paragraph())
                 ->setIsOnline($this->faker()->numberBetween(0, 1))
@@ -200,7 +202,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
                 ->setRecipe($this->faker()->randomElement($recipes))
                 ->setIsVisible($this->faker()->numberBetween(0, 1))
                 ->setRating($this->faker()->numberBetween(1, 5))
-                ->setHeadline($this->faker()->unique()->sentence())
+                ->setHeadline($this->faker()->unique()->sentence(5, true))
                 ->setSlug($this->slugger->slug($review->getHeadline())->lower())
                 ->setContent($this->faker()->paragraph())
             ;
@@ -213,7 +215,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i <= 20; ++$i) {
             $restaurant = new Restaurant();
             $restaurant
-                ->setName($this->faker()->sentence())
+                ->setName($this->faker()->sentence(5, true))
                 ->setSlug($this->slugger->slug($restaurant->getName())->lower())
                 ->setContent(1 === mt_rand(0, 1) ? $this->faker()->paragraphs(10, true) : null)
                 ->setViews(rand(10, 160))
@@ -260,7 +262,7 @@ class AppRecipeFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i <= 20; ++$i) {
             $venue = new Venue();
             $venue
-                ->setName($this->faker()->unique()->sentence())
+                ->setName($this->faker()->unique()->sentence(5, true))
                 ->setSlug($this->slugger->slug($venue->getName())->lower())
                 ->setDescription($this->faker()->paragraphs(10, true))
                 ->setPricing(1 === mt_rand(0, 1) ? $this->faker()->numberBetween(10, 250) : null)

@@ -4,6 +4,7 @@
 			<tr>
 				<th>{{ 'Name'|trans }}</th>
 				<th>{{ 'Recipes count'|trans }}</th>
+				<th>{{ 'Icon'|trans }}</th>
 				<th>{{ 'Status'|trans }}</th>
 				<th></th>
 			</tr>
@@ -16,7 +17,7 @@
 						<a href="{{ link }}" class="text-inherit">
 							<div class="d-flex align-items-center">
 								<div>
-									<img src="{{ audience.imageName ? asset(audience.getImagePath) : audience.getImagePlaceholder }}" alt="{{ audience.title }}" class="img-4by3-lg rounded">
+									<img src="{{ audience.imageName ? asset(audience.getImagePath) : audience.getImagePlaceholder }}" alt="{{ audience.name }}" class="img-4by3-lg rounded">
 								</div>
 								<div class="ms-3">
 									<h4 class="mb-1 text-primary-hover">{{ audience.name }}</h4>
@@ -28,7 +29,8 @@
 							</div>
 						</a>
 					</td>
-					<td>{{ audience.recipes|length }}</td>
+					<td>{{ audience.recipes | length }}</td>
+					<td><i class="{{ audience.icon }} fa-2x fa-fw"></i></td>
 					<td>
 						{% if audience.isOnline == false %}
 							<span class="badge bg-danger-soft">

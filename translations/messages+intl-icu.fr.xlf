@@ -773,9 +773,9 @@
         <source>Application</source>
         <target>Application</target>
       </trans-unit>
-      <trans-unit id="XYdAmFJ" resname="Minimum reading">
-        <source>Minimum reading</source>
-        <target>Lecture minimale</target>
+      <trans-unit id="XYdAmFJ" resname="min read">
+        <source>min read</source>
+        <target>lecture min</target>
       </trans-unit>
       <trans-unit id="txqGh0T" resname="My Subscriptions">
         <source>My Subscriptions</source>

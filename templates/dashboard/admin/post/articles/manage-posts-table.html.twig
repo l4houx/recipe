@@ -2,10 +2,12 @@
 	<table class="table mb-0 text-nowrap table-hover table-centered">
 		<thead class="">
 			<tr>
-				<th>{{ 'Title'|trans}}</th>
+				<th>{{ 'Post'|trans}}</th>
+				<th>{{ 'Type'|trans }}</th>
                 <th>{{ 'Category'|trans }}</th>
 				<th>{{ 'Views'|trans }}</th>
 				<th>{{ 'Last updated'|trans }}</th>
+				<th>{{ 'Author'|trans }}</th>
 				<th>{{ 'Status'|trans }}</th>
 				<th></th>
 			</tr>
@@ -24,11 +26,14 @@
 									<h4 class="mb-1 text-primary-hover">{{ post.title }}</h4>
 									<span>
 										{{ 'Published'|trans }}
-										{{ post.createdAt ? post.createdAt | ago() : '' }}
+										{{ post.createdAt | format_date('long') }}
 									</span>
 								</div>
 							</div>
 						</a>
+					</td>
+					<td>
+						<i class="fas fa-{{ post.type.name | lower }} fa-2x fa-fw text-primary"></i>
 					</td>
                     <td>
 						<span class="text-decoration-none" style="color: {{ post.category.color }}">
@@ -40,8 +45,17 @@
 							{{ "views"|trans }}
                         </span>
 					</td>
-					<td>{{ post.updatedAt ? post.updatedAt | ago() : '' }}</td>
+					<td>{{ post.updatedAt | localizeddate('medium', 'short', app.request.locale, date_timezone, date_format) }}</td>
 					<td>
+						<div class="d-flex align-items-center">
+							{% include "global/user-avatar.html.twig" with { user: post.author, type: "xs", class: "me-2" } %}
+							<h5 class="mb-0">{{ post.author.getFullName | lower | capitalize }}</h5>
+						</div>
+					</td>
+					<td>
+						<span class="badge-dot bg-{{ post.stringifyStatusClass }} me-1 d-inline-block align-middle"></span>
+						{{ post.stringifyStatus|trans }}
+						{#  
 						{% if post.isOnline == false %}
 							<span class="badge bg-danger-soft">
 								<i class="bi bi-eye-slash"></i>
@@ -53,6 +67,7 @@
 								{{ "Online"|trans }}
 							</span>
 						{% endif %}
+						#}
 						{% if post.deletedAt %}
 							<span class="badge bg-danger-soft">
 								<i class="bi bi-alarm"></i>

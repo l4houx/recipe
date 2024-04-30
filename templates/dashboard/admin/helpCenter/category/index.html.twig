@@ -18,16 +18,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row justify-content-md-between mb-4 mb-xl-0 gx-3">
-        <form class="d-flex align-items-center mb-lg-4 mb-2">
-            <div class="col-12 col-lg-10 mb-3 mb-lg-0">
-                <label for="keyword">{{ "Keyword"|trans }}</label>
-                <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.get('keyword') }}">
-            </div>
-            <div class="col-12 col-lg-2 mt-3 mb-lg-0 ms-2 text-start">
-                <button type="submit" class="btn btn-primary btn-md"><i class="bi bi-search"></i> {{'Search'|trans}}</button>
-            </div>
-        </form>
+    <div class="p-4 row justify-content-md-between mb-4 mb-xl-0 gx-3">
+        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+            <form class="d-flex align-items-center">
+                <span class="position-absolute ps-3 search-icon">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
+            </form>
+        </div>
+        <div class="col-12 col-lg-6">
+            <select class="form-select">
+                <option selected="">{{ "Select an option"|trans }}</option>
+                <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "c.createdAt", {"direction": "desc", "criteria": "c.createdAt"}) }}</option>
+                <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "c.createdAt", {"direction": "asc", "criteria": "c.createdAt"}) }}</option>
+            </select>
+        </div>
     </div>
     <div class="row">
         <div class="col-12">
@@ -51,4 +57,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            if (getURLParameter('isFeatured')) {
+                $('input[type="radio"][name="isFeatured"][value="' + getURLParameter('isFeatured') + '"]').attr("checked", "checked");
+            }
+        });
+    </script>
 {% endblock %}

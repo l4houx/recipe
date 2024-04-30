@@ -45,7 +45,7 @@ class LanguageController extends AdminBaseController
             $language = new Language();
         } else {
             /** @var Language $language */
-            $language = $this->settingService->getHelpCenterArticles(['isOnline' => 'all', 'slug' => $slug])->getQuery()->getOneOrNullResult();
+            $language = $this->settingService->getLanguages(['isOnline' => 'all', 'slug' => $slug])->getQuery()->getOneOrNullResult();
             if (!$language) {
                 $this->addFlash('danger', $this->translator->trans('The language can not be found'));
 

@@ -133,4 +133,32 @@ class PostRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function findPrevious(Post $post): ?Post
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.isOnline = true AND p.updatedAt < NOW()')
+            ->andWhere('p.updatedAt < :postUpdatedAt')
+            ->setParameter('postUpdatedAt', $post->getUpdatedAt())
+            ->orderBy('p.updatedAt', 'DESC')
+            ->groupBy('p.id')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findNext(Post $post): ?Post
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.isOnline = true AND p.updatedAt < NOW()')
+            ->andWhere('p.updatedAt < :postUpdatedAt')
+            ->setParameter('postUpdatedAt', $post->getUpdatedAt())
+            ->orderBy('p.updatedAt', 'ASC')
+            ->groupBy('p.id')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }
