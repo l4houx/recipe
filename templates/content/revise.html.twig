@@ -31,6 +31,8 @@
 	<section class="py-7 py-lg-8">
 		<div class="container my-lg-8">
 			{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+				{{ form_widget(form._token) }}
+				{{ form_errors(form) }}
 				<div class="row">
 					<div class="col-lg-4 col-md-4 col-12">
 						<div class="mb-4">
@@ -59,7 +61,7 @@
 						</div>
 					</div>
 				</div>
-			{{ form_end(form) }}
+			{{ form_end(form, {'render_rest': false}) }}
 		</div>
 	</section>
 {% endblock %}

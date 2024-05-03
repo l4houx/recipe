@@ -498,7 +498,7 @@ class OrderController extends BaseController
 
                 $sheet->setCellValue('A1', $this->translator->trans('Generation date').': '.date_format(new \DateTime(), $this->getParameter('date_format_simple')));
                 $sheet->setCellValue('B1', $this->translator->trans('Total sales').': '.$totalSales.' '.$this->settingService->getSettings('currency_ccy'));
-                $sheet->setCellValue('C1', $this->translator->trans('Total orders').': '.count($orders));
+                $sheet->setCellValue('C1', $this->translator->trans('Total orders').': '.count($rows));
                 $sheet->setCellValue('D1', $this->translator->trans('Total attendees').': '.$totalAttendees);
 
                 if ('1' == $request->query->get('excel')) {

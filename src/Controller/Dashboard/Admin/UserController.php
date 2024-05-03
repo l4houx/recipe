@@ -2,24 +2,26 @@
 
 namespace App\Controller\Dashboard\Admin;
 
-use App\Entity\Traits\HasRoles;
 use App\Entity\User;
 use App\Form\UserFormType;
-use App\Repository\UserRepository;
-use App\Security\Exception\PremiumNotBanException;
-use App\Service\AccountSuspendedService;
+use App\Service\IpService;
+use App\Entity\Traits\HasRoles;
 use App\Service\SettingService;
+use App\Repository\UserRepository;
+use App\Repository\UserStatsRepository;
+use App\Service\AccountSuspendedService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Security\Exception\PremiumNotBanException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/%website_dashboard_path%/admin/manage-users', name: 'dashboard_admin_user_')]
 #[IsGranted(HasRoles::ADMINAPPLICATION)]
@@ -29,7 +31,7 @@ class UserController extends AdminBaseController
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $em,
         private readonly SettingService $settingService,
-        private readonly UserRepository $userRepository,
+        private readonly UserRepository $userRepository
     ) {
     }
 

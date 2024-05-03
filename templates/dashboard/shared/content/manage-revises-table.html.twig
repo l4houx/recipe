@@ -4,9 +4,8 @@
 			<thead class="table-light">
 				<tr>
 					<th>{{ 'Article'|trans }}</th>
-					<th>{{ 'Date'|trans }}</th>
-					<th>{{ 'Status'|trans }}</th>
 					<th>{{ 'Comment'|trans }}</th>
+					<th>{{ 'Status'|trans }}</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -17,68 +16,57 @@
 					<td>
 						{% if revise.status == 1 %}
 							{% set link = path(revise.target) %}
-							<div class="d-flex align-items-center">
-								<div>
-									<a href="{{ link }}">
-										<img src="" alt="{{ revise.target.title }}" class="rounded img-4by3-lg">
-									</a>
+							<a href="{{ link }}" target="_blank" class="text-inherit">
+								<div class="d-flex align-items-center">
+									<div>
+										<img src="{{ revise.target.imageName ? asset(revise.target.getImagePath) : revise.target.getImagePlaceholder }}" alt="{{ revise.target.title }}" class="img-4by3-lg rounded">
+									</div>
+									<div class="ms-3">
+										<h4 class="mb-1 text-primary-hover">
+											{{ revise.target.title }}
+										</h4>
+										<span>
+											{{ 'Published the'|trans }}
+											{{ revise.createdAt | format_date('long') }}
+										</span>
+									</div>
 								</div>
-								<div class="ms-3">
-									<h4 class="mb-1 h5">
-										<a href="{{ link }}" class="text-inherit">{{ revise.target.title }}</a>
-									</h4>
-									<ul class="list-inline fs-6 mb-0">
-										<li class="list-inline-item">
-											<span class="align-text-bottom">
-												<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-clock" viewbox="0 0 16 16">
-													<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
-													<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
-												</svg>
-											</span>
-											<span>{{ revise.createdAt | ago() }}</span>
-										</li>
-									</ul>
-								</div>
-							</div>
+							</a>
 						{% else %}
 							{% set link = path('revise', {id: revise.target.id}) %}
-							<div class="d-flex align-items-center">
-								<div>
-									<a href="{{ link }}">
-										<img src="" alt="{{ revise.target.title }}" class="rounded img-4by3-lg">
-									</a>
+							<a href="{{ link }}" target="_blank" class="text-inherit">
+								<div class="d-flex align-items-center">
+									<div>
+										<img src="{{ revise.target.imageName ? asset(revise.target.getImagePath) : revise.target.getImagePlaceholder }}" alt="{{ revise.target.title }}" class="img-4by3-lg rounded">
+									</div>
+									<div class="ms-3">
+										<h4 class="mb-1 text-primary-hover">
+											{{ revise.target.title }}
+										</h4>
+										<span>
+											{{ 'Published the'|trans }}
+											{{ revise.createdAt | format_date('long') }}
+										</span>
+									</div>
 								</div>
-								<div class="ms-3">
-									<h4 class="mb-1 h5">
-										<a href="{{ link }}" class="text-inherit">{{ revise.target.title }}</a>
-									</h4>
-									<ul class="list-inline fs-6 mb-0">
-										<li class="list-inline-item">
-											<span class="align-text-bottom">
-												<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-clock" viewbox="0 0 16 16">
-													<path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
-													<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
-												</svg>
-											</span>
-											<span>{{ revise.createdAt | ago() }}</span>
-										</li>
-									</ul>
-								</div>
-							</div>
-						{% endif %}
-					</td>
-					<td>
-						{% if revise.status == -1 %}
-							<span class="badge bg-danger-soft">{{ 'Rejected'|trans }}</span>
-						{% elseif revise.status == 0 %}
-							<span class="badge bg-danger-soft">{{ 'Pending'|trans }}</span>
-						{% else %}
-							<span class="badge bg-success-soft">{{ 'Accepted'|trans }}</span>
+							</a>
 						{% endif %}
 					</td>
 					<td>
 						{% if revise.comment %}
-							<p class="mb-0 fs-6">{{ revise.comment }}</p>
+							<p class="mb-0 text-small text-muted fs-6">{{ revise.comment }}</p>
+						{% endif %}
+					</td>
+					<td>
+						{% if revise.status == -1 %}
+							<span class="badge-dot bg-danger me-1 d-inline-block align-middle"></span>
+							{{ 'Rejected'|trans }}
+						{% elseif revise.status == 0 %}
+							<span class="badge-dot bg-warning me-1 d-inline-block align-middle"></span>
+							{{ 'Pending'|trans }}
+						{% else %}
+							<span class="badge-dot bg-success me-1 d-inline-block align-middle"></span>
+							{{ 'Accepted'|trans }}
 						{% endif %}
 					</td>
 					<td>
@@ -103,7 +91,4 @@
 			{% endfor %}
 		</tbody>
 	</table>
-    <div class="card-footer">
-        {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-    </div>
 </div>

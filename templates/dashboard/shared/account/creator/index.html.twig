@@ -16,8 +16,8 @@
                 <span class="ml-3">{{ "Member since"|trans }}</span>
                 <span class="ml-3 text-success">
                     <i class="bi bi-person-add fa-fw"></i> 
-                    {{ app.user.createdAt | date("m/d/Y", false) }}
-                    {# {{ app.user.createdAt|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }} #}
+                    {{ app.user.createdAt | localizeddate('full', 'short', app.request.locale, date_timezone, date_format) }}
+                    {# {{ app.user.createdAt | date("m/d/Y", false) }} #}
                 </span>
             </p>
         </div>
@@ -27,6 +27,7 @@
                 <p class="mb-4">{{ 'Change your personal information and address.'|trans }}</p>
                 {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                    {{ form_widget(form._token) }}
                     {{ form_errors(form) }}
                     <div class="mb-3 col-12 col-md-4">
                         {{ form_row(form.username) }}

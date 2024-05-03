@@ -1,0 +1,144 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="table-light">
+			<tr>
+				<th>{{ 'Reference'|trans }}</th>
+				<th>{{ 'Recipe date'|trans }}</th>
+                {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                    <th>{{'Restaurant'|trans}}</th>
+                {% endif %}
+				<th>{{ 'Payout method'|trans }}</th>
+				<th>{{ 'Net sales'|trans }}</th>
+				<th>{{ 'Request date'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for payoutRequest in rows %}
+
+				<tr>
+					<td>{{ payoutRequest.reference }}</td>
+                    <td>
+						{{ payoutRequest.recipeDate.recipe.name }} 
+						{{ payoutRequest.recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+					</td>
+                    {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                        <td>
+                            {{ payoutRequest.recipe.restaurant.name }}
+                        </td>
+                    {% endif %}
+					<td>
+                        <img src="{{  asset('images/icons/payment/'~ payoutRequest.paymentGateway.name|lower ~'.svg') }}" class="img-4by3-lg rounded">
+                    </td>
+                    <td>
+                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ payoutRequest.recipeDate.getRestaurantPayoutAmount() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                    </td>
+                    <td class="text-sm">
+                        {{ payoutRequest.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                    </td>
+					<td>
+                        <span class="badge-dot bg-{{ payoutRequest.getStatusClass }} me-1 d-inline-block align-middle"></span>
+						{{ payoutRequest.stringifyStatus|trans }}
+                        {% if payoutRequest.status != 0 %}
+                            <i class="bi bi-alarm text-primary ml-1" data-toggle="tooltip" title="{{ "Processed"|trans ~ ": " ~ payoutRequest.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}"></i>
+                        {% endif %}
+                        {% if payoutRequest.note %}
+                            <i class="bi bi-chat-dots text-primary ml-1" data-toggle="tooltip" title="{{ "Note"|trans ~ ": " ~ payoutRequest.note }}"></i>
+                        {% endif %}
+                        {% if payoutRequest.deletedAt %}
+                            <span class="badge-dot bg-danger me-1 d-inline-block align-middle"></span>
+                            {{ "Deleted"|trans }}
+                        {% endif %}
+					</td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
+								{% if is_granted("ROLE_RESTAURANT") %}
+									<a class="dropdown-item" href="{{ path('dashboard_restaurant_payout_request_details', {reference : payoutRequest.reference}) }}">
+										<i class="bi bi-file dropdown-item-icon"></i>
+										{{ 'Details'|trans }}
+									</a>
+                                    {% if payoutRequest.status == 0 %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_restaurant_payout_request_cancel', {reference : payoutRequest.reference}) }}" data-confirmation-text="{{ "You are about to cancel this payout request (this action cannot be undone), the recipe date related to this payout request will be unlocked"|trans }}">
+                                            <i class="bi bi-x dropdown-item-icon"></i>
+                                            {{ 'Cancel'|trans }}
+                                        </a>
+                                    {% endif %}
+								{% elseif is_granted("ROLE_ADMIN_APPLICATION") %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_payout_request_details', {reference : payoutRequest.reference}) }}">
+										<i class="bi bi-file dropdown-item-icon"></i>
+										{{ 'Details'|trans }}
+									</a>
+                                    {% if payoutRequest.status == 1 or payoutRequest.status == -2 %}
+                                        <a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#payoutRequest-{{ payoutRequest.reference }}-payment-details">
+                                            <i class="bi bi-file dropdown-item-icon"></i>
+                                            {{ 'Payment details'|trans }}
+                                        </a>
+                                    {% elseif payoutRequest.status == 0 %}
+                                        <a class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to approve the payout request"|trans }}<br>{{ "Amount" }}: <b>{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ payoutRequest.recipeDate.getRestaurantPayoutAmount }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }} </b><br>{{ 'Payout method'|trans }}: <b>{{ payoutRequest.paymentGateway.name }}</b>" href="{{ path('dashboard_admin_payout_request_approve', {reference : payoutRequest.reference}) }}">
+                                            <i class="bi bi-cash-coin dropdown-item-icon"></i>
+                                            {{ 'Approve'|trans }}
+                                        </a>
+                                        <a class="dropdown-item payoutRequest-cancel-button" data-confirmation-text="{{ "You are about to cancel this payout request (this action cannot be undone), the recipe date related to this payout request will be unlocked"|trans }}" href="{{ path('dashboard_admin_payout_request_cancel', {reference : payoutRequest.reference}) }}">
+                                            <i class="bi bi-x dropdown-item-icon"></i>
+                                            {{ 'Cancel'|trans }}
+                                        </a>
+                                    {% endif %}
+                                    {% if payoutRequest.deletedAt %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_payout_request_restore', { reference : payoutRequest.reference }) }}">
+                                            <i class="bi bi-trash-fill dropdown-item-icon"></i>
+                                            {{ 'Restore'|trans }}
+                                        </a>
+                                        <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-payoutRequest-delete-form').submit();" class="dropdown-item">
+                                            <i class="bi bi-trash dropdown-item-icon"></i>
+                                            {{ 'Delete permanently'|trans }}
+                                        </a>
+                                        <form id="js-payoutRequest-delete-form" action="{{ path('dashboard_admin_payout_request_delete', { reference : payoutRequest.reference }) }}" method="post" class="">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('payout_deletion_' ~ reference : payoutRequest.reference) }}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                        </form>
+                                    {% else %}
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_payout_request_delete', { reference : payoutRequest.reference }) }}">
+                                            <i class="bi bi-alarm dropdown-item-icon"></i>
+                                            {{ 'Delete'|trans }}
+                                        </a>
+                                    {% endif %}
+								{% endif %}
+							</div>
+						</div>
+					</td>
+				</tr>
+                {% if is_granted("ROLE_ADMIN_APPLICATION") and payoutRequest.status == 1 or payoutRequest.status == -2 %}
+                    <div class="modal fade" id="payoutRequest-{{ payoutRequest.reference }}-payment-details" tabindex="-1" role="dialog" aria-labelledby="payoutRequest-{{ payoutRequest.reference }}-payment-details" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="payoutRequest-{{ payoutRequest.reference }}-payment-details">
+                                        {{ "Payout request payment details"|trans }} - {{ payoutRequest.reference }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {{ payoutRequest.payment|json_encode(constant('JSON_PRETTY_PRINT'))|nl2br }}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="card-footer">
+		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+	</div>
+</div>

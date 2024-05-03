@@ -4,11 +4,13 @@ namespace App\Controller\Dashboard\Shared\Application;
 
 use App\Controller\BaseController;
 use App\Entity\Application;
+use App\Entity\Traits\HasLimit;
 use App\Entity\Traits\HasRoles;
 use App\Entity\User;
 use App\Form\ApplicationFormType;
 use App\Repository\ApplicationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,18 +31,27 @@ class ApplicationController extends BaseController
 
     #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(
+        Request $request,
         #[CurrentUser] ?User $user,
-        ApplicationRepository $applicationRepository
+        ApplicationRepository $applicationRepository,
+        PaginatorInterface $paginator
     ): Response {
         if (null === $user) {
             return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
-            $rows = $applicationRepository->findAll();
+            $query = $applicationRepository->findAlls();
         } else {
-            $rows = $applicationRepository->findBy(['user' => $user->getId()]);
+            $query = $applicationRepository->findBy(['user' => $user->getId()]);
         }
+
+        $rows = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            HasLimit::APP_LIMIT,
+            ['wrap-queries' => true]
+        );
 
         return $this->render('dashboard/shared/application/index.html.twig', compact('user', 'rows'));
     }
@@ -69,7 +80,7 @@ class ApplicationController extends BaseController
         return $this->render('dashboard/shared/application/new.html.twig', compact('application', 'form'));
     }
 
-    #[Route(path: '/token/{id}', name: 'token', methods: ['GET'], requirements: ['id' => Requirement::POSITIVE_INT])]
+    #[Route(path: '/token/{id}', name: 'token', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function token(
         Application $application,
         #[CurrentUser] ?User $user,
@@ -77,7 +88,7 @@ class ApplicationController extends BaseController
         EntityManagerInterface $em
     ): Response {
         if ($application->getUser() !== $user && !$this->security->isGranted(HasRoles::ADMIN)) {
-            $this->addFlash('secondary', $translator->trans('Application in you does not belong.'));
+            $this->addFlash('danger', $translator->trans('Application in you does not belong.'));
 
             return $this->redirectToRoute('dashboard_application_index', [], Response::HTTP_SEE_OTHER);
         }

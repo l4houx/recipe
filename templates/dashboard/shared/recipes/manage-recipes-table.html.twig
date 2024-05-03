@@ -22,7 +22,7 @@
 						{% set link = path('recipe', { slug : recipe.slug }) %}
 						<div class="d-flex align-items-center">
 							<div>
-								<a href="{{ link }}" target="_blank">
+								<a href="{{ link }}" target="_blank" class="text-inherit">
 									<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" alt="{{ recipe.title }}" class="rounded img-4by3-lg">
 								</a>
 							</div>

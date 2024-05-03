@@ -16,6 +16,9 @@ class EditorType extends TextareaType
                 'class' => 'full',
             ],
             'attr' => [
+                'class' => 'wysiwyg',
+                'placeholder' => '',
+                'rows' => 10,
                 'is' => 'markdown-editor',
             ],
         ]);

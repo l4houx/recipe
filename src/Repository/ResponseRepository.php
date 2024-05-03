@@ -20,4 +20,17 @@ class ResponseRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Response::class);
     }
+
+    /**
+     * @return Response[]
+     */
+    public function findAlls()
+    {
+        return $this->createQueryBuilder('r')
+            //->where('r.isOnline = true')
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Form;
 
 use App\Entity\Revise;
@@ -9,7 +7,9 @@ use App\Form\Type\EditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use function Symfony\Component\Translation\t;
 
 class ReviseFormType extends AbstractType
 {
@@ -20,7 +20,7 @@ class ReviseFormType extends AbstractType
                 'label' => false,
                 'purify_html' => true,
                 'required' => false,
-                'attr' => ['rows' => 10],
+                'attr' => ['class' => 'wysiwyg', 'placeholder' => '', 'rows' => 10],
             ])
         ;
     }

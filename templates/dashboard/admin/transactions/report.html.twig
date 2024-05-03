@@ -1,0 +1,46 @@
+{% extends 'admin.html.twig' %}
+
+{% set pagetitle = 'Financial report'|trans ~ year %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-12">
+			<div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+				{% set breadcrumb = [{ "current":(pagetitle) }] %}
+				{% include "global/admin-breadcrumb.html.twig" with breadcrumb %}
+				<div>
+					<a href="{{ path('dashboard_admin_transaction_index') }}" class="btn btn-primary me-2">
+						{{ 'Transaction details'|trans }}
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body p-lg-6">
+					<form method="get" class="needs-validation" novalidate="">
+                        <div class="row mb-4 mb-xl-0 gx-3">
+                            <div class="mb-3 col-md-4 col-12">
+                                <select class="form-select" name="year">
+                                    {% for y in current_year..2020 %}
+                                        <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-1 col-12">
+                                <button class="btn btn-primary" type="submit">{{ 'Submit'|trans }}</button>
+                            </div>
+						</div>
+					</form>
+                    {% include "dashboard/admin/transactions/manage-reports-table.html.twig" with {rows: rows} %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

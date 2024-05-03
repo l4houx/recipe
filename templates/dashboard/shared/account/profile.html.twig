@@ -131,6 +131,9 @@
                     </a>
                 </div>
                 {% include "dashboard/shared/content/manage-revises-table.html.twig" with {rows: revises, header: false} %}
+                <div class="card-footer">
+                    {{ knp_pagination_render(revises, null, {}, {'align': 'center'}) }}
+                </div>
             </div>
         {% endif %}
     {% else %}

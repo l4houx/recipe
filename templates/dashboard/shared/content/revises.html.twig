@@ -14,23 +14,10 @@
                 <h3 class="mb-0">{{ pagetitle }}</h3>
                 <span></span>
             </div>
-            <div class="card-body">
-                <form class="row gx-3">
-                    <div class="col-lg-9 col-md-7 col-12 mb-lg-0 mb-2">
-                        <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
-                    </div>
-                    <div class="col-lg-3 col-md-5 col-12">
-                        <select class="form-select">
-                            <option value="">Date Created</option>
-                            <option value="Newest">Newest</option>
-                            <option value="High Rated">High Rated</option>
-                            <option value="Law Rated">Law Rated</option>
-                            <option value="High Earned">High Earned</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
             {% include "dashboard/shared/content/manage-revises-table.html.twig" with {rows: rows} %}
+            <div class="card-footer">
+                {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+            </div>
         {% endif %}
     </div>
 {% endblock %}

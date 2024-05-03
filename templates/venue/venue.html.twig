@@ -1,6 +1,6 @@
 {% extends 'page.html.twig' %}
 
-{% set venue_comments_enabled = setting.getSettings("venue_comments_enabled") %}
+{% set venue_comments_enabled = settings["venue_comments_enabled"] %}
 {% set pagetitle = venue.name %}
 {% block title pagetitle %}
 
@@ -135,7 +135,9 @@
 							{% if '0' != settings["venue_comments_enabled"] %}
 								<li class="nav-item" role="presentation">
 									<a class="nav-link" id="comment-tab" data-bs-toggle="pill" href="#comment" role="tab"
-										aria-controls="comment" aria-selected="false" tabindex="-1">{{ "Comment"|trans }}</a>
+										aria-controls="comment" aria-selected="false" tabindex="-1">
+										{{ "Comment"|trans }}
+									</a>
 								</li>
 							{% endif %}
 						</ul>
@@ -148,26 +150,26 @@
 									{% if venue.description %}
 										<div class="mb-4">
 											<h3 class="mb-2">{{ "The space"|trans }}</h3>
-											<p>{{ venue.description |raw | nl2br }}</p>
+											<p>{{ venue.description | raw | nl2br }}</p>
 										</div>
 									{% endif %}
 									{% if venue.pricing %}
 										<div class="mb-4">
 											<h3 class="mb-2">{{ "Pricing"|trans }}</h3>
-											<p>{{ venue.pricing |raw | nl2br }}</p>
+											<p>{{ venue.pricing | raw | nl2br }}</p>
 										</div>
 									{% endif %}
 									{% if venue.availibility %}
 										<div class="mb-4">
 											<h3 class="mb-2">{{ "Availability"|trans }}</h3>
-											<p>{{ venue.availibility |raw | nl2br }}</p>
+											<p>{{ venue.availibility | raw | nl2br }}</p>
 										</div>
 									{% endif %}
 									{#  
 									{% if venue.foodbeverage %}
 										<div class="mb-4">
 											<h3 class="mb-2">{{ "Food and beverage"|trans }}</h3>
-											<p>{{ venue.foodbeverage |raw | nl2br }}</p>
+											<p>{{ venue.foodbeverage | raw | nl2br }}</p>
 										</div>
 									{% endif %}
 									#}
@@ -205,7 +207,7 @@
 									{% if venue.neighborhoods %}
 										<div class="mb-4">
 											<h3 class="mb-2">{{ "Neighborhoods"|trans }}</h3>
-											<p>{{ venue.neighborhoods |raw | nl2br }}</p>
+											<p>{{ venue.neighborhoods | raw | nl2br }}</p>
 										</div>
 									{% endif %}
 								</div>

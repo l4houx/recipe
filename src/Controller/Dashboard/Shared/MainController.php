@@ -2,18 +2,20 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\BaseController;
-use App\Entity\Traits\HasRoles;
 use App\Entity\User;
-use App\Repository\ApplicationRepository;
+use App\Entity\Traits\HasRoles;
+use App\Controller\BaseController;
 use App\Repository\LevelRepository;
+use App\Repository\RecipeRepository;
+use App\Repository\ReviseRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
+use App\Repository\ApplicationRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /** My Profile Creator */
 #[Route(path: '/%website_dashboard_path%/creator', name: 'dashboard_creator_')]
@@ -24,13 +26,19 @@ class MainController extends BaseController
     public function dashboard(
         #[CurrentUser] ?User $user,
         Security $security,
+        RecipeRepository $recipeRepository,
+        ReviseRepository $reviseRepository,
         TicketRepository $ticketRepository,
         LevelRepository $levelRepository,
         StatusRepository $statusRepository,
         ApplicationRepository $applicationRepository
     ): Response {
-        $levels = $levelRepository->findAll();
-        $statuses = $statusRepository->findAll();
+        $user = $this->getUserOrThrow();
+
+        //$lastRecipes = $recipeRepository->findLastByUser($user, 6);
+        $lastRevises = $reviseRepository->findPendingFor($user);
+        $lastLevels = $levelRepository->findAll();
+        $lastStatuses = $statusRepository->findAll();
 
         if (null === $user) {
             return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
@@ -48,6 +56,8 @@ class MainController extends BaseController
             $tickets = array_merge($ticketsApp, $ticketsUser);
         }
 
-        return $this->render('dashboard/shared/dashboard.html.twig', compact('user', 'tickets', 'statuses', 'levels'));
+        $hasActivity = !empty($lastRecipes) || !empty($lastRevises) || !empty($lastLevels) || !empty($lastStatuses);
+
+        return $this->render('dashboard/shared/dashboard.html.twig', compact('user', 'hasActivity', 'lastRevises'/*, 'lastRecipes'*/, 'lastLevels', 'lastStatuses'));
     }
 }

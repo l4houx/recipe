@@ -36,10 +36,10 @@
 										<i class="nav-icon bi bi-book me-2"></i>
 										{{ 'Recipes'|trans }}
 									</a>
-									<div id="recipe-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_recipe_date_statistics" or routename == "dashboard_admin_recipe_category_index" or routename == "dashboard_admin_recipe_category_new" or routename == "dashboard_admin_recipe_category_edit" or routename ==  "dashboard_admin_country_index" or routename == "dashboard_admin_country_new" or routename == "dashboard_admin_country_edit" or routename == "dashboard_admin_language_index" or routename == "dashboard_admin_language_new" or routename == "dashboard_admin_language_edit" or routename == "dashboard_admin_audience_index" or routename == "dashboard_admin_audience_new" or routename == "dashboard_admin_audience_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
+									<div id="recipe-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_recipe_date_statistics_index" or routename == "dashboard_admin_recipe_category_index" or routename == "dashboard_admin_recipe_category_new" or routename == "dashboard_admin_recipe_category_edit" or routename ==  "dashboard_admin_country_index" or routename == "dashboard_admin_country_new" or routename == "dashboard_admin_country_edit" or routename == "dashboard_admin_language_index" or routename == "dashboard_admin_language_new" or routename == "dashboard_admin_language_edit" or routename == "dashboard_admin_audience_index" or routename == "dashboard_admin_audience_new" or routename == "dashboard_admin_audience_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
-												<a class="nav-link {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_recipe_date_statistics" %}active{% endif %}" href="{{ path('dashboard_admin_recipe_index') }}">
+												<a class="nav-link {% if routename == "dashboard_admin_recipe_index" or routename == "dashboard_admin_recipe_new" or routename == "dashboard_admin_recipe_edit" or routename == "dashboard_admin_recipe_date_statistics_index" %}active{% endif %}" href="{{ path('dashboard_admin_recipe_index') }}">
 													{{ 'Manage recipes'|trans }}
 												</a>
 											</li>
@@ -236,7 +236,7 @@
 										<i class="nav-icon bi bi-award me-2"></i>
 										{{ 'Premium'|trans }}
 									</a>
-									<div id="premium-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_pricing_index" or routename == "dashboard_admin_pricing_new" or routename == "dashboard_admin_pricing_edit" or routename == "dashboard_admin_user_index" %}show{% endif %}" data-bs-parent="#sideNavbar">
+									<div id="premium-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_pricing_index" or routename == "dashboard_admin_transaction_index" or routename == "dashboard_admin_pricing_new" or routename == "dashboard_admin_pricing_edit" or routename == "dashboard_admin_user_index" %}show{% endif %}" data-bs-parent="#sideNavbar">
 										<ul class="nav flex-column">
 											<li class="nav-item">
 												<a class="nav-link {% if routename == "dashboard_admin_pricing_index" or routename == "dashboard_admin_pricing_new" or routename == "dashboard_admin_pricing_edit" %}active{% endif %}" href="{{ path('dashboard_admin_pricing_index') }}">
@@ -244,7 +244,7 @@
 												</a>
 											</li>
 											<li class="nav-item">
-												<a class="nav-link" href="#">
+												<a class="nav-link {% if routename == "dashboard_admin_transaction_index" %}active{% endif %}" href="{{ path('dashboard_admin_transaction_index') }}">
 													{{ 'Transactions'|trans }}
 												</a>
 											</li>

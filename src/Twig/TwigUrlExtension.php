@@ -2,9 +2,11 @@
 
 namespace App\Twig;
 
+use App\Entity\Post;
 use App\Entity\User;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use App\Entity\Restaurant;
 use Twig\Extension\AbstractExtension;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -22,7 +24,7 @@ class TwigUrlExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            // new TwigFunction('parent_path', $this->parentPath(...)),
+            new TwigFunction('post_path', $this->postPath(...)),
             new TwigFunction('path', $this->pathFor(...)),
             new TwigFunction('url', $this->urlFor(...)),
         ];
@@ -35,20 +37,20 @@ class TwigUrlExtension extends AbstractExtension
     {
         return [
             new TwigFilter('avatarName', $this->avatarName(...)),
+            new TwigFilter('logoName', $this->logoName(...)),
+            new TwigFilter('coverName', $this->coverName(...)),
             new TwigFilter('autolink', $this->autoLink(...)),
         ];
     }
 
-    /*
-    public function parentPath(Parent $parent): ?string
+    public function postPath(Post $post): ?string
     {
-        if ($parent instanceof Post) {
-            return $this->urlGenerator->generate('blog_article', ['slug' => $parents->getSlug()]);
+        if ($post instanceof Post) {
+            return $this->urlGenerator->generate('post_article', ['slug' => $post->getSlug()]);
         }
 
         return null;
     }
-    */
 
     public function avatarName(User $user): ?string
     {
@@ -60,6 +62,32 @@ class TwigUrlExtension extends AbstractExtension
             '%s?uid=%s',
             $this->uploaderHelper->asset($user, 'avatarFile'),
             $user->getUpdatedAt()?->getTimestamp() ?: 0
+        );
+    }
+
+    public function logoName(Restaurant $restaurant): ?string
+    {
+        if (null === $restaurant->getLogoName()) {
+            return '/uploads/restaurant/default.png';
+        }
+
+        return sprintf(
+            '%s?uid=%s',
+            $this->uploaderHelper->asset($restaurant, 'logoFile'),
+            $restaurant->getUpdatedAt()?->getTimestamp() ?: 0
+        );
+    }
+
+    public function coverName(Restaurant $restaurant): ?string
+    {
+        if (null === $restaurant->getCoverName()) {
+            return '/uploads/restaurant/covers/default.png';
+        }
+
+        return sprintf(
+            '%s?uid=%s',
+            $this->uploaderHelper->asset($restaurant, 'coverFile'),
+            $restaurant->getUpdatedAt()?->getTimestamp() ?: 0
         );
     }
 

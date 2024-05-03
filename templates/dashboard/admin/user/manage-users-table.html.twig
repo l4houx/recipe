@@ -101,7 +101,11 @@
 								<a href="{{ path('dashboard_admin_user_information', { slug : user.slug }) }}" class="dropdown-item">
 									<i class="bi bi-file dropdown-item-icon"></i>
 									{{ 'More information'|trans }}
-								</a> 
+								</a>
+								<a href="{{ path('dashboard_admin_transaction_index', { q: 'user:' ~ user.id }) }}" class="dropdown-item">
+									<i class="bi bi-credit-card dropdown-item-icon"></i>
+									{{ 'Transactions'|trans }}
+								</a>
 								{% if user.hasRole('ROLE_RESTAURANT') %}
 									<a href="{# {{ path('restaurant', { slug: (user.restaurant.slug) }) }} #}" class="dropdown-item">
 										<i class="bi bi-person-vcard dropdown-item-icon"></i>

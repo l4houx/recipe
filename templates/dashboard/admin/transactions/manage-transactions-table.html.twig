@@ -1,0 +1,63 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th>{{ 'Date'|trans }}</th>
+				<th>{{ 'Price'|trans }}</th>
+				<th>{{ 'Username'|trans }}</th>
+				<th>{{ 'E-mail'|trans }}</th>
+				<th>{{ 'Method'|trans }}</th>
+				<th>{{ 'Duration'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for transaction in rows %}
+				<tr>
+					<td>{{ transaction.createdAt.format('d/m/Y H:i') }}</td>
+					<td>
+                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ transaction.price }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                    </td>
+                    <td>{{ transaction.author.username }}</td>
+                    <td>{{ transaction.author.email }}</td>
+                    <td>
+                        {% if transaction.paypal %}
+                            <span class="badge-dot bg-warning me-1 d-inline-block align-middle"></span>
+                            <a href="https://www.paypal.com/myaccount/transactions/?free_text_search={{ transaction.methodRef }}&account_subscription_type=ALL&filter_id=&currency=ALL&issuance_product_name=&asset_names=&asset_symbols=&type=&status=&start_date=2010-07-09&end_date=2120-10-07">
+                                {{ transaction.method }}
+                            </a>
+                        {% elseif transaction.stripe %}
+                            <span class="badge-dot bg-success me-1 d-inline-block align-middle"></span>
+                            <a href="https://dashboard.stripe.com/payments/{{ transaction.methodRef }}">
+                                {{ transaction.method }}
+                            </a>
+                        {% endif %}
+                    </td>
+					<td>{{ transaction.duration }}</td>
+					<td>
+						<div class="dropdown dropstart">
+							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="bi bi-three-dots-vertical"></i>
+							</a>
+							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
+								<span class="dropdown-header">{{ 'Settings'|trans }}</span> 
+								<a href="#" onclick="event.preventDefault(); confirm('{{ "Do you really want to mark this transaction as refunded?"|trans }}') && document.getElementById('js-transaction-form').submit();" class="dropdown-item">
+									<i class="bi bi-credit-card dropdown-item-icon"></i>
+									{{ 'Repay'|trans }}
+								</a>
+								<form id="js-transaction-form" action="{{ path('dashboard_admin_transaction_delete', {id: transaction.id}) }}" method="post" class="">
+									<input type="hidden" name="_token" value="{{ csrf_token('transaction_deletion_' ~ transaction.id) }}">
+									<input type="hidden" name="_method" value="DELETE">
+								</form>
+							</div>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="card-footer">
+		{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
+	</div>
+</div>

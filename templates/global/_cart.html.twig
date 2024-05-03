@@ -1,3 +1,199 @@
-<a href="#" class="btn btn-icon btn-light rounded-circle d-none d-md-inline-flex ms-2">
-    <i class="bi bi-cart2 align-middle"></i>
+{#  
+<a class="btn btn-icon btn-light rounded-circle d-none d-md-inline-flex ms-2" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart">
+    <i class="bi bi-cart3 align-middle" data-bs-target="#offcanvasCart"></i>
+    <span class="position-absolute top-0 start-100 translate-middle badge smaller rounded-circle bg-primary mt-xl-2 ms-n1">
+        {{ app.user.getSubscriptionsInCartQuantitySum }}
+        <span class="visually-hidden">unread messages</span>
+    </span>
 </a>
+#}
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    {% if is_granted('ROLE_CREATOR') %}
+        <li class="dropdown d-inline-block stoprecipe position-static ms-2">
+            <a class="btn btn-light btn-icon rounded-circle indicator indicator-primary" href="#" role="button" id="dropdownCartSecond" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="bi bi-cart3 align-middle"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge smaller rounded-circle bg-primary mt-xl-2 ms-n1">
+                    {{ app.user.getSubscriptionsInCartQuantitySum }}
+                    <span class="visually-hidden">unread messages</span>
+                </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-lg position-absolute mx-3 my-5" aria-labelledby="dropdownCartSecond">
+                {% if app.user.cartelements | length %}
+                    <div>
+                        <div class="border-bottom px-3 pb-3 d-flex justify-content-between align-items-center">
+                            <span class="h5 mb-0">{{ 'Carts'|trans }}</span>
+                            <a href="# ">
+                                <span class="align-middle">
+                                    <i class="bi bi-gear me-1"></i>
+                                </span>
+                            </a>
+                        </div>
+                        {% for cartelement in app.user.cartelements %}
+                            {#  
+                            <ul class="list-group list-group-flush simplebar-scrollable-y" style="height: 300px" data-simplebar="init">
+                                <div class="simplebar-wrapper" style="margin: 0px;">
+                                    <div class="simplebar-height-auto-observer-wrapper">
+                                        <div class="simplebar-height-auto-observer"></div>
+                                    </div>
+                                    <div class="simplebar-mask">
+                                        <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                            <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;">
+                                                <div class="simplebar-content" style="padding: 0px;">
+                                                    <li class="list-group-item bg-light">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <a class="text-body" href="#">
+                                                                    <div class="d-flex">
+                                                                        <img src="../assets/images/avatar/avatar-1.jpg" alt="" class="avatar-md rounded-circle">
+                                                                        <div class="ms-3">
+                                                                            <h5 class="fw-bold mb-1">Kristin Watson:</h5>
+                                                                            <p class="mb-3 text-body">Krisitn Watsan like your comment on course Javascript Introduction!</p>
+                                                                            <span class="fs-6">
+                                                                                <span>
+                                                                                    <span class="fe fe-thumbs-up text-success me-1"></span>
+                                                                                    2 hours ago,
+                                                                                </span>
+                                                                                <span class="ms-1">2:19 PM</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-auto text-center me-2">
+                                                                <a href="#" class="badge-dot bg-info" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Mark as read" data-bs-original-title="Mark as read"></a>
+                                                                <div>
+                                                                    <a href="#" class="bg-transparent" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Remove" data-bs-original-title="Remove">
+                                                                        <i class="fe fe-x"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <a class="text-body" href="#">
+                                                                    <div class="d-flex">
+                                                                        <img src="../assets/images/avatar/avatar-2.jpg" alt="" class="avatar-md rounded-circle">
+                                                                        <div class="ms-3">
+                                                                            <h5 class="fw-bold mb-1">Brooklyn Simmons</h5>
+                                                                            <p class="mb-3 text-body">Just launched a new Courses React for Beginner.</p>
+                                                                            <span class="fs-6">
+                                                                                <span>
+                                                                                    <span class="fe fe-thumbs-up text-success me-1"></span>
+                                                                                    Oct 9,
+                                                                                </span>
+                                                                                <span class="ms-1">1:20 PM</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-auto text-center me-2">
+                                                                <a href="#" class="badge-dot bg-secondary" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Mark as unread" data-bs-original-title="Mark as unread"></a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <a class="text-body" href="#">
+                                                                    <div class="d-flex">
+                                                                        <img src="../assets/images/avatar/avatar-3.jpg" alt="" class="avatar-md rounded-circle">
+                                                                        <div class="ms-3">
+                                                                            <h5 class="fw-bold mb-1">Jenny Wilson</h5>
+                                                                            <p class="mb-3 text-body">Krisitn Watsan like your comment on course Javascript Introduction!</p>
+                                                                            <span class="fs-6">
+                                                                                <span>
+                                                                                    <span class="fe fe-thumbs-up text-info me-1"></span>
+                                                                                    Oct 9,
+                                                                                </span>
+                                                                                <span class="ms-1">1:56 PM</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-auto text-center me-2">
+                                                                <a href="#" class="badge-dot bg-secondary" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Mark as unread" data-bs-original-title="Mark as unread"></a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <a class="text-body" href="#">
+                                                                    <div class="d-flex">
+                                                                        <img src="../assets/images/avatar/avatar-4.jpg" alt="" class="avatar-md rounded-circle">
+                                                                        <div class="ms-3">
+                                                                            <h5 class="fw-bold mb-1">Sina Ray</h5>
+                                                                            <p class="mb-3 text-body">You earn new certificate for complete the Javascript Beginner course.</p>
+                                                                            <span class="fs-6">
+                                                                                <span>
+                                                                                    <span class="fe fe-award text-warning me-1"></span>
+                                                                                    Oct 9,
+                                                                                </span>
+                                                                                <span class="ms-1">1:56 PM</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-auto text-center me-2">
+                                                                <a href="#" class="badge-dot bg-secondary" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Mark as unread" data-bs-original-title="Mark as unread"></a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="simplebar-placeholder" style="width: 352px; height: 557px;"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                    <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                                    <div class="simplebar-scrollbar" style="height: 161px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+                                </div>
+                            </ul>
+                            #}
+                            <figure class="itemside badge-notification badge-notification-right" data-badge="{{ cartelement.quantity }}">
+                                <div class="aside">
+                                    <div class="img-wrap img-sm">
+                                        <img src="{{ asset(cartelement.recipesubscription.recipedate.recipe.getImagePath) }}">
+                                    </div>
+                                </div>
+                                <figcaption class="text-wrap">
+                                    <h6 class="title mb-2">
+                                        <a href="{{ path('recipe', { slug: cartelement.recipesubscription.recipedate.recipe.slug }) }}">
+                                            {{ cartelement.recipesubscription.recipedate.recipe.name }}
+                                        </a>
+                                    </h6>
+                                    {% if cartelement.recipesubscription.recipedate.startdate %}
+                                        <div class="text-black-50 small mb-1">
+                                            {{ cartelement.recipesubscription.recipedate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if cartelement.recipesubscription.recipedate.venue %}
+                                        <div class="text-black-50 small">
+                                            {{ cartelement.recipesubscription.recipedate.venue.name }}: 
+                                            {{ cartelement.recipesubscription.recipedate.venue.stringifyAddress }}
+                                        </div>
+                                    {% endif %}
+                                </figcaption>
+                            </figure>
+                        {% endfor %}
+                        <div class="border-top px-3 pt-3 pb-0">
+                            <a href="{{ path('dashboard_creator_cart') }}" class="text-link fw-semibold">{{ "View cart"|trans }}</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="p-2">
+                        {% include "global/message.html.twig" with { icon: "bi bi-shop", type: "info", message: ('Your cart is empty'|trans) } %}
+                    </div>
+                {% endif %}
+            </div>
+        </li>
+    {% endif %}
+{% endif %}

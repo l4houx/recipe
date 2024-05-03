@@ -102,6 +102,27 @@
 	<section class="pb-8">
 		<div class="container">
 			<div class="row">
+				<div class="col-lg-12 col-md-12 col-12 mb-5">
+					<div id="carouselRecipeIndicators" class="carousel slide" data-bs-ride="carousel">
+						<div class="carousel-inner">
+							<div class="carousel-item {{ (loop.first ) ? 'active' : '' }}">
+								<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" class="d-block w-100 " alt="{{ recipe.title }}">
+							</div>
+						</div>
+						<a class="carousel-control-prev" href="#carouselRecipeIndicators" role="button"
+							data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">{{ "Previous"|trans }}</span>
+						</a>
+						<a class="carousel-control-next" href="#carouselRecipeIndicators" role="button"
+							data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">{{ "Next"|trans }}</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-lg-8 col-md-12 col-12 mt-n8 mb-4 mb-lg-0">
 					<div class="card rounded-3">
 						<div class="card-header border-bottom-0 p-0">
@@ -1792,7 +1813,7 @@
 				</div>
 			</div>
 
-			{% set otherrecipesbythisrestaurants = setting.getRecipes({"limit": 3, "restaurant": recipe.restaurant.slug, "notId": recipe.id}).getQuery().getResult() %}
+			{% set otherrecipesbythisrestaurants = setting.getRecipes({"restaurant": recipe.restaurant.slug, "limit": 3, "notId": recipe.id}).getQuery().getResult() %}
 			{% if otherrecipesbythisrestaurants | length > 0 %}
 				<div class="pt-8 pb-3">
 					<div class="row d-md-flex align-items-center mb-4">
@@ -1810,7 +1831,7 @@
 				</div>
 			{% endif %}
 
-			{% set similarrecipes = setting.getRecipes({"limit": 3, "category": recipe.category.slug, "notId": recipe.id}).getQuery().getResult() %}
+			{% set similarrecipes = setting.getRecipes({"category": recipe.category.slug, "limit": 3, "notId": recipe.id}).getQuery().getResult() %}
 			{% if similarrecipes | length > 0 %}
 				<div class="pt-8 pb-3">
 					<div class="row d-md-flex align-items-center mb-4">
@@ -1827,4 +1848,17 @@
 			{% endif %}
 		</div>
 	</section>
+
+	{% if recipe.hasAnRecipeDateOnSale %}
+		{% for recipeDate in recipe.recipedates if recipeDate.isOnSale %}
+			{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_CREATOR') %}
+				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+					{% if recipeDate.hasSeatingPlan %}
+						{% include "dashboard/shared/recipe/seatingPlans/seating-plan-sections-modals.html.twig" with {seatingPlan: recipeDate.seatingPlan, recipeDate: recipeDate} %}
+					{% endif %}
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+
 {% endblock %}

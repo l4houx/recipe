@@ -2,26 +2,28 @@
 
 namespace App\Controller\Dashboard\Shared\Tickets;
 
-use App\Controller\BaseController;
+use App\Entity\User;
 use App\Entity\Level;
 use App\Entity\Status;
 use App\Entity\Ticket;
-use App\Entity\Traits\HasRoles;
-use App\Entity\User;
 use App\Form\TicketFormType;
-use App\Repository\ApplicationRepository;
+use App\Entity\Traits\HasLimit;
+use App\Entity\Traits\HasRoles;
+use App\Controller\BaseController;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ApplicationRepository;
+use Doctrine\Common\Collections\Criteria;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[IsGranted(HasRoles::DEFAULT)]
 #[Route(path: '/%website_dashboard_path%/my-tickets', name: 'dashboard_ticket_')]
@@ -38,21 +40,27 @@ class TicketController extends BaseController
     }
 
     #[Route(path: '', name: 'index', methods: ['GET'])]
-    public function index(#[CurrentUser] ?User $user): Response
+    public function index(Request $request, #[CurrentUser] ?User $user, PaginatorInterface $paginator): Response
     {
         if (null === $user) {
             return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
         }
 
         if ($this->security->isGranted(HasRoles::ADMIN)) {
-            $rows = $this->ticketRepository->findAll();
+            $query = $this->ticketRepository->findAlls();
         } else {
             $applications = $this->applicationRepository->findBy(['user' => $user->getId()]);
-
             $ticketsApp = $this->ticketRepository->findBy(['application' => $applications]);
             $ticketsUser = $this->ticketRepository->findBy(['user' => $user->getId()]);
-            $rows = array_merge($ticketsApp, $ticketsUser);
+            $query = array_merge($ticketsApp, $ticketsUser);
         }
+
+        $rows = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            HasLimit::TICKET_LIMIT,
+            ['wrap-queries' => true]
+        );
 
         return $this->render('dashboard/shared/tickets/index.html.twig', compact('user', 'rows'));
     }

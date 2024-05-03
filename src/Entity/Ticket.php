@@ -2,17 +2,18 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
+use App\Entity\Traits\HasLimit;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TicketRepository;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasDeletedAtTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
-use App\Entity\Traits\HasIdApiIdAuthorTrait;
-use App\Repository\TicketRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use App\Entity\Traits\HasDeletedAtTrait;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\Traits\HasIdApiIdAuthorTrait;
+use App\Entity\Traits\HasGedmoTimestampTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
@@ -29,6 +30,8 @@ class Ticket
     use HasContentTrait;
     use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
+
+    public const TICKET_LIMIT = HasLimit::TICKET_LIMIT;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     private string $subject = '';

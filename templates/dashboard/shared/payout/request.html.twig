@@ -1,0 +1,100 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'New payout request'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "dashboard_restaurant_payout_requests": ("Payout requests"|trans), "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-body">
+            {% include "global/message.html.twig" with { type: "info", message: ('Once the payout request submitted, the recipe date will be locked and the sales will be suspended for the specific recipe date. If you wish, you can wait until the start date of the recipe date before requesting the payout. You can cancel the payout request any time before it is processed'|trans), icon: "bi bi-exclamation-circle" } %}
+            <form name="payout_request" method="post" class="needs-validation" novalidate="">
+                <ul class="list-group list-group-flush mt-5">
+                    <li class="list-group-item">
+                        <b>{{ "Recipe"|trans }}</b>
+                        <h5 class="mt-1">{{ recipeDate.recipe.name }}</h5>
+                    </li>
+                    <li class="list-group-item">
+                        <b>{{ "Date"|trans }}</b>
+                        <h5 class="mt-1">
+                            {{ recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                        </h5>
+                    </li>
+                    <li class="list-group-item">
+                        <b>{{ "Venue"|trans }}</b>
+                        <h5 class="mt-1">
+                            {{ recipeDate.venue ? (recipeDate.venue.name ~ ": " ~ recipeDate.venue.stringifyAddress()) : ("Online"|trans) }}
+                        </h5>
+                    </li>
+                    <li class="list-group-item">
+                        <b class="mr-3">{{ "Subscriptions sold"|trans }}</b>
+                        <a href="{{ path('dashboard_restaurant_recipe_date_statistics_index', {recipeSlug: recipeDate.recipe.slug, recipeDateReference: recipeDate.reference}) }}" target="_blank">
+                            <i class="bi bi-bar-chart"></i> {{ "View detailed statistics"|trans }}
+                        </a>
+                        <h5 class="mt-1">{{ recipeDate.getOrderElementsQuantitySum }}</h5>
+                    </li>
+                    <li class="list-group-item ">
+                        <b>{{ "Gross sales"|trans }}</b>
+                        <h5 class="mt-1">
+                            {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getSales }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                        </h5>
+                    </li>
+                    <li class="list-group-item ">
+                        <b>{{ "Percentage cut"|trans }}</b>
+                        <h5 class="mt-1">
+                            {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getSubscriptionPricePercentageCutSum() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                        </h5>
+                    </li>
+                    <li class="list-group-item list-group-item-success">
+                        <b>
+                            {{ "Net sales until"|trans }}
+                            {{ "now" | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                        </b>
+                        <h5 class="mt-1">
+                            {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getRestaurantPayoutAmount() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                        </h5>
+                    </li>
+                    <li class="list-group-item">
+                        <div>
+                            <h4 class="mb-4">{{ "Select a payout method"|trans }}</h4>
+                            {% set payoutMethods = setting.getPaymentGateways({"restaurant": app.user.restaurant.slug}).getQuery().getResult() %}
+                            <div class="card card-bordered shadow-none mb-2">
+                                <div class="card-body">
+                                    {% for payoutMethod in payoutMethods %}
+                                        <div class="d-md-flex">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="payout_method" id="{{ payoutMethod.slug }}" value="{{ payoutMethod.slug }}" {{ loop.first ? "checked"}}>
+                                                <label class="form-check-label ms-2 w-100" for="{{ payoutMethod.slug }}"></label>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <div class="d-flex align-items-start">
+                                                    <img src="{{ asset('images/icons/payment/'~ payoutMethod.name|lower ~'.svg') }}" alt="">
+                                                    <div class="ms-2">
+                                                        <h5 class="mb-1">FedEx Next Day Delivery</h5>
+                                                        <p class="mb-0 fs-6">No Delivery on Public Holidays</p>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h3 class="mb-0">$19.99</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-action text-center pt-5">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-credit-card"></i> {{ "Confirm payout request"|trans }}
+                        </button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+{% endblock %}

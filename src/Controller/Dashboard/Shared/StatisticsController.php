@@ -7,14 +7,15 @@ use App\Entity\Traits\HasRoles;
 use App\Service\SettingService;
 use App\Controller\BaseController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\LineChart;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-#[Route(path: '/%website_dashboard_path%/admin/manage-recipes/', name: 'dashboard_admin_recipe_date_statistics_')]
-#[Route(path: '/%website_dashboard_path%/restaurant/my-recipes/', name: 'dashboard_restaurant_recipe_date_statistics_')]
+#[Route(path: '/%website_dashboard_path%/admin/manage-recipes', name: 'dashboard_admin_recipe_date_statistics_')]
+#[Route(path: '/%website_dashboard_path%/restaurant/my-recipes', name: 'dashboard_restaurant_recipe_date_statistics_')]
 #[IsGranted(HasRoles::DEFAULT)]
 class StatisticsController extends BaseController
 {
@@ -25,8 +26,8 @@ class StatisticsController extends BaseController
     ) {
     }
 
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'index', methods: ['GET'])]
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'index', methods: ['GET'])]
+    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'index', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'index', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
     public function recipeDateStatistics(string $recipeDateReference)
     {
         $restaurant = 'all';
@@ -81,7 +82,7 @@ class StatisticsController extends BaseController
         $subscriptionsSoldPerPointOfSalePieChart = null;
         $grossSalesPerPointOfSalePieChart = null;
 
-        if ($recipeDate->getOrderElementsQuantitySum(1, "all", HASROLES::POINTOFSALE) > 0) {
+        if ($recipeDate->getOrderElementsQuantitySum(1, "all", HasRoles::POINTOFSALE) > 0) {
             foreach ($recipeDate->getPointofsales() as $pointOfSale) {
                 $subscriptionsSoldPerPointOfSale[] = [$pointOfSale->getName(), $recipeDate->getOrderElementsQuantitySum(1, $pointOfSale->getUser())];
                 $grossSalesPerPointOfSale[] = [$pointOfSale->getName(), $recipeDate->getSales(HasRoles::POINTOFSALE, $pointOfSale->getUser())];
@@ -139,8 +140,8 @@ class StatisticsController extends BaseController
             $thisSubscriptionsSoldByChannelPieChart = new PieChart();
             $thisSubscriptionsSoldByChannelPieChart->getData()->setArrayToDataTable(
                     [[$this->translator->trans("Sales channel"), $this->translator->trans("Number of subscriptions")],
-                        [$this->translator->trans("Online"), $recipeSubscription->getOrderElementsQuantitySum(1, "all", HASROLES::CREATOR)],
-                        [$this->translator->trans("POS"), $recipeSubscription->getOrderElementsQuantitySum(1, "all", HASROLES::POINTOFSALE)],
+                        [$this->translator->trans("Online"), $recipeSubscription->getOrderElementsQuantitySum(1, "all", HasRoles::CREATOR)],
+                        [$this->translator->trans("POS"), $recipeSubscription->getOrderElementsQuantitySum(1, "all", HasRoles::POINTOFSALE)],
                     ]
             );
             $thisSubscriptionsSoldByChannelPieChart->getOptions()->setTitle($this->translator->trans("Subscriptions sold by channel"));
@@ -155,8 +156,8 @@ class StatisticsController extends BaseController
             $thisGrossSalesByChannelPieChart = new PieChart();
             $thisGrossSalesByChannelPieChart->getData()->setArrayToDataTable(
                     [[$this->translator->trans("Sales channel"), $this->translator->trans("Gross Sales")],
-                        [$this->translator->trans("Online"), $recipeSubscription->getSales(HASROLES::CREATOR)],
-                        [$this->translator->trans("POS"), $recipeSubscription->getSales(HASROLES::POINTOFSALE)],
+                        [$this->translator->trans("Online"), $recipeSubscription->getSales(HasRoles::CREATOR)],
+                        [$this->translator->trans("POS"), $recipeSubscription->getSales(HasRoles::POINTOFSALE)],
                     ]
             );
             $thisGrossSalesByChannelPieChart->getOptions()->setTitle($this->translator->trans("Gross sales by channel") . " (" . $this->settingService->getSettings("currency_ccy") . ")");
@@ -184,8 +185,8 @@ class StatisticsController extends BaseController
         ));
     }
 
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'reservedSeats', methods: ['GET'])]
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'reservedSeats', methods: ['GET'])]
+    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'reservedSeats', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'reservedSeats', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
     public function recipeDateReservedSeats(string $recipeDateReference)
     {
         $restaurant = 'all';

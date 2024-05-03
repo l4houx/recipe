@@ -74,7 +74,7 @@ trait HasLogoAndCoverVichTrait
 
     public function getLogoPath(): string
     {
-        return '/images/restaurant/'.$this->logoName;
+        return '/uploads/restaurants/'.$this->logoName;
     }
 
     public function getLogoPlaceholder(string $size = 'default'): string
@@ -123,6 +123,6 @@ trait HasLogoAndCoverVichTrait
 
     public function getCoverPath(): string
     {
-        return '/images/restaurant/covers/'.$this->coverName;
+        return '/uploads/restaurants/covers/'.$this->coverName;
     }
 }

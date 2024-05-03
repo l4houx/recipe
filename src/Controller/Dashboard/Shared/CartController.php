@@ -164,7 +164,7 @@ class CartController extends BaseController
         if ($cartelement->getUser() != $this->getUser()) {
             $this->addFlash('danger', $this->translator->trans('Access is denied. You may not have the appropriate permissions to access this resource.'));
 
-            return $this->settingService->redirectToReferer('cart');
+            return $this->redirectToRoute('dashboard_creator_cart', [], Response::HTTP_SEE_OTHER);
         }
 
         $this->em->remove($cartelement);
@@ -172,7 +172,7 @@ class CartController extends BaseController
 
         $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
 
-        return $this->settingService->redirectToReferer('cart');
+        return $this->redirectToRoute('dashboard_creator_cart', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route(path: '/creator/cart/empty', name: 'dashboard_creator_cart_empty', methods: ['GET'])]
@@ -181,6 +181,6 @@ class CartController extends BaseController
         $this->settingService->emptyCart($this->getUser());
         $this->addFlash('info', $this->translator->trans('Your cart has been emptied'));
 
-        return $this->settingService->redirectToReferer('cart');
+        return $this->redirectToRoute('dashboard_creator_cart', [], Response::HTTP_SEE_OTHER);
     }
 }

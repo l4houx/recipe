@@ -3819,7 +3819,7 @@
       </trans-unit>
       <trans-unit id="IlRhod_" resname="Sign up restaurant">
         <source>Sign up restaurant</source>
-        <target>Inscrivez-vous restaurant</target>
+        <target>S'inscrire (restaurant)</target>
       </trans-unit>
       <trans-unit id="oXlHg6q" resname="Offline">
         <source>Offline</source>

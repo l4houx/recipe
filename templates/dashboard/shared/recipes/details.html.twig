@@ -146,9 +146,11 @@
                                 <tr>
                                     <td width="30%">{{ "Main image"|trans }}</td>
                                     <td>
-                                        <a class="glightbox" href="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" data-bs-toggle="tooltip" title="{{ "Enlarge"|trans }}">
-                                            <img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" class="rounded-3 img-fluid" />
-                                        </a>
+                                        <div class="mb-4">
+                                            <a class="glightbox" href="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" data-bs-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+                                                <img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" class="rounded-3 img-fluid" />
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>

@@ -33,4 +33,10 @@ final class HasLimit
     public const LANG_LIMIT = 10;
 
     public const COUNTRY_LIMIT = 10;
+
+    public const APP_LIMIT = 10;
+
+    public const TICKET_LIMIT = 10;
+
+    public const RESPONSE_LIMIT = 10;
 }

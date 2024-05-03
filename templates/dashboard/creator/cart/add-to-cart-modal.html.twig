@@ -1,4 +1,4 @@
-<div class="modal fade {% if recipedate.hasSeatingPlan %}has-seating-plan{% endif %}" id="buy-subscriptions-modal-recipeDate-{{ recipedate.reference }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade {% if recipedate.hasSeatingPlan %}has-seating-plan{% endif %}" id="buy-subscriptions-modal-recipeDate-{{ recipedate.reference }}" tabindex="-1" role="dialog" aria-labelledby="buy-subscriptions-modal-recipeDate-{{ recipedate.reference }}" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,7 +15,7 @@
             </div>
             <div class="modal-body">
                 <h6 class="mb-3 fw-bold">{{ recipedate.recipe.name }}</h6>
-                <p class="mb-0 fs-4">{{ recipedate.startdate | ago }}</p>
+                <p class="mb-0 fs-4">{{ recipedate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}</p>
                 <p class="mb-0 fs-4">
                     {% if recipedate.venue %}
                         {{ recipedate.venue.name }}: {{ recipedate.venue.stringifyAddress }}
@@ -75,7 +75,7 @@
                                                 {% else %}
                                                     <small class="text-success fs-4 mt-1">
                                                         {{ "Sales started on"|trans }}
-                                                        {{ subscription.salesstartdate | ago }}
+                                                        {{ subscription.salesstartdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
                                                     </small>
                                                 {% endif %}
                                             {% endif %}
@@ -84,7 +84,7 @@
                                                 {% if subscription.salesenddate | date("Y/m/d H:i") < "now" | date("Y/m/d H:i") %}
                                                     <small class="text-danger fs-4 mt-1">
                                                         {{ "Sales ended on"|trans }}
-                                                        <span>{{ subscription.salesenddate | ago }}</span>
+                                                        <span>{{ subscription.salesenddate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}</span>
                                                     </small>
                                                 {% else %}
                                                     <small class="text-danger fs-4 mt-1">

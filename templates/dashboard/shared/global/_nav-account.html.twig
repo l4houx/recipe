@@ -79,7 +79,7 @@
                         {{ 'Change password'|trans }}
                     </a>
                 </li>
-                <li class="nav-item {% if routename == "dashboard_restaurant_recipe_index" or routename == "dashboard_restaurant_recipe_new"  or routename == "dashboard_restaurant_recipe_edit" %}active{% endif %}">
+                <li class="nav-item {% if routename == "dashboard_restaurant_recipe_index" or routename == "dashboard_restaurant_recipe_new"  or routename == "dashboard_restaurant_recipe_edit" or routename == "dashboard_restaurant_recipe_date_statistics_index" %}active{% endif %}">
                     <a class="nav-link" href="{{ path('dashboard_restaurant_recipe_index') }}">
                         <i class="bi bi-book nav-icon"></i>
                         {{ 'My recipes'|trans }}
@@ -145,7 +145,11 @@
             <li class="nav-item {% if routename == "dashboard_ticket_index" or routename == "dashboard_ticket_new"  or routename == "dashboard_ticket_edit" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_ticket_index') }}">
                     <i class="bi bi-ticket nav-icon"></i>
-                    {{ 'My tickets'|trans }}
+                    {% if is_granted('ROLE_ADMIN_APPLICATION') or is_granted('ROLE_ADMIN') %}
+                        {{ 'Manage tickets'|trans }}
+                    {% elseif is_granted('ROLE_VERIFIED') or is_granted('ROLE_USER') or not is_granted('ROLE_CREATOR') %}
+                        {{ 'My tickets'|trans }}
+                    {% endif %}
                 </a>
             </li>
             <li class="nav-item {% if routename == "dashboard_application_index" or routename == "dashboard_application_new"  or routename == "dashboard_ticket_token" %}active{% endif %}">

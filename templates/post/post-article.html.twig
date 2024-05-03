@@ -138,7 +138,7 @@
                             </a>
                         {% endif %}
                     </div>
-                    {% set post_comments_enabled = setting.getSettings("post_comments_enabled") %}
+                    {% set post_comments_enabled = settings["post_comments_enabled"] %}
                     {% if 'no' != settings["post_comments_enabled"] %}
                         {% if settings["post_comments_enabled"] == "native" %}
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}

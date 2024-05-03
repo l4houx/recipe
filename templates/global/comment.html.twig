@@ -1,4 +1,59 @@
 {% if comment.isApproved %}
+    <div class="py-4">
+        <div class="d-flex align-items-center justify-content-between pb-2 mb-1">
+            <div class="d-flex align-items-center me-3">
+                {% include "global/user-avatar.html.twig" with { user: comment.author, type: "lg" } %}
+                <div class="ps-3">
+                    <h6 class="fw-semibold mb-0">{{ comment.author.getFullName | lower | capitalize }}</h6>
+                    <span class="fs-6">
+                        <a href="#c{{ comment.id }}" class="text-inherit">
+                            {{ comment.publishedAt | localizeddate('medium', 'short', app.request.locale, date_timezone, date_format) }}
+                        </a>
+                    </span>
+                </div>
+            </div>
+            {% if is_granted('ROLE_USER') %}
+                <a href="#add-comment" class="nav-link fs-6 px-0" type="button" data-reply data-id="{{comment.id}}">
+                    <i class="bi bi-reply fs-lg me-2"></i>
+                    {{ 'Reply'|trans }}
+                </a>
+            {% endif %}
+        </div>
+        <p class="mb-0 pb-2">{{ comment.content | markdown_to_html | sanitize_html }}</p>
+        {% for reply in comment.replies %}
+            <div class="position-relative ps-4 mt-4">
+                <span class="position-absolute top-0 start-0 w-1 h-100 bg-primary"></span>
+                <div class="d-flex align-items-center justify-content-between ps-3 pb-2 mb-1">
+                    <div class="d-flex align-items-center me-3">
+                        {% include "global/user-avatar.html.twig" with { user: reply.author, type: "lg" } %}
+                        <div class="ps-3">
+                            <h6 class="fw-semibold mb-0">{{ reply.author.getFullName | lower | capitalize }}</h6>
+                            <span class="fs-6">
+                                <a href="#c{{ reply.id }}" class="text-inherit">
+                                    {{ reply.publishedAt | localizeddate('medium', 'short', app.request.locale, date_timezone, date_format) }}
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    {% if is_granted('ROLE_USER') %}
+                        <a href="#add-comment" class="nav-link fs-6 px-0" type="button" data-reply data-id="{{reply.id}}">
+                            <i class="bi bi-reply fs-lg me-2"></i>
+                            {{ 'Reply'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+                <p class="ps-3 mb-0">
+                    <a href="{{ path('user_profil', { slug : reply.author.slug }) }}" class="fw-semibold text-decoration-none">
+                        @{{ reply.author.getFullName | lower | capitalize }}
+                    </a>
+                    {{ reply.content | markdown_to_html | sanitize_html }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+    <hr class="my-2">
+
+{#  
     <div class="d-flex align-items-start border-bottom pb-4 mb-4" id="c{{ comment.id }}">
         {% include "global/user-avatar.html.twig" with { user: comment.author, type: "lg" } %}
         <div class="ms-3">
@@ -31,7 +86,7 @@
             </div>
             <p>{{ comment.content | markdown_to_html | sanitize_html }}</p>
             <div class="d-lg-flex">
-                {# <p class="mb-0">Was this comment helpful?</p> #}
+                {# <p class="mb-0">Was this comment helpful?</p> }
                 {% if app.user == comment.author %}
                     {% if comment.post or comment.venue %}
                         {% if comment.post %}
@@ -121,6 +176,7 @@
             </div>
         </div>
     {% endfor %}
+#}
 {% endif %}
 
 {% block javascripts %}

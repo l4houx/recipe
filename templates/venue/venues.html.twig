@@ -30,20 +30,18 @@
 					<div class="row align-items-center mb-4">
 						<div class="col">
 							<div class="mb-4">
-								<p class="mb-0">{{ "%resultsCount% recipe(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
+								<p class="mb-0">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
 							</div>
 						</div>
 						<div class="col-auto">
 							<div class="d-flex">
-								{% if rows.getTotalItemCount > 0 %}
-									<div class="ms-3">
-										<select id="sortable-select" class="form-select select2" data-placeholder="{{ "Select an option"|trans }}">
-                                            <option value>{{ "Sort by"|trans }}</option>
-											<option value>{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}</option>
-											<option value>{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}</option>
-										</select>
-									</div>
-								{% endif %}
+								<div class="ms-3">
+									<select id="sortable-select" class="form-select select2" data-placeholder="{{ "Select an option"|trans }}">
+										<option value="">{{ "Sort by"|trans }}</option>
+										<option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}</option>
+										<option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}</option>
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -177,6 +175,9 @@
 								<button class="btn btn-outline-secondary">{{ "Search"|trans }}</button>
 							</div>
 						</form>
+						{% if '1' == settings["newsletter_enabled"] and settings["mailchimp_api_key"] and settings["mailchimp_list_id"] %}
+							{% include "global/newsletter-card.html.twig" %}
+						{% endif %}
 					</div>
 				</div>
 			</div>

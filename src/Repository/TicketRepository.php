@@ -20,4 +20,17 @@ class TicketRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ticket::class);
     }
+
+    /**
+     * @return Ticket[]
+     */
+    public function findAlls()
+    {
+        return $this->createQueryBuilder('t')
+            //->where('t.isOnline = true')
+            ->orderBy('t.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

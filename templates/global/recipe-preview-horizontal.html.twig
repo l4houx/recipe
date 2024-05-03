@@ -1,0 +1,67 @@
+{% if handlebarstemplate is defined %}
+    {% verbatim %}
+        <div class="card">
+            <div class="card-body">
+                <figure class="itemside">
+                    <div class="aside">
+                        <div class="img-wrap img-sm"><a href="{{ link }}"><img src="{{ image }}"></a></div>
+                    </div>
+                    <figcaption class="text-wrap">
+                        <h6 class="title mb-2"><a href="{{ link}}">{{ text }}</a></h6>
+                        <div class="text-black-50 small mb-1">{{ date }}</div>
+                        <div class="text-black-50 small">{{ venue }}</div>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    {% endverbatim %}
+{% elseif recipesubscription is defined or recipedate is defined or recipe is defined %}
+    {% if recipesubscription is defined %}
+        {% set recipe = recipesubscription.recipedate.recipe %}
+        {% set recipedate = recipesubscription.recipedate %}
+    {% elseif recipedate is defined %}
+        {% set recipe = recipedate.recipe %}
+    {% endif %}
+    <figure class="media h-100">
+        <div class="img-wrap my-auto"><img src="{{ asset('assets/img/loader.svg') }}" data-src="{{ asset(recipe.getImagePath) }}" class="img-thumbnail img-sm img-lazy-load"></div>
+        <figcaption class="media-body my-auto {% if app.request.locale == "ar" %}ml-2{% endif %}">
+            <a href="{{ path('recipe', { slug: recipe.slug }) }}">
+                <h6 class="title mb-2">{{ recipe.title }}</h6>
+            </a>
+            {% if recipesubscription is defined %}
+                <dl class="dlist-inline small">
+                    <dt></dt>
+                    <dd class="mr-0">{{ recipesubscription.name }} 
+                        {% if recipesubscription.description %}
+                            <i class="fas fa-info-circle text-primary ml-2" data-toggle="tooltip" title="{{ recipesubscription.description }}"></i>
+                        {% endif %}
+                    </dd>
+                </dl>
+            {% endif %}
+            {% if recipedate is defined %}
+                <dl class="dlist-inline small">
+                    <dt>{{ "When"|trans }}</dt>
+                    <dd>{{ recipedate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}</dd>
+                </dl>
+                <dl class="dlist-inline small">
+                    <dt>{{ "Where"|trans }}</dt>
+                    <dd>
+                        {% if recipedate.venue %}
+                            {{ recipedate.venue.name }}: {{ recipedate.venue.stringifyAddress }}
+                        {% else %}
+                            {{ "Online"|trans }}
+                        {% endif %}
+                    </dd>
+                </dl>
+            {% endif %}
+            {% if hiderestaurant is not defined %}
+                <dl class="dlist-inline small">
+                    <dt>{{ "Restaurant"|trans }}</dt>
+                    <dd>
+                        <a href="{{ path('restaurant', { slug :recipe.restaurant.slug }) }}" taget="_blank">{{ recipe.restaurant.name }}</a>
+                    </dd>
+                </dl>
+            {% endif %}
+        </figcaption>
+    </figure>
+{% endif %}

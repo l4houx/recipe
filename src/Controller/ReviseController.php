@@ -2,31 +2,32 @@
 
 namespace App\Controller;
 
-use App\Entity\Content;
 use App\Entity\Post;
-use App\Entity\Revise;
-use App\Entity\Traits\HasRoles;
 use App\Entity\User;
+use App\Entity\Revise;
+use App\Entity\Content;
 use App\Form\ReviseFormType;
-use App\Repository\ReviseRepository;
-use App\Security\Voter\ReviseVoter;
 use App\Service\ReviseService;
+use App\Entity\Traits\HasRoles;
+use App\Security\Voter\ReviseVoter;
+use App\Repository\ReviseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * @method User getUser()
  */
 class ReviseController extends BaseController
 {
-    #[Route(path: '/%website_dashboard_path%/my-revises', name: 'dashboard_revise_index')]
+    #[Route(path: '/%website_dashboard_path%/my-revises', name: 'dashboard_revise_index', methods: ['GET'])]
     #[IsGranted(HasRoles::DEFAULT)]
-    public function index(ReviseRepository $reviseRepository, PaginatorInterface $paginator): Response
+    public function revises(ReviseRepository $reviseRepository, PaginatorInterface $paginator): Response
     {
         $query = $reviseRepository->queryAllForUser($this->getUserOrThrow());
         $rows = $paginator->paginate($query->getQuery());
@@ -34,9 +35,9 @@ class ReviseController extends BaseController
         return $this->render('dashboard/shared/content/revises.html.twig', compact('rows'));
     }
 
-    #[Route(path: '/revise/{id<\d+>}', name: 'revise', methods: ['GET', 'POST'])]
+    #[Route(path: '/revise/{id<\d+>}/post-article', name: 'revise', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
     #[IsGranted(ReviseVoter::ADD, subject: 'post')]
-    public function show(Request $request, TranslatorInterface $translator, Post $post, ReviseService $reviseService): Response
+    public function revise(Request $request, TranslatorInterface $translator, Post $post, ReviseService $reviseService): Response
     {
         $revise = $reviseService->reviseFor($this->getUser(), $post);
 
@@ -56,7 +57,7 @@ class ReviseController extends BaseController
         return $this->render('content/revise.html.twig', compact('revise', 'form'));
     }
 
-    #[Route(path: '/revise/{id<\d+>}', methods: ['DELETE'])]
+    #[Route(path: '/revise/{id<\d+>}/post-article', methods: ['DELETE'], requirements: ['id' => Requirement::DIGITS])]
     #[IsGranted(ReviseVoter::DELETE, subject: 'revise')]
     public function delete(Request $request, Revise $revise, TranslatorInterface $translator, EntityManagerInterface $em): Response
     {

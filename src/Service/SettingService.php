@@ -238,6 +238,26 @@ class SettingService
         }
     }
 
+    // Returns the applications after applying the specified search criterias
+    public function getApplications($criterias): QueryBuilder
+    {
+        $this->disableSofDeleteFilterForAdmin($this->em, $this->authChecker);
+        //$isOnline = array_key_exists('isOnline', $criterias) ? $criterias['isOnline'] : true;
+        $keyword = array_key_exists('keyword', $criterias) ? $criterias['keyword'] : 'all';
+        $id = array_key_exists('id', $criterias) ? $criterias['id'] : 'all';
+        $user = array_key_exists('user', $criterias) ? $criterias['user'] : 'all';
+        $name = array_key_exists('name', $criterias) ? $criterias['name'] : 'name';
+        $token = array_key_exists('token', $criterias) ? $criterias['token'] : 'token';
+        $tickets = array_key_exists('tickets', $criterias) ? $criterias['tickets'] : 'tickets';
+        $roles = array_key_exists('roles', $criterias) ? $criterias['roles'] : 'roles';
+        $limit = array_key_exists('limit', $criterias) ? $criterias['limit'] : 'all';
+        $count = array_key_exists('count', $criterias) ? $criterias['count'] : false;
+        $sort = array_key_exists('sort', $criterias) ? $criterias['sort'] : 'createdAt';
+        $order = array_key_exists('order', $criterias) ? $criterias['order'] : 'DESC';
+
+        return $this->em->getRepository("App\Entity\Application")->getApplications($keyword, $id, $user, $name, $token, $tickets, $roles, $limit, $count, $sort, $order);
+    }
+
     // Returns the comments after applying the specified search criterias
     public function getComments($criterias): QueryBuilder
     {

@@ -19,8 +19,8 @@ class RecipeSubscriptionController extends BaseController
     ) {
     }
 
-    #[Route(path: '/recipe/{slug}/recipe-date/{recipeDateReference}/get-subscriptions', name: 'get_recipesubscriptions_by_recipedate', methods: ['GET'], requirements: ['slug' => Requirement::ASCII_SLUG])]
-    public function getRecipeSubscriptions(Request $request, string $slug, string $recipeDateReference): Response
+    #[Route(path: '/recipe/{recipeSlug}/recipe-date/{recipeDateReference}/get-subscriptions', name: 'get_recipesubscriptions_by_recipedate', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG])]
+    public function getRecipeSubscriptions(Request $request, string $recipeSlug, string $recipeDateReference): Response
     {
         if ($this->isGranted(HasRoles::CREATOR) || !$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             throw new AccessDeniedHttpException();
@@ -35,7 +35,7 @@ class RecipeSubscriptionController extends BaseController
         $limit = '' == $request->query->get('limit') ? 10 : $request->query->get('limit');
 
         /** @var RecipeSubscription $recipeSubscriptions */
-        $recipeSubscriptions = $this->settingService->getRecipeSubscriptions(['restaurant' => $restaurant, 'recipe' => $slug, 'recipedate' => $recipeDateReference, 'limit' => $limit])->getQuery()->getResult();
+        $recipeSubscriptions = $this->settingService->getRecipeSubscriptions(['restaurant' => $restaurant, 'recipe' => $recipeSlug, 'recipedate' => $recipeDateReference, 'limit' => $limit])->getQuery()->getResult();
         $results = [];
 
         /** @var RecipeSubscription $recipeSubscription */

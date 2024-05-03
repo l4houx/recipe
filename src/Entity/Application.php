@@ -6,6 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Traits\HasGedmoTimestampTrait;
+use App\Entity\Traits\HasIsOnlineTrait;
+use App\Entity\Traits\HasLimit;
 use App\Entity\Traits\HasRoles;
 use App\Repository\ApplicationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,7 +27,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 class Application implements UserInterface
 {
+    // use HasIsOnlineTrait;
     use HasGedmoTimestampTrait;
+
+    public const APP_LIMIT = HasLimit::APP_LIMIT;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

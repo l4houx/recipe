@@ -2,14 +2,15 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasLimit;
+use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Traits\HasContentTrait;
-use App\Entity\Traits\HasDeletedAtTrait;
-use App\Entity\Traits\HasGedmoTimestampTrait;
-use App\Entity\Traits\HasIdApiIdAuthorTrait;
 use App\Repository\ResponseRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use App\Entity\Traits\HasDeletedAtTrait;
+use App\Entity\Traits\HasIdApiIdAuthorTrait;
+use App\Entity\Traits\HasGedmoTimestampTrait;
 
 #[ORM\Entity(repositoryClass: ResponseRepository::class)]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
@@ -26,6 +27,8 @@ class Response
     use HasContentTrait;
     use HasGedmoTimestampTrait;
     use HasDeletedAtTrait;
+
+    public const RESPONSE_LIMIT = HasLimit::RESPONSE_LIMIT;
 
     #[ORM\ManyToOne]
     private ?User $user = null;

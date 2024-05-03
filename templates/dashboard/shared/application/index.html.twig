@@ -8,7 +8,7 @@
         <div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
             <div class="mb-3 mb-lg-0">
                 <h3 class="mb-0">{{ pagetitle }}</h3>
-                <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows | length}) }}</span>
+                <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
             </div>
             {% if is_granted('ROLE_VERIFIED') %}
                 <div>
@@ -18,23 +18,7 @@
                 </div>
             {% endif %}
         </div>
-        {% if rows | length > 0 %}
-            <div class="card-body">
-                <form class="row gx-3">
-                    <div class="col-lg-9 col-md-7 col-12 mb-lg-0 mb-2">
-                        <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
-                    </div>
-                    <div class="col-lg-3 col-md-5 col-12">
-                        <select class="form-select">
-                            <option value="">Date Created</option>
-                            <option value="Newest">Newest</option>
-                            <option value="High Rated">High Rated</option>
-                            <option value="Law Rated">Law Rated</option>
-                            <option value="High Earned">High Earned</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
+        {% if rows.getTotalItemCount > 0 %}
             {% include "dashboard/shared/application/manage-applications-table.html.twig" with {rows: rows} %}
         {% else %}
             <div class="card-footer">

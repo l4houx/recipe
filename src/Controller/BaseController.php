@@ -31,7 +31,7 @@ abstract class BaseController extends AbstractController
             $messages[] = $error->getMessage();
         }
 
-        $this->addFlash('red', implode("\n", $messages));
+        $this->addFlash('danger', implode("\n", $messages));
     }
 
     protected function getUserOrThrow(): User

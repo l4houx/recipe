@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Content;
+use App\Entity\Post;
 use App\Entity\Revise;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -31,7 +32,7 @@ class ReviseVoter extends Voter
 
         if (
             self::ADD === $attribute
-            && $subject instanceof Content
+            && $subject instanceof Post
             && $subject->isOnline()
         ) {
             return true;

@@ -32,17 +32,17 @@
                     <div class="mb-3 col-12">
                         <input type="text" id="revise-rejection-comment" name="comment" class="form-control" value="" placeholder="{{ 'Reason for refusal'|trans }}" >
                     </div>
-                    <div class="mb-3 col-12">
-                        <textarea class="form-control" name="content" id="" rows="3" cols="30" is="diff-editor" original="{{ revise.target.content | e('html_attr') }}" updated="{{ revise.content | e('html_attr') }}"></textarea>
-                    </div>
-                    <div class="col-12 pt-2">
-                        <button disabled type="submit" name="delete" class="btn btn-danger me-4" 
-                            onclick="return confirm("{{ 'Are you sure you want to reject this revise?'|trans }}")">
+                    <div class="col-12 mb-3 pt-2">
+                        <button disabled type="submit" name="delete" class="btn btn-danger" 
+                            onclick="return confirm('{{ "Are you sure you want to reject this revise?"|trans }}')">
                             {{ 'Deny'|trans }}
                         </button>
                         <button type="submit" class="btn btn-outline-primary">
                             {{ 'Accept'|trans }}
                         </button>
+                    </div>
+                    <div class="mb-3 col-12">
+                        <textarea class="form-control" name="content" id="" rows="3" is="diff-editor" original="{{ revise.target.content | e('html_attr') }}" updated="{{ revise.content | e('html_attr') }}"></textarea>
                     </div>
                 </div>
             </form>

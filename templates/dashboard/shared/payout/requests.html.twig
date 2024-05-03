@@ -1,0 +1,168 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Payout requests'|trans %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        {% if is_granted("ROLE_RESTAURANT") %}
+            {% include "global/message.html.twig" with { type: "info", message: ('To submit a new payout request for an recipe date, go to the My recipes page and click on the Request payout link next to the recipe'|trans), icon: "bi bi-exclamation-circle" } %}
+        {% endif %}
+        <div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
+            <div class="mb-3 mb-lg-0">
+                <h3 class="mb-0">{{ pagetitle }}</h3>
+                <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
+            </div>
+            {% if is_granted('ROLE_VERIFIED') %}
+                <div>
+                    <a href="" class="btn btn-outline-primary btn-sm">
+                        {{ 'Create'|trans }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <div class="mb-4 mb-xl-0 row">
+                <div class="col-6 col-lg-4">
+                    <select class="form-select">
+                        <option value="">{{ "Select an option"|trans }}</option>
+                        <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.createdAt", {"direction": "desc", "criteria": "p.createdAt"}) }}</option>
+                        <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "p.createdAt", {"direction": "asc", "criteria": "p.createdAt"}) }}</option>
+                        <option value="">{{ knp_pagination_sortable(rows, "Processing date"|trans ~ ' (' ~ "desc"|trans ~ ')', "p.updatedAt", {"direction": "desc", "criteria": "p.updatedAt"}) }}</option>
+                        <option value="">{{ knp_pagination_sortable(rows, "Processing date"|trans ~ ' (' ~ "asc"|trans ~ ')', "p.updatedAt", {"direction": "asc", "criteria": "p.updatedAt"}) }}</option>
+                    </select>
+                </div>
+                <div class="col-6 col-lg-1">
+                    <a href="#search-filters" class="btn btn-primary" data-bs-toggle="collapse" title="{{ "Toggle display the search filters"|trans }}" aria-expanded="false" aria-controls="search-filters">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </div>
+            </div>
+            <div id="search-filters" class="col-md-12 col-lg-12 text-center mb-3 mb-lg-0 collapse">
+                <form class="mt-3">
+                    <div class="row">
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <label class="form-label" for="reference">{{ "Reference"|trans }}</label>
+                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0" id="reference" name="reference">
+                        </div>
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <label class="form-label" for="recipedate">{{ "Recipe date"|trans }} 
+                                <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip" title="{{ "Select a specific recipe date"|trans }}"></i>
+                            </label>
+                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 autocomplete" id="recipedate" name="recipedate" data-url-list="{{ path('get_recipedates_by_recipe', { recipeSlug : "all" }) }}" data-minimum-input-length="0">
+                        </div>
+                        {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                            <div class="col-12 col-md-4 text-start mb-4">
+                                <label class="form-label" for="restaurant">{{ "Restaurant"|trans }} 
+                                    <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip" title="{{ "All payout requests for an  restaurant"|trans }}"></i>
+                                </label>
+                                <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 autocomplete" id="restaurant" name="restaurant" data-url-list="{{ path('get_restaurants') }}" data-minimum-input-length="0">
+                            </div>
+                        {% endif %}
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <label class="form-label" for="datefrom">{{ "From date"|trans }}</label>
+                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 datetimepicker" id="datefrom" name="datefrom">
+                        </div>
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <label class="form-label" for="dateto">{{ "Until date"|trans }}</label>
+                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 datetimepicker" id="dateto" name="dateto">
+                        </div>
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <div class="mb-3">
+                                <label class="form-label">{{ "Status"|trans }}</label>
+                                <br>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="status-all" value="all">
+                                    <label class="form-check-label" for="status-all">{{ "All"|trans }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="status-paid" value="1">
+                                    <label class="form-check-label" for="status-paid">{{ "Approved"|trans }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="status-waiting-for-payment" value="0">
+                                    <label class="form-check-label" for="status-waiting-for-payment">{{ "Pending"|trans }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="status-canceled" value="-1">
+                                    <label class="form-check-label" for="status-canceled">{{ "Canceled"|trans }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="status" id="status-failed" value="-2">
+                                    <label class="form-check-label" for="status-failed">{{ "Failed"|trans }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" title="{{ "Search"|trans }}">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button type="reset" class="btn btn-primary" data-bs-toggle="tooltip" title="{{ "Reset"|trans }}">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if rows.getTotalItemCount > 0 %}
+            {% include "dashboard/shared/payout/manage-payout-requests-table.html.twig" with {rows: rows} %}
+        {% else %}
+            <div class="card-footer">
+                {% include "global/message.html.twig" with { type: "dark", message: ('No payout requests found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            if (getURLParameter("reference")) {
+                $("#reference").val("{{ app.request.get('reference') }}");
+            }
+
+            if (getURLParameter("recipedate")) {
+                var url = "{{ path('get_recipedate', { reference : "reference" }) }}";
+                url = url.replace("reference", getURLParameter("recipedate"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_recipedate').select2('data', {id: data.id, text: data.text});
+                    $('#recipedate').val(data.id).change();
+                });
+            }
+
+            if (getURLParameter("restaurant")) {
+                var url = "{{ path('get_restaurant', { slug : "slug" }) }}";
+                url = url.replace("slug", getURLParameter("restaurant"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_restaurant').select2('data', {id: data.slug, text: data.text});
+                    $('#restaurant').val(data.slug).change();
+                });
+            }
+
+            if (getURLParameter("datefrom")) {
+                $("#datefrom").val("{{ app.request.get('datefrom') }}");
+            }
+
+            if (getURLParameter("dateto")) {
+                $("#dateto").val("{{ app.request.get('dateto') }}");
+            }
+
+            if (getURLParameter('status') != "null") {
+                $('input[type="radio"][name="status"][value="' + getURLParameter('status') + '"]').attr("checked", "checked");
+            }
+        });
+    </script>
+{% endblock %}

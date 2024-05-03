@@ -393,8 +393,11 @@
 										{% set link = path('dashboard_admin_revise_edit', { id : revise.id }) %}
 										<tr>
 											<td>
-												<a href="{{ link }}" class="text-inherit">
+												<a href="{{ link }}" target="_blank" class="text-inherit">
 													<div class="d-flex align-items-center">
+														<div>
+															<img src="{{ revise.target.imageName ? asset(revise.target.getImagePath) : revise.target.getImagePlaceholder }}" alt="{{ revise.target.title }}" class="img-4by3-lg rounded">
+														</div>
 														<div class="ms-3">
 															<h4 class="mb-1 text-primary-hover">
 																{{ revise.target.title }}

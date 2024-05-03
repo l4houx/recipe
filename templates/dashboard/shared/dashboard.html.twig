@@ -4,72 +4,105 @@
 {% block title pagetitle %}
 
 {% block content %}
-	<div class="row">
-		{#  
-		{% for status in statuses | sort() %}
+	{% if hasActivity %}
+		<div class="row">
+			{#  
+			{% for status in statuses | sort() %}
+				<div class="col-lg-4 col-md-12 col-12">
+					<div class="card mb-4">
+						<div class="p-4">
+							<span class="fs-6 text-uppercase fw-semibold">{{ 'Status'|trans }}</span>
+							<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">{{ status.name|trans }}</h2>
+							<span class="d-flex justify-content-between align-items-center">
+								<span>{{ tickets | filter(t => t.status == status) | length }}</span>
+								<span class="badge ms-2" style="background-color: {{ status.color }};">{{ status.name|trans }}</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+			{% for level in levels | sort() %}
+				<div class="col-lg-4 col-md-12 col-12">
+					<div class="card mb-4">
+						<div class="p-4">
+							<span class="fs-6 text-uppercase fw-semibold">{{ 'Level'|trans }}</span>
+							<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">{{ level.name|trans }}</h2>
+							<span class="d-flex justify-content-between align-items-center">
+								<span>{{ tickets | filter(t => t.level == level and t.status.id != 3) | length }}</span>
+								<span class="badge ms-2" style="background-color: {{ level.color }};">{{ level.name|trans }}</span>
+							</span>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+			#}
 			<div class="col-lg-4 col-md-12 col-12">
 				<div class="card mb-4">
 					<div class="p-4">
-						<span class="fs-6 text-uppercase fw-semibold">{{ 'Status'|trans }}</span>
-						<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">{{ status.name|trans }}</h2>
+						<span class="fs-6 text-uppercase fw-semibold">{{ 'Recipes Rating'|trans }}</span>
+						<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">4.80</h2>
 						<span class="d-flex justify-content-between align-items-center">
-							<span>{{ tickets | filter(t => t.status == status) | length }}</span>
-							<span class="badge ms-2" style="background-color: {{ status.color }};">{{ status.name|trans }}</span>
+							<span>{{ 'Rating this month'|trans }}</span>
+							<span class="badge bg-primary ms-2">10+</span>
 						</span>
 					</div>
 				</div>
 			</div>
-		{% endfor %}
-		{% for level in levels | sort() %}
 			<div class="col-lg-4 col-md-12 col-12">
 				<div class="card mb-4">
 					<div class="p-4">
-						<span class="fs-6 text-uppercase fw-semibold">{{ 'Level'|trans }}</span>
-						<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">{{ level.name|trans }}</h2>
+						<span class="fs-6 text-uppercase fw-semibold">{{ 'Invoices'|trans }}</span>
+						<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">4.80</h2>
 						<span class="d-flex justify-content-between align-items-center">
-							<span>{{ tickets | filter(t => t.level == level and t.status.id != 3) | length }}</span>
-							<span class="badge ms-2" style="background-color: {{ level.color }};">{{ level.name|trans }}</span>
+							<span>{{ 'Rating this month'|trans }}</span>
+							<span class="badge bg-dark-info ms-2">10+</span>
 						</span>
 					</div>
 				</div>
 			</div>
-		{% endfor %}
-		#}
-		<div class="col-lg-4 col-md-12 col-12">
-			<div class="card mb-4">
-				<div class="p-4">
-					<span class="fs-6 text-uppercase fw-semibold">{{ 'Recipes Rating'|trans }}</span>
-					<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">4.80</h2>
-					<span class="d-flex justify-content-between align-items-center">
-						<span>{{ 'Rating this month'|trans }}</span>
-						<span class="badge bg-primary ms-2">10+</span>
-					</span>
+			<div class="col-lg-4 col-md-12 col-12">
+				<div class="card mb-4">
+					<div class="p-4">
+						<span class="fs-6 text-uppercase fw-semibold">{{ 'Recipes'|trans }}</span>
+						<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">4.80</h2>
+						<span class="d-flex justify-content-between align-items-center">
+							<span>{{ 'Rating this month'|trans }}</span>
+							<span class="badge bg-secondary ms-2">10+</span>
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-4 col-md-12 col-12">
-			<div class="card mb-4">
-				<div class="p-4">
-					<span class="fs-6 text-uppercase fw-semibold">{{ 'Invoices'|trans }}</span>
-					<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">4.80</h2>
-					<span class="d-flex justify-content-between align-items-center">
-						<span>{{ 'Rating this month'|trans }}</span>
-						<span class="badge bg-dark-info ms-2">10+</span>
-					</span>
+        {% if lastRevises is not empty %}
+            <div class="card mb-4">
+				<div class="d-lg-flex align-items-center justify-content-between card-header">
+					<div class="mb-3 mb-lg-0">
+						<h3 class="mb-0">{{ 'My suggested changes'|trans }}</h3>
+						<span></span>
+					</div>
+					<div>
+						<a href="{{ path('dashboard_revise_index') }}" class="btn btn-outline-primary btn-sm">
+							{{ 'View all my suggestions'|trans }}
+						</a>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-lg-4 col-md-12 col-12">
-			<div class="card mb-4">
-				<div class="p-4">
-					<span class="fs-6 text-uppercase fw-semibold">{{ 'Recipes'|trans }}</span>
-					<h2 class="mt-4 fw-bold mb-1 d-flex align-items-center h1 lh-1">4.80</h2>
-					<span class="d-flex justify-content-between align-items-center">
-						<span>{{ 'Rating this month'|trans }}</span>
-						<span class="badge bg-secondary ms-2">10+</span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
+                {% include "dashboard/shared/content/manage-revises-table.html.twig" with {rows: lastRevises, header: false} %}
+            </div>
+        {% endif %}
+	{% else %}
+        <div class="card border-0">
+            <div class="card-body p-10">
+                <div class="text-center">
+                    <img src="{{ asset('images/svg/survey-img.svg') }}" alt="welcome" class="img-fluid">
+                    <div class="px-lg-8">
+                        <h1>{{ 'Welcome !'|trans }} {{ user.username }}</h1>
+                        <p class="mb-0">
+                            {{ 'Post all your favorite recipes here, so that as many people as possible can benefit from them.'|trans }}
+                        </p>
+                        <a href="{{ path('dashboard_restaurant_recipe_new') }}" class="btn btn-primary mt-4">{{ 'Create'|trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+	{% endif %}
 {% endblock %}

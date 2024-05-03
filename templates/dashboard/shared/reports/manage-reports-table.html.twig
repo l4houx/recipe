@@ -22,7 +22,10 @@
 
 				<tr>
 					<td>{{ recipeDate.reference }}</td>
-                    <td>{{ recipeDate.recipe.name }} {{ recipeDate.startdate|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}</td>
+                    <td>
+						{{ recipeDate.recipe.name }} 
+						{{ recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+					</td>
                     {% if is_granted("ROLE_ADMIN_APPLICATION") %}
                         <td>
                             {{ recipeDate.recipe.restaurant.name }}
@@ -41,9 +44,8 @@
                         <b>{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getTicketPricePercentageCutSum() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</b>
                     </td>
 					<td>
-                        <span class="badge bg-{{ recipeDate.stringifyStatusClass }}-soft">
-                            {{ recipeDate.stringifyStatus|trans }}
-                        </span>
+                        <span class="badge-dot bg-{{ recipeDate.stringifyStatusClass }} me-1 d-inline-block align-middle"></span>
+						{{ recipeDate.stringifyStatus|trans }}
 					</td>
 					<td>
 						<div class="dropdown dropstart">
@@ -52,10 +54,45 @@
 							</a>
 							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
 								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
-								<a class="dropdown-item" href="">
-									<i class="bi bi-eye dropdown-item-icon"></i>
-									{{ 'Show'|trans }}
-								</a>
+								{% if is_granted("ROLE_RESTAURANT") %}
+									<a class="dropdown-item" href="{{ path('dashboard_restaurant_recipe_index', {slug: recipeDate.recipe.slug}) }}" target="_blank">
+										<i class="bi bi-calendar dropdown-item-icon"></i>
+										{{ 'Manage recipe'|trans }}
+									</a>
+									<a class="dropdown-item" href="{{ path('dashboard_restaurant_recipe_date_statistics_index', {recipeSlug: recipeDate.recipe.slug, recipeDateReference: recipeDate.reference}) }}" target="_blank">
+										<i class="bi bi-bar-chart-line dropdown-item-icon"></i>
+										{{ 'View detailed statistics'|trans }}
+									</a>
+									<a class="dropdown-item" href="{{ path('dashboard_restaurant_orders', {recipe: recipeDate.recipe.slug, recipedate: recipeDate.reference}) }}" target="_blank">
+										<i class="bi bi-cart3 dropdown-item-icon"></i>
+										{{ 'Orders'|trans }}
+									</a>
+									{% if recipeDate.payoutRequested() %}
+										<a class="dropdown-item" href="{{ path('dashboard_restaurant_payout_requests', {recipedate: recipeDate.reference}) }}" target="_blank">
+											<i class="bi bi-currency-dollar dropdown-item-icon"></i>
+											{{ 'Payout requests'|trans }}
+										</a>
+									{% endif %}
+								{% elseif is_granted("ROLE_ADMIN_APPLICATION") %}
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_index', {slug: recipeDate.recipe.slug}) }}" target="_blank">
+										<i class="bi bi-calendar dropdown-item-icon"></i>
+										{{ 'Manage recipe'|trans }}
+									</a>
+									<a class="dropdown-item" href="{{ path('dashboard_admin_recipe_date_statistics_index', {recipeSlug: recipeDate.recipe.slug, recipeDateReference: recipeDate.reference}) }}" target="_blank">
+										<i class="bi bi-bar-chart-line dropdown-item-icon"></i>
+										{{ 'View detailed statistics'|trans }}
+									</a>
+									<a class="dropdown-item" href="{{ path('dashboard_admin_orders', {recipe: recipeDate.recipe.slug, recipedate: recipeDate.reference}) }}" target="_blank">
+										<i class="bi bi-cart3 dropdown-item-icon"></i>
+										{{ 'Orders'|trans }}
+									</a>
+									{% if recipeDate.payoutRequested() %}
+										<a class="dropdown-item" href="{{ path('dashboard_admin_payout_requests', {recipedate: recipeDate.reference}) }}" target="_blank">
+											<i class="bi bi-currency-dollar dropdown-item-icon"></i>
+											{{ 'Payout requests'|trans }}
+										</a>
+									{% endif %}
+								{% endif %}
 							</div>
 						</div>
 					</td>

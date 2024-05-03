@@ -433,6 +433,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         // $this->plainPassword = null;
     }
 
+    public function __serialize(): array
+    {
+        return [
+            $this->id,
+            $this->username,
+            $this->firstname,
+            $this->lastname,
+            $this->email,
+            $this->password,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        if (count($data) === 6) {
+            [
+                $this->id,
+                $this->username,
+                $this->firstname,
+                $this->lastname,
+                $this->email,
+                $this->password,
+            ] = $data;
+        }
+    }
+
     /**
      * @return Collection<int, Post>
      */

@@ -1,0 +1,40 @@
+<div class="table-responsive overflow-y-hidden">
+	<table class="table mb-0 text-nowrap table-hover table-centered">
+		<thead class="">
+			<tr>
+				<th>{{ 'Month'|trans }}</th>
+				<th>{{ 'Income'|trans }}</th>
+				<th>{{ 'VAT'|trans }}</th>
+				<th>{{ 'Costs'|trans }}</th>
+				<th>{{ 'Income - expenses'|trans }}</th>
+				<th>{{ 'Method'|trans }}</th>
+				<th>{{ 'Status'|trans }}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for report in rows %}
+				<tr>
+					<td>{{ ('2020-' ~ report.month ~ '-01') | format_datetime(pattern="MMMM") | capitalize }}</td>
+					<td>
+                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ report.price }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                    </td>
+					<td>
+                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ report.tax }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                    </td>
+					<td>
+                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ report.fee }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                    </td>
+					<td>
+                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ report.price - report.fee }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                    </td>
+					<td>
+						<a class="pill uppercase {% if report.method == 'paypal' %}pill-yellow{% endif %}">
+							{{ report.method }}
+						</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

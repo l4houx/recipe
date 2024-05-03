@@ -164,7 +164,8 @@ class RecipeRepository extends ServiceEntityRepository
     public function findLastByUser(User $user, int $maxResults): array // MainController
     {
         return $this->createQueryBuilder('r')
-            ->where('r.author = :user')
+            ->leftJoin('r.restaurant', 'rest')
+            ->where('rest.user = :user')
             ->andWhere('r.isOnline = true')
             ->orderBy('r.updatedAt', 'DESC')
             ->setMaxResults($maxResults)

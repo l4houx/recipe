@@ -3,12 +3,17 @@
 {% set pagetitle = 'Reports'|trans %}
 {% block title pagetitle %}
 
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
 {% block content %}
     <div class="card mb-4">
         <div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
             <div class="mb-3 mb-lg-0">
                 <h3 class="mb-0">{{ pagetitle }}</h3>
-                <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
+                <span>{{ "%resultsCount% recipe date(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
             </div>
             {% if is_granted('ROLE_VERIFIED') %}
                 <div>
@@ -18,23 +23,60 @@
                 </div>
             {% endif %}
         </div>
-        {% if rows.getTotalItemCount %}
-            <div class="card-body">
-                <form class="row gx-3">
-                    <div class="col-lg-9 col-md-7 col-12 mb-lg-0 mb-2">
-                        <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
-                    </div>
-                    <div class="col-lg-3 col-md-5 col-12">
-                        <select class="form-select">
-                            <option value="">Date Created</option>
-                            <option value="Newest">Newest</option>
-                            <option value="High Rated">High Rated</option>
-                            <option value="Law Rated">Law Rated</option>
-                            <option value="High Earned">High Earned</option>
-                        </select>
+        <div class="card-body">
+            <div class="mb-4 mb-xl-0 row">
+                <div class="col-6 col-lg-4">
+                    <select class="form-select">
+                        <option value="">{{ "Select an option"|trans }}</option>
+                        <option value="">{{ knp_pagination_sortable(rows, "Start date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.startdate", {"direction": "asc", "criteria": "r.startdate"}) }}</option>
+                        <option value="">{{ knp_pagination_sortable(rows, "Start date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.startdate", {"direction": "desc", "criteria": "r.startdate"}) }}</option>
+                    </select>
+                </div>
+                <div class="col-6 col-lg-1">
+                    <a href="#search-filters" class="btn btn-primary" data-bs-toggle="collapse" title="{{ "Toggle display the search filters"|trans }}" aria-expanded="false" aria-controls="search-filters">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </div>
+            </div>
+            <div id="search-filters" class="col-md-12 col-lg-12 text-center mb-3 mb-lg-0 collapse">
+                <form class="mt-3">
+                    <div class="row">
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <label class="form-label" for="recipe">{{ "Recipe"|trans }}</label>
+                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 autocomplete" id="recipe" name="recipe" data-url-list="{{ path('get_recipes') }}" data-minimum-input-length="0">
+                        </div>
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <label class="form-label" for="reference">{{ "Recipe date"|trans }} 
+                                <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip" title="{{ "Select a specific recipe date"|trans }}"></i>
+                            </label>
+                            {% if app.request.get('recipe') %}
+                                {% set recipe = app.request.get('recipe') %}
+                            {% else %}
+                                {% set recipe = "all" %}
+                            {% endif %}
+                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 autocomplete" id="reference" name="reference" data-url-list="{{ path('get_recipedates_by_recipe', { recipeSlug : recipe }) }}" data-minimum-input-length="0">
+                        </div>
+                        {% if is_granted("ROLE_ADMIN_APPLICATION") %}
+                            <div class="col-12 col-md-4 text-start mb-4">
+                                <label class="form-label" for="restaurant">{{ "Restaurant"|trans }} 
+                                    <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip" title="{{ "All recipe dates for an restaurant"|trans }}"></i>
+                                </label>
+                                <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 autocomplete" id="restaurant" name="restaurant" data-url-list="{{ path('get_restaurants') }}" data-minimum-input-length="0">
+                            </div>
+                        {% endif %}
+                        <div class="col-12 col-md-4 text-start mb-4">
+                            <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" title="{{ "Search"|trans }}">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button type="reset" class="btn btn-primary" data-bs-toggle="tooltip" title="{{ "Reset"|trans }}">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
+        </div>
+        {% if rows.getTotalItemCount > 0 %}
             {% include "dashboard/shared/reports/manage-reports-table.html.twig" with {rows: rows} %}
         {% else %}
             <div class="card-footer">

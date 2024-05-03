@@ -1,6 +1,5 @@
-{% extends 'page.html.twig' %}
+{% extends 'dashboard.html.twig' %}
 
-{% set bodyClass = 'bg-white' %}
 {% set pagetitle = 'My cart'|trans %}
 {% block title pagetitle %}
 
@@ -36,142 +35,170 @@
 
 {% block content %}
     {% if app.user.cartelements | length %}
-        <section class="py-6">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 mb-2">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="d-flex">
+                            <h4 class="mb-0">
+                                {{ app.user.getSubscriptionsInCartQuantitySum }}
+                                <span>({{ "subscriptions found in your cart"|trans }})</span>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
                         {% include 'global/message.html.twig' with { type: 'warning',icon: 'bi bi-exclamation-circle', message: "Your subscriptions are not reserved until checkout, the quantity you intend to buy might not be available if you do not proceed to checkout right away"|trans } %}
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="d-flex">
-                                    <h4 class="mb-0">
-                                        {{ app.user.getSubscriptionsInCartQuantitySum }}
-                                        <span>({{ "subscriptions found in your cart"|trans }})</span>
-                                    </h4>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive table-card">
-                                    <form method="post">
-                                        <table class="table mb-0 text-nowrap">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th>{{ "Recipe"|trans ~ " / " ~ "Subscription"|trans }}</th>
-                                                    <th>{{ "Price"|trans }}</th>
-                                                    <th>{{ "Quantity"|trans }}</th>
-                                                    <th>{{ "Subtotal"|trans }}</th>
-                                                    <th>{{ 'Status'|trans }}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for cartelement in app.user.cartelements %}
-                                                    <tr>
-                                                        <td>
+                        <div class="table-responsive table-card">
+                            <form method="post">
+                                <table class="table mb-0 text-nowrap">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>{{ "Recipe"|trans ~ " / " ~ "Subscription"|trans }}</th>
+                                            <th>{{ "Price"|trans }}</th>
+                                            <th>{{ "Quantity"|trans }}</th>
+                                            <th>{{ "Subtotal"|trans }}</th>
+                                            <th>{{ 'Status'|trans }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for cartelement in app.user.cartelements %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <div>
                                                             {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription: cartelement.recipesubscription } %}
-                                                            {% if cartelement.reservedSeats and cartelement.reservedSeats | length > 0 %}
-                                                                <h6 class='text-primary mb-0'>
-                                                                    <i class="bi bi-bricks"></i> 
-                                                                    {{ "Reserved seats"|trans }}
-                                                                </h6>
-                                                                <ul class='list-check'>
-                                                                    {% for reservedSeat in cartelement.reservedSeats %}
-                                                                        <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
-                                                                    {% endfor %}
-                                                                </ul>
-                                                            {% endif %}
-                                                        </td>
-                                                        <td>
-                                                            <div class="price-wrap">
-                                                                {% if cartelement.recipesubscription.recipedate.recipe.isFree %}
-                                                                    <span class="price-new">{{ "Free"|trans }}</span>
-                                                                {% else %}
-                                                                    {% if cartelement.recipesubscription.recipedate %}
-                                                                        <span class="price-new">{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ cartelement.recipesubscription.getSalePrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</span>
-                                                                    {% endif %}
-                                                                {% endif %}
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control touchspin-integer bg-white recipedate-subscription-qte {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}cart-recipedate-subscription-qte-hasSeatingPlan{% endif %}" 
-                                                            {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}readonly
-                                                            {% endif %} name="{{ cartelement.recipesubscription.reference }}" data-min="0" data-max="{{ cartelement.recipesubscription.getMaxSubscriptionsForSaleCount(app.user) }}" value="{{ cartelement.quantity }}">
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <div class="price-wrap">
-                                                                <var class="price">{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ cartelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</var>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <a href="{{ path('dashboard_creator_cart_remove', { id: cartelement.id }) }}" data-toggle="tooltip" title="{{ "Remove"|trans }}">
-                                                                <i class="bi bi-file-minus-fill"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="5" class="text-right">
-                                                        <div class="price-wrap">
-                                                            <var class="price">{{ "Fees"|trans }}: {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ app.user.getTotalFees }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</var>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5" class="text-right">
-                                                        <div class="price-wrap">
-                                                            <var class="price">{{ "Total"|trans }}: {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ app.user.getSubscriptionsInCartPriceSum(true) }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}</var>
+                                                        <div class="ms-4 mt-2 mt-lg-0">
+                                                            <h4 class="mb-1 text-primary-hover">{{ "Reserved seats"|trans }}</h4>
+                                                            <div>
+                                                                {% for reservedSeat in cartelement.reservedSeats %}
+                                                                    <span>
+                                                                        <span class="text-dark fw-medium">
+                                                                            {{ services.stringifySeatLabel(reservedSeat) }}
+                                                                        </span>
+                                                                    </span>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="mt-4">
+                                                                <a href="#" class="text-body">
+                                                                    {{ "Edit"|trans }}
+                                                                </a>
+                                                                <a href="{{ path('dashboard_creator_cart_remove', { id: cartelement.id }) }}" class="text-body ms-3">
+                                                                    {{ "Remove"|trans }}
+                                                                </a>
+                                                                <a href="#" class="text-body ms-3">
+                                                                    {{ "Move to Wishlist"|trans }}
+                                                                </a>
+                                                            </div>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5" class="text-right">
-                                                        <a href="{{ path('recipes') }}" class="btn btn-outline-primary mr-3">
-                                                            <i class="bi bi-ticket"></i> {{ "Buy more subscriptions"|trans }}
-                                                        </a>
-                                                        <button type="submit" class="btn btn-outline-primary mr-3">
-                                                            <i class="bi bi-arrow-repeat"></i> {{ "Update cart"|trans }}
-                                                        </button>
-                                                        <span data-target="{{ path('dashboard_creator_cart_empty') }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to empty your cart"|trans }}">
-                                                            <i class="bi bi-file-minus-fill"></i> {{ "Empty cart"|trans }}
-                                                        </span>
-                                                        <a href="{{ path('dashboard_creator_checkout') }}" class="btn btn-primary">
-                                                            {% if app.user.getSubscriptionsInCartPriceSum(true) > 0 %}
-                                                                {{ "Checkout"|trans }}
-                                                            {% else %}
-                                                                {{ "Register"|trans }}
+                                                    </div>
+                                                </td>
+                                                {#  
+                                                <td>
+                                                    {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription: cartelement.recipesubscription } %}
+                                                    {% if cartelement.reservedSeats and cartelement.reservedSeats | length > 0 %}
+                                                        <h6 class='text-primary mb-0'>
+                                                            <i class="bi bi-bricks"></i> 
+                                                            {{ "Reserved seats"|trans }}
+                                                        </h6>
+                                                        <ul class='list-check'>
+                                                            {% for reservedSeat in cartelement.reservedSeats %}
+                                                                <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    {% endif %}
+                                                </td>
+                                                #}
+                                                <td>
+                                                    <h4 class="mb-0">
+                                                        {% if cartelement.recipesubscription.recipedate.recipe.isFree %}
+                                                            {{ "Free"|trans }}
+                                                        {% else %}
+                                                            {% if cartelement.recipesubscription.recipedate %}
+                                                                {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ cartelement.recipesubscription.getSalePrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
                                                             {% endif %}
-                                                            <i class="bi bi-chevron-right me-2"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4 d-flex justify-content-between">
-                            <a href="" class="btn btn-outline-primary">Continue Shopping</a>
-                            <a href="" class="btn btn-primary">Checkout</a>
+                                                        {% endif %}
+                                                    </h4>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group flex-nowrap justify-content-center">
+                                                        <input type="button" value="-"
+                                                            class="button-minus form-control text-center flex-xl-none w-xl-30 w-xxl-10 px-0 py-1"
+                                                            data-field="{{ cartelement.recipesubscription.reference }}">
+                                                        <input type="number" step="1" data-min="0" data-max="{{ cartelement.recipesubscription.getMaxSubscriptionsForSaleCount(app.user) }}" value="{{ cartelement.quantity }}" name="{{ cartelement.recipesubscription.reference }}" {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}readonly{% endif %}
+                                                            class="quantity-field form-control text-center flex-xl-none w-xl-30 w-xxl-10 px-0 py-1 {% if cartelement.recipesubscription.recipedate.hasSeatingPlan %}cart-recipedate-subscription-qte-hasSeatingPlan{% endif %} recipedate-subscription-qte touchspin-integer">
+                                                        <input type="button" value="+"
+                                                            class="button-plus form-control text-center flex-xl-none w-xl-30 w-xxl-10 px-0 py-1"
+                                                            data-field="{{ cartelement.recipesubscription.reference }}">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h4 class="mb-0">
+                                                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ cartelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                                    </h4>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td class="align-middle border-top-0 border-bottom-0"></td>
+                                            <td class="align-middle border-top-0 border-bottom-0">
+                                                <h4 class="mb-0">{{ "Total"|trans }}</h4>
+                                            </td>
+                                            <td class="align-middle border-top-0 border-bottom-0 text-center">
+                                                <span class="fs-4">2 (items)</span>
+                                            </td>
+                                            <td>
+                                                <h4 class="mb-0">$98.00</h4>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
                         </div>
                     </div>
-                    <div class="col-lg-4"></div>
+                </div>
+                <div class="mt-4 d-flex justify-content-between">
+                    <a href="{{ path('recipes') }}" class="btn btn-outline-primary">{{ "Buy more subscriptions"|trans }}</a>
+                    <button type="submit" class="btn btn-outline-primary">{{ "Update cart"|trans }}</button>
+                    <a href="{{ path('dashboard_creator_cart_empty') }}" class="btn btn-outline-primary requires-confirmation" data-confirmation-text="{{ "You are about to empty your cart"|trans }}">
+                        {{ "Empty cart"|trans }}
+                    </a>
+                    <a href="{{ path('dashboard_creator_checkout') }}" class="btn btn-primary">
+                        {% if app.user.getSubscriptionsInCartPriceSum(true) > 0 %}
+                            {{ "Checkout"|trans }}
+                        {% else %}
+                            {{ "Register"|trans }}
+                        {% endif %}
+                    </a>
                 </div>
             </div>
-        </section>
-    {% else %}
-        {#  
+            <div class="col-lg-4">
+                <div class="card mb-4 mt-4 mt-lg-0">
+                    <div class="card-body">
+                        <h4 class="mb-3">{{ "Order Summary"|trans }}</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item px-0 d-flex justify-content-between fs-5 text-dark fw-medium">
+                                <span>{{ "Fees"|trans }} :</span>
+                                <span>
+                                    {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ app.user.getTotalFees }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <div class="px-0 d-flex justify-content-between fs-5 text-dark fw-semibold">
+                            <span>
+                                ({{ settings['currency_position'] == 'left' ? settings['currency_ccy'] : '' }}){{ "Total"|trans }}({{ settings['currency_position'] == 'right' ? settings['currency_ccy'] : '' }})
+                            </span>
+                            <span>
+                                {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ app.user.getTicketsInCartPriceSum(true) }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}  
         {% include "global/message.html.twig" with { icon: "bi bi-shop", type: "dark", class: "my-2", message: ('Your cart is empty'|trans) } %}
-        #}
-        <section class="container d-flex flex-column vh-100">
-            <div class="row align-items-center justify-content-center g-0 h-lg-100 py-8">
-                <div class="offset-xl-1 col-xl-5 col-lg-6 col-md-12 col-12 text-center text-lg-start">
-                    <h1 class="display-3 mb-2 fw-bold">{{ 'Your cart is empty'|trans }}</h1>
-                </div>
-            </div>
-        </section>
     {% endif %}
 {% endblock %}

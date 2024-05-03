@@ -71,10 +71,10 @@
                         <div class="ms-3">
                             <select class="form-select">
                                 <option value="">{{ "Sort by"|trans }}</option>
-                                <option selected="">{{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.rating", {"direction": "desc", "criteria": "r.rating"}) }}</option>
-                                <option selected="">{{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.rating", {"direction": "asc", "criteria": "r.rating"}) }}</option>
-                                <option selected="">{{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.createdAt", {"direction": "desc", "criteria": "r.createdAt"}) }}
-                                <option selected="">{{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.createdAt", {"direction": "asc", "criteria": "r.createdAt"}) }}</option>
+                                <option value="">{{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.rating", {"direction": "desc", "criteria": "r.rating"}) }}</option>
+                                <option value="">{{ knp_pagination_sortable(rows, "Rating"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.rating", {"direction": "asc", "criteria": "r.rating"}) }}</option>
+                                <option value="">{{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "desc"|trans ~ ')', "r.createdAt", {"direction": "desc", "criteria": "r.createdAt"}) }}
+                                <option value="">{{ knp_pagination_sortable(rows, "Review date"|trans ~ ' (' ~ "asc"|trans ~ ')', "r.createdAt", {"direction": "asc", "criteria": "r.createdAt"}) }}</option>
                             </select>
                         </div>
                     </div>
@@ -113,8 +113,8 @@
 						<h2 class="h3 mb-6">Overall Rating</h2>
 						<div class="row align-items-center">
 							<div class="col-md-4 text-md-center mb-4 mb-md-0">
-								<h3 class="display-2 fw-bold">4.5</h3>
-								<span class="fs-6">
+								<h3 class="display-2 fw-bold">{{ recipe.getRatingAvg }}</h3>
+								<span style="width:{{ recipe.getRatingPercentage }}%" class="fs-6">
 									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
 										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 									</svg>
@@ -131,84 +131,79 @@
 										<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 									</svg>
 								</span>
-								<p class="mb-0">11.7k Reviews</p>
+								<p class="mb-0">{{ recipe.getRatingAvg }} {{ "out of 5 stars"|trans|lower }}</p>
 							</div>
 							<div class="offset-lg-1 col-lg-7 col-md-8">
 								<div class="d-flex align-items-center mb-2">
 									<div class="text-nowrap me-3 ">
-										<span class="d-inline-block align-middle  me-1">5</span>
+										<span class="d-inline-block align-middle  me-1">{{ "5 stars"|trans }}</span>
 										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
 											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 										</svg>
 									</div>
 									<div class="w-100">
 										<div class="progress" style="height: 6px;">
-											<div class="progress-bar bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+											<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(5) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(5) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(5) }}"></div>
 										</div>
 									</div>
-									<span class="ms-3">6.6k</span>
+									<span class="ms-3">{{ recipe.getRatingsPercentageForRating(5) }}</span>
 								</div>
-								<!-- progress -->
 								<div class="d-flex align-items-center mb-2">
 									<div class="text-nowrap me-3 ">
-										<span class="d-inline-block align-middle  me-1">4</span>
+										<span class="d-inline-block align-middle  me-1">{{ "4 stars"|trans }}</span>
 										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
 											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 										</svg>
 									</div>
 									<div class="w-100">
 										<div class="progress" style="height: 6px;">
-											<div class="progress-bar bg-warning" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50"></div>
+											<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(4) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(4) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(4) }}"></div>
 										</div>
 									</div>
-									<span class=" ms-3">2.9k</span>
+									<span class=" ms-3">{{ recipe.getRatingsPercentageForRating(4) }}</span>
 								</div>
-								<!-- progress -->
 								<div class="d-flex align-items-center mb-2">
 									<div class="text-nowrap me-3">
-										<span class="d-inline-block align-middle  me-1">3</span>
+										<span class="d-inline-block align-middle  me-1">{{ "3 stars"|trans }}</span>
 										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
 											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 										</svg>
 									</div>
 									<div class="w-100">
 										<div class="progress" style="height: 6px;">
-											<div class="progress-bar bg-warning" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="35"></div>
+											<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(3) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(3) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(3) }}"></div>
 										</div>
 									</div>
-									<span class=" ms-3">3k</span>
+									<span class=" ms-3">{{ recipe.getRatingsPercentageForRating(3) }}</span>
 								</div>
-								<!-- progress -->
 								<div class="d-flex align-items-center mb-2">
 									<div class="text-nowrap me-3 ">
-										<span class="d-inline-block align-middle  me-1">2</span>
+										<span class="d-inline-block align-middle  me-1">{{ "2 stars"|trans }}</span>
 										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
 											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 										</svg>
 									</div>
 									<div class="w-100">
 										<div class="progress" style="height: 6px;">
-											<div class="progress-bar bg-warning" role="progressbar" style="width: 22%;" aria-valuenow="22" aria-valuemin="0" aria-valuemax="22"></div>
+											<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(2) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(2) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(2) }}"></div>
 										</div>
 									</div>
-									<span class=" ms-3">479</span>
+									<span class=" ms-3">{{ recipe.getRatingsPercentageForRating(2) }}</span>
 								</div>
-								<!-- progress -->
 								<div class="d-flex align-items-center mb-2">
 									<div class="text-nowrap me-3 ">
-										<span class="d-inline-block align-middle  me-1">1</span>
+										<span class="d-inline-block align-middle  me-1">{{ "1 star"|trans }}</span>
 										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill " viewbox="0 0 16 16">
 											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
 										</svg>
 									</div>
 									<div class="w-100">
 										<div class="progress" style="height: 6px;">
-											<div class="progress-bar bg-warning" role="progressbar" style="width: 14%;" aria-valuenow="14" aria-valuemin="0" aria-valuemax="14"></div>
+											<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(1) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(1) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(1) }}"></div>
 										</div>
 									</div>
-									<span class=" ms-3">865</span>
+									<span class=" ms-3">{{ recipe.getRatingsPercentageForRating(1) }}</span>
 								</div>
-
 							</div>
 						</div>
 					</div>
