@@ -47,7 +47,7 @@ class TestimonialFormType extends AbstractType
                 'purify_html' => true,
                 'required' => true,
                 'empty_data' => '',
-                'attr' => ['placeholder' => '', 'rows' => 6],
+                'attr' => ['placeholder' => '', 'rows' => 10],
                 'help' => t(''),
             ])
             ->add('author', UserAutocompleteField::class, ['label' => t('Author :')])

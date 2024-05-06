@@ -579,6 +579,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         return $this;
     }
 
+    public function isRatedBy(User $user)
+    {
+        /** @var Testimonial $testimonial */
+        foreach ($this->testimonials as $testimonial) {
+            if ($testimonial->getAuthor() === $user) {
+                return $testimonial;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @return Collection<int, Recipe>
      */

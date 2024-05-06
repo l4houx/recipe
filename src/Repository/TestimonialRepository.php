@@ -120,7 +120,7 @@ class TestimonialRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $slug) {
-            $qb->andWhere('r.slug = :slug')->setParameter('slug', $slug);
+            $qb->andWhere('t.slug = :slug')->setParameter('slug', $slug);
         }
 
         if ('all' !== $user) {

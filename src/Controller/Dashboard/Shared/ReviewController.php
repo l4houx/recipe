@@ -5,6 +5,7 @@ namespace App\Controller\Dashboard\Shared;
 use App\Entity\Recipe;
 use App\Entity\Review;
 use App\Form\ReviewFormType;
+use App\Entity\Traits\HasLimit;
 use App\Entity\Traits\HasRoles;
 use App\Service\SettingService;
 use App\Controller\BaseController;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -26,6 +28,7 @@ class ReviewController extends BaseController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly TranslatorInterface $translator,
+        private readonly SluggerInterface $slugger,
         private readonly SettingService $settingService
     ) {
     }
@@ -54,11 +57,11 @@ class ReviewController extends BaseController
         $rows = $paginator->paginate(
             $this->settingService->getReviews(['user' => $user, 'restaurant' => $restaurant, 'keyword' => $keyword, 'recipe' => $recipe, 'slug' => $slug, 'isVisible' => $isVisible, 'rating' => $rating])->getQuery(),
             $request->query->getInt('page', 1),
-            10,
+            HasLimit::REVIEW_LIMIT,
             ['wrap-queries' => true]
         );
 
-        //$user = $this->getUserOrThrow();
+        // $user = $this->getUserOrThrow();
 
         return $this->render('dashboard/shared/review/index.html.twig', compact('rows', 'user'));
     }
@@ -81,6 +84,7 @@ class ReviewController extends BaseController
             if ($form->isValid()) {
                 $review->setAuthor($this->getUser());
                 $review->setRecipe($recipe);
+                $review->setSlug($this->slugger->slug($review->getHeadline())->lower());
 
                 $this->em->persist($review);
                 $this->em->flush();

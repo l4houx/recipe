@@ -10,13 +10,16 @@
                 <div class="col-lg-6 col-md-12 col-12 text-center">
                     <span class="text-primary mb-3 d-block text-uppercase fw-semibold ls-xl">{{ pagetitle }}</span>
                     <h2 class="mb-2 display-4 fw-bold">{{ 'What our users are saying'|trans }}</h2>
-                    <p class="lead">{{ '12+ million people are already learning on'|trans }} {{ website_name }}</p>
+                    {% set testimonialscount = setting.getTestimonials({"count": true}).getQuery().getSingleScalarResult() %}
+                    <p class="lead">{{ testimonialscount }} {{"Testimonial(s)"|trans|lower}}</p>
                 </div>
             </div>
             {% if testimonials | length > 0 %}
                 <div class="row">
                     {% for testimonial in testimonials %}
-                        {% include "global/testimonial-card.html.twig" with {testimonial: testimonial, showuser: 1, index: loop.index} %}
+                        {% if testimonial.enabletestimonials %}
+                            {% include "global/testimonial-card.html.twig" with {testimonial: testimonial, showuser: 1, index: loop.index} %}
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% else %}

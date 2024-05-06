@@ -7,7 +7,10 @@
             {% if showuser is defined %}
                 <h4 class="mb-1">
                     {{ review.author.getFullName | lower | capitalize }}
-                    <span class="ms-1 fs-6">{{ review.createdAt | format_date('long') }}</span>
+                    <span class="ms-1 fs-6">
+                        {{ 'Published the'|trans }}
+                        {{ review.createdAt | format_date('long') }}
+                    </span>
                 </h4>
             {% endif %}
             <div class="mb-2">
@@ -36,7 +39,7 @@
             </div>
             <span class="h5">{{ review.headline }}</span>
             <p data-collapsed-height="200" data-height-margin="20">
-                {{ review.content | html_markdown_excerpt() }}
+                {{ review.content | html_markdown }}
             </p>
             <div class="d-lg-flex">
                 <p class="mb-0">{{ 'Was this review helpful?'|trans }}</p>

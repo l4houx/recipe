@@ -92,8 +92,7 @@ class TestimonialController extends BaseController
                     )
                 );
 
-                // return $this->redirectToRoute('dashboard_testimonial_index', [], Response::HTTP_SEE_OTHER);
-                return $this->redirect($url->generate('page', ['slug' => $testimonial->getSlug()]).'#testimonial');
+                return $this->redirectToRoute('dashboard_testimonial_index', [], Response::HTTP_SEE_OTHER);
             } else {
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }

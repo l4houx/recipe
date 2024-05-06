@@ -61,8 +61,8 @@ class OrderRepository extends ServiceEntityRepository
         }
 
         if ($recipe !== "all") {
-            $qb->leftJoin("recipe.translations", "recipetranslations");
-            $qb->andWhere("recipetranslations.slug = :recipe")->setParameter("recipe", $recipe);
+            //$qb->leftJoin("recipe.translations", "recipetranslations");
+            $qb->andWhere("recipe.slug = :recipe")->setParameter("recipe", $recipe);
         }
 
         if ($recipeDate !== "all") {

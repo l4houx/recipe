@@ -59,8 +59,8 @@ class RecipeDateRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $recipe) {
-            $qb->leftJoin('recipe.translations', 'recipetranslations');
-            $qb->andWhere('recipetranslations.slug = :recipe')->setParameter('recipe', $recipe);
+           //$qb->leftJoin('recipe.translations', 'recipetranslations');
+            $qb->andWhere('recipes.slug = :recipe')->setParameter('recipe', $recipe);
         }
 
         $qb->orderBy('r.startdate', 'ASC');

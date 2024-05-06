@@ -10,4 +10,5 @@
 			</svg>
 		{% endif %}
 	{% endfor %}
+	{% if message is defined %}{{ message | raw }}{% endif %}
 </span>

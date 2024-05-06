@@ -1,6 +1,6 @@
 {% extends 'dashboard.html.twig' %}
 
-{% if is_granted('ROLE_CREATOR') %}
+{% if is_granted('ROLE_CREATOR') or is_granted("ROLE_USER") %}
 	{% set pagetitle = 'My testimonials'|trans %}
 {% elseif is_granted('ROLE_ADMIN_APPLICATION') %}
 	{% set pagetitle = 'Manage testimonials'|trans %}
@@ -8,88 +8,48 @@
 {% block title pagetitle %}
 
 {% block content %}
-	<div class="card mb-4">
-		<div class="d-lg-flex justify-content-between align-items-center card-header">
-			<div class="mb-3 mb-lg-0">
-				<h3 class="mb-0">{{ pagetitle }}</h3>
-				{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_ADMIN_APPLICATION') %}
-					<span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount }) }}</span>
-				{% endif %}
-			</div>
-			{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_ADMIN_APPLICATION') %}
-				<div>
-					<a href="{{ path('dashboard_creator_testimonial_new') }}" class="btn btn-outline-primary btn-sm">
-						{{ 'Create'|trans }}
-					</a>
-				</div>
-			{% endif %}
-		</div>
-		{% if rows.getTotalItemCount > 0 %}
-			<div class="card-body">
-				{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_ADMIN_APPLICATION') %}
-					<form class="row mb-4 gx-2">
-						<div class="col-xl-7 col-lg-6 col-md-4 col-12 mb-2 mb-lg-0">
-							<select class="form-select">
-								<option value="">ALL</option>
-								<option value="How to easily create a website">How to easily create a website</option>
-								<option value="Grunt: The JavaScript Task...">Grunt: The JavaScript Task...</option>
-								<option value="Vue js: The JavaScript Task...">Vue js: The JavaScript Task...</option>
-							</select>
-						</div>
-						<div
-							class="col-xl-2 col-lg-2 col-md-4 col-12 mb-2 mb-lg-0">
-							<!-- Custom select -->
-							<select class="form-select">
-								<option value="">Rating</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-							</select>
-						</div>
-						<div
-							class="col-xl-3 col-lg-3 col-md-4 col-12 mb-2 mb-lg-0">
-							<!-- Custom select -->
-							<select class="form-select">
-								<option value="">Sort by</option>
-								<option value="Newest">Newest</option>
-								<option value="Oldest">Oldest</option>
-							</select>
-						</div>
-					</form>
-				{% endif %}
-                <hr class="my-5">
-				<div class="mb-3">
-					<div class="d-lg-flex align-items-center justify-content-between mb-5">
-						<div class="mb-3 mb-lg-0">
-							<h3 class="mb-0">{{ 'Testimonials'|trans }}</h3>
-						</div>
+    <div class="row">
+        <div class="col-12">
+			<div class="card">
+				<div class="d-lg-flex justify-content-between align-items-center card-header">
+					<div class="mb-3 mb-lg-0">
+						<h3 class="mb-0">{{ pagetitle }}</h3>
+						{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_ADMIN_APPLICATION') %}
+							<span>{{ "%resultsCount% testimonial(s) found"|trans({'%resultsCount%': rows.getTotalItemCount }) }}</span>
+						{% endif %}
+					</div>
+					{% if is_granted('ROLE_VERIFIED') or is_granted('ROLE_CREATOR') or is_granted("ROLE_USER") %}
 						<div>
-							<form class="form-inline">
-								<div class="d-flex align-items-center me-2">
-									<span class="position-absolute ps-3">
-										<i class="bi bi-search"></i>
-									</span>
-									<label for="search" class="visually-hidden"></label>
-									<input type="search" id="search" class="form-control ps-6" placeholder="Search Courses">
-								</div>
-							</form>
+							{% if app.user.isRatedBy(app.user) %}
+								<a href="{{ path('testimonial') }}" class="btn btn-outline-primary btn-sm">
+									{{ "Alls testimonials"|trans }}
+								</a>
+							{% else %}
+								<a href="{{ path('dashboard_creator_testimonial_new') }}" class="btn btn-outline-primary btn-sm">
+									{{ "Add your testimonial"|trans }}
+								</a>
+							{% endif %}
+						</div>
+					{% endif %}
+				</div>
+				{% if rows.getTotalItemCount > 0 %}
+					<div class="card-body">
+						<div class="mb-3">
+							{% for testimonial in rows %}
+								{% include "global/user-testimonial.html.twig" with {rows: testimonial, showuser: 1, index: loop.index} %}
+							{% endfor %}
+						</div>
+						<div class="card-footer">
+							{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
 						</div>
 					</div>
-					{% for testimonial in rows %}
-						{% include "global/testimonials-list.html.twig" with {testimonial: testimonial, showuser: 1, index: loop.index} %}
-					{% endfor %}
-				</div>
-				<div class="card-footer">
-					{{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-				</div>
+				{% else %}
+					<div class="card-footer">
+						{% include "global/message.html.twig" with { type: "dark", message: ('No testimonials found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+					</div>
+				{% endif %}
 			</div>
-		{% else %}
-			<div class="card-footer">
-				{% include "global/message.html.twig" with { type: "dark", message: ('No testimonial found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
-			</div>
-		{% endif %}
+		</div>
 	</div>
 {% endblock %}
 
@@ -97,13 +57,13 @@
 	{{ parent() }}
 	<script>
 		$(document).ready(function () {
-if (getURLParameter('isOnline') != "null") {
-$('input[type="radio"][name="isOnline"][value="' + getURLParameter('isOnline') + '"]').attr("checked", "checked");
-}
+			if (getURLParameter('isOnline') != "null") {
+				$('input[type="radio"][name="isOnline"][value="' + getURLParameter('isOnline') + '"]').attr("checked", "checked");
+			}
 
-if (getURLParameter('rating') != "null") {
-$('input[type="radio"][name="rating"][value="' + getURLParameter('rating') + '"]').attr("checked", "checked");
-}
-});
+			if (getURLParameter('rating') != "null") {
+				$('input[type="radio"][name="rating"][value="' + getURLParameter('rating') + '"]').attr("checked", "checked");
+			}
+		});
 	</script>
 {% endblock %}

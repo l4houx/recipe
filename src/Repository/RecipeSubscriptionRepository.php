@@ -59,8 +59,8 @@ class RecipeSubscriptionRepository extends ServiceEntityRepository
         }
 
         if ('all' !== $recipe) {
-            $qb->leftJoin('recipe.translations', 'recipetranslations');
-            $qb->andWhere('recipetranslations.slug = :recipe')->setParameter('recipe', $recipe);
+            //$qb->leftJoin('recipe.translations', 'recipetranslations');
+            $qb->andWhere('recipe.slug = :recipe')->setParameter('recipe', $recipe);
         }
 
         if ('all' !== $recipedate) {
