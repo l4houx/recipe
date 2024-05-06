@@ -23,49 +23,53 @@
 {% endblock %}
 
 {% block content %}
-
     {% if rows.getTotalItemCount > 0 %}
-        <div class="box shadow-none bg-gray mb-4">
-            <div class="row">
-                <div class="col-sm-12 col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
-                    <span class="center-lg-y text-muted">{{ "%resultsCount% recipe(s) currently on sale"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
-                </div>
-                <div class="col-sm-12 col-lg-6 text-center text-lg-right">
-                    {% set anRecipehasRecipeDateWithSeatingPlan = false %}
-                    {% for recipe in rows if recipe.hasAnRecipeDateOnSale %}
-                        {% set anRecipehasRecipeDateWithSeatingPlan = true %}
-                    {% endfor %}
-                    <button id="pos-save-order-button" class="btn btn-primary {% if anRecipehasRecipeDateWithSeatingPlan %}an-recipe-date-has-seating-plan{% endif %}"><i class="fas fa-cart-arrow-down"></i> {{ "Save order"|trans }}</button>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row gx-3">
+                    <div class="col-lg-3 col-md-5 col-12 mb-lg-0 mb-2">
+                        <span>{{ "%resultsCount% recipe(s) currently on sale"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
+                    </div>
+                    <div class=" col-lg-9 col-md-7 col-12">
+                        {% set anRecipehasRecipeDateWithSeatingPlan = false %}
+                        {% for recipe in rows if recipe.hasAnRecipeDateOnSale %}
+                            {% set anRecipehasRecipeDateWithSeatingPlan = true %}
+                        {% endfor %}
+                        <button id="pos-save-order-button" class="btn btn-primary {% if anRecipehasRecipeDateWithSeatingPlan %}an-recipe-date-has-seating-plan{% endif %}">
+                            <i class="bi bi-arrow-down"></i> {{ "Save order"|trans }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     {% endif %}
+
     <div class="row">
         <div class="col-12">
             {% if rows.getTotalItemCount > 0 %}
-
-                <div class="accordion" id="recipes-accordion">
+                <div class="accordion accordion-flush" id="accordionRecipe">
                     <form id="pos-order-form" action="{{ path('dashboard_pointofsale_cart_add') }}" method="post">
                         {% for recipe in rows if recipe.hasAnRecipeDateOnSale %}
                             <div class="card">
-                                <div class="card-header" id="{{ recipe.slug }}">
+                                <div class="card-header" id="heading-{{ recipe.slug }}">
                                     <div class="row h-100">
                                         <div class="col-12 col-md-9 ">
                                             {% include "global/recipe-preview-horizontal.html.twig" with { recipe: recipe, hiderestaurant: true } %}
                                         </div>
                                         <div class="col-12 col-md-3 my-auto">
-                                            <button type="button" class="btn btn-light btn-sm float-right" data-toggle="collapse" data-target="#recipe-{{recipe.reference}}"><i class="fas fa-plus"></i> {{ "Show recipe dates and subscriptions"|trans }}</button>
+                                            <button type="button" class="btn btn-light btn-sm float-end" data-bs-toggle="collapse" data-bs-target="#collapse-recipe-{{recipe.reference}}">
+                                                <i class="bi bi-plus"></i> {{ "Show recipe dates and subscriptions"|trans }}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="recipe-{{recipe.reference}}" class="collapse" aria-labelledby="{{ recipe.slug }}" data-parent="#recipes-accordion">
+                                <div id="collapse-recipe-{{recipe.reference}}" class="collapse" aria-labelledby="heading-{{ recipe.slug }}" data-bs-parent="#accordionRecipe">
                                     <div class="card-body">
                                         {% for recipeDate in recipe.recipedates if recipeDate.isOnSaleByPos(app.user.pointofsale) %}
                                             <div class="card {% if recipeDate.hasSeatingPlan %}has-seating-plan{% endif %}">
                                                 <div class="card-header">
-                                                    <i class="fas fa-clock fa-fw"></i> {{ recipeDate.startdate | ago }}
-
-                                                    <i class="fas fa-map-marker-alt fa-fw"></i>
+                                                    <i class="bi bi-alarm fa-fw"></i> {{ recipeDate.startdate | localizeddate('full', 'short', app.request.locale, date_timezone, date_format) }}
+                                                    <i class="bi bi-pin-map fa-fw"></i>
                                                     {% if recipeDate.venue %}
                                                         {{ recipeDate.venue.name }}: {{ recipeDate.venue.stringifyAddress }}
                                                     {% else %}
@@ -73,7 +77,6 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="card-body">
-
                                                     {% if recipeDate.hasSeatingPlan %}
                                                         <div class="mb-3">
                                                             {% include "dashboard/shared/venue/seatingPlans/seating-plan-seats.html.twig" with {seatingPlan: recipeDate.seatingPlan} %}
@@ -85,30 +88,33 @@
                                                             <div class="mb-2">
                                                                 <b>{{ subscription.name }}</b>
                                                                 {% if subscription.description %}
-                                                                    <i class="fas fa-info-circle text-primary ml-2" data-toggle="tooltip" title="{{ subscription.description }}"></i>
+                                                                    <i class="bi bi-exclamation-circle text-primary ml-2" data-bs-toggle="tooltip" title="{{ subscription.description }}"></i>
                                                                 {% endif %}
                                                                 {% if not subscription.isOnSale %}
-                                                                    <span class="badge badge-{{ subscription.stringifyStatusClass }} ml-5">{{ subscription.stringifyStatus|trans }}</span>
+                                                                    <span class="badge bg-{{ subscription.stringifyStatusClass }}-soft ml-5">
+                                                                        {{ subscription.stringifyStatus|trans }}
+                                                                    </span>
                                                                 {% endif %}
                                                             </div>
-                                                            <div class="b mb-2">
-                                                                {{ subscription.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ subscription.getSalePrice ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+                                                            <div class="fw-bold mb-2">
+                                                                {{ subscription.free ? "Free"|trans : ((settings['currency_position'] == 'left' ? settings['currency_symbol'] : '') ~ subscription.getSalePrice ~ (settings['currency_position'] == 'right' ? settings['currency_symbol'] : '')) }}
                                                                 {% if subscription.promotionalprice and not subscription.free %}
-                                                                    <del class="price-old">{{ (services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ subscription.getPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '') }}</del>
+                                                                    <del class="mb-0">
+                                                                        {{ (settings['currency_position'] == 'left' ? settings['currency_symbol'] : '') ~ ticket.getPrice() ~ (settings['currency_position'] == 'right' ? settings['currency_symbol'] : '') }}
+                                                                    </del>
                                                                 {% endif %}
                                                             </div>
                                                             {% if subscription.salesstartdate %}
-
                                                                 <div class="mb-2">
                                                                     {% if subscription.salesstartdate|date("Y/m/d H:i") > "now" | date("Y/m/d H:i") %}
-                                                                        <small class="text-danger font-size-10px mt-1">
+                                                                        <small class="text-danger fs-6 mt-1">
                                                                             {{ "Sales start in"|trans }}
                                                                             <span class="countdown" data-count-down-to="{{ subscription.salesstartdate | date('Y/m/d H:i') }}"></span>
                                                                         </small>
                                                                     {% else %}
-                                                                        <small class="text-success font-size-10px mt-1">
+                                                                        <small class="text-success fs-6 mt-1">
                                                                             {{ "Sales started"|trans }}
-                                                                            {{ subscription.salesstartdate | ago }}
+                                                                            {{ subscription.salesstartdate | localizeddate('full', 'short', app.request.locale, date_timezone, date_format) }}
                                                                         </small>
                                                                     {% endif %}
                                                                 </div>
@@ -117,12 +123,14 @@
                                                             {% if subscription.salesenddate and subscription.salesstartdate | date("Y/m/d H:i") <= "now"|date("Y/m/d H:i") %}
                                                                 <div class="mb-2">
                                                                     {% if subscription.salesenddate|date("Y/m/d H:i") < "now"|date("Y/m/d H:i") %}
-                                                                        <small class="text-danger font-size-10px  mt-1">
+                                                                        <small class="text-danger fs-6 mt-1">
                                                                             {{ "Sales ended"|trans }}
-                                                                            <span>{{ subscription.salesenddate | ago }}</span>
+                                                                            <span>
+                                                                                {{ subscription.salesenddate | localizeddate('full', 'short', app.request.locale, date_timezone, date_format) }}
+                                                                            </span>
                                                                         </small>
                                                                     {% else %}
-                                                                        <small class="text-danger font-size-10px  mt-1">
+                                                                        <small class="text-danger fs-6 mt-1">
                                                                             {{ "Sales end"|trans }}
                                                                             <span class="countdown" data-count-down-to="{{ subscription.salesenddate|date('Y/m/d H:i') }}"></span>
                                                                         </small>
@@ -134,10 +142,17 @@
                                                                 <input type="text" class="form-control touchspin-integer pos-recipedate-subscription-qte recipedate-subscription-qte" name="{{ subscription.reference }}" data-subscription-id="{{ subscription.id }}" data-min="0" data-max="{{ subscription.getSubscriptionsLeftCount }}" {% if not subscription.isOnSale %}disabled{% endif %} />
                                                             </div>
 
-                                                            <div class="b mb-2">
-                                                                <small class="text-muted">{{ "Subscriptions left"|trans }}: {{ subscription.getSubscriptionsLeftCount }} / {{ Subscription.quantity }}</small>
+                                                            <div class="fw-bold mb-2">
+                                                                <small class="text-dark">{{ "Subscriptions left"|trans }}: 
+                                                                    {{ subscription.getSubscriptionsLeftCount }} / 
+                                                                    {{ Subscription.quantity }}
+                                                                </small>
                                                                 <br>
-                                                                <small class="text-muted">{{ "Scanned Subscriptions"|trans }}: {{ subscription.getScannedSubscriptionsCount }} / {{ subscription.getOrderElementsQuantitySum }}</small>
+                                                                <small class="text-dark">
+                                                                    {{ "Scanned Subscriptions"|trans }}: 
+                                                                    {{ subscription.getScannedSubscriptionsCount }} / 
+                                                                    {{ subscription.getOrderElementsQuantitySum }}
+                                                                </small>
                                                             </div>
 
                                                             {% if not loop.last %}
@@ -154,12 +169,12 @@
                         {% endfor %}
                     </form>
                 </div>
-
             {% else %}
-                {% include "Global/message.html.twig" with { type: "info", message: ('No recipes found'|trans), icon: "fas fa-exclamation-circle" } %}
+                <div class="card-footer">
+                    {% include "global/message.html.twig" with { type: "dark", message: ('No recipes found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                </div>
             {% endif %}
             {{ knp_pagination_render(rows, null, {}, {'align': 'center'}) }}
-
         </div>
     </div>
 
@@ -172,7 +187,6 @@
             {% endfor %}
         {% endif %}
     {% endfor %}
-
 {% endblock %}
 
 {% block javascripts %}
@@ -180,12 +194,12 @@
     <script>
         $(document).ready(function () {
             $(".collapse.show").each(function () {
-                $(this).prev(".card-header").find(".fa").addClass("fa-minus").removeClass("fa-plus");
+                $(this).prev(".card-header").find(".bi").addClass("bi-dash").removeClass("bi-plus");
             });
             $(".collapse").on('show.bs.collapse', function () {
-                $(this).prev(".card-header").find(".fa").removeClass("fa-plus").addClass("fa-minus");
+                $(this).prev(".card-header").find(".bi").removeClass("bi-plus").addClass("bi-dash");
             }).on('hide.bs.collapse', function () {
-                $(this).prev(".card-header").find(".fa").removeClass("fa-minus").addClass("fa-plus");
+                $(this).prev(".card-header").find(".bi").removeClass("bi-dash").addClass("bi-plus");
             });
         });
     </script>

@@ -17,21 +17,42 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[IsGranted(HasRoles::CREATOR)]
 class AccountController extends BaseController
 {
-    #[Route(path: '/account-profile', name: 'account_index', methods: ['GET'])]
-    public function index(Request $request, EntityManagerInterface $em, TranslatorInterface $translator): Response
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly TranslatorInterface $translator
+    ) {
+    }
+
+    #[Route(path: '/account-profile', name: 'account_index', methods: ['GET', 'POST'])]
+    public function index(Request $request): Response
     {
+        $user = $this->getUserOrThrow();
         $form = $this->createForm(AccountCreatorFormType::class, $this->getUser())->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $em->persist($this->getUser());
-                $em->flush();
-                $this->addFlash('info', $translator->trans('Content was edited successfully.'));
+                $this->em->persist($this->getUser());
+                $this->em->flush();
+                $this->addFlash('info', $this->translator->trans('Content was edited successfully.'));
             } else {
-                $this->addFlash('danger', $translator->trans('The form contains invalid data'));
+                $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
         }
 
-        return $this->render('dashboard/shared/account/creator/index.html.twig', compact('form'));
+        return $this->render('dashboard/shared/account/creator/index.html.twig', compact('form', 'user'));
+    }
+
+    #[Route(path: '/social-profile', name: 'account_social_profiles', methods: ['GET', 'POST'])]
+    public function socialProfiles(Request $request): Response
+    {
+        return $this->render('dashboard/shared/account/creator/social-profiles.html.twig');
+    }
+
+    #[Route(path: '/account-linked', name: 'account_linked_profiles', methods: ['GET', 'POST'])]
+    public function linkedProfiles(Request $request): Response
+    {
+        $user = $this->getUserOrThrow();
+
+        return $this->render('dashboard/shared/account/creator/linked-profiles.html.twig', compact('user'));
     }
 }

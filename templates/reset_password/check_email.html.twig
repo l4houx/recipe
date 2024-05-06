@@ -2,7 +2,7 @@
 
 {% block layout %}{{ parent() }} check_email{% endblock %}
 
-{% set pagetitle = "Password reset email sent"|trans %}
+{% set pagetitle = "Check your email inbox"|trans %}
 {% block title pagetitle %}
 
 {% block content %}
@@ -11,6 +11,7 @@
             <img src="{{ asset('images/brand/logo/logo-icon.svg') }}" class="mb-4" alt="logo-icon">
             {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="mb-4"> #}
         </a>
+        <p><i class="bi bi-check-circle fs-1 text-success"></i></p>
         <h1 class="mb-1 fw-bold">{{ pagetitle }}</h1>
         <span>
             {{ 'Already have an account?'|trans }}

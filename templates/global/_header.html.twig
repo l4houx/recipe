@@ -16,10 +16,6 @@
             </div>
             <ul class="navbar-nav navbar-right-wrap ms-2 flex-row d-none d-md-block">
 				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-					{% if is_granted('ROLE_CREATOR') %}
-						{# {% include "global/_cart.html.twig" %} #}
-                        {% include "global/_notification.html.twig" %}
-					{% endif %}
                     <li class="dropdown ms-2 d-inline-block position-static">
                         <a class="rounded-circle" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                             <div class="avatar avatar-md avatar-indicators avatar-online">

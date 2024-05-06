@@ -195,6 +195,12 @@
                     </li>
                 {% endif %}
             {% endif %}
+            <li class="nav-item {% if routename == "dashboard_creator_account_social_profiles" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_creator_account_social_profiles') }}">
+                    <i class="bi bi-arrow-clockwise nav-icon"></i>
+                    {{ 'Social profiles'|trans }}
+                </a>
+            </li>
             {#  
             <li class="nav-item {% if routename == "dashboard_account_profile" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_account_profile') }}">
@@ -219,6 +225,12 @@
                 <a class="nav-link" href="">
                     <i class="bi bi-lock nav-icon"></i>
                     {{ 'Profile privacy'|trans }}
+                </a>
+            </li>
+            <li class="nav-item {% if routename == "dashboard_creator_account_linked_profiles" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_creator_account_linked_profiles') }}">
+                    <i class="bi bi-person nav-icon"></i>
+                    {{ 'Linked accounts'|trans }}
                 </a>
             </li>
             {% if is_granted('IS_IMPERSONATOR') %}

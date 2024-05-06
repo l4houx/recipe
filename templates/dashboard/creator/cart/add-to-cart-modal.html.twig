@@ -38,19 +38,19 @@
                                             <div>
                                                 {{ subscription.name }}
                                                 {% if subscription.description %}
-                                                    <i class="bi bi-exclamation-circle text-primary ms-2" data-toggle="tooltip" title="{{ subscription.description }}"></i>
+                                                    <i class="bi bi-exclamation-circle text-primary ms-2" data-bs-toggle="tooltip" title="{{ subscription.description }}"></i>
                                                 {% endif %}
                                                 {% set recipeSubscriptionInCartSum = app.user.isRecipesubscriptionInCart(subscription) %}
                                                 {% if recipeSubscriptionInCartSum %}
-                                                    <i class="bi bi-cart-plus ms-2 animated infinite flash text-danger" data-toggle="tooltip" title="{{ "You have added %subscriptions% subscription(s) to your cart"|trans({"%subscriptions%": recipeSubscriptionInCartSum}) }}"></i>
+                                                    <i class="bi bi-cart-plus ms-2 animated infinite flash text-danger" data-bs-toggle="tooltip" title="{{ "You have added %subscriptions% subscription(s) to your cart"|trans({"%subscriptions%": recipeSubscriptionInCartSum}) }}"></i>
                                                 {% endif %}
                                                 {% set validSubscriptionReservationsQuantitySumForUser = subscription.getValidSubscriptionReservationsQuantitySum(app.user) %}
                                                 {% if validSubscriptionReservationsQuantitySumForUser %}
-                                                    <i class="bi bi-hourglass ms-2 animated infinite flash text-danger" data-toggle="tooltip" title="{{ "%subscriptions% subscription(s) are still reserved for you, please wait until the reservation expires at %expirationDate% in order to purchase more subscriptions"|trans({"%subscriptions%": validSubscriptionReservationsQuantitySumForUser, "%expirationDate%":  subscription.getValidSubscriptionReservationExpirationDate(app.user) | ago}) }}"></i>
+                                                    <i class="bi bi-hourglass ms-2 animated infinite flash text-danger" data-bs-toggle="tooltip" title="{{ "%subscriptions% subscription(s) are still reserved for you, please wait until the reservation expires at %expirationDate% in order to purchase more subscriptions"|trans({"%subscriptions%": validSubscriptionReservationsQuantitySumForUser, "%expirationDate%":  subscription.getValidSubscriptionReservationExpirationDate(app.user) | ago}) }}"></i>
                                                 {% endif %}
                                                 {% set paidOrderElementsQuantitySum = subscription.getOrderElementsQuantitySum(1, app.user) %}
                                                 {% if paidOrderElementsQuantitySum %}
-                                                    <i class="bi bi-ticket ms-2 animated infinite flash text-info" data-toggle="tooltip" title="{{ "You have already bought %subscriptions% subscription(s)"|trans({"%subscriptions%": paidOrderElementsQuantitySum}) }}"></i>
+                                                    <i class="bi bi-ticket ms-2 animated infinite flash text-info" data-bs-toggle="tooltip" title="{{ "You have already bought %subscriptions% subscription(s)"|trans({"%subscriptions%": paidOrderElementsQuantitySum}) }}"></i>
                                                 {% endif %}
                                             </div>
                                             {% if not subscription.isOnSale %}

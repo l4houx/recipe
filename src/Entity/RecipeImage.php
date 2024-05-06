@@ -33,6 +33,18 @@ class RecipeImage
     #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
     private ?string $imageName = null;
 
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options: ['unsigned' => true])]
+    private ?int $imageSize = 0;
+
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    private ?string $imageMimeType = null;
+
+    #[ORM\Column(type: Types::STRING, length: 1000, nullable: true)]
+    private ?string $imageOriginalName = null;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
+    private array $imageDimensions = [];
+
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $position = null;
 
@@ -71,6 +83,54 @@ class RecipeImage
     public function setImageName(?string $imageName): static
     {
         $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+
+    public function setImageSize(?int $imageSize): static
+    {
+        $this->imageSize = $imageSize;
+
+        return $this;
+    }
+
+    public function getImageMimeType(): ?string
+    {
+        return $this->imageMimeType;
+    }
+
+    public function setImageMimeType(?string $imageMimeType): static
+    {
+        $this->imageMimeType = $imageMimeType;
+
+        return $this;
+    }
+
+    public function getImageOriginalName(): ?string
+    {
+        return $this->imageOriginalName;
+    }
+
+    public function setImageOriginalName(?string $imageOriginalName): static
+    {
+        $this->imageOriginalName = $imageOriginalName;
+
+        return $this;
+    }
+
+    public function getImageDimensions(): array
+    {
+        return $this->imageDimensions;
+    }
+
+    public function setImageDimensions(?array $imageDimensions): static
+    {
+        $this->imageDimensions = $imageDimensions;
 
         return $this;
     }

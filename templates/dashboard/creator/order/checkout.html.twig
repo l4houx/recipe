@@ -44,54 +44,55 @@
                                 <table class="table mb-0 text-nowrap">
                                     <thead class="table-light">
                                         <tr>
-                                            <th style="width:55%;" scope="col">{{ "Recipe / Subscription"|trans }}</th>
-                                            <th style="width:15%;" scope="col" width="100">{{ "Price"|trans }}</th>
-                                            <th style="width:15%;" scope="col" width="100">{{ "Quantity"|trans }}</th>
-                                            <th style="width:15%;" scope="col" class="text-right" width="100">
-                                                {{ "Subtotal"|trans }}
-                                            </th>
+                                            <th>{{ "Recipe / Subscription"|trans }}</th>
+                                            <th>{{ "Price"|trans }}</th>
+                                            <th>{{ "Quantity"|trans }}</th>
+                                            <th>{{ "Subtotal"|trans }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for orderelement in order.orderelements %}
                                             <tr>
-                                                <td width="55%">
-                                                    {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription:
-                                                    orderelement.recipesubscription } %}
-                                                    {% if orderelement.reservedSeats and orderelement.reservedSeats | length > 0 %}
-                                                        <h6 class='text-primary mb-0'>
-                                                            <i class="bi bi-bricks"></i> 
-                                                            {{ "Reserved seats"|trans }}
-                                                        </h6>
-                                                        <ul class='list-check'>
-                                                            {% for reservedSeat in orderelement.reservedSeats %}
-                                                                <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                    {% endif %}
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription:
+                                                            orderelement.recipesubscription } %}
+                                                        </div>
+                                                        <div class="ms-4 mt-2 mt-lg-0">
+                                                            {% if orderelement.reservedSeats and orderelement.reservedSeats | length > 0 %}
+                                                                <h4 class="mb-1 text-primary-hover">{{ "Reserved seats"|trans }}</h4>
+                                                                <div>
+                                                                    {% for reservedSeat in orderelement.reservedSeats %}
+                                                                        <span>
+                                                                            <span class="text-dark fw-medium">
+                                                                                {{ services.stringifySeatLabel(reservedSeat) }}
+                                                                            </span>
+                                                                        </span>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
                                                 </td>
-                                                <td width="15%">
-                                                    <div class="price-wrap">
+                                                <td>
+                                                    <h4 class="mb-0">
                                                         {% if orderelement.recipesubscription.recipedate.recipe.isFree %}
-                                                            <span class="price-new">{{ "Free"|trans }}</span>
+                                                            {{ "Free"|trans }}
                                                         {% else %}
                                                             {% if orderelement.recipesubscription.recipedate %}
-                                                                <span class="price-new">
-                                                                    {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.recipesubscription.getSalePrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
-                                                                </span>
+                                                                {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.recipesubscription.getSalePrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
                                                             {% endif %}
                                                         {% endif %}
-                                                    </div>
+                                                    </h4>
                                                 </td>
-                                                <td width="15%">
+                                                <td>
                                                     {{ orderelement.quantity }}
                                                 </td>
-                                                <td width="15%" class="text-right">
-                                                    <div class="price-wrap">
-                                                        <var class="price">
-                                                            {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
-                                                        </var>
-                                                    </div>
+                                                <td>
+                                                    <h4 class="mb-0">
+                                                        {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+                                                    </h4>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -101,6 +102,7 @@
                         </div>
                     </div>
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
+                        {{ form_widget(form._token) }}
                         {{ form_widget(form.orderReference, { value: order.reference }) }}
                         <div class="card mb-3 mb-lg-0">
                             <div class="card-header">
@@ -320,7 +322,7 @@
                         {% else %}
                             <button type="submit" class="btn btn-primary mt-6" id="checkout_submit">{{ "Register"|trans }}</button>
                         {% endif %}
-                    {{ form_end(form) }}
+                    {{ form_end(form, {'render_rest': false}) }}
                 </div>
                 <div class="col-lg-4 col-md-12 col-12">
                     <div class="card border-0 mb-3">

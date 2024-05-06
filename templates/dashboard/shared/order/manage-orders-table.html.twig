@@ -51,7 +51,9 @@
                     {% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_CREATOR") %}
                         <td>
                             {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                                <span title="{{ "User information"|trans }}" data-toggle="tooltip" data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_admin_user_information', { slug : order.user.slug }) }}" class="ajax-loading">{% include "global/user-avatar.html.twig" with { user: order.user } %} {{ order.user.getCrossRoleName }}</span>
+                                <span title="{{ "User information"|trans }}" data-toggle="tooltip" data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_admin_user_information', { slug : order.user.slug }) }}" class="ajax-loading">{% include "global/user-avatar.html.twig" with { user: order.user } %} 
+                                    {{ order.user.getCrossRoleName }}
+                                </span>
                             {% else %}
                                 {% include "global/user-avatar.html.twig" with { user: order.user } %}
                                 {{ order.user.getCrossRoleName }}
@@ -59,7 +61,7 @@
                         </td>
                     {% endif %}
                     <td>
-                        {{ order.createdAt|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}
+                        {{ order.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
                     </td>
                     <td>
                         <span class="badge bg-{{ order.getStatusClass }}-soft">{{ order.stringifyStatus|trans }}</span>

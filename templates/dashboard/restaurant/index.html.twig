@@ -22,41 +22,47 @@
             </div>
         </div>
         <div class="card-body">
-
-            Here
-
-
-            <header class="section-heading mb-3">
-                <h4 class="title-section float-left"><i class="fas fa-calendar-alt"></i> {{ "Recipes summary"|trans }}</h4>
-                <a href="{{ path('dashboard_restaurant_recipe_index') }}" class="float-right"><i class="fas fa-cog"></i> {{ "My recipes"|trans }}</a>
+            <div class="mb-5 mb-3">
+                <h4 class="fw-semibold pe-1 float-left">
+                    <i class="bi bi-calendar"></i> {{ "Recipes summary"|trans }}
+                </h4>
+                <a href="{{ path('dashboard_restaurant_recipe_index') }}" class="float-end">
+                    <i class="bi bi-gear"></i> {{ "My recipes"|trans }}
+                </a>
                 <div class="clearfix"></div>
-            </header>
+            </div>
             <div class="row mb-3 pl-2 pr-2">
                 <div class="col-md-3 col-sm-6 col-12 p-1">
                     <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                        <i class="fas fa-calendar-alt"></i>
+                        <i class="bi bi-calendar"></i>
                         <h4>{{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": "all", "elapsed": "all"}).getQuery().getSingleScalarResult() }}</h4>
                         <h5 class="mb-0">{{ "Recipes added"|trans }}</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 p-1">
                     <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h4>{{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": true, "elapsed": "all"}).getQuery().getSingleScalarResult() }}</h4>
+                        <i class="bi bi-calendar"></i>
+                        <h4>
+                            {{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": true, "elapsed": "all"}).getQuery().getSingleScalarResult() }}
+                        </h4>
                         <h5 class="mb-0">{{ "Published recipes"|trans }}</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 p-1">
                     <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h4>{{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": true, "elapsed": false}).getQuery().getSingleScalarResult() }}</h4>
+                        <i class="bi bi-calendar"></i>
+                        <h4>
+                            {{ setting.getRecipes({"restaurant": app.user.restaurant.slug, "count": true, "isOnline": true, "elapsed": false}).getQuery().getSingleScalarResult() }}
+                        </h4>
                         <h5 class="mb-0">{{ "Upcoming recipes"|trans }}</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 p-1">
                     <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h4>{{ setting.getRecipeDates({"restaurant": app.user.restaurant.slug, "count": true}).getQuery().getSingleScalarResult() }}</h4>
+                        <i class="bi bi-calendar"></i>
+                        <h4>
+                            {{ setting.getRecipeDates({"restaurant": app.user.restaurant.slug, "count": true}).getQuery().getSingleScalarResult() }}
+                        </h4>
                         <h5 class="mb-0">{{ "Recipe dates"|trans }}</h5>
                     </div>
                 </div>
@@ -72,30 +78,40 @@
                 </div>
             {% endif %}
 
-            <header class="section-heading mb-3 mt-5">
-                <h4 class="title-section float-left"><i class="fas fa-cart-arrow-down"></i> {{ "Creators summary"|trans }}</h4>
-                <a href="{{ path('dashboard_restaurant_orders') }}" class="float-right"><i class="fas fa-users"></i> {{ "Manage creators"|trans }}</a>
+            <div class="mb-5 mb-3 mt-5">
+                <h4 class="fw-semibold pe-1 float-left">
+                    <i class="bi bi-arrow-down"></i> {{ "Creators summary"|trans }}
+                </h4>
+                <a href="{{ path('dashboard_restaurant_orders') }}" class="float-end">
+                    <i class="bi bi-people"></i> {{ "Manage creators"|trans }}
+                </a>
                 <div class="clearfix"></div>
-            </header>
+            </div>
             <div class="row mb-3 pl-2 pr-2">
                 <div class="col-md-3 col-sm-6 col-12 p-1">
                     <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                        <i class="fas fa-cart-arrow-down"></i>
-                        <h4>{{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": "all"}).getQuery().getSingleScalarResult() }}</h4>
+                        <i class="bi bi-arrow-down"></i>
+                        <h4>
+                            {{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": "all"}).getQuery().getSingleScalarResult() }}
+                        </h4>
                         <h5 class="mb-0">{{ "Orders placed"|trans }}</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 p-1">
                     <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                        <i class="fas fa-cart-arrow-down"></i>
-                        <h4>{{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": 1}).getQuery().getSingleScalarResult() }}</h4>
+                        <i class="bi bi-arrow-down"></i>
+                        <h4>
+                            {{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": 1}).getQuery().getSingleScalarResult() }}
+                        </h4>
                         <h5 class="mb-0">{{ "Paid orders"|trans }}</h5>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 p-1">
                     <div class="bg-primary rounded p-4 text-center text-white position-relative counter-box">
-                        <i class="fas fa-cart-arrow-down"></i>
-                        <h4>{{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": 0}).getQuery().getSingleScalarResult() }}</h4>
+                        <i class="bi bi-arrow-down"></i>
+                        <h4>
+                            {{ setting.getOrders({"restaurant": app.user.restaurant.slug, "count": true, "status": 0}).getQuery().getSingleScalarResult() }}
+                        </h4>
                         <h5 class="mb-0">{{ "Awaiting payment"|trans }}</h5>
                     </div>
                 </div>
@@ -111,8 +127,7 @@
 
             <div class="row mb-5">
                 <div class="col-12">
-                    <div id="subscriptionsSalesByDateLineChart">
-                    </div>
+                    <div id="subscriptionsSalesByDateLineChart"></div>
                 </div>
             </div>
 
@@ -126,7 +141,6 @@
                     </div>
                 </div>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}

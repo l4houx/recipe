@@ -27,7 +27,7 @@
 									{% endif %}
 									<span>
 										{{ 'Joined'|trans }}
-										{{ user.createdAt ? user.createdAt | ago() }}
+										{{ user.createdAt ? user.createdAt | format_date('long') }}
 									</span>
 								</div>
 							</div>

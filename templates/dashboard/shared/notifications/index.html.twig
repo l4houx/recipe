@@ -1,0 +1,31 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'My notifications'|trans %}
+{% block title pagetitle %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">{{ pagetitle }}</h3>
+            <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows | length }) }}</span>
+        </div>
+        {% if rows | length > 0 %}
+            <div class="card-body">
+                {% for notification in rows %}
+                    <div class="mb-3">
+                        <p>
+                            <a href="{{ notification.url }}" class="text-primary mb-2 d-block">
+                                <u>{{ notification.message | raw }}</u>
+                            </a>
+                        </p>
+                        <div>{{ notification.createdAt | ago }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+		{% else %}
+			<div class="card-footer">
+				{% include "global/message.html.twig" with { type: "dark", message: ('No notification found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+			</div>
+		{% endif %}
+    </div>
+{% endblock %}

@@ -144,7 +144,7 @@
 					</div>
 					<div class="text-center my-4">
 						<h1 class="display-3 text-success mb-0 fw-bold">
-							{{ dump(setting.getUsers({"role": "pointofsale", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult()) }}
+							{{ dump(setting.getUsers({"role": "pointofsale", "count": true, "isVerified": true}).getQuery().getSingleScalarResult()) }}
 						</h1>
 						<p class="mb-0">{{ "Points of sale"|trans }}</p>
 					</div>
@@ -164,7 +164,7 @@
 					</div>
 					<div class="text-center my-4">
 						<h1 class="display-3 text-danger mb-0 fw-bold">
-							{{ dump(setting.getUsers({"role": "scanner", "count": true, "isVerified": "all"}).getQuery().getSingleScalarResult()) }}
+							{{ dump(setting.getUsers({"role": "scanner", "count": true, "isVerified": true}).getQuery().getSingleScalarResult()) }}
 						</h1>
 						<p class="mb-0">{{ "Scanners"|trans }}</p>
 					</div>
@@ -173,7 +173,7 @@
 		</div>
 	</div>
 	<div class="row">
-		{% set rows = setting.getUsers({"isVerified": "all", "limit": 3}).getQuery().getResult() %}
+		{% set rows = setting.getUsers({"isVerified": true, "limit": 3}).getQuery().getResult() %}
 		{% if rows | length > 0 %}
 			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
 				<div class="card h-100">
@@ -189,7 +189,7 @@
 				</div>
 			</div>
 		{% endif %}
-		{% set testimonials = setting.getTestimonials({"isOnline": "all", "limit": 3}).getQuery().getResult() %}
+		{% set testimonials = setting.getTestimonials({"isOnline": true, "limit": 3}).getQuery().getResult() %}
 		{% if testimonials | length > 0 %}
 			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
 				<div class="card h-100">
@@ -295,7 +295,7 @@
 			</div>
 		</div>
 	</div>
-	{# {% set recipes = setting.getRecipes({"isOnline": "all", "elapsed": "all", "limit": 3}).getQuery().getResult() %} #}
+	{# {% set rows = setting.getRecipes({"isOnline": "all", "elapsed": "all", "limit": 3}).getQuery().getResult() %} #}
 	{% if recipes | length > 0 %}
 		<div class="row">
 			<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">

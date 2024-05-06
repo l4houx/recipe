@@ -2,22 +2,22 @@
 
 namespace App\Controller\Dashboard\Shared;
 
-use App\Controller\BaseController;
 use App\Entity\Recipe;
 use App\Entity\Review;
-use App\Entity\Traits\HasRoles;
 use App\Form\ReviewFormType;
+use App\Entity\Traits\HasRoles;
 use App\Service\SettingService;
+use App\Controller\BaseController;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[Route(path: '/%website_dashboard_path%')]
 #[IsGranted(HasRoles::DEFAULT)]

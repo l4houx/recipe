@@ -79,12 +79,10 @@
         {% endif %}
         <div>
             <div class="d-grid">
-                <button type="submit" class="btn btn-primary">{{ pagetitle }}</button>
+                <button type="submit" class="btn btn-primary">{{ "Create Account"|trans }}</button>
             </div>
         </div>
-        {% if '1' == settings['social_login_facebook_enabled'] or '1' == settings['social_login_google_enabled'] %}
-            <hr class="my-4">
-            {% include "global/_social-auth.html.twig" %}
-        {% endif %}
-    {{ form_end(registrationForm) }}
+        {% include "global/_social-auth.html.twig" %}
+        {{ form_widget(registrationForm._token) }}
+    {{ form_end(registrationForm, {'render_rest': false}) }}
 {% endblock %}

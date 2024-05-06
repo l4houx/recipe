@@ -50,8 +50,8 @@
                             <label for="sorting" class="visually-hidden">{{ "Sort by"|trans }}</label>
                             <select class="form-select" id="sorting">
                                 <option value="">{{ "Select an option"|trans }}</option>
-                                <option value="">{{ knp_pagination_sortable(rows, "Order date"|trans ~ ' (' ~ "desc"|trans ~ ')', "t.createdAt", {"direction": "desc", "criteria": "t.createdAt"}) }}</option>
-                                <option value="">{{ knp_pagination_sortable(rows, "Order date"|trans ~ ' (' ~ "asc"|trans ~ ')', "t.createdAt", {"direction": "asc", "criteria": "t.createdAt"}) }}</option>
+                                <option value="">{{ knp_pagination_sortable(rows, "Order date"|trans ~ ' (' ~ "desc"|trans ~ ')', "s.createdAt", {"direction": "desc", "criteria": "s.createdAt"}) }}</option>
+                                <option value="">{{ knp_pagination_sortable(rows, "Order date"|trans ~ ' (' ~ "asc"|trans ~ ')', "s.createdAt", {"direction": "asc", "criteria": "s.createdAt"}) }}</option>
                             </select>
                         </div>
                     </div>

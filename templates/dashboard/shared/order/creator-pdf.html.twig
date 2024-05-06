@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ recipe.name }}: {{ "Creators list"|trans({}, "messages", locale) }}</title>
+        <title>{{ recipe.title }}: {{ "Creators list"|trans({}, "messages", locale) }}</title>
         <style>
             table, th, td {
                 padding: 10px;
@@ -21,7 +21,10 @@
         <h2 style="text-align: center;">{{ recipe.translate(locale).name }}</h2>
 
         {% for recipeDate in recipe.recipedates %}
-            <p style="text-align: center;">{{ recipeDate.startdate|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}{% if recipeDate.venue %} - {{ recipeDate.venue.translate(locale).name }}{% endif %}</p>
+            <p style="text-align: center;">
+                {{ recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                {% if recipeDate.venue %} - {{ recipeDate.venue.translate(locale).name }}{% endif %}
+            </p>
             <table width="100%">
                 <thead>
                     <tr>
@@ -35,7 +38,7 @@
                 </thead>
                 <tbody>
                     {% for order in orders %}
-                        {% for orderElement in order.orderelements if (orderElement.recipesubscription.recipedate == recipeDate)%}
+                        {% for orderElement in order.orderelements if (orderElement.recipesubscription.recipedate == recipeDate) %}
                             <tr>
                                 <td><input type="radio"/></td>
                                 <td>{{ orderElement.order.user.lastname }}</td>

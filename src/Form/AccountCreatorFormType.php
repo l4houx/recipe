@@ -30,7 +30,6 @@ class AccountCreatorFormType extends AbstractType
     {
         $builder
             // Profil
-            /*
             ->add('avatarFile', VichImageType::class, [
                 'required' => false,
                 'allow_delete' => true,
@@ -41,7 +40,6 @@ class AccountCreatorFormType extends AbstractType
                 'label' => t('Profile picture :'),
                 'translation_domain' => 'messages'
             ])
-            */
             ->add('username', TextType::class, [
                 'purify_html' => true,
                 'required' => true,

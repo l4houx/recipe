@@ -216,6 +216,9 @@ class AppSettingsFixtures extends Fixture
         $settings[] = new Setting('Facebook Login', 'social_login_facebook_id', '', TextType::class);
         $settings[] = new Setting('Facebook Enabled', 'social_login_facebook_enabled', 0, CheckboxType::class);
 
+        // Social login Github
+        $settings[] = new Setting('Github Enabled', 'social_login_github_enabled', 0, CheckboxType::class);
+
         // Comment
         $settings[] = new Setting('Venue Comments Enabled', 'venue_comments_enabled', 'no', CheckboxType::class);
         $settings[] = new Setting('Post Comments Enabledd', 'post_comments_enabled', 'native', CheckboxType::class);

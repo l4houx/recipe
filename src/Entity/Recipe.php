@@ -305,7 +305,7 @@ class Recipe
         return $this;
     }
 
-    public function isRatedBy(User $user): Review
+    public function isRatedBy(User $user)
     {
         /** @var Review $review */
         foreach ($this->reviews as $review) {

@@ -15,16 +15,16 @@
         <p>{{ 'Complete the form to reset your password.'|trans }}</p>
     </div>
     {{ form_start(requestForm, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'} }) }}
-        <div class="mb-3">
-            {{ form_row(requestForm.email) }}
-        </div>
+        {{ form_widget(requestForm) }}
         <div>
             <small>
                 {{ 'Enter your email address and we will send you a link to reset your password.'|trans }}
             </small>
         </div>
-        <div class="mb-3 d-grid">
-            <button type="submit" class="btn btn-primary">{{ 'Send a password reset email'|trans }}</button>
+        <div class="my-3 d-grid">
+            <button type="submit" class="btn btn-primary">
+                {{ 'Send a password reset email'|trans }}
+            </button>
         </div>
         <span>
             {{ 'Return to'|trans }}

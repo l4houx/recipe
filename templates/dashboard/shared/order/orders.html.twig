@@ -55,7 +55,7 @@
                                             <div class="mt-3">
                                                 <label for="recipedate" class="visually-hidden">
                                                     {{ "Recipe date"|trans }}
-                                                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select a specific recipe date"|trans }}"></i>
+                                                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{ "Select a specific recipe date"|trans }}"></i>
                                                 </label>
                                                 <input id="recipedate" name="recipedate" type="text" class="form-control autocomplete" data-url-list="{{ path('dashboard_pointofsale_get_recipedates') }}" data-minimum-input-length="0">
                                             </div>
@@ -74,7 +74,7 @@
                                                 <div class="mt-3">
                                                     <label for="recipedate" class="visually-hidden">
                                                         {{ "Recipe date"|trans }}
-                                                        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select a specific recipe date"|trans }}"></i>
+                                                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{ "Select a specific recipe date"|trans }}"></i>
                                                     </label>
                                                     <input id="recipedate" name="recipedate" type="text" class="form-control autocomplete" data-url-list="{{ path('get_recipedates_by_recipe', { recipeSlug : app.request.get('recipe') }) }}" data-minimum-input-length="0">
                                                 </div>
@@ -85,7 +85,7 @@
                                                 <div class="mt-3">
                                                     <label for="recipesubscription" class="visually-hidden">
                                                         {{ "Recipe subscription"|trans }}
-                                                        <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select a specific recipe subscription"|trans }}"></i>
+                                                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{ "Select a specific recipe subscription"|trans }}"></i>
                                                     </label>
                                                     <input id="recipesubscription" name="recipesubscription" type="text" class="form-control autocomplete" data-url-list="{{ path('get_recipesubscriptions_by_recipedate', { recipeSlug : app.request.get('recipe'), recipeDateReference : app.request.get('recipedate') }) }}"  data-minimum-input-length="0">
                                                 </div>
@@ -97,7 +97,7 @@
                                             <div class="mt-3">
                                                 <label for="restaurant" class="visually-hidden">
                                                     {{ "Restaurant"|trans }}
-                                                    <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "All orders for an restaurant"|trans }}"></i>
+                                                    <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{ "All orders for an restaurant"|trans }}"></i>
                                                 </label>
                                                 <input id="restaurant" name="restaurant" type="text" class="form-control autocomplete" data-url-list="{{ path('get_restaurants') }}" data-minimum-input-length="0">
                                             </div>
@@ -124,7 +124,6 @@
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-6 text-lg-end">
-                        <!-- Button -->
                         <a href="#" class="btn btn-outline-secondary btn-icon" download="">
                             <i class="fe fe-download"></i>
                         </a>

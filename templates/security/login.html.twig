@@ -46,9 +46,9 @@
                 <button type="submit" class="btn btn-primary">{{ pagetitle }}</button>
             </div>
         </div>
-        {% if '1' == settings['social_login_facebook_enabled'] or '1' == settings['social_login_google_enabled'] %}
-            <hr class="my-4">
-            {% include "global/_social-auth.html.twig" %}
+        {% if app.request.get('_target_path') is not null %}
+            <input type="hidden" name="_target_path" value="{{ app.request.get('_target_path') }}"/>
         {% endif %}
+        {% include "global/_social-auth.html.twig" %}
     </form>
 {% endblock %}

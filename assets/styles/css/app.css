@@ -19701,6 +19701,11 @@ fieldset:disabled .btn {
   width: 2.75rem;
 }
 
+.img-4by3-xxs {
+  width: 1.5625rem;
+  height: 1.5625rem;
+}
+
 .img-200-200 {
   max-height: 200px;
   max-width: 200px;
@@ -27078,4 +27083,373 @@ a.fc-event:hover {
 
 .flag-zw {
   background-image: url("../../../images/svg/flags/zw.svg");
+}
+
+.card-recipe {
+  margin-bottom: 1.3rem;
+}
+
+.card-recipe:after {
+  content: "";
+  display: table;
+  clear: both;
+  visibility: hidden;
+}
+
+.card-recipe .img-wrap {
+  background-position: 50% !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  border-radius: 0.2rem 0.2rem 0 0;
+  overflow: hidden;
+  position: relative;
+  height: 220px;
+  text-align: center;
+}
+
+.card-recipe .img-wrap img {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  display: inline-block;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.card-recipe .img-wrap a {
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.card-recipe .info-wrap {
+  padding: 15px;
+  border-top: 1px solid #eee;
+  position: relative;
+}
+
+.card-recipe .recipe-favorite {
+  position: absolute;
+  top: -10px;
+  right: 5px;
+  background: #f9f9f9;
+  border-radius: 50%;
+  padding: 5px 8px;
+}
+
+.card-recipe .recipe-favorite a {
+  color: #333;
+}
+
+.card-recipe .recipe-favorite button {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.card-recipe .recipe-favorite button:focus {
+  outline: none;
+}
+
+.card-recipe .action-wrap {
+  padding-top: 4px;
+  margin-top: 4px;
+}
+
+.card-recipe .bottom-wrap {
+  padding: 15px;
+  border-top: 1px solid #eee;
+}
+
+.card-recipe .title {
+  margin-top: 0;
+  font-size: 1.125rem;
+  color: #2e3e40;
+  font-weight: 600;
+}
+
+.card-recipe .btn-overlay {
+  transition: 0.5s;
+  opacity: 0;
+  left: 0;
+  bottom: 0;
+  color: #fff;
+  width: 100%;
+  padding: 5px 0;
+  font-size: 12px;
+  text-align: center;
+  position: absolute;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.card-recipe:hover .btn-overlay {
+  opacity: 1;
+}
+
+.card-recipe:hover {
+  box-shadow: 0 4px 15px hsla(0, 0%, 60%, 0.3);
+  transition: 0.5s;
+}
+
+.card-recipe .recipe-category {
+  color: #7f818e;
+  border-radius: 5px;
+  background-color: #fff;
+  right: -10px;
+  padding: 0.625rem 1.25rem;
+}
+
+.card-recipe .recipe-category,
+.card-recipe .recipe-date {
+  position: absolute;
+  top: 10px;
+  box-shadow: 0 4px 15px 0 rgba(40, 44, 53, 0.06), 0 2px 2px 0 rgba(40, 44, 53, 0.08);
+  z-index: 3;
+  font-size: 12px;
+  opacity: 0.97;
+}
+
+.card-recipe .recipe-date {
+  left: 10px;
+}
+
+.card-recipe .recipe-date .recipe-month {
+  position: relative;
+  padding: 5px 17px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.card-recipe .recipe-date .recipe-day {
+  font-weight: 900;
+  padding: 10px 17px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.card-recipe .recipe-info {
+  float: left;
+  max-width: 100%;
+}
+
+.card-recipe .recipe-info > h5 {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+}
+
+.card-recipe .price-wrap {
+  float: right;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.card-recipe .order-reference {
+  float: right;
+  position: absolute;
+  right: 15px;
+  bottom: 10px;
+}
+
+.card-sm .img-wrap {
+  height: 180px;
+}
+
+.card-banner {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  background-size: cover;
+  border-radius: 0.25rem;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.card-banner .card-body {
+  background-size: cover;
+  position: relative;
+  z-index: 10;
+}
+
+.card-banner .img-bg {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  mix-blend-mode: multiply;
+  max-width: 100%;
+}
+
+.card-banner .overlay {
+  background-color: rgba(0, 0, 0, 0.65);
+  z-index: 10;
+  padding: 1.25rem;
+  color: #fff;
+}
+
+.card-banner .overlay.bottom {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.card-banner .overlay.top {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.card-banner .overlay-cover {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.card-banner .overlay.left {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+}
+
+.card-banner .text-bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  padding: 7px 20px;
+  padding-top: 30px;
+  border-radius: 0 0 0.25rem 0.25rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+  color: #fff;
+}
+
+.banner-size-lg {
+  height: 350px;
+}
+
+[class*=dlist-] {
+  margin-bottom: 5px;
+}
+
+[class*=dlist-] dd {
+  margin-bottom: 0;
+}
+
+.dlist-inline dd,
+.dlist-inline dt {
+  display: inline-block;
+}
+
+.dlist-align dt {
+  width: 90px;
+  float: left;
+  word-wrap: break-word;
+}
+
+.dlist-align dd {
+  margin-left: 120px;
+  vertical-align: baseline;
+}
+
+.dlist-align dt {
+  width: 130px;
+}
+
+.dlist-border > dt {
+  width: 200px;
+  margin-bottom: 0;
+}
+
+.dlist-border > dd {
+  margin-left: 230px;
+  margin-bottom: 0;
+  border-left: 1px solid #f1f3f7;
+  padding-bottom: 50px;
+  padding-left: 50px;
+}
+
+@media (max-width: 991px) {
+  .dlist-border > dt {
+    float: none;
+    margin-bottom: 15px;
+  }
+  .dlist-border > dd {
+    margin-left: 0;
+    padding-left: 0;
+    border: none;
+  }
+}
+.label-rating {
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.stars-simple {
+  margin-bottom: 7px;
+}
+
+.stars-simple i {
+  color: #f59e0b !important;
+}
+
+.stars-simple small {
+  color: #999;
+  margin-left: 5px;
+}
+
+.rating-stars {
+  display: inline-block;
+  vertical-align: middle;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  line-height: 1;
+  white-space: nowrap;
+  clear: both;
+}
+
+.rating-stars i {
+  font-size: 14px;
+  color: #ccc;
+  display: inline;
+}
+
+.rating-stars li {
+  display: block;
+  text-overflow: clip;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.rating-stars li.stars-active {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.rating-stars li.stars-active i {
+  color: #f59e0b !important;
+}
+
+.text-lg {
+  font-size: 125%;
+}
+
+.text-sm {
+  font-size: 90%;
 }/*# sourceMappingURL=app.css.map */

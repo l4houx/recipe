@@ -14,32 +14,32 @@
                     <td>
                         {{ subscription.reference }}
                         <br>
-                        <span class="text-sm text-muted">
+                        <span class="text-sm text-dark">
                             {{ "Order"|trans }}# {{ subscription.orderelement.order.reference }}
                         </span>
                     </td>
                     <td>
                         {{ subscription.orderelement.order.payment.firstname ~ " " ~ subscription.orderelement.order.payment.lastname }}
                         <br>
-                        <span class="text-sm text-muted">
+                        <span class="text-sm text-dark">
                             {{ subscription.orderelement.order.payment.clientEmail }}
                         </span>
                     </td>
                     <td>
                         {{ subscription.orderelement.recipesubscription.name }}
                         <br>
-                        <span class="text-sm text-muted">
-                            {{ "Bought on"|trans }} {{ subscription.createdAt | ago }}
+                        <span class="text-sm text-dark">
+                            {{ "Bought on"|trans }} {{ subscription.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
                         </span>
                     </td>
 					<td>
 						{% if recipe.isScanned %}
-							<span class="badge bg-success-soft" data-toggle="tooltip" title="{{ "Checked In At"|trans ~ " " ~ subscription.updatedAt | ago }}">
+							<span class="badge bg-success-soft" data-toggle="tooltip" title="{{ "Checked In At"|trans ~ " " ~ subscription.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}">
 								<i class="bi bi-check"></i>
 								{{ "checked In"|trans }}
 							</span>
 						{% else %}
-							<a href="{{ path('dashboard_scanner_subscription_check_in', {recipeDateReference: recipeDate.reference, subscriptionReference: subscription.reference}) }}" class="text-inherit">
+							<a href="{{ path('dashboard_scanner_subscription_check_in', { recipeDateReference: recipeDate.reference, subscriptionReference: subscription.reference }) }}" class="text-inherit">
                                 {{ "Check In"|trans }}
                             </a>
 						{% endif %}

@@ -37,7 +37,7 @@
 							</div>
 						</a>
 					</td>
-					<td>{{ testimonial.author.getFullName() }}</td>
+					<td>{{ testimonial.author.getFullName | lower | capitalize }}</td>
                     <td>{{ testimonial.content | html_markdown_excerpt(40) }}</td>
                     <td>
 						{% include 'global/rating.html.twig' with {'rating' : testimonial.rating, 'class' : 'fs-6 align-top'} %}

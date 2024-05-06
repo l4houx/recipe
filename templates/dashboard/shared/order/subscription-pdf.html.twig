@@ -7,7 +7,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{ "Order"|trans({}, "messages", locale) }} #{{ order.reference }} - {{ "Subscriptions"|trans({}, "messages", locale) }}</title>
+        <title>
+            {{ "Order"|trans({}, "messages", locale) }} #{{ order.reference }} - {{ "Subscriptions"|trans({}, "messages", locale) }}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <style>
             *{
@@ -95,10 +96,18 @@
                                     <td width="50%">
                                         <h3>{{ orderElement.recipesubscription.recipedate.recipe.translate(locale).name }}</h3>
                                         {% if orderElement.recipesubscription.recipedate.startdate %}
-                                            <h6><span class="text-muted">{{ "Start date"|trans({}, "messages", locale) }}</span><br>{{ orderElement.recipesubscription.recipedate.startdate|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}</h6>
+                                            <h6>
+                                                <span class="text-muted">{{ "Start date"|trans({}, "messages", locale) }}</span>
+                                                <br>
+                                                {{ orderElement.recipesubscription.recipedate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                            </h6>
                                             {% endif %}
                                             {% if orderElement.recipesubscription.recipedate.enddate %}
-                                            <h6><span class="text-muted">{{ "End date"|trans({}, "messages", locale) }}</span><br>{{ orderElement.recipesubscription.recipedate.enddate|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}</h6>
+                                            <h6>
+                                                <span class="text-muted">{{ "End date"|trans({}, "messages", locale) }}</span>
+                                                <br>
+                                                {{ orderElement.recipesubscription.recipedate.enddate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                            </h6>
                                             {% endif %}
                                         <h6>
                                             <span class="text-muted">{{ "Venue / Location"|trans({}, "messages", locale) }}</span><br>
@@ -109,8 +118,11 @@
                                             {% endif %}
                                         </h6>
                                         {% if orderElement.recipesubscription.recipedate.recipe.restaurant %}
-                                            <h6><span class="text-muted">{{ "Restaurant"|trans({}, "messages", locale) }}</span><br>{{ orderElement.recipesubscription.recipedate.recipe.restaurant.name }}</h6>
-                                            {% endif %}
+                                            <h6>
+                                                <span class="text-muted">{{ "Restaurant"|trans({}, "messages", locale) }}</span>
+                                                <br>{{ orderElement.recipesubscription.recipedate.recipe.restaurant.name }}
+                                            </h6>
+                                        {% endif %}
                                     </td>
                                     <td width="50%">
                                         <h3>
@@ -119,18 +131,28 @@
                                                 ({{ order.payment.firstname ~ " " ~ order.payment.lastname }})
                                             {% endif %}
                                         </h3>
-                                        <h6><span class="text-muted">{{ "Subscription type"|trans({}, "messages", locale) }}</span><br>{{ orderElement.recipesubscription.name }}</h6>
-                                        <h6><span class="text-muted">{{ "Subscription price"|trans({}, "messages", locale) }}</span><br>{{ orderElement.recipesubscription.free ? "Free"|trans({}, "messages", locale) : ((settings['currency_position'] == 'left' ? settings['currency_symbol'] : '') ~ orderElement.displayUnitPrice() ~ (settings['currency_position'] == 'right' ? settings['currency_symbol'] : '')) }}</h6>
-                                            {% if order.getOrderElementsPriceSum(true) > 0 %}
-                                            <h6><span class="text-muted">{{ "Payment method"|trans({}, "messages", locale) }}</span><br>{{ order.paymentgateway.name }}</h6>
-                                            {% endif %}
-                                        <h6><span class="text-muted">{{ "Order date"|trans({}, "messages", locale) }}</span><br>
+                                        <h6>
+                                            <span class="text-muted">{{ "Subscription type"|trans({}, "messages", locale) }}</span>
+                                            <br>{{ orderElement.recipesubscription.name }}
+                                        </h6>
+                                        <h6>
+                                            <span class="text-muted">{{ "Subscription price"|trans({}, "messages", locale) }}</span>
+                                            <br>{{ orderElement.recipesubscription.free ? "Free"|trans({}, "messages", locale) : ((settings['currency_position'] == 'left' ? settings['currency_symbol'] : '') ~ orderElement.displayUnitPrice() ~ (settings['currency_position'] == 'right' ? settings['currency_symbol'] : '')) }}
+                                        </h6>
+                                        {% if order.getOrderElementsPriceSum(true) > 0 %}
+                                            <h6>
+                                                <span class="text-muted">{{ "Payment method"|trans({}, "messages", locale) }}</span>
+                                                <br>{{ order.paymentgateway.name }}
+                                            </h6>
+                                        {% endif %}
+                                        <h6>
+                                        <span class="text-muted">{{ "Order date"|trans({}, "messages", locale) }}</span><br>
                                             {% if order.payment.details["TIMESTAMP"] is defined %}
-                                                {{ order.payment.details["TIMESTAMP"]|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}
+                                                {{ order.payment.details["TIMESTAMP"] | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
                                             {% elseif order.payment.details["created"] is defined %}
-                                                {{ order.payment.details["created"]|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}
+                                                {{ order.payment.details["created"] | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
                                             {% else %}
-                                                {{ order.payment.updatedAt|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone) }}
+                                                {{ order.payment.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
                                             {% endif %}
                                         </h6>
                                     </td>
@@ -156,9 +178,10 @@
                                     <tr>
                                         <td class="text-center" colspan="2">
                                             <br><br>
-                                            <img src=".{{ asset('assets/img/scanned-subscription-stamp.png') }}" height="150" />
-
-                                            <p class="text-center text-muted">{{ "This subscription was scanned at %scanDate%"|trans({"%scanDate%": subscription.updatedAt|format_datetime('full', 'none', locale=app.request.locale, timezone=date_timezone)}, "messages", locale) }}</p>
+                                            <img src=".{{ asset('assets/img/scanned-subscription-stamp.png') }}" height="150">
+                                            <p class="text-center text-muted">
+                                                {{ "This subscription was scanned at %scanDate%"|trans({"%scanDate%": subscription.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }, "messages", locale) }}
+                                            </p>
                                         </td>
                                     </tr>
                                 {% endif %}

@@ -3,7 +3,7 @@
         <h4 class="mb-0">
             {{ pagetitle }} 
             {% if app.request.attributes.get('_route') == 'dashboard_admin_testimonial_edit' %}
-                "{{ testimonial.author.username }}"
+                "{{ testimonial.author.getFullName | lower | capitalize }}"
             {% endif %}
         </h4>
     </div>

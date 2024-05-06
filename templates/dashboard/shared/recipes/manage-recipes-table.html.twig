@@ -28,7 +28,7 @@
 							</div>
 							<div class="ms-3">
 								<h4 class="mb-1 h5">
-									<a href="{{ link }}" data-toggle="tooltip" title="{{ "View recipe"|trans }}" target="_blank" class="text-inherit">
+									<a href="{{ link }}" data-bs-toggle="tooltip" title="{{ "View recipe"|trans }}" target="_blank" class="text-inherit">
 										{{ recipe.title }}
 									</a>
                                     <span class="small text-muted ms-1">#{{ recipe.reference }}</span>
@@ -61,7 +61,7 @@
 					</td>
 					{% if is_granted('ROLE_ADMIN_APPLICATION') %}
 						<td>
-							<a href="{{ path('restaurant', { slug : recipe.restaurant.slug }) }}" target="_blank" class="text-inherit" data-toggle="tooltip" title="{{ "View restaurant"|trans }}">{{ recipe.restaurant.name }}</a>
+							<a href="{{ path('restaurant', { slug : recipe.restaurant.slug }) }}" target="_blank" class="text-inherit" data-bs-toggle="tooltip" title="{{ "View restaurant"|trans }}">{{ recipe.restaurant.name }}</a>
 						</td>
 					{% endif %}
 					<td>

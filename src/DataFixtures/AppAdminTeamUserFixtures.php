@@ -33,38 +33,6 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
         /** @var array<HomepageHeroSetting> $homepages */
         $homepages = $manager->getRepository(HomepageHeroSetting::class)->findAll();
 
-        // Create 20 Scanner
-        $scanners = [];
-        for ($i = 0; $i <= 20; ++$i) {
-            $scanner = (new Scanner())
-                ->setName($this->faker()->word(4, true))
-                //->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
-                //->setUser($this->faker()->randomElement($users))
-                //->addRecipedate($this->faker()->randomElement($recipedates))
-            ;
-
-            $this->addReference('scanner-'.$i, $scanner);
-
-            $manager->persist($scanner);
-            $scanners[] = $scanner;
-        }
-
-        // Create 20 Point Of Sale
-        $pointofsales = [];
-        for ($i = 0; $i <= 20; ++$i) {
-            $pointofsale = (new PointOfSale())
-                ->setName($this->faker()->word(4, true))
-                //->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
-                //->setUser($this->faker()->randomElement($users))
-                //->addRecipedate($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
-            ;
-
-            $this->addReference('pointofsale-'.$i, $pointofsale);
-
-            $manager->persist($pointofsale);
-            $pointofsales[] = $pointofsale;
-        }
-
         // User Super Admin Application
         /** @var User $superadmin */
         $superadmin = (new User());
@@ -167,38 +135,6 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
             )
         );
 
-        // User Restaurants
-        /** //@var User $restaurant */
-        /*
-        $restaurant = (new User());
-        $restaurant
-            ->setId(4)
-            ->setRoles([HasRoles::RESTAURANT])
-            ->setLastname('Bob')
-            ->setFirstname('Cooper')
-            ->setUsername('restaurant')
-            ->setSlug('restaurant')
-            ->setEmail('restaurant@yourdomain.com')
-            ->setPhone($this->faker()->phoneNumber())
-            ->setIsVerified(true)
-            ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
-            ->setLastLoginIp($this->faker()->ipv4())
-            ->setBirthdate(\DateTime::createFromInterface($this->faker()->dateTime()))
-            ->setStreet($this->faker()->streetAddress())
-            ->setStreet2($this->faker()->secondaryAddress())
-            ->setCity($this->faker()->city())
-            ->setState($this->faker()->region())
-            ->setPostalcode($this->faker()->postcode())
-            ->setCountry($this->faker()->randomElement($countries))
-        ;
-
-        $manager->persist(
-            $restaurant->setPassword(
-                $this->hasher->hashPassword($restaurant, 'restaurant')
-            )
-        );
-        */
-
         // Create 10 Users
         $genres = ['male', 'female'];
         $genre = $this->faker()->randomElement($genres);
@@ -206,6 +142,7 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
             /** @var User $user */
             $user = (new User());
             $user
+                ->setAvatarName('default.png')
                 ->setRoles([HasRoles::CREATOR])
                 ->setLastname($this->faker()->lastName)
                 ->setFirstname($this->faker()->firstName($genre))
@@ -242,6 +179,13 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
         }
 
         // Create 20 Restauranter Users
+        $avatars = [
+            'default.png', 'avatar-1.jpg', 'avatar-2.jpg', 'avatar-3.jpg', 'avatar-4.jpg', 'avatar-5.jpg',
+            'avatar-6.jpg', 'avatar-7.jpg', 'avatar-8.jpg', 'avatar-9.jpg', 'avatar-10.jpg', 'avatar-11.jpg',
+            'avatar-12.jpg', 'avatar-13.jpg', 'avatar-14.jpg', 'avatar-15.jpg', 'avatar-16.jpg', 'avatar-17.jpg',
+            'avatar-18.jpg', 'avatar-19.jpg', 'avatar-20.jpg',
+        ];
+        $avatar = $this->faker()->randomElement($avatars);
         $genres = ['male', 'female'];
         $genre = $this->faker()->randomElement($genres);
         $restauranters = [];
@@ -249,6 +193,8 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
             /** @var User $restauranter */
             $restauranter = (new User());
             $restauranter
+                ->setAvatarName($avatar)
+                ->setRoles([HasRoles::RESTAURANT])
                 ->setLastname($this->faker()->lastName)
                 ->setFirstname($this->faker()->firstName($genre))
                 ->setUsername($this->faker()->unique()->userName())
@@ -257,7 +203,6 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
                 ->setLastLogin(\DateTimeImmutable::createFromMutable($this->faker()->dateTime()))
                 ->setLastLoginIp($this->faker()->ipv4())
                 ->setPhone($this->faker()->phoneNumber())
-                ->setRoles([HasRoles::RESTAURANT])
                 ->setBirthdate(\DateTime::createFromInterface($this->faker()->dateTime()))
                 ->setStreet($this->faker()->streetAddress())
                 ->setStreet2($this->faker()->secondaryAddress())
@@ -310,6 +255,38 @@ class AppAdminTeamUserFixtures extends Fixture implements DependentFixtureInterf
 
             $manager->persist($notification);
             $notifications[] = $notification;
+        }
+
+        // Create 20 Scanner
+        $scanners = [];
+        for ($i = 0; $i <= 20; ++$i) {
+            $scanner = (new Scanner())
+                ->setName($this->faker()->word(4, true))
+                //->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
+                ->setUser($this->faker()->randomElement($restauranters))
+                //->addRecipedate($this->faker()->randomElement($recipedates))
+            ;
+
+            $this->addReference('scanner-'.$i, $scanner);
+
+            $manager->persist($scanner);
+            $scanners[] = $scanner;
+        }
+
+        // Create 20 Point Of Sale
+        $pointofsales = [];
+        for ($i = 0; $i <= 20; ++$i) {
+            $pointofsale = (new PointOfSale())
+                ->setName($this->faker()->word(4, true))
+                //->setRestaurant($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
+                ->setUser($this->faker()->randomElement($restauranters))
+                //->addRecipedate($this->getReference('restaurant-'.$this->faker()->numberBetween(1, 20)))
+            ;
+
+            $this->addReference('pointofsale-'.$i, $pointofsale);
+
+            $manager->persist($pointofsale);
+            $pointofsales[] = $pointofsale;
         }
 
         $manager->flush();

@@ -23,8 +23,8 @@ class ReviewFormType extends AbstractType
                 'label' => t('Your rating (out of 5 stars) :'),
                 'required' => true,
                 'multiple' => false,
-                'expanded' => true,
-                'choices' => [t('5 stars') => 5, t('4 stars') => 4, t('3 stars') => 3, t('2 stars') => 2, t('1 star') => 1],
+                'expanded' => false,
+                'choices' => ['5 stars' => 5, '4 stars' => 4, '3 stars' => 3, '2 stars' => 2, '1 star' => 1],
                 'label_attr' => ['class' => 'radio-custom radio-inline'],
             ])
             ->add('headline', TextType::class, [

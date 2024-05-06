@@ -898,6 +898,17 @@ class SettingController extends AdminBaseController
     public function socialLogin(Request $request): Response
     {
         $form = $this->createFormBuilder()
+            ->add('social_login_github_enabled', ChoiceType::class, [
+                'required' => true,
+                'multiple' => false,
+                'expanded' => true,
+                'label' => t('Enable Github Social Login'),
+                'choices' => ['Disabled' => 0, 'Enabled' => 1],
+                'label_attr' => ['class' => 'radio-custom radio-inline'],
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ])
             ->add('social_login_facebook_enabled', ChoiceType::class, [
                 'required' => true,
                 'multiple' => false,
@@ -949,6 +960,7 @@ class SettingController extends AdminBaseController
             if ($form->isValid()) {
                 /** @var Setting $setting */
                 $setting = $form->getData();
+                $this->settingervice->setSettings('social_login_github_enabled', $setting['social_login_github_enabled']);
                 $this->settingervice->setSettings('social_login_facebook_enabled', $setting['social_login_facebook_enabled']);
                 $this->settingervice->setSettings('social_login_facebook_id', $setting['social_login_facebook_id']);
                 $this->settingervice->setSettings('social_login_facebook_secret', $setting['social_login_facebook_secret']);
@@ -966,6 +978,7 @@ class SettingController extends AdminBaseController
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
         } else {
+            $form->get('social_login_github_enabled')->setData($this->settingervice->getSettings('social_login_github_enabled'));
             $form->get('social_login_facebook_enabled')->setData($this->settingervice->getSettings('social_login_facebook_enabled'));
             $form->get('social_login_facebook_id')->setData($this->settingervice->getSettings('social_login_facebook_id'));
             $form->get('social_login_facebook_secret')->setData($this->settingervice->getSettings('social_login_facebook_secret'));
@@ -1111,6 +1124,7 @@ class SettingController extends AdminBaseController
 
         $form->handleRequest($request);
 
+        /*
         if ($form->isSubmitted()) {
             $paymentgateway->setGatewayName($paymentgateway->getFactoryName());
 
@@ -1135,6 +1149,7 @@ class SettingController extends AdminBaseController
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
         }
+        */
 
         return $this->render('dashboard/admin/setting/payment-gateway-new-edit.html.twig', compact('form', 'paymentgateway'));
     }

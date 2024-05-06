@@ -122,9 +122,15 @@ class RecipeRepository extends ServiceEntityRepository
     public function findLatest(int $maxResults): array
     {
         return $this->createQueryBuilder('r')
-            ->where('r.isOnline = :isOnline')
+            ->andWhere('r.isOnline = :isOnline')
+            ->andWhere('r.createdAt <= :now')
+            ->orderBy('r.createdAt', 'DESC')
+            //->setParameter('isOnline', true)
+            ->setParameters([
+                'isOnline' => true,
+                'now' => new \DateTime(),
+            ])
             ->setMaxResults($maxResults)
-            ->setParameter('isOnline', true)
             ->getQuery()
             ->getResult()
         ;
@@ -246,15 +252,15 @@ class RecipeRepository extends ServiceEntityRepository
 
         if ('all' !== $country || 'all' !== $location) {
             $qb->leftJoin('venue.country', 'country');
-            $qb->leftJoin('country.translations', 'countrytranslations');
+            //$qb->leftJoin('country.translations', 'countrytranslations');
         }
 
         if ('all' !== $country) {
-            $qb->andWhere('countrytranslations.slug = :country')->setParameter('country', $country);
+            $qb->andWhere('country.slug = :country')->setParameter('country', $country);
         }
 
         if ('all' !== $location) {
-            $qb->andWhere('countrytranslations.name LIKE :location or :location LIKE countrytranslations.name or venue.state LIKE :location or :location LIKE venue.state or venue.city LIKE :location or :location LIKE venue.city')->setParameter('location', $location);
+            $qb->andWhere('country.name LIKE :location or :location LIKE country.name or venue.state LIKE :location or :location LIKE venue.state or venue.city LIKE :location or :location LIKE venue.city')->setParameter('location', $location);
         }
 
         if ('all' !== $restaurant || 'all' !== $restaurantEnabled) {

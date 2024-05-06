@@ -1,0 +1,458 @@
+{% extends 'dashboard.html.twig' %}
+
+{% set pagetitle = 'Order details'|trans %}
+
+{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+	{% set parentpagetitle = 'Manage orders'|trans %}
+	{% set parentpagelink = path('dashboard_admin_orders') %}
+{% elseif is_granted('ROLE_RESTAURANT') %}
+	{% set parentpagetitle = 'Recent orders'|trans %}
+	{% set parentpagelink = path('dashboard_restaurant_orders') %}
+{% elseif is_granted('ROLE_CREATOR') %}
+	{% set parentpagetitle = 'My subscriptions'|trans %}
+	{% set parentpagelink = path('dashboard_creator_orders') %}
+{% elseif is_granted('ROLE_POINTOFSALE') %}
+	{% set parentpagetitle = 'My orders'|trans %}
+	{% set parentpagelink = path('dashboard_pointofsale_orders') %}
+{% endif %}
+{% block title pagetitle %}
+
+{% block breadcrumb %}
+	{% set breadcrumb = [{ "current":(pagetitle) }] %}
+	{% include "global/breadcrumb.html.twig" with breadcrumb %}
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<div class="card mb-4">
+				<div class="card-header border-bottom-0">
+					<h3 class="mb-0">
+						{{ "Order"|trans ~ " #" ~ order.reference ~ " " ~ ("placed on"|trans) ~ " " ~ order.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                    </h3>
+                    <span class="badge bg-{{ order.getStatusClass }}-soft">{{ order.stringifyStatus|trans }}</span>
+				</div>
+				<div class="card-body">
+					{% if order.note %}
+						{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: order.note,  class: "my-2" } %}
+					{% endif %}
+
+					{% if order.paymentGateway and order.paymentGateway.instructions %}
+						{% include "global/message.html.twig" with { type: "info", message: (order.paymentGateway.instructions | raw), icon: "bi bi-exclamation-circle",  class: "my-2" } %}
+					{% endif %}
+
+					<div class="row mb-3">
+						{% if not is_granted('ROLE_RESTAURANT') and order.payment and order.status == 1 and order.getOrderElementsPriceSum(true) > 0 %}
+							<div class="col-12 col-lg-6">
+								<div class="card">
+									<div class="card-header">
+										{{ "Payment"|trans }}
+									</div>
+									<div class="card-body p-4">
+										{% if status %}
+											<span class="badge bg-{{ order.getPaymentStatusClass(status.value) }}-soft">
+                                                {{ status.value | capitalize |trans }}
+                                            </span>
+										{% endif %}
+
+										{% if order.payment.details["TIMESTAMP"] is defined %}
+											{{ order.payment.details["TIMESTAMP"] | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
+										{% elseif order.payment.details["created"] is defined %}
+											{{ order.payment.details["created"] | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
+										{% else %}
+											{{ order.payment.updatedAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
+										{% endif %}
+
+										<button data-bs-toggle="collapse" data-bs-target="#payment-details" class="btn btn-primary btn-sm float-end">
+											<i class="bi bi-plus"></i>
+											{{ "More details"|trans }}
+                                        </button>
+
+										<div id="payment-details" class="collapse mt-3">
+											{% if order.paymentgateway %}
+												<dl class="dlist-align">
+													<dt>{{ "Payment method"|trans }}</dt>
+													<dd>
+														{{ order.paymentgateway.name }}
+														<br>
+														<img src="{{ asset(order.paymentgateway.getLogoPath) }}" class="img-50-50 mt-2"/>
+													</dd>
+												</dl>
+											{% endif %}
+											{% if order.paymentgateway.factoryName == "paypal_express_checkout" %}
+												{% if order.payment.details["DESC"] is defined %}
+													<dl class="dlist-align">
+														<dt>{{ "Description"|trans }}</dt>
+														<dd>{{ order.payment.details["DESC"] }}</dd>
+													</dl>
+												{% endif %}
+												{% if order.payment.details["AMT"] is defined %}
+													<dl class="dlist-align">
+														<dt>{{ "Amount"|trans }}</dt>
+														<dd>{{ order.payment.details["AMT"]|number_format(2, '.', ',') }}</dd>
+													</dl>
+												{% endif %}
+												{% if order.payment.details["CURRENCYCODE"] is defined %}
+													<dl class="dlist-align">
+														<dt>{{ "Currency"|trans }}</dt>
+														<dd>{{ order.payment.details["CURRENCYCODE"] }}</dd>
+													</dl>
+												{% endif %}
+											{% elseif order.paymentgateway.factoryName == "offline" %}
+												{% if order.payment.details["description"] is defined %}
+													<dl class="dlist-align">
+														<dt>{{ "Description"|trans }}</dt>
+														<dd>{{ order.payment.details["description"] }}</dd>
+													</dl>
+												{% endif %}
+												{% if order.payment.details["amount"] is defined %}
+													<dl class="dlist-align">
+														<dt>{{ "Amount"|trans }}</dt>
+														<dd>{{ order.payment.details["amount"]|slice(0, order.payment.details["amount"]|length - 2) }}.{{ order.payment.details["amount"]|slice(order.payment.details["amount"]|length - 2, order.payment.details["amount"]|length) }}</dd>
+													</dl>
+												{% endif %}
+												{% if order.payment.details["currency"] is defined %}
+													<dl class="dlist-align">
+														<dt>{{ "Currency"|trans }}</dt>
+														<dd>{{ order.payment.details["currency"] }}</dd>
+													</dl>
+												{% endif %}
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+						<div class="col-12 {% if not is_granted('ROLE_RESTAURANT') and order.payment and order.status == 1 and order.getOrderElementsPriceSum(true) > 0 %}col-lg-6{% endif %}">
+							<div class="card">
+								<div class="card-header">
+									{{ "Creator"|trans }}
+									/
+									{{ "Point of sale"|trans }}
+								</div>
+								<div class="card-body p-4">
+									{% include "global/user-avatar.html.twig" with { user: order.user, type: "lg" } %}
+									{{ order.user.getCrossRoleName }}
+									{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+										<button class="btn btn-sm ml-3 ajax-loading" data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_admin_user_information', { slug : order.user.slug }) }}" data-bs-toggle="tooltip" title="{{ "User information"|trans }}">
+											<i class="bi bi-file dropdown-item-icon"></i>
+										</button>
+									{% endif %}
+									{% if order.payment and order.payment.hasBillingInformation %}
+										<button data-bs-toggle="collapse" data-bs-target="#billing-information" class="btn btn-primary btn-sm has-tooltip ml-3" title="{{ "Billing information"|trans }}">
+											<i class="bi bi-plus"></i>
+										</button>
+										<div id="billing-information" class="collapse mt-3">
+											{% if order.payment.firstname and order.payment.lastname %}
+												<dl class="dlist-align">
+													<dt>{{ "Full name"|trans }}</dt>
+													<dd>{{ order.payment.firstname ~ " " ~ order.payment.lastname }}</dd>
+												</dl>
+											{% endif %}
+											{% if order.payment.clientEmail %}
+												<dl class="dlist-align">
+													<dt>{{ "Email"|trans }}</dt>
+													<dd>{{ order.payment.clientEmail }}</dd>
+												</dl>
+											{% endif %}
+											{% if order.payment.stringifyAddress %}
+												<dl class="dlist-align">
+													<dt>{{ "Address"|trans }}</dt>
+													<dd>{{ order.payment.stringifyAddress }}</dd>
+												</dl>
+											{% endif %}
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="table-responsive table-card">
+								<table class="table mb-0 text-nowrap">
+									<thead class="table-light">
+										<tr>
+											<th>{{ "Recipe"|trans ~ " / " ~ "Subscription"|trans }}</th>
+											<th>{{ "Price"|trans }}</th>
+											<th>{{ "Quantity"|trans }}</th>
+											<th>{{ "Subtotal"|trans }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for orderelement in order.orderelements %}
+											{% if is_granted('ROLE_CREATOR') or is_granted('ROLE_ADMIN_APPLICATION') or (is_granted('ROLE_RESTAURANT') and orderelement.belongsToRestaurant(app.user.restaurant.slug)) or (is_granted("ROLE_POINTOFSALE") and order.user == app.user) %}
+												<tr>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div>
+                                                                {% include "global/recipe-preview-horizontal.html.twig" with { recipesubscription: orderelement.recipesubscription } %}
+                                                            </div>
+                                                            <div class="ms-4 mt-2 mt-lg-0">
+                                                                <h4 class="mb-1 text-primary-hover">{{ "Reserved seats"|trans }}</h4>
+                                                                <div>
+                                                                    {% for reservedSeat in orderelement.reservedSeats %}
+                                                                        <span>
+                                                                            <span class="text-dark fw-medium">
+                                                                                {{ setting.stringifySeatLabel(reservedSeat) }}
+                                                                            </span>
+                                                                        </span>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+													<td>
+														<h4 class="mb-0">
+															{{ orderelement.recipesubscription.free ? "Free"|trans : ((settings['currency_position'] == 'left' ? settings['currency_symbol'] : '') ~ orderelement.displayUnitPrice ~ (settings['currency_position'] == 'right' ? settings['currency_symbol'] : '')) }}
+														</h4>
+													</td>
+													<td>
+														{{ orderelement.quantity }}
+													</td>
+													<td>
+														<h4 class="mb-0">
+															{{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ orderelement.getPrice }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
+														</h4>
+													</td>
+												</tr>
+											{% endif %}
+
+											{% if is_granted('ROLE_CREATOR') %}
+												<tr>
+													<td colspan="4">
+														<a href="{{ path('recipe', { slug: orderelement.recipesubscription.recipedate.recipe.slug }) }}" class="btn btn-primary btn-sm">
+															<i class="bi bi-award"></i>
+															{{ "Buy more subscriptions"|trans }}
+                                                        </a>
+														<a href="{{ path('dashboard_creator_review_new', { slug: orderelement.recipesubscription.recipedate.recipe.slug }) }}" class="btn btn-primary btn-sm ml-3">
+															<i class="bi bi-star"></i>
+															{{ "Leave a review"|trans }}
+                                                        </a>
+														<a href="{{ path('restaurant', { slug: orderelement.recipesubscription.recipedate.recipe.restaurant.slug }) }}" class="btn btn-primary btn-sm ml-3">
+															<i class="bi bi-person-vcard"></i>
+															{{ "Restaurant"|trans }}
+                                                        </a>
+													</td>
+												</tr>
+											{% endif %}
+										{% endfor %}
+									</tbody>
+									<tfoot>
+										{% if is_granted("ROLE_ADMIN_APPLICATION") or is_granted("ROLE_CREATOR") %}
+											<tr>
+												<td colspan="5" class="text-right">
+													<h4 class="mb-0">
+														{{ "Subscriptions"|trans }}:
+                                                        {{ settings['currency_position'] == 'left' ? order.currencySymbol() : '' }}{{ order.getOrderElementsPriceSum() }}{{ settings['currency_position'] == 'right' ? order.currencySymbol() : '' }}
+                                                        ({{ order.getOrderElementsQuantitySum }}
+                                                        {{ "subscription(s)"|trans }})
+													</h4>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="5" class="text-right">
+													<h4 class="mb-0">
+														{{ "Fees"|trans }}:
+														{{ settings['currency_position'] == 'left' ? order.currencySymbol() : '' }}{{ order.getTotalFees() }}{{ settings['currency_position'] == 'right' ? order.currencySymbol() : '' }}
+													</h4>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="5" class="text-right">
+													<h4 class="mb-0">
+														{{ "Total"|trans }}:
+                                                        <strong>
+                                                            {{ settings['currency_position'] == 'left' ? order.currencySymbol() : '' }}{{ order.getOrderElementsPriceSum(true) }}{{ settings['currency_position'] == 'right' ? order.currencySymbol() : '' }}
+                                                        </strong>
+													</h4>
+												</td>
+											</tr>
+										{% endif %}
+										<tr>
+											<td class="pt-5 text-right" colspan="4">
+												{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+													{% if order.status == 0 or order.status == 1 %}
+														<button id="order-cancel-button" data-bs-target="{{ path('dashboard_admin_order_cancel', { reference : order.reference }) }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to cancel this order (this action cannot be undone)"|trans }}">
+															<i class="bi bi-window-x"></i>
+															{{ "Cancel"|trans }}
+                                                        </button>
+													{% endif %}
+
+													{% if order.deletedAt %}
+														<button data-bs-target="{{ path('dashboard_admin_order_delete', { reference : order.reference, forceRedirect: 1 }) }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to delete the order and all its related information (payment details, subscriptions...)"|trans ~ " " ~ "PERMANENTLY"|trans }}">
+															<i class="bi bi-trash"></i>
+															{{ "Delete permanently"|trans }}
+                                                        </button>
+														<a href="{{ path('dashboard_admin_order_restore', { reference : order.reference }) }}" class="btn btn-outline-primary mr-3">
+															<i class="bi bi-trash-fill"></i>
+															{{ "Restore"|trans }}
+                                                        </a>
+													{% else %}
+														<button data-bs-target="{{ path('dashboard_admin_order_delete', { reference : order.reference }) }}" class="btn btn-outline-primary mr-3 requires-confirmation" data-confirmation-text="{{ "You are about to delete the order and all its related information (payment details, subscriptions...)"|trans }}">
+															<i class="bi bi-alarm"></i>
+															{{ "Delete"|trans }}
+														</button>
+													{% endif %}
+
+													{% if order.status == 1 %}
+														<button data-bs-target="{{ path('dashboard_admin_order_resend_confirmation_email', { reference : order.reference }) }}" data-initial-email-address="{{ order.payment.clientEmail }}" class="btn btn-outline-primary mr-3 resend-confirmation-email-button" data-confirmation-text="{{ "If you need to send the confirmation email to a different email address, you can change it before submitting"|trans }}">
+															<i class="bi bi-envelope"></i>
+															{{ "Resend confirmation email"|trans }}
+                                                        </button>
+													{% endif %}
+
+													{% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}
+														<span data-bs-target="{{ path('dashboard_admin_order_validate', { reference : order.reference }) }}" class="btn btn-outline-primary requires-confirmation" data-confirmation-text="{{ "You are about to validate this order, generate the subscriptions and send a confirmation email to the creator"|trans }}">
+															<i class="bi bi-check dropdown-item-icon"></i>
+															{{ "Validate"|trans }}</span>
+													{% endif %}
+												{% endif %}
+
+												{% if is_granted('ROLE_CREATOR') and not order.deletedAt %}
+													<button class="btn btn-outline-primary mr-3 cursor-pointer" data-bs-toggle="modal" data-bs-target="#order-{{ order.reference }}-contactRestaurant">
+														<i class="dropdown-item-icon bi bi-envelope"></i>
+														{{ "Contact the restaurant"|trans }}
+                                                    </button>
+												{% endif %}
+
+												{% if is_granted('ROLE_RESTAURANT') and not order.deletedAt %}
+													<button class="btn btn-outline-primary mr-3 cursor-pointer" data-bs-toggle="modal" data-bs-target="#order-{{ order.reference }}-contactCreator">
+														<i class="dropdown-item-icon bi bi-envelope"></i>
+														{{ "Contact the creator"|trans }}
+                                                    </button>
+												{% endif %}
+
+												{% if order.status == -2 or order.status == 1 %}
+													<button class="btn btn-outline-primary mr-3 cursor-pointer" data-bs-toggle="modal" data-bs-target="#order-{{ order.reference }}-payment-details">
+														<i class="bi bi-file dropdown-item-icon fa-fw"></i>
+														{{ "Payment details"|trans }}
+                                                    </button>
+												{% endif %}
+
+												{% if order.status == 1 %}
+													<a href="{{ path('dashboard_subscriptions_print', { reference: order.reference }) }}" class="btn btn-primary" target="_blank">
+														<i class="bi bi-award"></i>
+														{{ "Print subscriptions"|trans }}
+                                                    </a>
+												{% endif %}
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+
+								{% if order.status == -2 or order.status == 1 %}
+									<div class="modal fade" id="order-{{ order.reference }}-payment-details" tabindex="-1" role="dialog" aria-labelledby="order-{{ order.reference }}-payment-details" aria-hidden="true">
+										<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="order-{{ order.reference }}-payment-details">
+                                                        {{ "Order payment details"|trans }}
+														-
+														{{ order.reference }}
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+												</div>
+												<div class="modal-body">
+													<p class="mb-3 text-center">
+														<img src="{{ asset(order.paymentgateway.getLogoPath) }}" class="img-80-80">
+													</p>
+													{% if order.payment.details %}
+														{{ order.payment.details|json_encode(constant('JSON_PRETTY_PRINT'))|nl2br }}
+													{% else %}
+														{{ "N/A"|trans }}
+													{% endif %}
+												</div>
+												<div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                        {{ "Close"|trans }}
+                                                    </button>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+
+								{% if is_granted('ROLE_CREATOR') and not order.deletedAt %}
+									<div class="modal fade" id="order-{{ order.reference }}-contactRestaurant" tabindex="-1" role="dialog" aria-labelledby="order-{{ order.reference }}-contactRestaurant" aria-hidden="true">
+										<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="order-{{ order.reference }}-contactRestaurant">
+                                                        {{ "Order"|trans }} #{{ order.reference }}:
+														{{ "Contact the restaurant"|trans }}
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+												</div>
+												<div class="modal-body">
+													<form action="{{ path('dashboard_creator_order_contactRestaurant', {reference: order.reference}) }}" method="POST">
+														<div class="mb-3">
+															<label for="message" class="col-form-label required">
+                                                                {{ "Message"|trans }}
+                                                            </label>
+															<textarea name="message" id="message" class="form-control" rows="10" required></textarea>
+														</div>
+														<button type="submit" class="btn btn-primary mt-3">
+															<i class="bi bi-envelope"></i>
+															{{ "Send"|trans }}
+														</button>
+													</form>
+												</div>
+												<div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                        {{ "Close"|trans }}
+                                                    </button>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+
+								{% if is_granted('ROLE_RESTAURANT') and not order.deletedAt %}
+									<div class="modal fade" id="order-{{ order.reference }}-contactCreator" tabindex="-1" role="dialog" aria-labelledby="order-{{ order.reference }}-contactCreator" aria-hidden="true">
+										<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="order-{{ order.reference }}-contactCreator">
+                                                        {{ "Order"|trans }} #{{ order.reference }}:
+														{{ "Contact the creator"|trans }}
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+												</div>
+												<div class="modal-body">
+													<form action="{{ path('dashboard_restaurant_order_contactCreator', {reference: order.reference}) }}" method="POST">
+														<div class="mb-3">
+															<label for="message" class="col-form-label required">
+                                                                {{ "Message"|trans }}
+                                                            </label>
+															<textarea name="message" id="message" class="form-control" rows="10" required></textarea>
+														</div>
+														<button type="submit" class="btn btn-primary mt-3">
+															<i class="bi bi-envelope"></i>
+															{{ "Send"|trans }}
+														</button>
+													</form>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                        {{ "Close"|trans }}
+                                                    </button>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

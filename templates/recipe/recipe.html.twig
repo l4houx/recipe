@@ -20,102 +20,27 @@
 	<meta name="twitter:description" content="{{ recipe.content | raw | nl2br | striptags | slice(0, 200) | raw }}..."/>
 {% endblock %}
 
-{% block pageheader %}
-	<section class="pt-lg-8 pb-8 bg-primary">
-		<div class="container pb-lg-8">
-			<div class="row align-items-center">
-				<div class="col-xl-7 col-lg-7 col-md-12">
-					<div>
-						<h1 class="text-white display-4 fw-semibold">{{ pagetitle }}</h1>
-						<p class="text-white mb-6 lead"></p>
-						<div class="d-flex align-items-center">
-							<a href="#" class="bookmark text-white">
-								<i class="fe fe-bookmark fs-4 me-2"></i>
-								Bookmark
-							</a>
-							<span class="text-white ms-3">
-								<i class="fe fe-user"></i>
-								1200 Enrolled
-							</span>
-							{% set reviewscount = setting.getReviews({"count": true, "recipe": recipe.slug}).getQuery().getSingleScalarResult() %}
-							{% if recipe.enablereviews %}
-								<div>
-									<span class="fs-6 ms-4 align-text-top" style="width:{{ recipe.getRatingPercentage }}%">
-										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-										</svg>
-										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-										</svg>
-										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-										</svg>
-										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-										</svg>
-										<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-											<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-										</svg>
-									</span>
-									<span class="text-white">
-                                        ({{ reviewscount }}) {{ "Review(s)"|trans|lower }}
-                                    </span>
-								</div>
-							{% endif %}
-							<span class="text-white ms-4 d-none d-md-block">
-								<svg width="16" height="16" viewbox="0 0 16
-									16" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<rect x="3" y="8" width="2" height="6" rx="1" fill="#DBD8E9"></rect>
-									<rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
-									<rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
-								</svg>
-								<span class="align-middle">Intermediate</span>
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-{% endblock %}
-
 {% block breadcrumb %}
 	{% set breadcrumb = [{ "recipes": "Recipes"|trans, "current":(pagetitle) }] %}
 	{% include "global/breadcrumb.html.twig" with breadcrumb %}
 {% endblock %}
 
 {% block content %}
-	{% if is_granted('ROLE_ADMIN_APPLICATION') %}
-		{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('<a href="'~ path('dashboard_admin_recipe', {slug: recipe.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage this recipe'|trans) } %}
-	{% endif %}
-	{% if is_granted('ROLE_RESTAURANT') %}
-		{% if recipe.restaurant == app.user.restaurant %}
-			{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('<a href="'~ path('dashboard_restaurant_recipe', {slug: recipe.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage your recipe'|trans) } %}
-		{% endif %}
-	{% endif %}
-	{% if is_granted('ROLE_CREATOR') %}
-		{% if app.user.hasBoughtASubscriptionForRecipe(recipe) %}
-			{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-cart', message: ('You are going to this recipe'|trans ~ ' ' ~ '<a href="'~ path('dashboard_creator_orders', {recipe: recipe.slug}) ~'">' ~ 'My subscriptions'|trans ~ '</a>') } %}
-		{% endif %}
-	{% endif %}
-
-	<section class="pb-8">
+	<section class="p-lg-5 py-7">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 col-md-12 col-12 mb-5">
+			<div class="row gx-5">
+				<div class="col-lg-12 col-md-12 col-12 mb-5 p-0">
 					<div id="carouselRecipeIndicators" class="carousel slide" data-bs-ride="carousel">
 						<div class="carousel-inner">
-							<div class="carousel-item {{ (loop.first ) ? 'active' : '' }}">
-								<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" class="d-block w-100 " alt="{{ recipe.title }}">
+							<div class="carousel-item active">
+								<img src="{{ recipe.imageName ? asset(recipe.getImagePath) : recipe.getImagePlaceholder }}" class="justify-content-center align-self-center d-block {# w-100 #}" alt="{{ recipe.title }}">
 							</div>
 						</div>
-						<a class="carousel-control-prev" href="#carouselRecipeIndicators" role="button"
-							data-bs-slide="prev">
+						<a class="carousel-control-prev" href="#carouselRecipeIndicators" role="button" data-bs-slide="prev">
 							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 							<span class="visually-hidden">{{ "Previous"|trans }}</span>
 						</a>
-						<a class="carousel-control-next" href="#carouselRecipeIndicators" role="button"
-							data-bs-slide="next">
+						<a class="carousel-control-next" href="#carouselRecipeIndicators" role="button" data-bs-slide="next">
 							<span class="carousel-control-next-icon" aria-hidden="true"></span>
 							<span class="visually-hidden">{{ "Next"|trans }}</span>
 						</a>
@@ -123,1336 +48,350 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-lg-8 col-md-12 col-12 mt-n8 mb-4 mb-lg-0">
-					<div class="card rounded-3">
-						<div class="card-header border-bottom-0 p-0">
-							<div>
-								<ul class="nav nav-lb-tab" id="tab" role="tablist">
-									<li class="nav-item" role="presentation">
-										<a class="nav-link" id="table-tab" data-bs-toggle="pill" href="#table" role="tab" aria-controls="table" aria-selected="false" tabindex="-1">Contents</a>
-									</li>
-									<li class="nav-item" role="presentation">
-										<a class="nav-link active" id="content-tab" data-bs-toggle="pill" href="#content" role="tab" aria-controls="content" aria-selected="true">
-											{{ "Content"|trans }}
-										</a>
-									</li>
-									{% if recipe.enablereviews %}
-										<li class="nav-item" role="presentation">
-											<a class="nav-link" id="review-tab" data-bs-toggle="pill" href="#review" role="tab" aria-controls="review" aria-selected="false" tabindex="-1">{{ "Reviews"|trans }}</a>
-										</li>
-									{% endif %}
-								</ul>
-							</div>
-						</div>
+				<div class="col-12">
+					{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+						{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('<a href="'~ path('dashboard_admin_recipe_index', {slug: recipe.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage this recipe'|trans), class: "my-2" } %}
+					{% endif %}
+					{% if is_granted('ROLE_RESTAURANT') %}
+						{% if recipe.restaurant == app.user.restaurant %}
+							{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: ('<a href="'~ path('dashboard_restaurant_recipe_index', {slug: recipe.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage your recipe'|trans), class: "my-2" } %}
+						{% endif %}
+					{% endif %}
+					{% if is_granted('ROLE_CREATOR') %}
+						{% if app.user.hasBoughtASubscriptionForRecipe(recipe) %}
+							{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-ticket-detailed', message: ('You are going to this recipe'|trans ~ ' ' ~ '<a href="'~ path('dashboard_creator_orders', {recipe: recipe.slug}) ~'">' ~ 'My subscriptions'|trans ~ '</a>'), class: "my-2" } %}
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+			<div class="row">
+				{% set reviewscount = setting.getReviews({"count": true, "recipe": recipe.slug}).getQuery().getSingleScalarResult() %}
+				<div class="col-xl-8 col-lg-12 col-md-12 col-12 mb-4 mb-xl-0">
+					<div class="card mb-5">
 						<div class="card-body">
-							<div class="tab-content" id="tabContent">
-								<div class="tab-pane fade" id="table" role="tabpanel" aria-labelledby="table-tab">
-									<div class="accordion" id="courseAccordion">
-										<div>
-											<ul class="list-group list-group-flush">
-												<li class="list-group-item px-0 pt-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center active" data-bs-toggle="collapse" href="#courseTwo" aria-expanded="true" aria-controls="courseTwo">
-														<div class="me-auto">Introduction to JavaScript</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse show" id="courseTwo" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 7s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Installing Development Software</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 11s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Hello World Project from GitHub</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 33s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Our Sample Website</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 15s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseThree" aria-expanded="false" aria-controls="courseThree">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															JavaScript Beginning
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseThree" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 41s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Adding JavaScript Code to a Web
-																																				                                                                            Page</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 39s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Working with JavaScript Files</span>
-																</div>
-																<div class="text-truncate">
-																	<span>6m 18s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Formatting Code</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 18s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Detecting and Fixing Errors</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 14s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Case Sensitivity</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 48s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-2 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Commenting Code</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 24s</span>
-																</div>
-															</a>
-															<a href="course-resume.html" class="mb-0 d-flex justify-content-between align-items-center text-inherit">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light icon-sm rounded-circle me-2">
-																		<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-play-fill" viewbox="0 0 16 16">
-																			<path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
-																		</svg>
-																	</span>
-																	<span>Summary</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 14s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseFour" aria-expanded="false" aria-controls="courseFour">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Variables and Constants
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseFour" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 19s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>What Is a Variable?</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 11s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Declaring Variables</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 30s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Using let to Declare Variables</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 28s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Naming Variables</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 14s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Common Errors Using Variables</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 30s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Changing Variable Values</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 4s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Constants</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 15s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>The var Keyword</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 20s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Summary</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 49s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseFive" aria-expanded="false" aria-controls="courseFive">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Types and Operators
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseFive" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 55s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Numbers</span>
-																</div>
-																<div class="text-truncate">
-																	<span>6m 14s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Operator Precedence</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 58s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Number Precision</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 22s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Negative Numbers</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 35s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Strings</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 7s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Manipulating Strings</span>
-																</div>
-																<div class="text-truncate">
-																	<span>5m 8s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Converting Strings and Numbers</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 55s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Boolean Variables</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 39s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseSix" aria-expanded="false" aria-controls="courseSix">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Program Flow
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseSix" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 52s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Clip Watched</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 27s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Conditionals Using if()</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 25s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Truthy and Falsy</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 30s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>if ... else</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 30s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Comparing === and ==</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 52s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>The Ternary Operator</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 47s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Block Scope Using let</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 21s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Looping with for()</span>
-																</div>
-																<div class="text-truncate">
-																	<span>5m 30s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Looping with do ... while()</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 58s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Summary</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 21s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseSeven" aria-expanded="false" aria-controls="courseSeven">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Functions
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseSeven" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 52s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Function Basics</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 46s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Function Expressions</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 32s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Passing Information to Functions</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 19s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Function Return Values</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 13s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Function Scope</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 20s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Using Functions to Modify Web Pages</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 42s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-0 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Summary</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 3s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseEight" aria-expanded="false" aria-controls="courseEight">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Objects and the DOM
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseEight" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 48s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Object Properties</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 28s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Object Methods</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 3s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Passing Objects to Functions</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 27s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Standard Built-in Objects</span>
-																</div>
-																<div class="text-truncate">
-																	<span>6m 55s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>The Document Object Model (DOM)</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 29s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Styling DOM Elements</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 42s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Detecting Button Clicks</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 3s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Showing and Hiding DOM Elements</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 37s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Summary</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 47s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseNine" aria-expanded="false" aria-controls="courseNine">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Arrays
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseNine" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 48s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Creating and Initializing Arrays</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 7s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Accessing Array Items</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 4s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Manipulating Arrays</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 3s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>slice() and splice()</span>
-																</div>
-																<div class="text-truncate">
-																	<span>5m 54s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Array Searching and Looping</span>
-																</div>
-																<div class="text-truncate">
-																	<span>7m 32s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Arrays in the DOM</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 11s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Summary</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 28s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseTen" aria-expanded="false" aria-controls="courseTen">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Scope and Hoisting
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseTen" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Introduction</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 20s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Global Scope</span>
-																</div>
-																<div class="text-truncate">
-																	<span>4m 7s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Clip Watched</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 14s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Function Scope</span>
-																</div>
-																<div class="text-truncate">
-																	<span>3m 45s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Var and Hoisting</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 21s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Undeclared Variables and Strict
-																																				                                                                            Mode</span>
-																</div>
-																<div class="text-truncate">
-																	<span>2m 16s</span>
-																</div>
-															</a>
-															<a href="#" class="mb-2 d-flex justify-content-between align-items-center text-inherit disableClick">
-																<div class="text-truncate">
-																	<span class="icon-shape bg-light text-secondary icon-sm rounded-circle me-2">
-																		<i class="fe fe-lock"></i>
-																	</span>
-																	<span>Summary</span>
-																</div>
-																<div class="text-truncate">
-																	<span>1m 33s</span>
-																</div>
-															</a>
-														</div>
-													</div>
-												</li>
-												<!-- List group item -->
-												<li
-													class="list-group-item px-0 pb-0">
-													<!-- Toggle -->
-													<a class="h4 mb-0 d-flex align-items-center" data-bs-toggle="collapse" href="#courseEleven" aria-expanded="false" aria-controls="courseEleven">
-														<div
-															class="me-auto">
-															<!-- Title -->
-															Summary
-														</div>
-														<!-- Chevron -->
-														<span class="chevron-arrow ms-4">
-															<i class="fe fe-chevron-down fs-4"></i>
-														</span>
-													</a>
-													<!-- Row -->
-													<!-- Collapse -->
-													<div class="collapse" id="courseEleven" data-bs-parent="#courseAccordion">
-														<div class="pt-3 pb-2">
-															<p>
-																Lorem ipsum dolor sit amet consectetur adipisicing
-																																                                                                    elit. Repudiandae esse velit eos sunt ab inventore
-																																                                                                    est tenetur blanditiis?
-																																                                                                    Voluptas eius molestiae ad itaque tempora nobis
-																																                                                                    minima eveniet aperiam molestias, maiores natus
-																																                                                                    expedita dolores ea non possimus
-																																                                                                    magnam corrupt i quas rem unde quo enim porro culpa!
-																																                                                                    Quaerat veritatis veniam corrupti iusto.
-															</p>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
+							<div class="d-flex justify-content-between align-items-center">
+								<h1 class="fw-semibold mb-2">{{ recipe.title }}</h1>
+								{#
+								<a href="#" data-bs-toggle="tooltip" data-placement="top" aria-label="Add to Bookmarks" data-bs-original-title="Add to Bookmarks">
+									<i class="bi bi-bookmark fs-4 fs-3 text-inherit"></i>
+								</a>
+								<div class="text-inherit mb-2"></div>
+								#}
+							</div>
+							<div class="d-flex mb-5 lh-1">
+								{% if recipe.enablereviews %}
+									<div class="rating-wrap fs-6 align-top me-1">
+										<ul class="rating-stars">
+											<li style="width:{{ recipe.getRatingPercentage }}%" class="stars-active">
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+											</li>
+											<li>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+											</li>
+										</ul>
+										<div class="label-rating">({{ reviewscount }})
+											{{ "Review(s)"|trans|lower }}</div>
+									</div>
+								{% endif %}
+								{# 
+								<span class="ms-4 d-none d-md-block">
+									<svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<rect x="3" y="8" width="2" height="6" rx="1" fill="#754FFE"></rect>
+										<rect x="7" y="5" width="2" height="9" rx="1" fill="#754FFE"></rect>
+										<rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
+									</svg>
+									<span>Intermediate</span>
+								</span>
+								<span class="ms-4 d-none d-md-block">
+									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-people" viewbox="0 0 16 16">
+										<path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816ZM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"></path>
+									</svg>
+									<span>Enrolled</span>
+								</span>
+								#}
+							</div>
+							{#  
+							<div class="d-flex justify-content-between">
+								<div class="d-flex align-items-center">
+									<img src="{{ asset('images/user/default.png') }}" class="rounded-circle avatar-md"
+										alt="avatar">
+									<div class="ms-2 lh-1">
+										<h4 class="mb-1">Kathryn Jones</h4>
+										<p class="fs-6 mb-0">@kathrynjones</p>
 									</div>
 								</div>
+								<div>
+									<a href="#" class="btn btn-outline-secondary btn-sm">Follow</a>
+								</div>
+							</div>
+							#}
+						</div>
+						<ul class="nav nav-lt-tab" id="tab" role="tablist">
+							<li class="nav-item" role="presentation">
+								<a class="nav-link active" id="content-tab" data-bs-toggle="pill" href="#content" role="tab" aria-controls="content" aria-selected="true">
+									{{ "Content"|trans }}
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="photos-tab" data-bs-toggle="pill" href="#photos" role="tab" aria-controls="photos" aria-selected="true">
+									{{ "Photos / Video"|trans }}
+								</a>
+							</li>
+							{% if recipe.enablereviews %}
+								<li class="nav-item" role="presentation">
+									<a class="nav-link" id="review-tab" data-bs-toggle="pill" href="#review" role="tab" aria-controls="review" aria-selected="false" tabindex="-1">{{ "Reviews"|trans }}</a>
+								</li>
+							{% endif %}
+						</ul>
+					</div>
+					<div class="card rounded-3">
+						<div class="card-body">
+							<div class="tab-content" id="tabContent">
 								<div class="tab-pane fade active show" id="content" role="tabpanel" aria-labelledby="content-tab">
 									{% if recipe.content %}
 										<div class="mb-4">
-											<h3 class="mb-2">{{ "Content"|trans }}</h3>
-											<p>{{ recipe.content |raw | nl2br }}</p>
+											<h3 class="mb-2">{{ "Description"|trans }}</h3>
+											<p>{{ recipe.content | raw | nl2br }}</p>
 										</div>
 									{% endif %}
-									<h4 class="mb-3">
-                                        {{ "Category & Country & Languages & Subtitles & Authors & Year & Audience"|trans }}
-                                    </h4>
+									<hr class="my-5">
 									<div class="row mb-3">
-										<div class="col-12 col-md-6">
-											<ul class="list-unstyled">
+										<div class="col-12 col-md-12">
+											{#  
+											<ul class="list-group list-group-flush mt-5 mb-5 p-0">
+												<li class="list-group-item px-0 fs-5 fw-medium">
+													{% if recipe.category %}
+														<dl class="dlist-align">
+															<dt class="text-dark">{{ "Category"|trans }}</dt>
+															<dd class="text-end">{{ recipe.category.name }}</dd>
+														</dl>
+													{% endif %}
+													{% if recipe.country %}
+														<dl class="dlist-align">
+															<dt class="text-dark">{{ "Country"|trans }}</dt>
+															<dd class="text-end">
+																<span class="flag flag-{{ recipe.country.code | lower }}"></span>
+																{{ recipe.country.name }}
+															</dd>
+														</dl>
+													{% endif %}
+													{% if recipe.languages | length > 0 %}
+														<dl class="dlist-align">
+															<dt class="text-dark">{{ "Languages"|trans }}</dt>
+															<dd class="text-end">{{ recipe.displayLanguages }}</dd>
+														</dl>
+													{% endif %}
+													{% if recipe.subtitles | length > 0 %}
+														<dl class="dlist-align">
+															<dt class="text-dark">{{ "Subtitles"|trans }}</dt>
+															<dd class="text-end">{{ recipe.displaySubtitles }}</dd>
+														</dl>
+													{% endif %}
+													{% if recipe.authors %}
+														<dl class="dlist-align">
+															<dt class="text-dark">{{ "Authors"|trans }}</dt>
+															<dd class="text-end">{{ recipe.authors }}</dd>
+														</dl>
+													{% endif %}
+													{% if recipe.year %}
+														<dl class="dlist-align">
+															<dt class="text-dark">{{ "Year"|trans }}</dt>
+															<dd class="text-end">{{ recipe.year }}</dd>
+														</dl>
+													{% endif %}
+													{% if recipe.audiences | length > 0 %}
+														<dl class="dlist-align">
+															<dt class="text-dark">{{ "Audience"|trans }}</dt>
+															<dd class="text-end">
+																<ul class="list-inline">
+																	{% for audience in recipe.audiences %}
+																		<li class="list-inline-item" data-bs-toggle="tooltip" title="{{ audience.name }}">
+																			<img src="{{ audience.imageName ? asset(audience.getImagePath) : audience.getImagePlaceholder }}" class="img-4by3-xxs" alt="{{ audience.name }}"/>
+																		</li>
+																	{% endfor %}
+																</ul>
+															</dd>
+														</dl>
+													{% endif %}
+												</li>
+											</ul>
+											#}
+											<ul class="list-group list-group-flush">
 												{% if recipe.category %}
-													<li class="d-flex mb-2">
-														<span class="me-2">
-															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-															</svg>
-														</span>
+													<li class="list-group-item px-0 d-flex justify-content-between fs-5 fw-medium border-0">
+														<span class="text-dark">{{ "Category"|trans }} :</span>
 														<span>{{ recipe.category.name }}</span>
 													</li>
 												{% endif %}
 												{% if recipe.country %}
-													<li class="d-flex mb-2">
-														<span class="me-2">
-															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-															</svg>
+													<li class="list-group-item px-0 d-flex justify-content-between fs-5 fw-medium border-0">
+														<span class="text-dark">{{ "Country"|trans }} :</span>
+														<span class="text-end">
+															<span class="flag flag-{{ recipe.country.code | lower }}"></span>
+															{{ recipe.country.name }}
 														</span>
-														<span class="flag flag-{{ recipe.country.code|lower }}"></span>
-														{{ recipe.country.name }}
 													</li>
 												{% endif %}
 												{% if recipe.languages | length > 0 %}
-													<li class="d-flex mb-2">
-														<span class="me-2">
-															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-															</svg>
-														</span>
+													<li class="list-group-item px-0 d-flex justify-content-between fs-5 fw-medium border-0">
+														<span class="text-dark">{{ "Languages"|trans }} :</span>
 														<span>{{ recipe.displayLanguages }}</span>
 													</li>
 												{% endif %}
-											</ul>
-										</div>
-										<div class="col-12 col-md-6">
-											<ul class="list-unstyled">
 												{% if recipe.subtitles | length > 0 %}
-													<li class="d-flex mb-2">
-														<span class="me-2">
-															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-															</svg>
-														</span>
+													<li class="list-group-item px-0 d-flex justify-content-between fs-5 fw-medium border-0">
+														<span class="text-dark">{{ "Subtitles"|trans }} :</span>
 														<span>{{ recipe.displaySubtitles }}</span>
 													</li>
 												{% endif %}
 												{% if recipe.authors %}
-													<li class="d-flex mb-2">
-														<span class="me-2">
-															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-															</svg>
-														</span>
+													<li class="list-group-item px-0 d-flex justify-content-between fs-5 fw-medium border-0">
+														<span class="text-dark">{{ "Authors"|trans }} :</span>
 														<span>{{ recipe.authors }}</span>
 													</li>
 												{% endif %}
 												{% if recipe.year %}
-													<li class="d-flex mb-2">
-														<span class="me-2">
-															<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-																<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-																<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-															</svg>
-														</span>
+													<li class="list-group-item px-0 d-flex justify-content-between fs-5 fw-medium border-0">
+														<span class="text-dark">{{ "Year"|trans }} :</span>
 														<span>{{ recipe.year }}</span>
 													</li>
 												{% endif %}
 												{% if recipe.audiences | length > 0 %}
-													<li class="d-flex mb-2"></li>
+													<li class="list-group-item px-0 d-flex justify-content-between fs-5 fw-medium pb-0 border-0">
+														<span class="text-dark">{{ "Audience"|trans }} :</span>
+														<span class="text-end">
+															<ul class="list-inline">
+																{% for audience in recipe.audiences %}
+																	<li class="list-inline-item" data-bs-toggle="tooltip" title="{{ audience.name }}">
+																		<img src="{{ audience.imageName ? asset(audience.getImagePath) : audience.getImagePlaceholder }}" class="img-4by3-xxs" alt="{{ audience.name }}"/>
+																	</li>
+																{% endfor %}
+															</ul>
+														</span>
+													</li>
 												{% endif %}
 											</ul>
 										</div>
 									</div>
-									{% if recipe.images | length > 0 %}
-                                        <h4 class="mb-3">
-                                            {{ "Photos"|trans }}
-                                        </h4>
-                                        <div class="row mb-3">
-                                            {% for image in recipe.images %}
-                                                <div class="col-lg-3 col-md-4 col-12">
-                                                    <div class="mb-4">
-                                                        <a href="{{ asset(image.getImagePath) }}" data-size="{{ image.imageDimensions[0] }}x{{ image.imageDimensions[1] }}" class="glightbox" data-gallery="gallery1">
-                                                            <img src="{{ image.getImagePath | imagine_filter('thumbnail') }}" alt="{{ recipe.title }}" class="rounded-3 img-fluid">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
+									<hr class="my-5">
 									{% if recipe.hasContactAndSocialMedia %}
 										<h4 class="mb-3">{{ 'Contact & Social media'|trans }}</h4>
 										<div class="row mb-3">
 											<div class="col-12 col-md-6">
 												<ul class="list-unstyled">
-                                                    {% if recipe.externallink %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="{% if 'http://' not in recipe.externallink and 'https://' not in recipe.externallink %}http://{% endif %}{{ recipe.externallink }}" class="pl-4" target="_blank">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span>{{ recipe.externallink }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                    {% if recipe.email %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="mailto:{{ recipe.email }}" class="pl-4">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span>{{ recipe.email }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                    {% if recipe.phonenumber %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="tel:{{ recipe.phonenumber }}" class="pl-4">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span></span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
+													{% if recipe.externallink %}
+														<li class="d-flex mb-2">
+															<a href="{% if 'http://' not in recipe.externallink and 'https://' not in recipe.externallink %}http://{% endif %}{{ recipe.externallink }}" class="" target="_blank">
+																<span class="me-2">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-globe" viewbox="0 0 16 16">
+																		<path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.externallink }}</span>
+															</a>
+														</li>
+													{% endif %}
+													{% if recipe.email %}
+														<li class="d-flex mb-2">
+															<a href="mailto:{{ recipe.email }}" class="">
+																<span class="me-2">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-envelope" viewbox="0 0 16 16">
+																		<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.email }}</span>
+															</a>
+														</li>
+													{% endif %}
+													{% if recipe.phone %}
+														<li class="d-flex mb-2">
+															<a href="tel:{{ recipe.phone }}" class="">
+																<span class="me-2">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-phone" viewbox="0 0 16 16">
+																		<path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+																		<path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.phone }}</span>
+															</a>
+														</li>
+													{% endif %}
+													{% if recipe.facebookurl %}
+														<li class="d-flex mb-2">
+															<a href="{% if 'http://' not in recipe.facebookurl and 'https://' not in recipe.facebookurl %}http://{% endif %}{{ recipe.facebookurl }}" class="" target="_blank">
+																<span class="me-2">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-facebook" viewbox="0 0 16 16">
+																		<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.facebookurl | lower }}</span>
+															</a>
+														</li>
+													{% endif %}
+													{% if recipe.twitterurl %}
+														<li class="d-flex mb-2">
+															<a href="{% if 'http://' not in recipe.twitterurl and 'https://' not in recipe.twitterurl %}http://{% endif %}{{ recipe.twitterurl }}" class="" target="_blank">
+																<span class="me-2">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-twitter" viewbox="0 0 16 16">
+																		<path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.twitterurl | lower }}</span>
+															</a>
+														</li>
+													{% endif %}
 												</ul>
 											</div>
 											<div class="col-12 col-md-6">
 												<ul class="list-unstyled">
-                                                    {% if recipe.facebook %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="{% if 'http://' not in recipe.facebook and 'https://' not in recipe.facebook %}http://{% endif %}{{ recipe.facebook }}" class="pl-4" target="_blank">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span>{{ recipe.facebook }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                    {% if recipe.twitter %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="{% if 'http://' not in recipe.twitter and 'https://' not in recipe.twitter %}http://{% endif %}{{ recipe.twitter }}" class="pl-4" target="_blank">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span>{{ recipe.twitter }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                    {% if recipe.googleplus %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="{% if 'http://' not in recipe.googleplus and 'https://' not in recipe.googleplus %}http://{% endif %}{{ recipe.googleplus }}" class="pl-4" target="_blank">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span>{{ recipe.googleplus }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                    {% if recipe.instagram %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="{% if 'http://' not in recipe.instagram and 'https://' not in recipe.instagram %}http://{% endif %}{{ recipe.instagram }}" class="pl-4" target="_blank">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span>{{ recipe.instagram }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                    {% if recipe.linkedin %}
-                                                        <li class="d-flex mb-2">
-                                                            <a href="{% if 'http://' not in recipe.linkedin and 'https://' not in recipe.linkedin %}http://{% endif %}{{ recipe.linkedin }}" class="pl-4" target="_blank">
-                                                                <span class="me-2">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle text-success" viewbox="0 0 16 16">
-                                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                                                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"></path>
-                                                                    </svg>
-                                                                </span>
-                                                                <span>{{ recipe.linkedin }}</span>
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
+													{% if recipe.googleplusurl %}
+														<li class="d-flex mb-2">
+															<a href="{% if 'http://' not in recipe.googleplusurl and 'https://' not in recipe.googleplusurl %}http://{% endif %}{{ recipe.googleplusurl }}" class="" target="_blank">
+																<span class="me-2">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-google" viewbox="0 0 16 16">
+																		<path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.googleplusurl | lower }}</span>
+															</a>
+														</li>
+													{% endif %}
+													{% if recipe.instagramurl %}
+														<li class="d-flex mb-2">
+															<a href="{% if 'http://' not in recipe.instagramurl and 'https://' not in recipe.instagramurl %}http://{% endif %}{{ recipe.instagramurl }}" class="" target="_blank">
+																<span class="me-2">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-instagram" viewbox="0 0 16 16">
+																		<path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.instagramurl | lower }}</span>
+															</a>
+														</li>
+													{% endif %}
+													{% if recipe.linkedinurl %}
+														<li class="d-flex mb-2">
+															<a href="{% if 'http://' not in recipe.linkedinurl and 'https://' not in recipe.linkedinurl %}http://{% endif %}{{ recipe.linkedinurl }}" class="" target="_blank">
+																<span class="me-2 text-primary-hover">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-linkedin" viewbox="0 0 16 16">
+																		<path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+																	</svg>
+																</span>
+																<span>{{ recipe.linkedinurl | lower }}</span>
+															</a>
+														</li>
+													{% endif %}
 												</ul>
 											</div>
 										</div>
 									{% endif %}
-									<hr class="my-5">
 									<div class="d-flex justify-content-between align-items-center mb-5">
 										<div>
 											{% if recipe.tags %}
@@ -1467,348 +406,740 @@
 										<div>
 											<div>
 												<span class="ms-2">{{ 'Share'|trans }}</span>
-
 											</div>
 										</div>
 									</div>
 								</div>
+								<div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+									<div class="row">
+										{% if recipe.images | length > 0 %}
+											<div class="col-md-12">
+												<h2 class="mb-4">{{ "Photos"|trans }}</h2>
+											</div>
+											{% for image in recipe.images %}
+												<div class="col-lg-3 col-md-4 col-12">
+													<div class="mb-4">
+														<a href="{# {{ asset(image.getImagePath) }}" data-size="{{ image.imageDimensions[0] }}x{{ image.imageDimensions[1] }} #}" class="glightbox" data-gallery="gallery1">
+															<img src="{# {{ image.getImagePath | imagine_filter('thumbnail') }} #}" alt="{{ recipe.title }}" class="rounded-3 img-fluid">
+														</a>
+													</div>
+												</div>
+											{% endfor %}
+										{% endif %}
+									</div>
+									<div class="row mt-6">
+										{% if recipe.youtubeurl %}
+											<div class="col-md-12">
+												<h2 class="mb-4">{{ "Video"|trans }}</h2>
+											</div>
+											<dl class="mt-5">
+												<dt class="text-dark">{{ "Video"|trans }}</dt>
+												<dd class="me-0">
+													<iframe class="w-100 border-0" height="400" src="https://www.youtube.com/embed/{{ recipe.youtubeurl|split('=')[1] }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+												</dd>
+											</dl>
+										{% endif %}
+									</div>
+								</div>
 								{% if recipe.enablereviews %}
 									<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
-										<div class="mb-3">
-                                            <div class="d-md-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h3 class="mb-4">
-                                                        ({{ reviewscount }})
-                                                        {{ "review"|trans|lower }}
-                                                    </h3>
-                                                </div>
-                                                <div class="mt-3">
-                                                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                                                        {% if is_granted('ROLE_CREATOR') %}
-                                                            {% if recipe.isRatedBy(app.user) %}
-                                                                <a href="{{ path('dashboard_creator_reviews_index', { slug: recipe.isRatedBy(app.user).slug }) }}" class="btn btn-outline-primary">
-                                                                    {{ "My review"|trans }}
-                                                                </a>
-                                                            {% else %}
-                                                                <a href="{{ path('dashboard_creator_reviews_new', { slug: recipe.slug }) }}" class="btn btn-outline-primary">
-                                                                    {{ "Add your review"|trans }}
-                                                                </a>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    {% else %}
-                                                        <a href="{{ path('login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-outline-primary">
-                                                            {{ "Add your review"|trans }}
-                                                        </a>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-											<div class="row align-items-center">
-												<div class="col-auto text-center">
-													<h3 class="display-2 fw-bold">4.5</h3>
-													<span class="fs-6" style="width:{{ recipe.getRatingPercentage }}%">
-														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-														</svg>
-														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-														</svg>
-														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-														</svg>
-														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-														</svg>
-														<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-															<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-														</svg>
-													</span>
-													<p class="mb-0 fs-6">
-                                                        ({{ recipe.getRatingAvg }} {{ "out of 5 stars"|trans|lower }})
-                                                    </p>
-												</div>
-												<div class="col order-3 order-md-2">
-													<div class="progress mb-3" style="height: 6px">
-														<div class="progress-bar bg-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+										<div class="row">
+											<div class="col-md-12 mb-8">
+												<div class="d-md-flex justify-content-between align-items-center">
+													<div>
+														<h2 class="mb-0">{{ "Company Reviews"|trans }}
+															<span class="ms-2 fs-5 fw-normal">
+																{{ "based on"|trans }}
+																{{ reviewscount }}
+																{{ "Reviews"|trans|lower }}
+															</span>
+														</h2>
 													</div>
-													<div class="progress mb-3" style="height: 6px">
-														<div class="progress-bar bg-warning" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-													<div class="progress mb-3" style="height: 6px">
-														<div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-													<div class="progress mb-3" style="height: 6px">
-														<div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-													</div>
-													<div class="progress mb-0" style="height: 6px">
-														<div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+													<div class="mt-3">
+														{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+															{% if is_granted('ROLE_CREATOR') or is_granted("ROLE_USER") %}
+																{% if recipe.isRatedBy(app.user) %}
+																	<a href="{{ path('dashboard_creator_review_index', { slug: recipe.isRatedBy(app.user).slug }) }}" class="btn btn-outline-primary">
+																		{{ "My review"|trans }}
+																	</a>
+																{% else %}
+																	<a href="{{ path('dashboard_creator_review_new', { slug: recipe.slug }) }}" class="btn btn-outline-primary">
+																		{{ "Add your review"|trans }}
+																	</a>
+																{% endif %}
+															{% endif %}
+														{% else %}
+															<a href="{{ path('login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-outline-primary">
+																{{ "Write a Review"|trans }}
+															</a>
+														{% endif %}
 													</div>
 												</div>
-												<div class="col-md-auto col-6 order-2 order-md-3">
-                                                    <div>
-                                                        <span class="fs-6">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                                            </svg>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                                            </svg>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                                            </svg>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                                            </svg>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-                                                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-                                                            </svg>
-                                                        </span>
-                                                        <span class="ms-1">53%</span>
-                                                    </div>
-													<div>
-														<span class="fs-6">
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-														</span>
-														<span class="ms-1">36%</span>
-													</div>
-													<div>
-														<span class="fs-6">
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-														</span>
-														<span class="ms-1">9%</span>
-													</div>
-													<div>
-														<span class="fs-6">
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-														</span>
-														<span class="ms-1">3%</span>
-													</div>
-													<div>
-														<span class="fs-6">
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-															<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill text-light" viewbox="0 0 16 16">
-																<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-															</svg>
-														</span>
-														<span class="ms-1">2%</span>
+											</div>
+											<div class="col-lg-12 col-md-12 col-12">
+												<div class="mb-4 mb-lg-0">
+													<h2 class="h3 mb-6">{{ "Overall Rating"|trans }}</h2>
+													<div class="row align-items-center">
+														<div class="col-md-4 text-md-center mb-4 mb-md-0">
+															<h3 class="display-2 fw-bold">{{ reviewscount }}</h3>
+															<div class="rating-wrap fs-6">
+																<ul class="rating-stars">
+																	<li style="width:{{ recipe.getRatingPercentage }}%" class="stars-active">
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																	</li>
+																	<li>
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																		<i class="bi bi-star-fill"></i>
+																	</li>
+																</ul>
+																<div class="label-rating mb-0 fs-6 me-auto d-block">
+																	{{ recipe.getRatingAvg }}
+																	{{ "out of 5 stars"|trans|lower }}
+																</div>
+															</div>
+														</div>
+														<div class="offset-lg-1 col-lg-7 col-md-8">
+															<div class="d-flex align-items-center mb-2">
+																<div class="text-nowrap me-3">
+																	<span class="d-inline-block align-middle me-1">
+																		{{ "5 stars"|trans }}
+																	</span>
+																	<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill" viewbox="0 0 16 16">
+																		<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+																	</svg>
+																</div>
+																<div class="w-100">
+																	<div class="progress" style="height: 6px;">
+																		<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(5) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(5) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(5) }}"></div>
+																	</div>
+																</div>
+																<span class="ms-3">{{ recipe.getRatingsPercentageForRating(5) }}%</span>
+															</div>
+															<div class="d-flex align-items-center mb-2">
+																<div class="text-nowrap me-3">
+																	<span class="d-inline-block align-middle me-1">
+																		{{ "4 stars"|trans }}
+																	</span>
+																	<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill" viewbox="0 0 16 16">
+																		<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+																	</svg>
+																</div>
+																<div class="w-100">
+																	<div class="progress" style="height: 6px;">
+																		<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(4) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(4) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(4) }}">
+																		</div>
+																	</div>
+																</div>
+																<span class="ms-3">{{ recipe.getRatingsPercentageForRating(4) }}%</span>
+															</div>
+															<div class="d-flex align-items-center mb-2">
+																<div class="text-nowrap me-3">
+																	<span class="d-inline-block align-middle me-1">
+																		{{ "3 stars"|trans }}
+																	</span>
+																	<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill" viewbox="0 0 16 16">
+																		<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+																	</svg>
+																</div>
+																<div class="w-100">
+																	<div class="progress" style="height: 6px;">
+																		<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(3) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(3) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(3) }}">
+																		</div>
+																	</div>
+																</div>
+																<span class="ms-3">{{ recipe.getRatingsPercentageForRating(3) }}%</span>
+															</div>
+															<div class="d-flex align-items-center mb-2">
+																<div class="text-nowrap me-3">
+																	<span class="d-inline-block align-middle me-1">
+																		{{ "2 stars"|trans }}
+																	</span>
+																	<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill" viewbox="0 0 16 16">
+																		<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+																	</svg>
+																</div>
+																<div class="w-100">
+																	<div class="progress" style="height: 6px;">
+																		<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(2) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(2) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(2) }}"></div>
+																	</div>
+																</div>
+																<span class="ms-3">{{ recipe.getRatingsPercentageForRating(2) }}%</span>
+															</div>
+															<div class="d-flex align-items-center mb-2">
+																<div class="text-nowrap me-3">
+																	<span class="d-inline-block align-middle me-1">
+																		{{ "1 star"|trans }}
+																	</span>
+																	<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-star-fill" viewbox="0 0 16 16">
+																		<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+																	</svg>
+																</div>
+																<div class="w-100">
+																	<div class="progress" style="height: 6px;">
+																		<div class="progress-bar bg-warning" role="progressbar" style="width: {{ recipe.getRatingsPercentageForRating(1) }}%;" aria-valuenow="{{ recipe.getRatingsPercentageForRating(1) }}" aria-valuemin="0" aria-valuemax="{{ recipe.getRatingsPercentageForRating(1) }}"></div>
+																	</div>
+																</div>
+																<span class="ms-3">{{ recipe.getRatingsPercentageForRating(1) }}%</span>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
 										<hr class="my-5">
-										<div id="reviews" class="mb-3">
-											<div class="d-lg-flex align-items-center justify-content-between mb-5">
-												<div class="mb-3 mb-lg-0">
-													<h3 class="mb-0">{{ 'Reviews'|trans }}</h3>
+										{% if reviewscount | length %}
+											<div id="reviews" class="row mt-8">
+												<div class="d-lg-flex align-items-center justify-content-between mb-5">
+													<div class="mb-3 mb-lg-0">
+														<h3 class="mb-0">{{ 'Reviews'|trans }}</h3>
+													</div>
+													<div>
+														<form class="form-inline">
+															<div class="d-flex align-items-center me-2">
+																<span class="position-absolute ps-3">
+																	<i class="bi bi-search"></i>
+																</span>
+																<input type="search" class="form-control ps-6" placeholder="Search Review">
+															</div>
+														</form>
+													</div>
 												</div>
-												<div>
-													<form class="form-inline">
-														<div class="d-flex align-items-center me-2">
-															<span class="position-absolute ps-3">
-																<i class="fe fe-search"></i>
-															</span>
-															<input type="search" class="form-control ps-6" placeholder="Search Review">
-														</div>
-													</form>
-												</div>
+												{% for review in setting.getReviews({"recipe": recipe.slug, "limit": 8}).getQuery().getResult() %}
+													{% include "global/user-review.html.twig" with { review : review, showuser: 1 } %}
+												{% endfor %}
+												{% if reviewscount > 8 %}
+													<div class="d-flex align-items-start">
+														<a href="{{ path('recipe_reviews') }}" class="btn btn-outline-primary mx-auto">
+															<i class="bi bi-star-half"></i>
+															{{ "See all %reviewscount% reviews"|trans({'%reviewscount%': reviewscount}) }}
+														</a>
+													</div>
+												{% endif %}
 											</div>
-                                            {% if reviewscount | length %}
-                                                {% for review in setting.getReviews({"recipe": recipe.slug, "limit": 8}).getQuery().getResult() %}
-                                                    {% include "global/user-review.html.twig" with { review : review, showuser: 1 } %}
-                                                {% endfor %}
-                                                {% if reviewscount > 8 %}
-                                                    <div class="d-flex align-items-start">
-                                                        <a href="{{ path('recipe_reviews') }}" class="btn btn-outline-primary mx-auto">
-                                                            <i class="bi bi-star-half"></i>
-                                                            {{ "See all %reviewscount% reviews"|trans({'%reviewscount%': reviewscount}) }}
-                                                        </a>
-                                                    </div>
-                                                {% endif %}
-                                            {% endif %}
-										</div>
+										{% endif %}
 									</div>
 								{% endif %}
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-12 col-12 mt-lg-n8">
-					<div class="card mb-3 mb-4">
-						{% if recipe.youtubeurl %}
-							<div class="p-1">
-								<div class="d-flex justify-content-center align-items-center rounded border-white border rounded-3 bg-cover" style="background-image: url(../assets/images/course/course-javascript.jpg); height: 210px">
-									<a class="glightbox icon-shape rounded-circle btn-play icon-xl" href="https://www.youtube.com/watch?v=Nfzi7034Kbg">
-										<i class="bi bi-play"></i>
-									</a>
-								</div>
-							</div>
-						{% endif %}
-						<div class="card-body">
-							<div class="mb-3">
-								<span class="text-dark fw-bold h2">$600</span>
-								<del class="fs-4">$750</del>
-							</div>
-							<div class="d-grid">
-								<a href="#" class="btn btn-primary mb-2">Start Free Month</a>
-								<a href="pricing.html" class="btn btn-outline-primary">Get Full Access</a>
-							</div>
-						</div>
-					</div>
-					<div class="card mb-4">
-						<div>
-							<div class="card-header">
-								<h4 class="mb-0">{{ pagetitle }}</h4>
-							</div>
-							{% if recipe.enablereviews %}
-								<ul class="list-group list-group-flush">
-									<li class="list-group-item bg-transparent" style="width:{{ recipe.getRatingPercentage }}%">
-										<i class="bi bi-star align-middle me-2 text-warning"></i>
-										<i class="bi bi-star align-middle me-2 text-warning"></i>
-										<i class="bi bi-star align-middle me-2 text-warning"></i>
-										<i class="bi bi-star align-middle me-2 text-warning"></i>
-										<i class="bi bi-star align-middle me-2 text-warning"></i>
-									</li>
-									<li class="list-group-item bg-transparent">
-										<i class="bi bi-star me-2 align-middle text-warning"></i>
-										<i class="bi bi-star me-2 align-middle text-warning"></i>
-										<i class="bi bi-star me-2 align-middle text-warning"></i>
-										<i class="bi bi-star me-2 align-middle text-warning"></i>
-										<i class="bi bi-star me-2 align-middle text-warning"></i>
-									</li>
-								</ul>
-							{% endif %}
-							<span class="text-dark fw-bold h2">
-								{{ reviewscount }} {{"Reviews"|trans|lower}}
-							</span>
-						</div>
-					</div>
-					<div class="card mb-4">
-						<div>
-							<div class="card-header">
-								<h4 class="mb-0">What’s included</h4>
-							</div>
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item bg-transparent">
-									<i class="fe fe-play-circle align-middle me-2 text-primary"></i>
-									12 hours video
-								</li>
-								<li class="list-group-item bg-transparent">
-									<i class="fe fe-award me-2 align-middle text-success"></i>
-									Certificate
-								</li>
-								<li class="list-group-item bg-transparent">
-									<i class="fe fe-calendar align-middle me-2 text-info"></i>
-									12 Article
-								</li>
-								<li class="list-group-item bg-transparent">
-									<i class="fe fe-video align-middle me-2 text-secondary"></i>
-									Watch Offline
-								</li>
-								<li class="list-group-item bg-transparent border-bottom-0">
-									<i class="fe fe-clock align-middle me-2 text-warning"></i>
-									Lifetime access
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="card">
-						<div class="card-body">
-							<div class="d-flex align-items-center">
-								<div class="position-relative">
-									<img src="../assets/images/avatar/avatar-1.jpg" alt="avatar" class="rounded-circle avatar-xl">
-									<a href="#" class="position-absolute mt-2 ms-n3" data-bs-toggle="tooltip" data-placement="top" aria-label="Verifed" data-bs-original-title="Verifed">
-										<img src="../assets/images/svg/checked-mark.svg" alt="checked-mark" height="30" width="30">
-									</a>
-								</div>
-								<div class="ms-4">
-									<h4 class="mb-0">Jenny Wilson</h4>
-									<p class="mb-1 fs-6">Front-end Developer, Designer</p>
-									<p class="fs-6 mb-1 d-flex align-items-center">
-										<span class="text-warning">4.5</span>
-										<span class="mx-1">
-											<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star-fill text-warning" viewbox="0 0 16 16">
-												<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
-											</svg>
+				<div class="col-xl-4 col-lg-12 col-md-12 col-12">
+					<div class="card" id="recipeAccordion">
+						<ul class="list-group list-group-flush">
+							{% if recipe.youtubeurl %}
+								<li class="list-group-item p-0 bg-transparent">
+									<a class="h4 mb-0 d-flex align-items-center py-3 px-4 collapsed" data-bs-toggle="collapse" href="#recipeTwo" role="button" aria-expanded="false" aria-controls="recipeTwo">
+										<div class="me-auto">
+											{{ "Video"|trans }}
+											<p class="mb-0 fs-6 mt-1 fw-normal"></p>
+										</div>
+										<span class="chevron-arrow ms-4">
+											<i class="bi bi-chevron-down fs-4"></i>
 										</span>
-										Instructor Rating
-									</p>
-								</div>
-							</div>
-							<div class="border-top row mt-3 border-bottom mb-3 g-0">
-								<div class="col">
-									<div class="pe-1 ps-2 py-3">
-										<h5 class="mb-0">11,604</h5>
-										<span>Students</span>
+									</a>
+									<div class="collapse show" id="recipeTwo" data-bs-parent="#recipeAccordion">
+										<div class="card mb-4">
+											<div class="p-1">
+												<div class="d-flex justify-content-center align-items-center rounded border-white border rounded-3 bg-cover" style="background-image: url(../assets/images/recipe/recipe-javascript.jpg); height: 210px">
+													<a class="glightbox icon-shape rounded-circle btn-play icon-xl" href="https://www.youtube.com/watch?v=Nfzi7034Kbg">
+														<i class="bi bi-play"></i>
+													</a>
+												</div>
+											</div>
+											<div class="card-body">
+												<div class="mb-3">
+													<span class="text-dark fw-bold h2">$600</span>
+													<del class="fs-4">$750</del>
+												</div>
+												<div class="d-grid">
+													<a href="#" class="btn btn-primary mb-2">Start Free Month</a>
+													<a href="pricing.html" class="btn btn-outline-primary">Get Full Access</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							{% endif %}
+							{% if recipe.enablereviews %}
+								<li class="list-group-item p-0 d-lg-none">
+									<a class="h4 mb-0 d-flex align-items-center py-3 px-4 collapsed" data-bs-toggle="collapse" href="#recipeReviews" role="button" aria-expanded="false" aria-controls="recipeReviews">
+										<div class="me-auto">
+											{{ "Reviews"|trans }}
+											<p class="mb-0 fs-6 mt-1 fw-normal"></p>
+										</div>
+										<span class="chevron-arrow ms-4">
+											<i class="bi bi-chevron-down fs-4"></i>
+										</span>
+									</a>
+									<div class="collapse" id="recipeReviews" data-bs-parent="#recipeAccordion">
+										<div class="mb-4">
+											<div>
+												<div class="card-header text-center">
+													<h4 class="mb-0">{{ pagetitle }}</h4>
+												</div>
+												<div class="card-body">
+													<div class="rating-wrap fs-6 text-center">
+														<ul class="rating-stars">
+															<li style="width:{{ recipe.getRatingPercentage }}%" class="stars-active">
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+															</li>
+															<li>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+															</li>
+														</ul>
+														<div class="label-rating mb-0 fs-6">
+															{{ reviewscount }}
+															{{ "Reviews"|trans|lower }}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							{% endif %}
+							<li class="list-group-item p-0">
+								<a class="h4 mb-0 d-flex align-items-center py-3 px-4 collapsed" data-bs-toggle="collapse" href="#recipeDate" role="button" aria-expanded="false" aria-controls="recipeDate">
+									<div class="me-auto">
+										{{ "Dates"|trans }}
+										<p class="mb-0 fs-6 mt-1 fw-normal"></p>
+									</div>
+									<span class="chevron-arrow ms-4">
+										<i class="bi bi-chevron-down fs-4"></i>
+									</span>
+								</a>
+								<div class="collapse" id="recipeDate" data-bs-parent="#recipeAccordion">
+									<div class="card mb-4">
+										<div class="card-body">
+											{% if recipe.hasAnRecipeDateOnSale %}
+												{# Recipe Dates calendar used on multi date recipes #}
+												{% if recipe.hasTwoOrMoreRecipeDatesOnSale %}
+													{% set recipeDatesCalendar = [] %}
+													{% for recipeDate in recipe.recipedates %}
+														{% if recipeDate.isOnSale %}
+															{% set recipeDatesCalendar = recipeDatesCalendar|merge([{"Date": recipeDate.startdate | date('Y-m-d'), "Title": recipeDate.startdate | date('g:i A'), "Link": recipeDate.reference}]) %}
+														{% endif %}
+													{% endfor %}
+													{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: "Click on a date to view subscriptions"|trans } %}
+													<div id="recipe-dates-calendar" class="mt-5" data-recipe-dates="{{ recipeDatesCalendar|json_encode() }}"></div>
+													{% if is_granted('ROLE_CREATOR') %}
+														<div class="d-grid">
+															<button id="add-to-cart-button" type="button" class="btn btn-primary mt-3 mb-3 {% if recipe.hasRecipeDateWithSeatingPlan %}recipe-date-has-seating-plan{% endif %}">
+																<i class="bi bi-plus"></i>
+																{{ "Add to cart"|trans }}
+															</button>
+														</div>
+													{% endif %}
+												{% endif %}
+												<form id="add-to-cart-form" action="{{ path('dashboard_creator_cart_add') }}" method="post">
+													{% for recipeDate in recipe.recipedates %}
+														{% if recipeDate.isOnSale %}
+															<div id="recipeDate-{{recipeDate.reference}}-wrapper" class="recipe-recipeDate-wrapper">
+																<dl>
+																	<dt class="text-muted">
+																		<span>{{ "Dates"|trans }}</span>
+																	</dt>
+																	<dd>
+																		<div class="text-center">
+																			{# for the add to calendar link #}
+																			{% set recipestartdate = "" %}
+																			{% set recipeenddate = "" %}
+																			{% set recipelocation = "" %}
+																			{% if recipeDate.venue %}
+																				{% set recipelocation = recipeDate.venue.name ~ ': ' ~ recipeDate.venue.stringifyAddress %}
+																			{% else %}
+																				{% set recipelocation = "Online"|trans %}
+																			{% endif %}
+																			{% if recipeDate.startdate %}
+																				<div class="d-inline-block">
+																					<div class="d-inline-block">
+																						<span class="fs-1">
+																							{{ recipeDate.startdate|date('d') }}
+																						</span>
+																					</div>
+																					<div class="d-inline-block me-3">
+																						<div>
+																							<span class="fs-4">
+																								{{ recipeDate.startdate | localizeddate('full', 'none', app.request.locale, null, "MMMM") |capitalize | slice(0, 3) }}
+																							</span>
+																						</div>
+																						<div>
+																							<span>{{ recipeDate.startdate | date('Y') }}</span>
+																						</div>
+																					</div>
+																					<div class="mb-2">
+																						<span class="text-muted fw-semibold">
+																							{{ recipeDate.startdate | date('g:i a')|upper }}
+																							{% if recipeDate.enddate %}
+																								{% if recipeDate.enddate | date('Y-m-d') == recipeDate.startdate | date('Y-m-d') %}
+																									-
+																									{{ recipeDate.enddate | date('g:i a')|upper }}
+																								{% endif %}
+																							{% endif %}
+																						</span>
+																					</div>
+																				</div>
+																				{% set recipestartdate = recipeDate.startdate | date('F d, Y H:i') %}
+																			{% endif %}
+																			{% if recipeDate.enddate %}
+																				{% if recipeDate.enddate | date('Y-m-d') != recipeDate.startdate|date('Y-m-d') %}
+																					<div class="d-inline-block">
+																						<div class="d-inline-block">
+																							<span class="fs-1">
+																								{{ recipeDate.enddate | date('d') }}
+																							</span>
+																						</div>
+																						<div class="d-inline-block">
+																							<div>
+																								<span class="fs-4">
+																									{{ recipeDate.enddate | localizeddate('full', 'none', app.request.locale, null, "MMMM") |capitalize | slice(0, 3) }}
+																								</span>
+																							</div>
+																							<div>
+																								<span>
+																									{{ recipeDate.enddate | date('Y') }}
+																								</span>
+																							</div>
+																						</div>
+																						<div class="mb-2">
+																							<span class="text-muted fw-semibold">
+																								{{ recipeDate.enddate | date('g:i a') | upper }}
+																							</span>
+																						</div>
+																					</div>
+																				{% endif %}
+																				{% set recipestartdate = recipeDate.enddate | date('F d, Y H:i') %}
+																			{% endif %}
+																			<div class="clearfix"></div>
+																			<a id="add-to-calendar-link" data-toggle="modal" data-target="#add-to-calendar-modal" href="javascript:void(0)" data-title="{{ recipe.name }}" data-start="{{ recipestartdate }}" data-end="{{ recipeenddate }}" data-address="{{ recipelocation }}" data-description="{{ recipe.content|striptags|slice(0, 250)|raw|nl2br }}">
+																				<i class="bi bi-calendar-plus"></i>
+																				{{ "Add to calendar"|trans }}
+																			</a>
+																			<div class="modal fade" id="add-to-calendar-modal">
+																				<div class="modal-dialog modal-dialog-centered">
+																					<div class="modal-content">
+																						<div class="modal-header">
+																							<h4 class="modal-title">
+																								<i class="bi bi-calendar-plus"></i>
+																								{{ "Add to calendar"|trans }}</h4>
+																							<button type="button" class="close" data-dismiss="modal">&times;</button>
+																						</div>
+																						<div id="add-to-calendar" class="modal-body"></div>
+																						<div class="modal-footer">
+																							<button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+																						</div>
+
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</dd>
+																</dl>
+																{#  
+																<hr class="hr-md">
+																{% if recipeDate.venue %}
+																	<dl>
+																		<dt class="text-muted">
+																			<span class="{% if app.request.locale == "ar" %}float-right{% else %}float-left{% endif %}">{{ "Venue"|trans }}</span>
+																			{% if recipeDate.venue.listedondirectory %}
+																				<a href="{{ path('venue', { slug: recipeDate.venue.slug }) }}" class="{% if app.request.locale == "ar" %}float-left{% else %}float-right{% endif %} text-sm">
+																					<i class="far fa-building"></i>
+																					{{ "Details"|trans }}</a>
+																			{% endif %}
+																			<div class="clearfix"></div>
+																		</dt>
+																		<dd class="mr-0">
+																			<h4 class="text-center">{{ recipeDate.venue.name }}</h4>
+																			<p>{{ recipeDate.venue.stringifyAddress }}</p>
+																			<div class="d-flex mb-3">
+																				<ul class="list-inline mx-auto">
+																					<li class="list-inline-item">
+																						<a href="https://www.google.com/maps/dir/?api=1&destination={{ recipeDate.venue.lat }},{{ recipeDate.venue.lng }}&travelmode=driving" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary driving"|trans }}" target="_blank">
+																							<i class="fas fa-car fa-fw"></i>
+																						</a>
+																					</li>
+																					<li class="list-inline-item">
+																						<a href="https://www.google.com/maps/dir/?api=1&destination={{ recipeDate.venue.lat }},{{ recipeDate.venue.lng }}&travelmode=walking" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary walking"|trans }}" target="_blank">
+																							<i class="fas fa-walking fa-fw"></i>
+																						</a>
+																					</li>
+																					<li class="list-inline-item">
+																						<a href="https://www.google.com/maps/dir/?api=1&destination={{ recipeDate.venue.lat }},{{ recipeDate.venue.lng }}&travelmode=transit" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary on public transportation"|trans }}" target="_blank">
+																							<i class="fas fa-bus fa-fw"></i>
+																						</a>
+																					</li>
+																					<li class="list-inline-item">
+																						<a href="https://www.google.com/maps/dir/?api=1&destination={{ recipeDate.venue.lat }},{{ recipeDate.venue.lng }}&travelmode=bicycling" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary bicycling"|trans }}" target="_blank">
+																							<i class="fas fa-bicycle fa-fw"></i>
+																						</a>
+																					</li>
+																				</ul>
+																			</div>
+																			<iframe class="w-100 border-0 venue-map" height="300" src="{{ services.getCurrentRequestProtocol() }}://maps.google.com/maps?q={{ recipeDate.venue.name|url_encode ~ '%20' ~ recipeDate.venue.stringifyAddress|url_encode }}&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+																		</dd>
+																	</dl>
+																{% else %}
+																	<dl>
+																		<dt class="text-muted">
+																			<span class="{% if app.request.locale == "ar" %}float-right{% else %}float-left{% endif %}">{{ "Venue" }}</span>
+
+																		</dt>
+																		<dd>
+																			<br>
+																			<h4 class="text-center">{{ "Online"|trans }}</h4>
+																		</dd>
+																	</dl>
+																{% endif %}
+																<hr class="hr-md">
+																<dl class="mt-5">
+																	<dt class="text-muted">{{ "Tickets"|trans }}</dt>
+																	<dd class="mr-0">
+																		<div class="table-responsive">
+																			<table class="table table-hover table-condensed">
+																				<tbody>
+																					{% for ticket in recipeDate.tickets %}
+																						{% if ticket.active %}
+																							<tr class="bg-gray">
+																								<td class="border-top-white" style="width: 75%;">
+																									{{ ticket.name }}
+																								</td>
+																								<td class="border-top-white text-right">
+																									{% if not ticket.isOnSale %}
+																										<span class="badge badge-{{ ticket.stringifyStatusClass }}">{{ ticket.stringifyStatus|trans }}</span>
+																									{% else %}
+																										{{ ticket.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getSalePrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+																										{% if ticket.promotionalprice and not ticket.free %}
+																											<del class="price-old">{{ (services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '') }}</del>
+																										{% endif %}
+																									{% endif %}
+																								</td>
+																							</tr>
+																						{% endif %}
+																					{% endfor %}
+																				</tbody>
+																			</table>
+																		</div>
+																		{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_ATTENDEE') %}
+																			{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+																				<a href="#" class="btn btn-primary btn-block mb-2 buy-tickets-modal-button" data-toggle="modal" data-target="#buy-tickets-modal-recipeDate-{{ recipeDate.reference }}">
+																					{% if recipeDate.hasSeatingPlan %}
+																						<i class="fas fa-braille"></i>
+																						{{ "Pick your seats"|trans }}
+																					{% else %}
+																						<i class="fas fa-ticket-alt"></i>
+																						{{ "Tickets"|trans }}
+																					{% endif %}
+																				</a>
+																				{% include "Dashboard/Attendee/Cart/add-to-cart-modal.html.twig" with { recipedate: recipeDate } %}
+																			{% else %}
+																				<a href="{{ path('fos_user_security_login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-primary btn-block">
+																					{% if recipeDate.hasSeatingPlan %}
+																						<i class="fas fa-braille"></i>
+																						{{ "Pick your seats"|trans }}
+																					{% else %}
+																						<i class="fas fa-ticket-alt"></i>
+																						{{ "Tickets"|trans }}
+																					{% endif %}
+																				</a>
+																			{% endif %}
+																		{% endif %}
+																	</dd>
+																</dl>
+																#}
+															</div>
+														{% endif %}
+													{% endfor %}
+												</form>
+												{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_USER') or is_granted('ROLE_CREATOR') %}
+													<div class="d-grid">
+														{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+															{% if recipe.isAddedToFavoritesBy(app.user) %}
+																<button class="recipe-favorites-remove btn btn-primary mb-2" data-bs-target="{{ path('dashboard_creator_favorites_remove', { slug : recipe.slug }) }}" data-bs-toggle="tooltip" title="" data-placement="bottom">
+																	<i class="bi bi-heart-fill"></i>
+																	{{ "Remove from favorites"|trans }}</button>
+															{% else %}
+																<button class="recipe-favorites-new btn btn-outline-primary" data-bs-target="{{ path('dashboard_creator_favorites_new', { slug : recipe.slug }) }}" data-bs-toggle="tooltip" title="" data-placement="bottom">
+																	<i class="bi bi-heart"></i>
+																	{{ "Add to favorites"|trans }}</button>
+															{% endif %}
+														{% else %}
+															<a href="{{ path('login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-outline-primary">
+																<i class="bi bi-heart"></i>
+																{{ "Add to favorites"|trans }}
+															</a>
+														{% endif %}
+													</div>
+												{% endif %}
+											{% else %}
+												<div class="card-header border-0">
+													{% include "global/message.html.twig" with { type: 'info', icon: 'bi bi-exclamation-circle', message: "No subscriptions on sale at this moment" } %}
+												</div>
+											{% endif %}
+										</div>
 									</div>
 								</div>
-								<div class="col border-start">
-									<div class="pe-1 ps-3 py-3">
-										<h5 class="mb-0">32</h5>
-										<span>Courses</span>
+							</li>
+							<li class="list-group-item p-0">
+								<a class="h4 mb-0 d-flex align-items-center py-3 px-4 collapsed" data-bs-toggle="collapse" href="#recipeRestaurant" role="button" aria-expanded="false" aria-controls="recipeRestaurant">
+									<div class="me-auto">
+										{{ "Restaurant"|trans }}
+										<p class="mb-0 fs-6 mt-1 fw-normal"></p>
+									</div>
+									<span class="chevron-arrow ms-4">
+										<i class="bi bi-chevron-down fs-4"></i>
+									</span>
+								</a>
+								<div class="collapse" id="recipeRestaurant" data-bs-parent="#recipeAccordion">
+									<div class="card mb-4">
+										<div class="card-body">
+											<div class="mt-5 mb-5">
+												{#  
+												<dt class="">
+													<span class="{% if app.request.locale == "ar" %}float-end{% else %}float-start{% endif %}">{{ "Restaurant"|trans }}</span>
+													<a href="{{ path('restaurant', { slug : recipe.restaurant.slug }) }}" class="{% if app.request.locale == "ar" %}float-start{% else %}float-end{% endif %} text-sm">
+														<i class="bi bi-person-vcard"></i>
+														{{ "Details"|trans }}
+													</a>
+												</dt>
+												#}
+												<div class="d-flex justify-content-between align-items-center mb-2">
+													<span class="fw-semibold ">{{ "Restaurant"|trans }}</span>
+													<a href="{{ path('restaurant', { slug : recipe.restaurant.slug }) }}" class="text-sm">
+														<i class="bi bi-person-vcard"></i>
+														{{ "Details"|trans }}
+													</a>
+												</div>
+												<div class="me-0">
+													<div class="card-banner {{ recipe.restaurant.coverName ? '' : 'restaurant-preview-no-cover' }}" {% if recipe.restaurant.coverName %} style="height:250px;background-image: url('{{asset(recipe.restaurant.getCoverPath|imagine_filter('thumbnail', {" thumbnail": {" size": [400, 250] }}))}}');" {% endif %}>
+														<div class="overlay bottom text-center">
+															<div class="card-header">
+																<h4 class="mb-0">
+																	<a href="{{ path('restaurant', { slug : recipe.restaurant.slug }) }}">
+																		{{ recipe.restaurant.name }}
+																	</a>
+																</h4>
+															</div>
+															{% if recipe.restaurant.logoName %}
+																<img src="{{asset(recipe.restaurant.getLogoPath)}}" class="img-100-100 d-block mx-auto mb-3 img-thumbnail" alt="{{ recipe.restaurant.name }}"/>
+															{% endif %}
+															{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_USER') or is_granted('ROLE_CREATOR') %}
+																{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+																	{% if recipe.restaurant.isFollowedBy(app.user) %}
+																		<button class="restaurant-unfollow btn btn-primary btn-sm" data-bs-target="{{ path('dashboard_creator_following_remove', { slug : recipe.restaurant.slug }) }}">
+																			<i class="bi bi-folder-minus"></i>
+																			{{ "Unfollow"|trans }}
+																		</button>
+																	{% else %}
+																		<button class="restaurant-follow btn btn-primary btn-sm" data-bs-target="{{ path('dashboard_creator_following_new', { slug : recipe.restaurant.slug }) }}">
+																			<i class="bi bi-folder-plus"></i>
+																			{{ "Follow"|trans }}
+																		</button>
+																	{% endif %}
+																{% else %}
+																	<a href="{{ path('login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-primary btn-sm">
+																		<i class="bi bi-folder-plus"></i>
+																		{{ "Follow"|trans }}
+																	</a>
+																{% endif %}
+															{% endif %}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="col border-start">
-									<div class="pe-1 ps-3 py-3">
-										<h5 class="mb-0">12,230</h5>
-										<span>Reviews</span>
-									</div>
-								</div>
-							</div>
-							<p>I am an Innovation designer focussing on UX/UI based in Berlin. As a creative</p>
-							<a href="instructor-profile.html" class="btn btn-outline-secondary btn-sm">View Details</a>
-						</div>
+							</li>
+							{% if recipe.isShowattendees %}
+								{% set creatorscount = recipe.getTotalOrderElementsQuantitySum(1, 'all', 'ROLE_CREATOR') %}
+								{% if creatorscount %}
+									<li class="list-group-item p-0 bg-transparent">
+										<a class="h4 mb-0 d-flex align-items-center py-3 px-4 collapsed" data-bs-toggle="collapse" href="#recipeCreators" role="button" aria-expanded="false" aria-controls="recipeCreators">
+											<div class="me-auto">
+												{{ "Creators"|trans }}
+												<p class="mb-0 fs-6 mt-1 fw-normal">({{ creatorscount }})</p>
+											</div>
+											<span class="chevron-arrow ms-4">
+												<i class="bi bi-chevron-down fs-4"></i>
+											</span>
+										</a>
+										<div class="collapse" id="recipeCreators" data-bs-parent="#recipeAccordion">
+											<div class="card mb-4">
+												<div class="card-body">
+													<div class="mt-5 mb-5">
+														<div class="d-flex justify-content-between align-items-center mb-2">
+															<span class="fw-semibold ">{{ "Creators"|trans }}</span>
+															<button type="button" class="text-sm" data-bs-toggle="modal" data-bs-target="#creators-modal">
+																<i class="bi bi-people"></i>
+																{{ "See all"|trans }}
+															</button>
+														</div>
+														<div class="modal fade" id="creators-modal" aria-hidden="true" aria-labelledby="creators-modal" tabindex="-1">
+															<div class="modal-dialog modal-dialog-centered">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="creators-modal">
+																			{{ "Creators"|trans }}
+																			({{ creatorscount }})
+																		</h5>
+																		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																		<div class="card border-0 card-body overflow-auto text-nowrap">
+																			<div class="avatar-list py-4">
+																				{% for user in setting.getUsers({"hasboughtsubscriptionfor": recipe.slug, "role": "creator"}).getQuery().getResult() %}
+																					{% include "global/user-avatar.html.twig" with { user: user, type: "sm", showusernametooltip: true } %}
+																				{% endfor %}
+																			</div>
+																		</div>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+																			{{ "Close"|trans }}
+																		</button>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="me-0">
+															<div class="card border-0 card-body">
+																<div class="d-lg-flex">
+																	<div class="avatar-group me-5">
+																		{% for user in setting.getUsers({"hasboughtsubscriptionfor": recipe.slug, "limit": 12, "role": "creator"}).getQuery().getResult() %}
+																			<span class="avatar avatar-lg">
+																				<img alt="avatar" src="../assets/images/avatar/avatar-1.jpg" class="rounded-circle" />
+																			</span>
+																		{% endfor %}
+																		{% if creatorscount > 12 %}
+																			<span class="avatar">{{ creatorscount - 12 }}</span>
+																		{% endif %}
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								{% endif %}
+							{% endif %}
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -1850,11 +1181,13 @@
 	</section>
 
 	{% if recipe.hasAnRecipeDateOnSale %}
-		{% for recipeDate in recipe.recipedates if recipeDate.isOnSale %}
-			{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_CREATOR') %}
-				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-					{% if recipeDate.hasSeatingPlan %}
-						{% include "dashboard/shared/recipe/seatingPlans/seating-plan-sections-modals.html.twig" with {seatingPlan: recipeDate.seatingPlan, recipeDate: recipeDate} %}
+		{% for recipeDate in recipe.recipedates %}
+			{% if recipeDate.isOnSale %}
+				{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_USER') or is_granted('ROLE_CREATOR') %}
+					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+						{% if recipeDate.hasSeatingPlan %}
+							{% include "dashboard/shared/recipe/seatingPlans/seating-plan-sections-modals.html.twig" with {seatingPlan: recipeDate.seatingPlan, recipeDate: recipeDate} %}
+						{% endif %}
 					{% endif %}
 				{% endif %}
 			{% endif %}

@@ -74,7 +74,7 @@
                                                                 {% for reservedSeat in cartelement.reservedSeats %}
                                                                     <span>
                                                                         <span class="text-dark fw-medium">
-                                                                            {{ services.stringifySeatLabel(reservedSeat) }}
+                                                                            {{ setting.stringifySeatLabel(reservedSeat) }}
                                                                         </span>
                                                                     </span>
                                                                 {% endfor %}
@@ -103,7 +103,7 @@
                                                         </h6>
                                                         <ul class='list-check'>
                                                             {% for reservedSeat in cartelement.reservedSeats %}
-                                                                <li>{{ services.stringifySeatLabel(reservedSeat) }}</li>
+                                                                <li>{{ setting.stringifySeatLabel(reservedSeat) }}</li>
                                                             {% endfor %}
                                                         </ul>
                                                     {% endif %}

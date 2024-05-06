@@ -1,0 +1,37 @@
+{% extends 'auth.html.twig' %}
+
+{% block layout %}{{ parent() }} login{% endblock %}
+
+{% set pagetitle = 'Congrats %username%, your account is now activated.'|trans({'%username%': user.username}) %}
+{% block title pagetitle %}
+
+{% block content %}
+    <div class="mb-4">
+        <a href="{{ path('home') }}">
+            <img src="{{ asset('images/brand/logo/logo-icon.svg') }}" class="mb-4" alt="logo-icon">
+            {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="mb-4"> #}
+        </a>
+        <p><i class="bi bi-check-circle fs-1 text-success"></i></p>
+        <h1 class="mb-1 fw-bold">{{ pagetitle }}</h1>
+        {% if targetUrl %}
+            <p>
+                <a href="{{ targetUrl }}">
+                    <i class="bi bi-arrow-left"></i> 
+                    {{ 'Back to the originating page.'|trans }}
+                </a>
+            </p>
+        {% endif %}
+        <p class="mt-5">
+            <a href="{{ path('dashboard_main') }}" class="btn btn-primary mb-3">
+                <i class="bi bi-speedometer fa-fw"></i> 
+                {{ "Dashboard"|trans }}
+            </a>
+            {% if is_granted('ROLE_CREATOR') %}
+                <a href="{{ path('recipes') }}" class="btn btn-outline-primary mb-3">
+                    <i class="bi bi-book fa-fw"></i> 
+                    {{ "Browse recipes"|trans }}
+                </a>
+            {% endif %}
+        </p>
+    </div>
+{% endblock %}

@@ -19,6 +19,7 @@ twig:
         date_timezone: "%date_timezone%"
 
         website_name: '%env(WEBSITE_NAME)%'
+        website_url: '%env(WEBSITE_URL)%'
 
         name: '%env(WEBSITE_CONTACT_NAME)%'
         email: '%env(WEBSITE_CONTACT_EMAIL)%'

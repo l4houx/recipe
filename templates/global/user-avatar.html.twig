@@ -1,8 +1,10 @@
 {#
 <img src="{{ user.gravatarUrl | default(asset('images/user/default.png')) }}" class="avatar-{{ type }} rounded-circle {{ class is defined ? class : '' }}" alt="avatar">
-#}
 
 <img src="{{ user | avatarName }}" class="avatar-{{ type }} rounded-circle {{ class is defined ? class : '' }}" alt="avatar">
+#}
+
+<img src="{{ user.avatarName ? asset(user.getAvatarPath) : user.getAvatarPlaceholder }}" class="avatar-{{ type }} rounded-circle {{ class is defined ? class : '' }}" alt="avatar" {% if showusernametooltip is defined %}data-bs-toggle="tooltip" title="{{ user.username }}" data-container="body"{% endif %}>
 
 {#  
 {% if user.hasRole('ROLE_CREATOR') %}
