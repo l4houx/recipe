@@ -86,7 +86,7 @@ class RegistrationController extends AbstractController
                     ))
                     ->to($user->getEmail())
                     ->subject($this->translator->trans('Please Confirm your Email'))
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('mails/registration.html.twig')
             );
             // do anything else you need here, like send an email
 
@@ -159,7 +159,7 @@ class RegistrationController extends AbstractController
                     ))
                     ->to($user->getEmail())
                     ->subject($this->translator->trans('Please Confirm your Email'))
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('mails/registration.html.twig')
             );
             // do anything else you need here, like send an email
 
@@ -209,7 +209,7 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('primary', $this->translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+            $this->addFlash('danger', $this->translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
             return $this->redirectToRoute('dashboard_main');
         }

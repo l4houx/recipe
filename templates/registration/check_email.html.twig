@@ -1,0 +1,17 @@
+{% extends 'auth.html.twig' %}
+
+{% block layout %}{{ parent() }} check_email{% endblock %}
+
+{% set pagetitle = 'An email has been sent to %email%. It contains an activation link you must click to activate your account.'|trans({'%email%': user.email}) %}
+{% block title pagetitle %}
+
+{% block content %}
+    <div class="mb-4">
+        <a href="{{ path('home') }}">
+            <img src="{{ asset('images/brand/logo/logo-icon.svg') }}" class="mb-4" alt="logo-icon">
+            {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}" class="mb-4"> #}
+        </a>
+        <p><i class="bi bi-envelope-open fs-1 text-success"></i></p>
+        <h1 class="mb-1 fw-bold">{{ pagetitle }}</h1>
+    </div>
+{% endblock %}

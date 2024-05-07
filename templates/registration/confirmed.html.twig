@@ -13,14 +13,6 @@
         </a>
         <p><i class="bi bi-check-circle fs-1 text-success"></i></p>
         <h1 class="mb-1 fw-bold">{{ pagetitle }}</h1>
-        {% if targetUrl %}
-            <p>
-                <a href="{{ targetUrl }}">
-                    <i class="bi bi-arrow-left"></i> 
-                    {{ 'Back to the originating page.'|trans }}
-                </a>
-            </p>
-        {% endif %}
         <p class="mt-5">
             <a href="{{ path('dashboard_main') }}" class="btn btn-primary mb-3">
                 <i class="bi bi-speedometer fa-fw"></i> 
