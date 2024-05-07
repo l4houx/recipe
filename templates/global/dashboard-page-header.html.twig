@@ -4,16 +4,16 @@
             <i class="bi bi-list"></i>
         </a>
         <div class="ms-lg-3 d-none d-md-none d-lg-block">
-            <form class="d-flex align-items-center">
+            <form action="{{ path('recipes') }}" class="d-flex align-items-center">
                 <span class="position-absolute ps-3 search-icon">
                     <i class="bi bi-search"></i>
                 </span>
-                <input type="search" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
+                <input type="search" class="form-control ps-6" name="keyword" placeholder="{{ 'Search for recipes'|trans }}">
             </form>
         </div>
         <div class="ms-auto d-flex">
             <div class="dropdown">
-                {% include "global/_bs-theme-text.html.twig" %}
+                {% include "global/dropdown-item-bs-theme-text.html.twig" %}
             </div>
             <ul class="navbar-nav navbar-right-wrap ms-2 d-flex nav-top-wrap">
                 {#  
@@ -149,89 +149,17 @@
                 <li class="dropdown ms-2">
                     <a class="rounded-circle" href="#" role="button" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="avatar avatar-md avatar-indicators avatar-online">
-                            <img alt="avatar" src="{{ app.user.gravatarUrl }}" class="rounded-circle">
+                            {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                <span class="avatar rounded-circle">
+                                    <i class="bi bi-person fs-3"></i>
+                                </span>
+                            {% else %}
+                                {% include "global/user-avatar.html.twig" with { user: app.user, type: "md" } %}
+                            {% endif %}
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
-                        <div class="dropdown-item">
-                            <div class="d-flex">
-                                <div class="avatar avatar-md avatar-indicators avatar-online">
-                                    <img alt="avatar" src="{{ app.user.gravatarUrl }}" class="rounded-circle">
-                                </div>
-                                <div class="ms-3 lh-1">
-                                    <h5 class="mb-1">{{ app.user.username }}</h5>
-                                    <p class="mb-0">{{ app.user.email }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <ul class="list-unstyled">
-                            <li class="dropdown-submenu dropstart-lg">
-                                <a class="dropdown-item dropdown-list-group-item dropdown-toggle" href="#">
-                                    <i class="bi bi-circle me-2"></i>
-                                    Status
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <span class="badge-dot bg-success me-2"></span>
-                                            Online
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <span class="badge-dot bg-secondary me-2"></span>
-                                            Offline
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <span class="badge-dot bg-warning me-2"></span>
-                                            Away
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <span class="badge-dot bg-danger me-2"></span>
-                                            Busy
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ path('dashboard_main') }}">
-                                    <i class="bi bi-speedometer me-2"></i>
-                                    {{ 'Dashboard'|trans }}
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ path('dashboard_creator_account_dashboard') }}">
-                                    <i class="bi bi-person me-2"></i>
-                                    {{ 'My dashboard'|trans }}
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="dropdown-divider"></div>
-                        <ul class="list-unstyled">
-                            {% if is_granted('IS_IMPERSONATOR') %}
-                                <li>
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();">
-                                        <i class="bi bi-power me-2"></i>
-                                        {{ 'Sign out'|trans }}
-                                    </a>
-                                    <form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
-                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                                    </form>
-                                </li>
-                            {% else %}
-                                <li>
-                                    <a class="dropdown-item" href="{{ impersonation_exit_path(path('home')) }}">
-                                        <i class="bi bi-power me-2"></i>
-                                        {{ 'Sign out'|trans }}
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
+                        {% include "global/dashboard-dropdown-item-links.html.twig" %}
                     </div>
                 </li>
             </ul>

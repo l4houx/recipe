@@ -4,12 +4,12 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid px-0">
         <a class="navbar-brand" href="{{ path('home') }}">
-            {# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}"> #}
+            {# <img src="{{ asset(setting.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}"> #}
             {{ website_name }}
         </a>
         <div class="ms-auto d-flex align-items-center order-lg-3">
             <div class="dropdown">
-                {% include "global/_bs-theme-text.html.twig" %}
+                {% include "global/dropdown-item-bs-theme-text.html.twig" %}
             </div>
             <div class="dropdown">
                 {% include "global/_cart.html.twig" %}
@@ -29,118 +29,12 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end position-absolute mx-3 my-5">
-                            <div class="dropdown-item">
-                                <div class="d-flex">
-                                    <div class="avatar avatar-md avatar-indicators avatar-online">
-                                        {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                                            <span class="avatar rounded-circle">
-                                                <i class="bi bi-person fs-3"></i>
-                                            </span>
-                                        {% else %}
-                                            <img alt="avatar" src="{{ app.user.gravatarUrl }}" class="rounded-circle">
-                                        {% endif %}
-                                    </div>
-                                    <div class="ms-3 lh-1">
-                                        <h5 class="mb-1">{{ app.user.username }}</h5>
-                                        <p class="mb-0">{{ app.user.email }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="dropdown-divider"></div>
-                            <ul class="list-unstyled">
-                                <li class="dropdown-submenu dropstart-lg">
-                                    <a class="dropdown-item dropdown-list-group-item dropdown-toggle" href="#">
-                                        <i class="bi bi-circle me-2"></i>
-                                        Status
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <span class="badge-dot bg-success me-2"></span>
-                                                Online
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <span class="badge-dot bg-secondary me-2"></span>
-                                                Offline
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <span class="badge-dot bg-warning me-2"></span>
-                                                Away
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <span class="badge-dot bg-danger me-2"></span>
-                                                Busy
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('dashboard_main') }}">
-										{% if is_granted("ROLE_POINTOFSALE") %}
-											<i class="bi bi-book me-2"></i>
-											{{ 'Recipes on sale'|trans }}
-										{% elseif is_granted("ROLE_SCANNER") %}
-											<i class="bi bi-calendar-date me-2"></i>
-											{{ 'Recipes list'|trans }}
-										{% else %}
-											<i class="bi bi-speedometer me-2"></i>
-											{{ 'Dashboard'|trans }}
-										{% endif %}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('dashboard_creator_account_dashboard') }}">
-                                        <i class="bi bi-person me-2"></i>
-                                        {{ 'My dashboard'|trans }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#!">
-                                        <i class="bi bi-star me-2"></i>
-                                        {{ 'Subscription'|trans }}
-                                    </a>
-                                </li>
-                                {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                                    <li>
-                                        <a class="dropdown-item" href="{{ path('dashboard_admin_setting_layout') }}">
-                                            <i class="bi bi-gear me-2"></i>
-                                            {{ 'Settings'|trans }}
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                            <div class="dropdown-divider"></div>
-                            <ul class="list-unstyled">
-                                {% if is_granted('IS_IMPERSONATOR') %}
-                                    <li>
-                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();">
-                                            <i class="bi bi-power me-2"></i>
-                                            {{ 'Sign out'|trans }}
-                                        </a>
-                                        <form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
-                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                                        </form>
-                                    </li>
-                                {% else %}
-                                    <li>
-                                        <a class="dropdown-item" href="{{ impersonation_exit_path(path('home')) }}">
-                                            <i class="bi bi-power me-2"></i>
-                                            {{ 'Sign out'|trans }}
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
+                            {% include "global/dashboard-dropdown-item-links.html.twig" %}
                         </div>
                     </li>
                 {% else %}
                     <div class="dropdown">
-                        {% include "global/_login-register.html.twig" %}
+                        {% include "global/dashboard-dropdown-item-links-login-register.html.twig" %}
                     </div>
                 {% endif %}
             </ul>
