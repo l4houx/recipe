@@ -8,7 +8,7 @@
 {% elseif is_granted('ROLE_RESTAURANT') %}
 	{% set parentpagetitle = 'Recent orders'|trans %}
 	{% set parentpagelink = path('dashboard_restaurant_orders') %}
-{% elseif is_granted('ROLE_CREATOR') %}
+{% elseif is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') %}
 	{% set parentpagetitle = 'My subscriptions'|trans %}
 	{% set parentpagelink = path('dashboard_creator_orders') %}
 {% elseif is_granted('ROLE_POINTOFSALE') %}
@@ -28,7 +28,7 @@
 			<div class="card mb-4">
 				<div class="card-header border-bottom-0">
 					<h3 class="mb-0">
-						{{ "Order"|trans ~ " #" ~ order.reference ~ " " ~ ("placed on"|trans) ~ " " ~ order.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+						{{ "Order"|trans ~ " #" ~ order.reference ~ " " ~ ("placed on"|trans) ~ " " ~ order.createdAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                     </h3>
                     <span class="badge bg-{{ order.getStatusClass }}-soft">{{ order.stringifyStatus|trans }}</span>
 				</div>
@@ -181,7 +181,7 @@
 									</thead>
 									<tbody>
 										{% for orderelement in order.orderelements %}
-											{% if is_granted('ROLE_CREATOR') or is_granted('ROLE_ADMIN_APPLICATION') or (is_granted('ROLE_RESTAURANT') and orderelement.belongsToRestaurant(app.user.restaurant.slug)) or (is_granted("ROLE_POINTOFSALE") and order.user == app.user) %}
+											{% if is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') or is_granted('ROLE_ADMIN_APPLICATION') or (is_granted('ROLE_RESTAURANT') and orderelement.belongsToRestaurant(app.user.restaurant.slug)) or (is_granted("ROLE_POINTOFSALE") and order.user == app.user) %}
 												<tr>
                                                     <td>
                                                         <div class="d-flex">
@@ -218,7 +218,7 @@
 												</tr>
 											{% endif %}
 
-											{% if is_granted('ROLE_CREATOR') %}
+											{% if is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') %}
 												<tr>
 													<td colspan="4">
 														<a href="{{ path('recipe', { slug: orderelement.recipesubscription.recipedate.recipe.slug }) }}" class="btn btn-primary btn-sm">

@@ -24,7 +24,7 @@
 					<td>{{ recipeDate.reference }}</td>
                     <td>
 						{{ recipeDate.recipe.name }} 
-						{{ recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+						{{ recipeDate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
 					</td>
                     {% if is_granted("ROLE_ADMIN_APPLICATION") %}
                         <td>

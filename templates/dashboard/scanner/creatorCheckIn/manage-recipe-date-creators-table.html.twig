@@ -29,12 +29,12 @@
                         {{ subscription.orderelement.recipesubscription.name }}
                         <br>
                         <span class="text-sm text-dark">
-                            {{ "Bought on"|trans }} {{ subscription.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                            {{ "Bought on"|trans }} {{ subscription.createdAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                         </span>
                     </td>
 					<td>
 						{% if recipe.isScanned %}
-							<span class="badge bg-success-soft" data-toggle="tooltip" title="{{ "Checked In At"|trans ~ " " ~ subscription.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}">
+							<span class="badge bg-success-soft" data-toggle="tooltip" title="{{ "Checked In At"|trans ~ " " ~ subscription.updatedAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}">
 								<i class="bi bi-check"></i>
 								{{ "checked In"|trans }}
 							</span>

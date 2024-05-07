@@ -21,7 +21,7 @@
 					<td>{{ payoutRequest.reference }}</td>
                     <td>
 						{{ payoutRequest.recipeDate.recipe.name }} 
-						{{ payoutRequest.recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+						{{ payoutRequest.recipeDate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
 					</td>
                     {% if is_granted("ROLE_ADMIN_APPLICATION") %}
                         <td>
@@ -35,13 +35,13 @@
                         {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ payoutRequest.recipeDate.getRestaurantPayoutAmount() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}
                     </td>
                     <td class="text-sm">
-                        {{ payoutRequest.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                        {{ payoutRequest.createdAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                     </td>
 					<td>
                         <span class="badge-dot bg-{{ payoutRequest.getStatusClass }} me-1 d-inline-block align-middle"></span>
 						{{ payoutRequest.stringifyStatus|trans }}
                         {% if payoutRequest.status != 0 %}
-                            <i class="bi bi-alarm text-primary ml-1" data-toggle="tooltip" title="{{ "Processed"|trans ~ ": " ~ payoutRequest.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}"></i>
+                            <i class="bi bi-alarm text-primary ml-1" data-toggle="tooltip" title="{{ "Processed"|trans ~ ": " ~ payoutRequest.updatedAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}"></i>
                         {% endif %}
                         {% if payoutRequest.note %}
                             <i class="bi bi-chat-dots text-primary ml-1" data-toggle="tooltip" title="{{ "Note"|trans ~ ": " ~ payoutRequest.note }}"></i>

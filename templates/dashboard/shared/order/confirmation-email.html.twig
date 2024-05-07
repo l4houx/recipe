@@ -103,7 +103,7 @@
                                                 <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                                                     {{ "This email is sent as a confirmation of your order"|trans }} 
                                                     <a href="{{ absolute_url(path('dashboard_creator_order_details', { reference: order.reference })) }}" target="_blank">#{{ order.reference }}</a> {{ "placed on"|trans }} 
-                                                    {{ order.payment.details["TIMESTAMP"] is defined ? order.payment.details["TIMESTAMP"] |localizeddate('full', 'non', app.request.locale, date_timezone, date_format) : order.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                                    {{ order.payment.details["TIMESTAMP"] is defined ? order.payment.details["TIMESTAMP"] |localizeddate('full', 'none', app.request.locale, date_timezone, date_format) : order.updatedAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                                                 </td>
                                             </tr>
                                             <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -152,7 +152,7 @@
                                                                         {{ orderElement.recipesubscription.recipedate.recipe.title }}
                                                                     </p>
                                                                     <p>
-                                                                        {{ "Date"|trans }}: {{ orderElement.recipesubscription.recipedate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                                                        {{ "Date"|trans }}: {{ orderElement.recipesubscription.recipedate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                                                                     </p>
                                                                     {% if orderElement.recipesubscription.recipedate.venue %}
                                                                         <p>

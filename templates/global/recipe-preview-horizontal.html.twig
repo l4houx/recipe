@@ -41,7 +41,7 @@
             {% if recipedate is defined %}
                 <dl class="dlist-inline small">
                     <dt>{{ "When"|trans }}</dt>
-                    <dd>{{ recipedate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}</dd>
+                    <dd>{{ recipedate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}</dd>
                 </dl>
                 <dl class="dlist-inline small">
                     <dt>{{ "Where"|trans }}</dt>

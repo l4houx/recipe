@@ -106,7 +106,7 @@
                                             <h6>
                                                 <span class="text-muted">{{ "End date"|trans({}, "messages", locale) }}</span>
                                                 <br>
-                                                {{ orderElement.recipesubscription.recipedate.enddate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                                {{ orderElement.recipesubscription.recipedate.enddate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                                             </h6>
                                             {% endif %}
                                         <h6>
@@ -148,11 +148,11 @@
                                         <h6>
                                         <span class="text-muted">{{ "Order date"|trans({}, "messages", locale) }}</span><br>
                                             {% if order.payment.details["TIMESTAMP"] is defined %}
-                                                {{ order.payment.details["TIMESTAMP"] | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                                {{ order.payment.details["TIMESTAMP"] | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                                             {% elseif order.payment.details["created"] is defined %}
-                                                {{ order.payment.details["created"] | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                                {{ order.payment.details["created"] | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                                             {% else %}
-                                                {{ order.payment.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                                {{ order.payment.updatedAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                                             {% endif %}
                                         </h6>
                                     </td>
@@ -180,7 +180,7 @@
                                             <br><br>
                                             <img src=".{{ asset('assets/img/scanned-subscription-stamp.png') }}" height="150">
                                             <p class="text-center text-muted">
-                                                {{ "This subscription was scanned at %scanDate%"|trans({"%scanDate%": subscription.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }, "messages", locale) }}
+                                                {{ "This subscription was scanned at %scanDate%"|trans({"%scanDate%": subscription.updatedAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }, "messages", locale) }}
                                             </p>
                                         </td>
                                     </tr>

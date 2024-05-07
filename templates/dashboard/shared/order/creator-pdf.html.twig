@@ -22,7 +22,7 @@
 
         {% for recipeDate in recipe.recipedates %}
             <p style="text-align: center;">
-                {{ recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                {{ recipeDate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                 {% if recipeDate.venue %} - {{ recipeDate.venue.translate(locale).name }}{% endif %}
             </p>
             <table width="100%">

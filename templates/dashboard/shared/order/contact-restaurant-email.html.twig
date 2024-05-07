@@ -112,7 +112,7 @@
                                                                         {{ orderElement.recipesubscription.recipedate.recipe.title }}
                                                                     </p>
                                                                     <p>
-                                                                        {{ "Date"|trans }}: {{ orderElement.recipesubscription.recipedate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                                                                        {{ "Date"|trans }}: {{ orderElement.recipesubscription.recipedate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                                                                     </p>
                                                                     {% if orderElement.recipesubscription.recipedate.venue %}
                                                                         <p>

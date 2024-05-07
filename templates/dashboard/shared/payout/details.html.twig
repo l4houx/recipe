@@ -22,14 +22,14 @@
                 <li class="list-group-item">
                     <b>{{ "Requested at"|trans }}</b>
                     <h5 class="mt-1">
-                        {{ payoutRequest.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                        {{ payoutRequest.createdAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                     </h5>
                 </li>
                 {% if payoutRequest.status != 0 %}
                     <li class="list-group-item">
                         <b>{{ "Processed at"|trans }}</b>
                         <h5 class="mt-1">
-                            {{ payoutRequest.updatedAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                            {{ payoutRequest.updatedAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                         </h5>
                     </li>
                 {% endif %}
@@ -61,7 +61,7 @@
                 <li class="list-group-item">
                     <b>{{ "Date"|trans }}</b>
                     <h5 class="mt-1">
-                        {{ payoutRequest.recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                        {{ payoutRequest.recipeDate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                     </h5>
                 </li>
                 <li class="list-group-item">

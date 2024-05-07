@@ -21,7 +21,7 @@
                     <li class="list-group-item">
                         <b>{{ "Date"|trans }}</b>
                         <h5 class="mt-1">
-                            {{ recipeDate.startdate | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                            {{ recipeDate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                         </h5>
                     </li>
                     <li class="list-group-item">
@@ -52,7 +52,7 @@
                     <li class="list-group-item list-group-item-success">
                         <b>
                             {{ "Net sales until"|trans }}
-                            {{ "now" | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
+                            {{ "now" | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
                         </b>
                         <h5 class="mt-1">
                             {{ settings['currency_position'] == 'left' ? settings['currency_symbol'] : '' }}{{ recipeDate.getRestaurantPayoutAmount() }}{{ settings['currency_position'] == 'right' ? settings['currency_symbol'] : '' }}

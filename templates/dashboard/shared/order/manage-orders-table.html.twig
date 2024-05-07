@@ -1,78 +1,121 @@
 <div class="table-responsive overflow-y-hidden">
 	<table class="table mb-0 text-nowrap table-hover table-centered">
-        {% if header is not defined or header != false %}
-            <thead class="table-light">
-                <tr>
-                    <th>{{ 'Reference'|trans }}</th>
-                    <th>{{ 'Restaurant / Recipe / Date / Subscription '|trans }}</th>
-                    {% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_CREATOR") %}
-                        <th>{{'Creator / POS'|trans}}</th>
-                    {% endif %}
-                    <th>{{ 'Order date'|trans }}</th>
-                    <th>{{ 'Status'|trans }}</th>
-                    <th></th>
-                </tr>
-            </thead>
-        {% endif %}
+		{% if header is not defined or header != false %}
+			<thead class="table-light">
+				<tr>
+					<th>{{ 'Reference'|trans }}</th>
+					<th>{{ 'Restaurant / Recipe / Date / Subscription '|trans }}</th>
+					{% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_CREATOR") %}
+						<th>{{'Creator / POS'|trans}}</th>
+					{% endif %}
+					<th>{{ 'Order date'|trans }}</th>
+					<th>{{ 'Status'|trans }}</th>
+					<th></th>
+				</tr>
+			</thead>
+		{% endif %}
 		<tbody>
 			{% for order in rows %}
-                {% if is_granted("ROLE_ADMIN_APPLICATION") %}
-                    {% set link = path('dashboard_admin_order_details', { reference : order.reference }) %}
-                {% elseif is_granted("ROLE_RESTAURANT") %}
-                    {% set link = path('dashboard_restaurant_order_details', { reference : order.reference }) %}
-                {% elseif is_granted("ROLE_POINTOFSALE") %}
-                    {% set link = path('dashboard_pointofsale_order_details', { reference : order.reference }) %}
-                {% elseif is_granted("ROLE_CREATOR") %}
-                    {% set link = path('dashboard_creator_order_details', { reference : order.reference }) %}
-                {% endif %}
+				{% if is_granted("ROLE_ADMIN_APPLICATION") %}
+					{% set link = path('dashboard_admin_order_details', { reference : order.reference }) %}
+				{% elseif is_granted("ROLE_RESTAURANT") %}
+					{% set link = path('dashboard_restaurant_order_details', { reference : order.reference }) %}
+				{% elseif is_granted("ROLE_POINTOFSALE") %}
+					{% set link = path('dashboard_pointofsale_order_details', { reference : order.reference }) %}
+				{% elseif is_granted("ROLE_CREATOR") or is_granted('ROLE_USER') %}
+					{% set link = path('dashboard_creator_order_details', { reference : order.reference }) %}
+				{% endif %}
 				<tr>
-                    <td>
-                        {% if is_granted("ROLE_ADMIN_APPLICATION") %}
-                            <a href="{{ link }}" target="_blank" class="text-inherit">
-                                {{ order.reference }}
-                            </a>
-                        {% elseif is_granted("ROLE_RESTAURANT") %}
-                            <a href="{{ link }}" target="_blank" class="text-inherit">
-                                {{ order.reference }}
-                            </a>
-                        {% elseif is_granted("ROLE_POINTOFSALE") %}
-                            <a href="{{ link }}" target="_blank" class="text-inherit">
-                                {{ order.reference }}
-                            </a>
-                        {% elseif is_granted("ROLE_CREATOR") %}
-                            <a href="{{ link }}" target="_blank" class="text-inherit">
-                                {{ order.reference }}
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-
-                    </td>
-                    {% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_CREATOR") %}
-                        <td>
-                            {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                                <span title="{{ "User information"|trans }}" data-toggle="tooltip" data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_admin_user_information', { slug : order.user.slug }) }}" class="ajax-loading">{% include "global/user-avatar.html.twig" with { user: order.user } %} 
-                                    {{ order.user.getCrossRoleName }}
-                                </span>
-                            {% else %}
-                                {% include "global/user-avatar.html.twig" with { user: order.user } %}
-                                {{ order.user.getCrossRoleName }}
-                            {% endif %}
-                        </td>
-                    {% endif %}
-                    <td>
-                        {{ order.createdAt | localizeddate('full', 'non', app.request.locale, date_timezone, date_format) }}
-                    </td>
-                    <td>
-                        <span class="badge bg-{{ order.getStatusClass }}-soft">{{ order.stringifyStatus|trans }}</span>
-                        {% if not is_granted("ROLE_CREATOR") %}
-                            {% if order.deletedAt %}
-                                <span class="badge bg-danger-soft">
-                                    <i class="bi bi-alarm"></i> {{ "Deleted"|trans }}
-                                </span>
-                            {% endif %}
-                        {% endif %}
-                    </td>
+					<td>
+						{% if is_granted("ROLE_ADMIN_APPLICATION") %}
+							<a href="{{ link }}" target="_blank" class="text-inherit">
+								{{ order.reference }}
+							</a>
+						{% elseif is_granted("ROLE_RESTAURANT") %}
+							<a href="{{ link }}" target="_blank" class="text-inherit">
+								{{ order.reference }}
+							</a>
+						{% elseif is_granted("ROLE_POINTOFSALE") %}
+							<a href="{{ link }}" target="_blank" class="text-inherit">
+								{{ order.reference }}
+							</a>
+						{% elseif is_granted("ROLE_CREATOR") or is_granted('ROLE_USER') %}
+							<a href="{{ link }}" target="_blank" class="text-inherit">
+								{{ order.reference }}
+							</a>
+						{% endif %}
+					</td>
+					<td>
+						<ul class="p-0">
+							{% for orderelement in order.orderelements %}
+								{% if is_granted('ROLE_ADMIN_APPLICATION') or (is_granted('ROLE_RESTAURANT') and orderelement.belongsToRestaurant(app.user.restaurant.slug)) or is_granted('ROLE_POINTOFSALE') or is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') %}
+									{% if (not app.request.get('recipe') or app.request.get('recipe') == orderelement.recipesubscription.recipedate.recipe.slug) and (not app.request.get('recipedate') or app.request.get('recipedate') == orderelement.recipesubscription.recipedate.reference) and (not app.request.get('recipesubscription') or app.request.get('recipesubscription') == orderelement.recipesubscription.reference) and (not app.request.get('restaurant') or app.request.get('restaurant') == orderelement.recipesubscription.recipedate.recipe.restaurant.slug) %}
+										<li>
+											{% if is_granted("ROLE_ADMIN_APPLICATION") or is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') %}
+												<a href="{{ path('restaurant', { slug: orderelement.recipesubscription.recipedate.recipe.restaurant.slug }) }}">
+													{{ orderelement.recipesubscription.recipedate.recipe.restaurant.name }}
+												</a>
+												<i class="bi bi-chevron-{{ app.request.locale == " ar" ? " left" : " right" }} fa-sm"></i>
+											{% endif %}
+											<a href="{{ path('recipe', { slug: orderelement.recipesubscription.recipedate.recipe.slug }) }}">{{ orderelement.recipesubscription.recipedate.recipe.name }}</a>
+                                            <i class="bi bi-chevron-{{ app.request.locale == " ar" ? " left" : " right" }} fa-sm"></i>
+											{{ orderelement.recipesubscription.recipedate.startdate | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
+											<i class="bi bi-chevron-{{ app.request.locale == " ar" ? " left" : " right" }} fa-sm"></i>
+											{{ orderelement.recipesubscription.name }}
+											<br>
+											<small>
+												<strong>
+													{{ orderelement.quantity }}
+													{{ orderelement.quantity > 1 ? "subscriptions"|trans : "subscription"|trans }}
+												</strong>
+											</small>
+											{% if order.status == 0 %}
+												{% for subscriptionReservation in orderelement.subscriptionsReservations  %}
+                                                    {% if not subscriptionReservation.isExpired %}
+                                                        {% set dateInterval = subscriptionReservation.expiresAt | date_modify("+"~ services.getSetting('checkout_timeleft') ~" second").diff(date("now")) %}
+                                                        {% set secondsLeft = dateInterval | date("%i") * 60 + dateInterval|date("%s") %}
+                                                        {% if secondsLeft > 0 %}
+                                                            <span class="badge bg-warning">
+                                                                <i class="bi bi-hourglass-split"></i>
+                                                                <span class="checkout-timer" data-seconds-left="{{secondsLeft}}"></span>
+                                                                {{ "left before subscriptions are released"|trans }}
+                                                            </span>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+											{% endif %}
+										</li>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</td>
+					{% if not is_granted("ROLE_POINTOFSALE") and not is_granted("ROLE_CREATOR") %}
+						<td>
+							{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+								<span title="{{ "User information"|trans }}" data-toggle="tooltip" data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_admin_user_information', { slug : order.user.slug }) }}" class="ajax-loading">{% include "global/user-avatar.html.twig" with { user: order.user } %}
+									{{ order.user.getCrossRoleName }}
+								</span>
+							{% else %}
+								{% include "global/user-avatar.html.twig" with { user: order.user } %}
+								{{ order.user.getCrossRoleName }}
+							{% endif %}
+						</td>
+					{% endif %}
+					<td>
+						{{ order.createdAt | localizeddate('full', 'none', app.request.locale, date_timezone, date_format) }}
+					</td>
+					<td>
+						<span class="badge bg-{{ order.getStatusClass }}-soft">{{ order.stringifyStatus|trans }}</span>
+						{% if not is_granted("ROLE_CREATOR") %}
+							{% if order.deletedAt %}
+								<span class="badge bg-danger-soft">
+									<i class="bi bi-alarm"></i>
+									{{ "Deleted"|trans }}
+								</span>
+							{% endif %}
+						{% endif %}
+					</td>
 					<td>
 						<div class="dropdown dropstart">
 							<a class="btn-icon btn btn-ghost btn-sm rounded-circle" href="#" role="button" id="Dropdown1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -80,61 +123,51 @@
 							</a>
 							<div class="dropdown-menu" aria-labelledby="Dropdown1" style="">
 								<span class="dropdown-header">{{ 'Settings'|trans }}</span>
-                                {% if order.status == 1 %}
-                                    <a class="dropdown-item" href="{{ path('dashboard_subscriptions_print', { reference: order.reference }) }}">
-                                        <i class="bi bi-eye dropdown-item-icon"></i>
-                                        {{ 'Print subscriptions'|trans }}
-                                    </a>
-                                {% endif %}
-                                {% if order.status == -2 or order.status == 1 %}
+								{% if order.status == 1 %}
+									<a class="dropdown-item" href="{{ path('dashboard_subscriptions_print', { reference: order.reference }) }}">
+										<i class="bi bi-eye dropdown-item-icon"></i>
+										{{ 'Print subscriptions'|trans }}
+									</a>
+								{% endif %}
+								{% if order.status == -2 or order.status == 1 %}{% endif %}
+								{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+									<a class="dropdown-item" href="{{ link }}">
+										<i class="bi bi-file-invoice dropdown-item-icon"></i>
+										{{ 'Details'|trans }}
+									</a>
+									{% if order.status == 1 %}{% endif %}
+									{% if order.status == 0 or order.status == 1 %}{% endif %}
+									{% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}{% endif %}
+									{% if order.deletedAt %}
 
-                                {% endif %}
-                                {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                                    <a class="dropdown-item" href="{{ link }}">
-                                        <i class="bi bi-file-invoice dropdown-item-icon"></i>
-                                        {{ 'Details'|trans }}
-                                    </a>
-                                    {% if order.status == 1 %}
+										{% else %}
 
-                                    {% endif %}
-                                    {% if order.status == 0 or order.status == 1 %}
-
-                                    {% endif %}
-                                    {% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}
-
-                                    {% endif %}
-                                    {% if order.deletedAt %}
-
-                                    {% else %}
-
-                                    {% endif %}
-                                {% elseif is_granted("ROLE_RESTAURANT") %}
-                                    <a class="dropdown-item" href="{{ link }}">
-                                        <i class="bi bi-file-invoice dropdown-item-icon"></i>
-                                        {{ 'Details'|trans }}
-                                    </a>
-                                    {% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}
-
-                                    {% endif %}
-                                {% elseif is_granted("ROLE_POINTOFSALE") %}
-                                    <a class="dropdown-item" href="{{ link }}">
-                                        <i class="bi bi-file-invoice dropdown-item-icon"></i>
-                                        {{ 'Details'|trans }}
-                                    </a>
-                                {% elseif is_granted("ROLE_CREATOR") %}
-                                    <a class="dropdown-item" href="{{ link }}">
-                                        <i class="bi bi-file-invoice dropdown-item-icon"></i>
-                                        {{ 'Details'|trans }}
-                                    </a>
-                                    {% if not order.deletedAt %}
-                                        {% if order.status == 0 %}
-                                            <a class="dropdown-item" href="{{ path('dashboard_creator_checkout', { orderReference : order.reference }) }}">
-                                                <i class="bi bi-money-check dropdown-item-icon"></i>
-                                                {{ 'Checkout'|trans }}
-                                            </a>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endif %}
+									{% endif %}
+								{% elseif is_granted("ROLE_RESTAURANT") %}
+									<a class="dropdown-item" href="{{ link }}">
+										<i class="bi bi-file-invoice dropdown-item-icon"></i>
+										{{ 'Details'|trans }}
+									</a>
+									{% if order.status == 0 and not order.deletedAt and order.paymentGateway and order.paymentGateway.factoryName == "offline" %}{% endif %}
+								{% elseif is_granted("ROLE_POINTOFSALE") %}
+									<a class="dropdown-item" href="{{ link }}">
+										<i class="bi bi-file-invoice dropdown-item-icon"></i>
+										{{ 'Details'|trans }}
+									</a>
+								{% elseif is_granted("ROLE_CREATOR") %}
+									<a class="dropdown-item" href="{{ link }}">
+										<i class="bi bi-file-invoice dropdown-item-icon"></i>
+										{{ 'Details'|trans }}
+									</a>
+									{% if not order.deletedAt %}
+										{% if order.status == 0 %}
+											<a class="dropdown-item" href="{{ path('dashboard_creator_checkout', { orderReference : order.reference }) }}">
+												<i class="bi bi-money-check dropdown-item-icon"></i>
+												{{ 'Checkout'|trans }}
+											</a>
+										{% endif %}
+									{% endif %}
+								{% endif %}
 							</div>
 						</div>
 					</td>
@@ -148,13 +181,101 @@
 </div>
 
 {% for order in rows %}
-    {% if is_granted('ROLE_RESTAURANT') and not order.deletedAt %}
-
-    {% endif %}
-    {% if is_granted('ROLE_CREATOR') and not order.deletedAt %}
-
-    {% endif %}
-    {% if order.status == -2 or order.status == 1 %}
-
-    {% endif %}
+	{% if is_granted('ROLE_RESTAURANT') and not order.deletedAt %}
+		<div class="modal fade" id="order-{{ order.reference }}-contactCreator" tabindex="-1" role="dialog" aria-labelledby="order-{{ order.reference }}-contactCreator" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="order-{{ order.reference }}-contactCreator">
+							{{ "Order"|trans }}
+							#{{ order.reference }}:
+							{{ "Contact the creator"|trans }}
+						</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form action="{{ path('dashboard_restaurant_order_contactCreator', {reference: order.reference}) }}" method="POST">
+						<div class="modal-body">
+							<div class="mb-3">
+								<label for="message" class="col-form-label required">{{ "Message"|trans }}</label>
+								<textarea class="form-control" name="message" id="message" rows="10" required></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
+							<button type="button" class="btn btn-primary">
+								<i class="bi bi-envelope"></i>
+								{{ "Send"|trans }}
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	{% if is_granted('ROLE_CREATOR') and not order.deletedAt %}
+		<div class="modal fade" id="order-{{ order.reference }}-contactRestaurant" tabindex="-1" role="dialog" aria-labelledby="order-{{ order.reference }}-contactRestaurant" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="order-{{ order.reference }}-contactRestaurant">
+							{{ "Order"|trans }}
+							#{{ order.reference }}:
+							{{ "Contact the restaurant"|trans }}
+						</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form action="{{ path('dashboard_creator_order_contactRestaurant', {reference: order.reference}) }}" method="POST">
+						<div class="modal-body">
+							<div class="mb-3">
+								<label for="message" class="col-form-label required">{{ "Message"|trans }}</label>
+								<textarea class="form-control" name="message" id="message" rows="10" required></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
+							<button type="button" class="btn btn-primary">
+								<i class="bi bi-envelope"></i>
+								{{ "Send"|trans }}
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	{% if order.status == -2 or order.status == 1 %}
+		<div class="modal fade" id="order-{{ order.reference }}-payment-details" tabindex="-1" role="dialog" aria-labelledby="order-{{ order.reference }}-payment-details" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="order-{{ order.reference }}-payment-details">
+							{{ "Order payment details"|trans }}
+							-
+							{{ order.reference }}
+						</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p class="mb-3 text-center">
+							<img src="{{ asset(order.paymentgateway.getLogoPath) }}" class="rounded img-4by3-xs">
+						</p>
+						{% if order.payment.details %}
+							{{ order.payment.details | json_encode(constant('JSON_PRETTY_PRINT')) | nl2br }}
+						{% else %}
+							{{ "N/A"|trans }}
+						{% endif %}
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ "Close"|trans }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
 {% endfor %}
