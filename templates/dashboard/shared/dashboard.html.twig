@@ -3,12 +3,27 @@
 {% set pagetitle = 'My dashboard'|trans %}
 {% block title pagetitle %}
 
+{% block breadcrumb %}
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-12">
+			<div class="border-bottom pb-3 mb-3 d-lg-flex justify-content-between align-items-center">
+				<div class="mb-3 mb-lg-0">
+					<h1 class="mb-0 h2 fw-bold">{{ pagetitle }}</h1>
+				</div>
+				<div class="d-flex">
+					<a href="{{ path('dashboard_creator_account_index') }}" class="btn btn-primary">{{ 'My profile'|trans }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
 {% block content %}
 	{% if hasActivity %}
 		<div class="row">
 			{#  
 			{% for status in statuses | sort() %}
-				<div class="col-lg-4 col-md-12 col-12">
+				<div class="col-xl-3 col-lg-6 col-md-12 col-12">
 					<div class="card mb-4">
 						<div class="p-4">
 							<span class="fs-6 text-uppercase fw-semibold">{{ 'Status'|trans }}</span>
@@ -22,7 +37,7 @@
 				</div>
 			{% endfor %}
 			{% for level in levels | sort() %}
-				<div class="col-lg-4 col-md-12 col-12">
+				<div class="col-xl-3 col-lg-6 col-md-12 col-12">
 					<div class="card mb-4">
 						<div class="p-4">
 							<span class="fs-6 text-uppercase fw-semibold">{{ 'Level'|trans }}</span>
@@ -36,7 +51,7 @@
 				</div>
 			{% endfor %}
 			#}
-			<div class="col-lg-4 col-md-12 col-12">
+			<div class="col-xl-3 col-lg-6 col-md-12 col-12">
 				<div class="card mb-4">
 					<div class="p-4">
 						<span class="fs-6 text-uppercase fw-semibold">{{ 'Recipes Rating'|trans }}</span>
@@ -48,7 +63,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4 col-md-12 col-12">
+			<div class="col-xl-3 col-lg-6 col-md-12 col-12">
 				<div class="card mb-4">
 					<div class="p-4">
 						<span class="fs-6 text-uppercase fw-semibold">{{ 'Invoices'|trans }}</span>
@@ -60,7 +75,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4 col-md-12 col-12">
+			<div class="col-xl-3 col-lg-6 col-md-12 col-12">
 				<div class="card mb-4">
 					<div class="p-4">
 						<span class="fs-6 text-uppercase fw-semibold">{{ 'Recipes'|trans }}</span>
@@ -73,36 +88,41 @@
 				</div>
 			</div>
 		</div>
-        {% if lastRevises is not empty %}
-            <div class="card mb-4">
-				<div class="d-lg-flex align-items-center justify-content-between card-header">
-					<div class="mb-3 mb-lg-0">
-						<h3 class="mb-0">{{ 'My suggested changes'|trans }}</h3>
-						<span></span>
-					</div>
-					<div>
-						<a href="{{ path('dashboard_revise_index') }}" class="btn btn-outline-primary btn-sm">
-							{{ 'View all my suggestions'|trans }}
-						</a>
+		<div class="row">
+			{% if lastRevises is not empty %}
+				<div class="col-xl-6 col-lg-12 col-md-12 col-12 mb-4">
+					<div class="card h-100">
+						<div class="d-flex align-items-center justify-content-between card-header-height card-header">
+							<h4 class="mb-0">{{ 'My suggested changes'|trans }}</h4>
+							<a href="{{ path('dashboard_revise_index') }}" class="btn btn-outline-secondary btn-sm">
+								{{ 'View all'|trans }}
+							</a>
+						</div>
+						<div class="card-body">
+							{% include "dashboard/shared/content/manage-revises-table.html.twig" with {rows: lastRevises, header: false} %}
+						</div>
 					</div>
 				</div>
-                {% include "dashboard/shared/content/manage-revises-table.html.twig" with {rows: lastRevises, header: false} %}
-            </div>
-        {% endif %}
+			{% endif %}
+		</div>
 	{% else %}
-        <div class="card border-0">
-            <div class="card-body p-10">
-                <div class="text-center">
-                    <img src="{{ asset('images/svg/survey-img.svg') }}" alt="welcome" class="img-fluid">
-                    <div class="px-lg-8">
-                        <h1>{{ 'Welcome !'|trans }} {{ user.username }}</h1>
-                        <p class="mb-0">
-                            {{ 'Post all your favorite recipes here, so that as many people as possible can benefit from them.'|trans }}
-                        </p>
-                        <a href="{{ path('dashboard_restaurant_recipe_new') }}" class="btn btn-primary mt-4">{{ 'Create'|trans }}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="row">
+			<div class="col-xl-4 col-lg-12 col-md-12 col-12 mb-4">
+				<div class="card border-0 h-100">
+					<div class="card-body p-10">
+						<div class="text-center">
+							<img src="{{ asset('images/svg/survey-img.svg') }}" alt="welcome" class="img-fluid">
+							<div class="px-lg-8">
+								<h1>{{ 'Welcome !'|trans }} {{ user.username }}</h1>
+								<p class="mb-0">
+									{{ 'Post all your favorite recipes here, so that as many people as possible can benefit from them.'|trans }}
+								</p>
+								<a href="{{ path('dashboard_restaurant_recipe_new') }}" class="btn btn-primary mt-4">{{ 'Create'|trans }}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	{% endif %}
 {% endblock %}

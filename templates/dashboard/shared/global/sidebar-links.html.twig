@@ -18,7 +18,7 @@
                         {% elseif is_granted("ROLE_SCANNER") %}
                             <i class="bi bi-calendar-date nav-icon"></i>
                             {{ 'Recipes list'|trans }}
-                        {% elseif is_granted("ROLE_ADMIN_APPLICATION") %}
+                        {% elseif is_granted("ROLE_ADMIN_APPLICATION") or is_granted('ROLE_ADMIN') %}
                             <i class="bi bi-speedometer nav-icon"></i>
                             {{ 'Dashboard'|trans }}
                         {% elseif is_granted("ROLE_RESTAURANT") %}
@@ -28,7 +28,7 @@
                     </a>
                 </li>
             {% endif %}
-            {% if is_granted('ROLE_CREATOR') %}
+            {% if is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') %}
                 <li class="nav-item {% if routename == "dashboard_creator_account_dashboard" %}active{% endif %}">
                     <a class="nav-link" href="{{ path('dashboard_creator_account_dashboard') }}">
                         <i class="bi bi-speedometer nav-icon"></i>
@@ -53,8 +53,8 @@
                         {{ 'Following'|trans }}
                     </a>
                 </li>
-                <li class="nav-item {% if routename == "dashboard_creator_orders" or routename == "dashboard_creator_order_details" %}active{% endif %}">
-                    <a class="nav-link" href="{{ path('dashboard_creator_orders') }}">
+                <li class="nav-item">
+                    <a class="nav-link {% if routename == "dashboard_creator_orders" or routename == "dashboard_creator_order_details" %}active{% endif %}" href="{{ path('dashboard_creator_orders') }}">
                         <i class="bi bi-ticket nav-icon"></i>
                         {{ 'My subscriptions'|trans }}
                     </a>
@@ -179,7 +179,7 @@
         </ul>
         <span class="navbar-header">{{ 'Account settings'|trans }}</span>
         <ul class="list-unstyled ms-n2 mb-0">
-            {% if is_granted('ROLE_CREATOR') %}
+            {% if is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') %}
                 {% if app.user.facebookId is null and app.user.googleId is null %}
                     <li class="nav-item {% if routename == "dashboard_creator_account_index" %}active{% endif %}">
                         <a class="nav-link" href="{{ path('dashboard_creator_account_index') }}">
@@ -195,13 +195,13 @@
                     </li>
                 {% endif %}
             {% endif %}
+            {#
             <li class="nav-item {% if routename == "dashboard_creator_account_social_profiles" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_creator_account_social_profiles') }}">
                     <i class="bi bi-arrow-clockwise nav-icon"></i>
                     {{ 'Social profiles'|trans }}
                 </a>
             </li>
-            {#  
             <li class="nav-item {% if routename == "dashboard_account_profile" %}active{% endif %}">
                 <a class="nav-link" href="{{ path('dashboard_account_profile') }}">
                     <i class="bi bi-person nav-icon"></i>
@@ -235,6 +235,13 @@
             </li>
             {% if is_granted('IS_IMPERSONATOR') %}
                 <li class="nav-item">
+                    <a href="{{ impersonation_exit_path(path('home')) }}" class="nav-link">
+                        <i class="bi bi-power nav-icon"></i>
+                        {{ 'Sign out'|trans }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
                     <a href="#" onclick="event.preventDefault(); document.getElementById('js-logout-form').submit();" class="nav-link">
                         <i class="bi bi-power nav-icon"></i>
                         {{ 'Sign out'|trans }}
@@ -242,13 +249,6 @@
                     <form id="js-logout-form" action="{{ path('logout') }}" method="POST" style="display: none;">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                     </form>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a href="{{ impersonation_exit_path(path('home')) }}" class="nav-link">
-                        <i class="bi bi-power nav-icon"></i>
-                        {{ 'Sign out'|trans }}
-                    </a>
                 </li>
             {% endif %}
         </ul>

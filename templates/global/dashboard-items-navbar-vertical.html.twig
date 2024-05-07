@@ -1,0 +1,29 @@
+<nav class="navbar-vertical navbar">
+	<div class="vh-100 simplebar-scrollable-y" data-simplebar="init">
+		<div class="simplebar-wrapper">
+			<div class="simplebar-height-auto-observer-wrapper">
+				<div class="simplebar-height-auto-observer"></div>
+			</div>
+			<div class="simplebar-mask">
+				<div class="simplebar-offset">
+					<div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content">
+						<div class="simplebar-content">
+							<a class="navbar-brand" href="{{ path('home') }}">
+								{# <img src="{{ asset(settings.getAppLayoutSettings.getLogoPath) }}" alt="{{ website_name }}"> #}
+								{{ website_name }}
+							</a>
+							{% include "global/dashboard-navbar.html.twig" %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="simplebar-placeholder"></div>
+		</div>
+		<div class="simplebar-track simplebar-horizontal">
+			<div class="simplebar-scrollbar"></div>
+		</div>
+		<div class="simplebar-track simplebar-vertical">
+			<div class="simplebar-scrollbar"></div>
+		</div>
+	</div>
+</nav>
