@@ -11,9 +11,11 @@
                 {% set breadcrumb = [{ "dashboard_main": ('Dashboard' | trans), "dashboard_admin_post_index": 'Manage posts'|trans, "current":(pagetitle) }] %}
                 {% include "global/dashboard-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_post_index') }}" class="btn btn-outline-secondary me-2">
-                        {{ 'Return to list'|trans }}
-                    </a>
+                    {% if is_granted('ROLE_VERIFIED') %}
+                        <a href="{{ path('dashboard_admin_post_index') }}" class="btn btn-outline-secondary me-2">
+                            {{ 'Return to list'|trans }}
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -21,8 +23,10 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-xl-9 col-lg-8 col-md-12 col-12">
-        {{ include('dashboard/admin/post/articles/_form.html.twig') }}
+    <div class="row">
+        <div class="col-xl-9 col-lg-8 col-md-12 col-12">
+            {{ include('dashboard/admin/post/articles/_form.html.twig') }}
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-12 col-12"></div>
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-12 col-12"></div>
 {% endblock %}

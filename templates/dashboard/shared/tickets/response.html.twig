@@ -1,92 +1,97 @@
 {% extends 'dashboard.html.twig' %}
 
-{% set pagetitle = 'My responses'|trans %}
+{% if is_granted('ROLE_ADMIN_APPLICATION') %}
+    {% set pagetitle = 'Manage responses'|trans %}
+{% elseif is_granted('ROLE_VERIFIED') or is_granted('ROLE_USER') or not is_granted('ROLE_CREATOR') %}
+    {% set pagetitle = 'My responses'|trans %}
+{% endif %}
 {% block title pagetitle %}
 
-{% block content %}
-    <div class="card mb-4">
-        <div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
-            <div class="mb-3 mb-lg-0">
-                <h3 class="mb-0">{{ pagetitle }}</h3>
-                <span></span>
-            </div>
-            {% if is_granted('ROLE_VERIFIED') %}
-                <div>
-                    <a href="{{ path('dashboard_ticket_index') }}" class="btn btn-outline-primary btn-sm">
-                        {{ 'My tickets'|trans }}
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-        <div class="card-body">
-            <form class="row gx-3">
-                <div class="col-lg-9 col-md-7 col-12 mb-lg-0 mb-2">
-                    <input type="search" class="form-control" placeholder="{{ 'Search...'|trans }}">
-                </div>
-                <div class="col-lg-3 col-md-5 col-12">
-                    <select class="form-select">
-                        <option value="">Date Created</option>
-                        <option value="Newest">Newest</option>
-                        <option value="High Rated">High Rated</option>
-                        <option value="Law Rated">Law Rated</option>
-                        <option value="High Earned">High Earned</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-12">
-                    <div class="accordion accordion-flush" id="accordionTicket">
-                        {% include "dashboard/shared/tickets/manage-tickets.html.twig" with {ticket: ticket} %}
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% if is_granted('ROLE_ADMIN_APPLICATION') or is_granted('ROLE_ADMIN') %}
+                    {% set breadcrumb = [{ "dashboard_main": ('Dashboard'|trans), "dashboard_admin_ticket_index": ('Manage tickets'|trans), "current":(pagetitle) }] %}
+                {% elseif is_granted('ROLE_VERIFIED') or is_granted('ROLE_USER') or not is_granted('ROLE_CREATOR') %}
+                    {% set breadcrumb = [{ "dashboard_main": ('Dashboard'|trans), "dashboard_creator_ticket_index": ('My tickets'|trans), "current":(pagetitle) }] %}
+                {% endif %}
+                {% include "global/dashboard-breadcrumb.html.twig" with breadcrumb %}
+                {% if is_granted('ROLE_VERIFIED') %}
+                    <div>
+                        <a href="{{ path('dashboard_creator_ticket_new') }}" class="btn btn-primary me-2">
+                            {{ 'Create'|trans }}
+                        </a>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-    <div class="card mb-4">
-        <div class="card-body">
-            <div>
-                <div class="accordion accordion-flush" id="accordionResponse">
-                    {% for response in responses %}
-                        <div class="border p-3 rounded-3 mb-2" id="heading-{{ response.id }}">
-                            <h3 class="mb-0 fs-4">
-                                <a href="#" class="d-flex align-items-center text-inherit {{ (response.id ) ? 'active' : '' }}" data-bs-toggle="collapse" data-bs-target="#collapse-{{ response.id }}" aria-expanded="false" aria-controls="#collapse-{{ response.id }}">
-                                    <span class="me-auto">
-                                        <h5>{{ 'Subject'|trans }} {{ response.ticket.subject }}?</h5>
-                                        {% if response.ticket.application %}
-                                            <h6>{{ 'Application'|trans }} {{ response.ticket.application.name }}</h6>
-                                        {% endif %}
-                                    </span>
-                                    <span class="collapse-toggle ms-4">
-                                        <i class="bi bi-chevron-down"></i>
-                                    </span>
-                                </a>
-                            </h3>
-                            <div id="collapse-{{ response.id }}" class="collapse" aria-labelledby="heading-{{ response.id }}" data-bs-parent="#accordionResponse">
-                                <div class="d-flex align-items-center mb-4 mb-lg-0 {{ response.user == app.user ? 'a-moi' }}">
-                                    {% include "global/user-avatar.html.twig" with { user: response.user, type: "xl" } %}
-                                    <div class="ms-3">
-                                        <div class="lh-1">
-                                            <h2 class="mb-0">@{{ response.author ?? ( response.user.firstName ~ ' ' ~ response.user.name ) }}</h2>
-                                            <p class="mb-0 d-block">{{ response.createdAt | date('d/m/Y H:i') }}</p>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-1">
+                        {# {{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }} #}
+                    </h4>
+                    <p class="mb-0"></p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-12">
+                            <div class="accordion accordion-flush" id="accordionTicket">
+                                {% include "dashboard/shared/tickets/manage-tickets.html.twig" with {ticket: ticket} %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="accordion accordion-flush" id="accordionResponse">
+                            {% for response in responses %}
+                                <div class="border p-3 rounded-3 mb-2" id="heading-{{ response.id }}">
+                                    <h3 class="mb-0 fs-4">
+                                        <a href="#" class="d-flex align-items-center text-inherit {{ (response.id ) ? 'active' : '' }}" data-bs-toggle="collapse" data-bs-target="#collapse-{{ response.id }}" aria-expanded="false" aria-controls="#collapse-{{ response.id }}">
+                                            <span class="me-auto">
+                                                <h5>{{ 'Subject'|trans }} {{ response.ticket.subject }}?</h5>
+                                                {% if response.ticket.application %}
+                                                    <h6>{{ 'Application'|trans }} {{ response.ticket.application.name }}</h6>
+                                                {% endif %}
+                                            </span>
+                                            <span class="collapse-toggle ms-4">
+                                                <i class="bi bi-chevron-down"></i>
+                                            </span>
+                                        </a>
+                                    </h3>
+                                    <div id="collapse-{{ response.id }}" class="collapse" aria-labelledby="heading-{{ response.id }}" data-bs-parent="#accordionResponse">
+                                        <div class="d-flex align-items-center mb-4 mb-lg-0 {{ response.user == app.user ? 'a-moi' }}">
+                                            {% include "global/user-avatar.html.twig" with { user: response.user, type: "lg" } %}
+                                            <div class="ms-3">
+                                                <div class="lh-1">
+                                                    <h2 class="mb-0">@{{ response.author ?? ( response.user.firstName ~ ' ' ~ response.user.name ) }}</h2>
+                                                    <p class="mb-0 d-block">{{ response.createdAt | date('d/m/Y H:i') }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 mb-lg-0 pt-2">
+                                            <p class="mb-0">{{ response.content | html_markdown }}</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-2 mb-lg-0 pt-2">
-                                    <p class="mb-0">{{ response.content | nl2br }}</p>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                    </div>
+                    <hr class="my-5">
+                    <div>
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+                            {{ form_errors(form) }}
+                            {{ form_widget(form) }}
+                        {{ form_end(form) }}
+                    </div>
                 </div>
-            </div>
-            <hr class="my-5">
-            <div>
-                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
-                    {{ form_errors(form) }}
-                    {{ form_widget(form) }}
-                {{ form_end(form) }}
             </div>
         </div>
     </div>

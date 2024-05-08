@@ -3,83 +3,105 @@
 {% set pagetitle = 'Linked Accounts'|trans %}
 {% block title pagetitle %}
 
+{% block breadcrumb %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-12">
+            <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
+                {% set breadcrumb = [{ "dashboard_main": ('Dashboard' | trans), "dashboard_creator_account_index": ('My account'|trans), "current":(pagetitle) }] %}
+                {% include "global/dashboard-breadcrumb.html.twig" with breadcrumb %}
+                <div>
+                    <a href="{{ path('dashboard_creator_account_change_password') }}" class="btn btn-primary me-2">
+                        {{ 'Change password'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
-	<div class="card">
-		<div class="card-header">
-			<h3 class="mb-2">{{ pagetitle }}</h3>
-			<p class="mb-0">
-                {{ "You can link your social accounts into your %websiteName% accounts &amp; also access your history of linked accounts and manage your accounts in this sections."|trans({"%websiteName%": website_name}) }}
-			</p>
-		</div>
-		<div class="card-body">
-			<div class="mb-5 d-md-flex">
-				<div>
-					<span class="color-facebook me-3 align-text-top">
-						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-facebook" viewbox="0 0 16 16">
-							<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"></path>
-						</svg>
-					</span>
+	<div class="py-6">
+		<div class="row">
+			<div class="offset-xl-3 col-xl-6 col-md-12 col-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="mb-2">{{ pagetitle }}</h3>
+						<p class="mb-0">
+							{{ "You can link your social accounts into your %websiteName% accounts &amp; also access your history of linked accounts and manage your accounts in this sections."|trans({"%websiteName%": website_name}) }}
+						</p>
+					</div>
+					<div class="card-body p-lg-6">
+						<div class="mb-5 d-md-flex">
+							<div>
+								<span class="color-facebook me-3 align-text-top">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-facebook" viewbox="0 0 16 16">
+										<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"></path>
+									</svg>
+								</span>
+							</div>
+							<span>
+								<h4 class="mb-0">{{ 'Facebook'|trans }}</h4>
+								<p>{{ 'Enable one-click login and receive more personalized course recommendations.'|trans }}</p>
+								<a href="{{ path(user.facebookId ? 'oauth_unlink' : 'oauth_connect', {service: 'facebook'}) }}" target="_blank" class="btn btn-dark btn-sm">
+									{{ user.facebookId ? 'Remove'|trans : 'Link'|trans }}
+									{{ 'my Facebook Account'|trans }}
+								</a>
+							</span>
+						</div>
+						<div class="mb-5 d-md-flex border-top pt-5">
+							<div>
+								<span class="color-google me-3 align-text-top">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-google" viewbox="0 0 16 16">
+										<path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"></path>
+									</svg>
+								</span>
+							</div>
+							<span>
+								<h4 class="mb-0">{{ 'Google'|trans }}</h4>
+								<p>{{ 'Enable one-click login and receive more personalized course recommendations.'|trans }}</p>
+								<a href="{{ path(user.googleId ? 'oauth_unlink' : 'oauth_connect', {service: 'google'}) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+								{{ user.googleId ? 'Remove'|trans : 'Link'|trans }}
+								{{ 'my Google Account'|trans }}
+								</a>
+							</span>
+						</div>
+						<div class="mb-5 d-md-flex border-top pt-5">
+							<div>
+								<span class="color-github me-3 align-text-top">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-github" viewbox="0 0 16 16">
+										<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+									</svg>
+								</span>
+							</div>
+							<div>
+								<h4 class="mb-0">{{ 'Github'|trans }}</h4>
+								<p>{{ 'Enable one-click login and receive more personalized course recommendations.'|trans }}</p>
+								<a href="{{ path(user.githubId ? 'oauth_unlink' : 'oauth_connect', {service: 'github'}) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+									{{ user.githubId ? 'Remove'|trans : 'Link'|trans }}
+									{{ 'my GitHub Account'|trans }}
+								</a>
+							</div>
+						</div>
+						<div class="mb-5 d-md-flex border-top pt-5">
+							<div>
+								<span class="color-discord me-3 align-text-top">
+									<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
+										<path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
+									</svg>
+								</span>
+							</div>
+							<span>
+								<h4 class="mb-0">{{ 'Discord'|trans }}</h4>
+								<p>
+									{{ "Link your Discord account to %websiteName% to access the premium room and obtain a special role."|trans({"%websiteName%": website_name}) }}
+								</p>
+								<a href="{{ path('oauth_discord') }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+									{{ user.discordId ? 'Change account'|trans : 'Link your Discord account'|trans }}
+								</a>
+							</span>
+						</div>
+					</div>
 				</div>
-				<span>
-					<h4 class="mb-0">{{ 'Facebook'|trans }}</h4>
-					<p>{{ 'Enable one-click login and receive more personalized course recommendations.'|trans }}</p>
-					<a href="{{ path(user.facebookId ? 'oauth_unlink' : 'oauth_connect', {service: 'facebook'}) }}" target="_blank" class="btn btn-dark btn-sm">
-                        {{ user.facebookId ? 'Remove'|trans : 'Link'|trans }}
-                        {{ 'my Facebook Account'|trans }}
-                    </a>
-				</span>
-			</div>
-			<div class="mb-5 d-md-flex border-top pt-5">
-				<div>
-					<span class="color-google me-3 align-text-top">
-						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-google" viewbox="0 0 16 16">
-							<path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"></path>
-						</svg>
-					</span>
-				</div>
-				<span>
-					<h4 class="mb-0">{{ 'Google'|trans }}</h4>
-					<p>{{ 'Enable one-click login and receive more personalized course recommendations.'|trans }}</p>
-					<a href="{{ path(user.googleId ? 'oauth_unlink' : 'oauth_connect', {service: 'google'}) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
-                    {{ user.googleId ? 'Remove'|trans : 'Link'|trans }}
-                    {{ 'my Google Account'|trans }}
-                    </a>
-				</span>
-			</div>
-			<div class="mb-5 d-md-flex border-top pt-5">
-				<div>
-					<span class="color-github me-3 align-text-top">
-						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-github" viewbox="0 0 16 16">
-							<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
-						</svg>
-					</span>
-				</div>
-				<div>
-					<h4 class="mb-0">{{ 'Github'|trans }}</h4>
-					<p>{{ 'Enable one-click login and receive more personalized course recommendations.'|trans }}</p>
-					<a href="{{ path(user.githubId ? 'oauth_unlink' : 'oauth_connect', {service: 'github'}) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
-                        {{ user.githubId ? 'Remove'|trans : 'Link'|trans }}
-                        {{ 'my GitHub Account'|trans }}
-                    </a>
-				</div>
-			</div>
-			<div class="mb-5 d-md-flex border-top pt-5">
-				<div>
-					<span class="color-discord me-3 align-text-top">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
-                            <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
-                        </svg>
-					</span>
-				</div>
-				<span>
-					<h4 class="mb-0">{{ 'Discord'|trans }}</h4>
-					<p>
-                        {{ "Link your Discord account to %websiteName% to access the premium room and obtain a special role."|trans({"%websiteName%": website_name}) }}
-                    </p>
-					<a href="{{ path('oauth_discord') }}" target="_blank" class="btn btn-outline-secondary btn-sm">
-                        {{ user.discordId ? 'Change account'|trans : 'Link your Discord account'|trans }}
-                    </a>
-				</span>
 			</div>
 		</div>
 	</div>

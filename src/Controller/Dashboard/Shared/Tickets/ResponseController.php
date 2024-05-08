@@ -10,21 +10,24 @@ use App\Controller\BaseController;
 use App\Repository\ResponseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Response as EntityResponse;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[IsGranted(HasRoles::DEFAULT)]
-#[Route(path: '/%website_dashboard_path%/my-responses', name: 'dashboard_response_')]
+#[Route(path: '/%website_dashboard_path%')]
 class ResponseController extends BaseController
 {
-    #[Route(path: '/{id}', name: 'index', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/creator/my-responses/{id}', name: 'dashboard_creator_response_index', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/admin/manage-responses/{id}', name: 'dashboard_admin_response_index', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function index(
         Request $request,
+        Security $security,
         Ticket $ticket,
         TranslatorInterface $translator,
         ResponseRepository $responseRepository,
@@ -44,7 +47,11 @@ class ResponseController extends BaseController
 
                 $this->addFlash('success', $translator->trans('Answer was created successfully.'));
 
-                return $this->redirectToRoute('dashboard_response_index', ['id' => $ticket->getId()]);
+                if ($security->isGranted(HasRoles::ADMIN)) {
+                    return $this->redirectToRoute('dashboard_admin_response_index', ['id' => $ticket->getId()]);
+                } else {
+                    return $this->redirectToRoute('dashboard_creator_response_index', ['id' => $ticket->getId()]);
+                }
             } else {
                 $this->addFlash('danger', $translator->trans('The form contains invalid data'));
             }

@@ -1,4 +1,4 @@
-{% if app.request.attributes.get('_route') == 'dashboard_ticket_index' %}
+{% if app.request.attributes.get('_route') == 'dashboard_creator_ticket_index' or app.request.attributes.get('_route') == 'dashboard_admin_ticket_index' %}
 	{% for ticket in rows %}
 		{{ component('ticket', { 'ticket': ticket, 'hidden': true }) }}
 	{% endfor %}

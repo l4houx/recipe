@@ -271,7 +271,7 @@
 			<i class="nav-icon bi bi-ticket me-2"></i>
 			{{ 'Ticketing'|trans }}
 		</a>
-		<div id="ticket-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_level_index" or routename == "dashboard_admin_level_new" or routename == "dashboard_admin_level_edit" or routename == "dashboard_admin_status_index" or routename == "dashboard_admin_status_new" or routename == "dashboard_admin_status_edit" %}show{% endif %}" data-bs-parent="#sideNavbar">
+		<div id="ticket-submenu-{{random}}" class="collapse {% if routename == "dashboard_admin_level_index" or routename == "dashboard_admin_level_new" or routename == "dashboard_admin_level_edit" or routename == "dashboard_admin_status_index" or routename == "dashboard_admin_status_new" or routename == "dashboard_admin_status_edit" or routename == "dashboard_admin_ticket_index" or routename == "dashboard_admin_ticket_new" or routename == "dashboard_admin_ticket_status" or routename == "dashboard_admin_ticket_level" or routename == "dashboard_admin_ticket_close" or routename == "dashboard_admin_application_index" or routename == "dashboard_admin_application_new" or routename == "dashboard_admin_application_token" or routename == "dashboard_admin_response_index" %}show{% endif %}" data-bs-parent="#sideNavbar">
 			<ul class="nav flex-column">
 				<li class="nav-item">
 					<a class="nav-link {% if routename == "dashboard_admin_level_index" or routename == "dashboard_admin_level_new" or routename == "dashboard_admin_level_edit" %}active{% endif %}" href="{{ path('dashboard_admin_level_index') }}">
@@ -281,6 +281,16 @@
 				<li class="nav-item">
 					<a class="nav-link {% if routename == "dashboard_admin_status_index" or routename == "dashboard_admin_status_new" or routename == "dashboard_admin_status_edit" %}active{% endif %}" href="{{ path('dashboard_admin_status_index') }}">
 						{{ 'Status'|trans }}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {% if routename == "dashboard_admin_ticket_index" or routename == "dashboard_admin_ticket_status" or routename == "dashboard_admin_ticket_level" or routename == "dashboard_admin_response_index" or routename == "dashboard_admin_ticket_close" %}active{% endif %}" href="{{ path('dashboard_admin_ticket_index') }}">
+						{{ 'Manage tickets'|trans }}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {% if routename == "dashboard_admin_application_index" or routename == "dashboard_admin_application_new"  or routename == "dashboard_admin_application_token" %}active{% endif %}" href="{{ path('dashboard_admin_application_index') }}">
+						{{ 'Manage applications'|trans }}
 					</a>
 				</li>
 			</ul>
@@ -467,6 +477,36 @@
 		<a class="nav-link {% if routename == "dashboard_creator_following_index" %}active{% endif %}" href="{{ path('dashboard_creator_following_index') }}">
 			<i class="nav-icon bi bi-folder me-2"></i>
 			{{ 'Following'|trans }}
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link {% if routename == "dashboard_creator_testimonial_index" or routename == "dashboard_creator_testimonial_new"  or routename == "dashboard_testimonial_edit" %}active{% endif %}" href="{{ path('dashboard_creator_testimonial_index') }}">
+			<i class="nav-icon bi bi-star me-2"></i>
+			{{ 'My testimonials'|trans }}
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="">
+			<i class="nav-icon bi bi-credit-card me-2"></i>
+			{{ 'My payments'|trans }}
+		</a>
+	</li>
+	<li class="nav-item {% if routename == "dashboard_invoice_index" or routename == "dashboard_invoice_show" %}active{% endif %}">
+		<a class="nav-link" href="{{ path('dashboard_invoice_index') }}">
+			<i class="nav-icon bi bi-clipboard me-2"></i>
+			{{ 'My invoices'|trans }}
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link {% if routename == "dashboard_creator_ticket_index" or routename == "dashboard_creator_ticket_new"  or routename == "dashboard_creator_ticket_edit" %}active{% endif %}" href="{{ path('dashboard_creator_ticket_index') }}">
+			<i class="nav-icon bi bi-ticket me-2"></i>
+			{{ 'My tickets'|trans }}
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link {% if routename == "dashboard_creator_application_index" or routename == "dashboard_creator_application_new"  or routename == "dashboard_creator_application_token" %}active{% endif %}" href="{{ path('dashboard_creator_application_index') }}">
+			<i class="nav-icon bi bi-app me-2"></i>
+			{{ 'My applications'|trans }}
 		</a>
 	</li>
 	<li class="nav-item">

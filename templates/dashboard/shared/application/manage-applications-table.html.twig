@@ -31,17 +31,31 @@
                             <span class="badge-dot bg-success me-1 d-inline-block align-middle"></span>
                             <strong>{{ "Token OK"|trans }}</strong>
                             <h4 class="mb-1 h5">
-                                <a href="{{ path('dashboard_application_token', { id : application.id }) }}" class="text-inherit">
-                                    {{ "Regenerate a token"|trans }}
-                                </a>
+                                {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                    <a href="{{ path('dashboard_admin_application_token', { id : application.id }) }}" class="text-inherit">
+                                        {{ "Regenerate a token"|trans }}
+                                    </a>
+                                {% elseif is_granted('ROLE_USER') or not is_granted('ROLE_CREATOR') %}
+                                    <a href="{{ path('dashboard_creator_application_token', { id : application.id }) }}" class="text-inherit">
+                                        {{ "Regenerate a token"|trans }}
+                                    </a>
+                                {% endif %}
                             </h4>
                         {% else %}
                             <h4 class="mb-1 h5">
-                                <a href="{{ path('dashboard_application_token', { id : application.id }) }}" class="text-inherit">
-                                    <span class="badge-dot bg-warning me-1 d-inline-block align-middle"></span>
-                                    <strong>{{ "Token NO"|trans }}</strong>
-                                    {{ "Generate a token"|trans }}
-                                </a>
+                                {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                    <a href="{{ path('dashboard_admin_application_token', { id : application.id }) }}" class="text-inherit">
+                                        <span class="badge-dot bg-warning me-1 d-inline-block align-middle"></span>
+                                        <strong>{{ "Token NO"|trans }}</strong>
+                                        {{ "Generate a token"|trans }}
+                                    </a>
+                                {% elseif is_granted('ROLE_USER') or not is_granted('ROLE_CREATOR') %}
+                                    <a href="{{ path('dashboard_creator_application_token', { id : application.id }) }}" class="text-inherit">
+                                        <span class="badge-dot bg-warning me-1 d-inline-block align-middle"></span>
+                                        <strong>{{ "Token NO"|trans }}</strong>
+                                        {{ "Generate a token"|trans }}
+                                    </a>
+                                {% endif %}
                             </h4>
                         {% endif %}
                     </td>

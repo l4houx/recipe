@@ -14,14 +14,16 @@
                 {% set breadcrumb = [{ "dashboard_main": ('Dashboard' | trans), "current":(pagetitle) }] %}
                 {% include "global/dashboard-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                        <a href="{{ path('dashboard_admin_venue_new') }}" class="btn btn-primary me-2">
-                            {{ 'Create'|trans }}
-                        </a>
-                    {% elseif is_granted('ROLE_RESTAURANT')  %}
-                        <a href="{{ path('dashboard_restaurant_venue_new') }}" class="btn btn-primary me-2">
-                            {{ 'Create'|trans }}
-                        </a>
+                    {% if is_granted('ROLE_VERIFIED') %}
+                        {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                            <a href="{{ path('dashboard_admin_venue_new') }}" class="btn btn-primary me-2">
+                                {{ 'Create'|trans }}
+                            </a>
+                        {% elseif is_granted('ROLE_RESTAURANT')  %}
+                            <a href="{{ path('dashboard_restaurant_venue_new') }}" class="btn btn-primary me-2">
+                                {{ 'Create'|trans }}
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -30,66 +32,57 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card mb-4">
-        <div class="d-lg-flex justify-content-between align-items-center card-header border-bottom-0">
-            <div class="mb-3 mb-lg-0">
-                <h3 class="mb-0">{{ pagetitle }}</h3>
-                <span>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</span>
-            </div>
-            {% if is_granted('ROLE_VERIFIED') %}
-                <div>
-                    {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                        <a href="{{ path('dashboard_admin_venue_new') }}" class="btn btn-outline-primary btn-sm">
-                            {{ 'Create'|trans }}
-                        </a>
-                    {% elseif is_granted('ROLE_RESTAURANT')  %}
-                        <a href="{{ path('dashboard_restaurant_venue_new') }}" class="btn btn-outline-primary btn-sm">
-                            {{ 'Create'|trans }}
-                        </a>
-                    {% endif %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-1">
+                        {{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}
+                    </h4>
+                    <p class="mb-0"></p>
                 </div>
-            {% endif %}
+                {% if rows.getTotalItemCount %}
+                    <div class="card-body">
+                        <form class="row mb-4 gx-2">
+                            <div class="col-xl-5 col-lg-7 col-md-3 col-12 mb-2 mb-lg-0">
+                                <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control" placeholder="{{ 'Search...'|trans }}">
+                            </div>
+                            {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                                <div class="col-xl-3 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
+                                    <select class="form-select">
+                                        <option value="all" name="directory">{{ 'All'|trans }}</option>
+                                        <option value="1" name="directory">{{ 'Yes'|trans }}</option>
+                                        <option value="0" name="directory">{{ 'No'|trans }}</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
+                                <select class="form-select">
+                                    <option value="">Rating</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
+                                <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
+                                    <option value="">{{ "Sort by"|trans }}</option>
+                                    <option value="">{{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}</option>
+                                    <option value="">{{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    {% include "dashboard/shared/venue/manage-venues-table.html.twig" with {rows: rows} %}
+                {% else %}
+                    <div class="card-footer">
+                        {% include "global/message.html.twig" with { type: "dark", message: ('No venues found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
-        {% if rows.getTotalItemCount %}
-            <div class="card-body">
-				<form class="row mb-4 gx-2">
-                    <div class="col-xl-5 col-lg-7 col-md-3 col-12 mb-2 mb-lg-0">
-                        <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control" placeholder="{{ 'Search...'|trans }}">
-                    </div>
-                    {% if is_granted('ROLE_ADMIN_APPLICATION') %}
-                        <div class="col-xl-3 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
-                            <select class="form-select">
-                                <option value="all" name="directory">{{ 'All'|trans }}</option>
-                                <option value="1" name="directory">{{ 'Yes'|trans }}</option>
-                                <option value="0" name="directory">{{ 'No'|trans }}</option>
-                            </select>
-                        </div>
-                    {% endif %}
-                    <div class="col-xl-2 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
-                        <select class="form-select">
-                            <option value="">Rating</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                    <div class="col-xl-2 col-lg-2 col-md-3 col-12 mb-2 mb-lg-0">
-                        <select class="form-select" data-placeholder="{{ "Select an option"|trans }}">
-                            <option value="">{{ "Sort by"|trans }}</option>
-                            <option value="">{{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}</option>
-                            <option value="">{{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}</option>
-                        </select>
-                    </div>
-				</form>
-            </div>
-            {% include "dashboard/shared/venue/manage-venues-table.html.twig" with {rows: rows} %}
-        {% else %}
-            <div class="card-footer">
-                {% include "global/message.html.twig" with { type: "dark", message: ('No venues found'|trans), icon: "bi bi-exclamation-circle", class: "my-2" } %}
-            </div>
-        {% endif %}
     </div>
 {% endblock %}
 

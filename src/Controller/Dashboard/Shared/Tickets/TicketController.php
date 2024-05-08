@@ -2,31 +2,31 @@
 
 namespace App\Controller\Dashboard\Shared\Tickets;
 
-use App\Entity\User;
+use App\Controller\BaseController;
 use App\Entity\Level;
 use App\Entity\Status;
 use App\Entity\Ticket;
-use App\Form\TicketFormType;
 use App\Entity\Traits\HasLimit;
 use App\Entity\Traits\HasRoles;
-use App\Controller\BaseController;
+use App\Entity\User;
+use App\Form\TicketFormType;
+use App\Repository\ApplicationRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ApplicationRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted(HasRoles::DEFAULT)]
-#[Route(path: '/%website_dashboard_path%/my-tickets', name: 'dashboard_ticket_')]
+#[Route(path: '/%website_dashboard_path%')]
 class TicketController extends BaseController
 {
     public function __construct(
@@ -39,7 +39,8 @@ class TicketController extends BaseController
     ) {
     }
 
-    #[Route(path: '', name: 'index', methods: ['GET'])]
+    #[Route(path: '/creator/my-tickets', name: 'dashboard_creator_ticket_index', methods: ['GET'])]
+    #[Route(path: '/admin/manage-tickets', name: 'dashboard_admin_ticket_index', methods: ['GET'])]
     public function index(Request $request, #[CurrentUser] ?User $user, PaginatorInterface $paginator): Response
     {
         if (null === $user) {
@@ -65,7 +66,7 @@ class TicketController extends BaseController
         return $this->render('dashboard/shared/tickets/index.html.twig', compact('user', 'rows'));
     }
 
-    #[Route(path: '/new', name: 'new', methods: ['GET', 'POST'])]
+    #[Route(path: '/creator/my-tickets/new', name: 'dashboard_creator_ticket_new', methods: ['GET', 'POST'])]
     public function new(Request $request, #[CurrentUser] ?User $user): Response
     {
         $ticket = new Ticket();
@@ -82,7 +83,11 @@ class TicketController extends BaseController
 
                 $this->addFlash('success', $this->translator->trans('Ticket was created successfully.'));
 
-                return $this->redirectToRoute('dashboard_response_index', ['id' => $ticket->getId()]);
+                if ($this->security->isGranted(HasRoles::ADMIN)) {
+                    return $this->redirectToRoute('dashboard_admin_response_index', ['id' => $ticket->getId()]);
+                } else {
+                    return $this->redirectToRoute('dashboard_creator_response_index', ['id' => $ticket->getId()]);
+                }
             } else {
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
@@ -91,7 +96,8 @@ class TicketController extends BaseController
         return $this->render('dashboard/shared/tickets/new.html.twig', compact('ticket', 'form'));
     }
 
-    #[Route(path: '/status/{id}', name: 'status', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/creator/my-tickets/status/{id}', name: 'dashboard_creator_ticket_status', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/admin/manage-tickets/status/{id}', name: 'dashboard_admin_ticket_status', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function status(Status $status, #[CurrentUser] ?User $user): Response
     {
         if (null === $user) {
@@ -110,7 +116,8 @@ class TicketController extends BaseController
         return $this->render('dashboard/shared/tickets/index.html.twig', compact('tickets'));
     }
 
-    #[Route(path: '/level/{id}', name: 'level', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/creator/my-tickets/level/{id}', name: 'dashboard_creator_ticket_level', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/admin/manage-tickets/level/{id}', name: 'dashboard_admin_ticket_level', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function level(Level $level, #[CurrentUser] ?User $user): Response
     {
         if (null === $user) {
@@ -139,7 +146,8 @@ class TicketController extends BaseController
         return $this->render('dashboard/shared/tickets/index.html.twig', compact('tickets'));
     }
 
-    #[Route(path: '/close/{id}', name: 'close', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/creator/my-tickets/close/{id}', name: 'dashboard_creator_ticket_close', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/admin/manage-tickets/close/{id}', name: 'dashboard_admin_ticket_close', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function close(Ticket $ticket): Response
     {
         $status = $this->statusRepository->findOneBy(['name' => 'Closed']);
@@ -147,6 +155,10 @@ class TicketController extends BaseController
 
         $this->em->flush();
 
-        return $this->redirectToRoute('dashboard_creator_account_dashboard', [], Response::HTTP_SEE_OTHER);
+        if ($this->security->isGranted(HasRoles::ADMIN)) {
+            return $this->redirectToRoute('dashboard_admin_index', [], Response::HTTP_SEE_OTHER);
+        } else {
+            return $this->redirectToRoute('dashboard_creator_account_dashboard', [], Response::HTTP_SEE_OTHER);
+        }
     }
 }
