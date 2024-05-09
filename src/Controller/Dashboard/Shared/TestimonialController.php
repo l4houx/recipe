@@ -11,6 +11,7 @@ use App\Repository\TestimonialRepository;
 use App\Service\SettingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,6 +30,7 @@ class TestimonialController extends BaseController
         private readonly EntityManagerInterface $em,
         private readonly TranslatorInterface $translator,
         private readonly SluggerInterface $slugger,
+        private readonly Security $security,
         private readonly SettingService $settingService
     ) {
     }
@@ -92,7 +94,11 @@ class TestimonialController extends BaseController
                     )
                 );
 
-                return $this->redirectToRoute('dashboard_testimonial_index', [], Response::HTTP_SEE_OTHER);
+                if ($this->security->isGranted(HasRoles::ADMIN)) {
+                    return $this->redirectToRoute('dashboard_admin_testimonial_index', [], Response::HTTP_SEE_OTHER);
+                } else {
+                    return $this->redirectToRoute('dashboard_creator_testimonial_index', [], Response::HTTP_SEE_OTHER);
+                }
             } else {
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }

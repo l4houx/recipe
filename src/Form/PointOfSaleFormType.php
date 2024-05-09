@@ -43,18 +43,19 @@ class PointOfSaleFormType extends AbstractType
                 'type' => PasswordType::class,
                 'mapped' => false,
                 'required' => true,
-                'invalid_message' => t('The password fields must match.'),
-                'options' => ['purify_html' => true, 'toggle' => true],
+                'invalid_message' => t('Password fields must correspond.'),
+                'options' => ['purify_html' => true, 'toggle' => true, 'translation_domain' => 'messages',],
                 'first_options' => ['required' => true, 'label' => t('Password :'), 'constraints' => [
                     new Regex([
                         'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$/',
                         'htmlPattern' => '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$',
-                        'groups' => ['password', 'create', 'update'],
+                        'groups' => ['password'],
                     ]),
                     new NotBlank(['groups' => ['create']]),
                     new Length([
                         'min' => 16,
-                        'max' => 4096,
+                        'minMessage' => t('Your password must have at least {{ limit }} characters'),
+                        'max' => 128,
                         'groups' => ['create', 'update'],
                     ]),
                 ], ],

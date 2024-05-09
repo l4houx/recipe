@@ -1,0 +1,28 @@
+<div class="card border-0 mb-4">
+    <div class="card-header">
+        <h4 class="mb-0">
+            {{ pagetitle }} 
+            {% if app.request.attributes.get('_route') == 'dashboard_restaurant_scanner_edit' %}
+                "{{ scanner.name }}"
+            {% endif %}
+        </h4>
+    </div>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+        {{ form_widget(form._token) }}
+        {{ form_errors(form) }}
+        <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+                {% if scanner.id %}
+                    {% include "global/message.html.twig" with { type: "dark", icon: "bi bi-exclamation-circle", "message": ("Leave the password empty to keep the old one"|trans) } %}
+                {% endif %}
+            </div>
+            {{ form_widget(form) }}
+            <div class="col-12 pt-2">
+                <button type="submit" class="{% if scanner.id %}btn btn-warning{% else %}btn btn-primary{% endif %} me-4">
+                    {% if scanner.id %}{{ 'Update'|trans }}{% else %}{{ 'Save'|trans }}{% endif %}
+                </button>
+            </div>
+        </div>
+    {{ form_end(form, {'render_rest': false}) }}
+</div>

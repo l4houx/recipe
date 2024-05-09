@@ -21,7 +21,7 @@ class MainController extends BaseController
         $datefrom = date_format(new \DateTime(), 'Y-m-01');
         $dateto = date_format(new \DateTime(), 'Y-m-t');
 
-        $ordersQuantityByDate = $settingService->getOrders(['restaurant' => $this->getUser()->getRestaurant()->getSlug(), 'ordersQuantityByDateStat' => true, 'order' => 'ASC', 'datefrom' => $datefrom, 'dateto' => $dateto])->getQuery()->getResult();
+        $ordersQuantityByDate = $settingService->getOrders(['restaurant' => $this->getUser()->getRestaurant()?->getSlug(), 'ordersQuantityByDateStat' => true, 'order' => 'ASC', 'datefrom' => $datefrom, 'dateto' => $dateto])->getQuery()->getResult();
 
         foreach ($ordersQuantityByDate as $i => $resultArray) {
             $ordersQuantityByDate[$i] = array_values($resultArray);

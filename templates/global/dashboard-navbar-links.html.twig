@@ -30,14 +30,6 @@
 
 {# Administrator role sidebar links #}
 {% if is_granted('ROLE_ADMINISTRATOR') or is_granted('ROLE_ADMIN') %}
-	{#  
-	<li class="nav-item">
-		<a class="nav-link {% if routename == "dashboard_admin_index" %}active{% endif %}" href="{{ path('dashboard_admin_index') }}">
-			<i class="nav-icon bi bi-speedometer2 me-2"></i>
-			{{ 'Dashboard'|trans }}
-		</a>
-	</li>
-	#}
 	<li class="nav-item">
 		<div class="nav-divider"></div>
 	</li>
@@ -301,10 +293,10 @@
 			<i class="nav-icon bi bi-people me-2"></i>
 			{{ 'Account'|trans }}
 		</a>
-		<div id="account-submenu-{{random}}" class="collapse {% if routename == "dashboard_creator_account_change_password" %}show{% endif %}" data-bs-parent="#sideNavbar">
+		<div id="account-submenu-{{random}}" class="collapse {% if routename == "dashboard_change_password" %}show{% endif %}" data-bs-parent="#sideNavbar">
 			<ul class="nav flex-column">
 				<li class="nav-item">
-					<a class="nav-link {% if routename == "dashboard_creator_account_change_password" %}active{% endif %}" href="{{ path('dashboard_creator_account_change_password') }}">
+					<a class="nav-link {% if routename == "dashboard_change_password" %}active{% endif %}" href="{{ path('dashboard_change_password') }}">
 						{{ 'Change password'|trans }}
 					</a>
 				</li>
@@ -353,6 +345,9 @@
 {# Restaurant role sidebar links #}
 {% elseif is_granted('ROLE_RESTAURANT') %}
 	<li class="nav-item">
+		<div class="nav-divider"></div>
+	</li>
+	<li class="nav-item">
 		<a class="nav-link {% if routename == "dashboard_restaurant_profile" %}active{% endif %}" href="{{ path('dashboard_restaurant_profile') }}">
 			<i class="nav-icon bi bi-person-badge me-2"></i>
 			{{ 'My restaurant profile'|trans }}
@@ -378,7 +373,7 @@
 			<i class="nav-icon bi bi-qr-code-scan me-2"></i>
 			{{ 'Scanner App'|trans }}
 		</a>
-		<div id="scanner-app-submenu-{{random}}" class="collapse {% if routename == "dashboard_restaurant_scanner_index" or routename == "dashboard_restaurant_scanner_edit" or routename == "dashboard_restaurant_scanner_edit" or routename == "dashboard_restaurant_setting_scanner_app" %}show{% endif %}" data-bs-parent="#sideNavbar">
+		<div id="scanner-app-submenu-{{random}}" class="collapse {% if routename == "dashboard_restaurant_scanner_index" or routename == "dashboard_restaurant_scanner_new" or routename == "dashboard_restaurant_scanner_edit" or routename == "dashboard_restaurant_setting_scanner_app" %}show{% endif %}" data-bs-parent="#sideNavbar">
 			<ul class="nav flex-column">
 				<li class="nav-item">
 					<a class="nav-link {% if routename == "dashboard_restaurant_scanner_index" or routename == "dashboard_restaurant_scanner_new" or routename == "dashboard_restaurant_scanner_edit" %}active{% endif %}" href="{{ path('dashboard_restaurant_scanner_index') }}">
@@ -400,7 +395,7 @@
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link {% if routename == "dashboard_restaurant_review_index" %}active{% endif %}" href="{{ path('dashboard_creator_review_index') }}">
+		<a class="nav-link {% if routename == "dashboard_restaurant_review_index" %}active{% endif %}" href="{{ path('dashboard_restaurant_review_index') }}">
 			<i class="nav-icon bi bi-star me-2"></i>
 			{{ 'Reviews'|trans }}
 		</a>
@@ -436,10 +431,10 @@
 			<i class="nav-icon bi bi-people me-2"></i>
 			{{ 'Account'|trans }}
 		</a>
-		<div id="account-submenu-{{random}}" class="collapse {% if routename == "dashboard_creator_account_change_password" %}show{% endif %}" data-bs-parent="#sideNavbar">
+		<div id="account-submenu-{{random}}" class="collapse {% if routename == "dashboard_change_password" %}show{% endif %}" data-bs-parent="#sideNavbar">
 			<ul class="nav flex-column">
 				<li class="nav-item">
-					<a class="nav-lin {% if routename == "dashboard_creator_account_change_password" %}active{% endif %}" href="{{ path('dashboard_creator_account_change_password') }}">
+					<a class="nav-link {% if routename == "dashboard_change_password" %}active{% endif %}" href="{{ path('dashboard_change_password') }}">
 						{{ 'Change password'|trans }}
 					</a>
 				</li>
@@ -448,6 +443,9 @@
 	</li>
 {# Creator (User) role sidebar links #}
 {% elseif is_granted('ROLE_CREATOR') or is_granted('ROLE_USER') %}
+	<li class="nav-item">
+		<div class="nav-divider"></div>
+	</li>
 	<li class="nav-item">
 		<a class="nav-link {% if routename == "dashboard_creator_orders" or routename == "dashboard_creator_order_details" %}active{% endif %}" href="{{ path('dashboard_creator_orders') }}">
 			<i class="nav-icon bi bi-ticket me-2"></i>
@@ -518,7 +516,7 @@
 				<i class="nav-icon bi bi-people me-2"></i>
 				{{ 'Account'|trans }}
 			</a>
-			<div id="account-submenu-{{random}}" class="collapse {% if routename == "dashboard_creator_account_index" or routename == "dashboard_creator_account_change_password" %}show{% endif %}" data-bs-parent="#sideNavbar">
+			<div id="account-submenu-{{random}}" class="collapse {% if routename == "dashboard_creator_account_index" or routename == "dashboard_change_password" %}show{% endif %}" data-bs-parent="#sideNavbar">
 				<ul class="nav flex-column">
 					<li class="nav-item">
 						<a class="nav-link {% if routename == "dashboard_creator_account_index" %}active{% endif %}" href="{{ path('dashboard_creator_account_index') }}">
@@ -526,7 +524,7 @@
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-lin {% if routename == "dashboard_creator_account_change_password" %}active{% endif %}" href="{{ path('dashboard_creator_account_change_password') }}">
+						<a class="nav-lin {% if routename == "dashboard_change_password" %}active{% endif %}" href="{{ path('dashboard_change_password') }}">
 							{{ 'Change password'|trans }}
 						</a>
 					</li>
@@ -536,6 +534,9 @@
 	{% endif %}
 {# Point of sale role sidebar links #}
 {% elseif is_granted('ROLE_POINTOFSALE') %}
+	<li class="nav-item">
+		<div class="nav-divider"></div>
+	</li>
 	<li class="nav-item">
 		<a class="nav-link {% if routename == "dashboard_pointofsale_orders" or routename == "dashboard_pointofsale_order_details" %}active{% endif %}" href="{{ path('dashboard_pointofsale_orders') }}">
 			<i class="nav-icon bi bi-basket me-2"></i>

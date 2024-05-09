@@ -7,10 +7,12 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="border-bottom pb-3 mb-3 d-md-flex align-items-center justify-content-between">
-                {% set breadcrumb = [{ "dashboard_main": ('Dashboard' | trans), "current":(pagetitle) }] %}
+                {% set breadcrumb = [{ "dashboard_main": ('Dashboard'|trans), "current":(pagetitle) }] %}
                 {% include "global/dashboard-breadcrumb.html.twig" with breadcrumb %}
                 <div>
-                    <a href="{{ path('dashboard_admin_help_center_category_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                    {% if is_granted('ROLE_VERIFIED') %}
+                        <a href="{{ path('dashboard_admin_help_center_category_new') }}" class="btn btn-primary me-2">{{ 'Create'|trans }}</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -18,8 +20,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="p-4 row justify-content-md-between mb-4 mb-xl-0 gx-3">
-        <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+    <div class="p-4 row justify-content-between g-3">
+        <div class="col-xxl-5 col-lg-3 col-md-12 col-12 mb-2 mb-lg-0">
             <form class="d-flex align-items-center">
                 <span class="position-absolute ps-3 search-icon">
                     <i class="bi bi-search"></i>
@@ -27,12 +29,16 @@
                 <input type="search" name="keyword" value="{{ app.request.get('keyword') }}" class="form-control ps-6" placeholder="{{ 'Search...'|trans }}">
             </form>
         </div>
-        <div class="col-12 col-lg-6">
-            <select class="form-select">
-                <option selected="">{{ "Select an option"|trans }}</option>
-                <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "c.createdAt", {"direction": "desc", "criteria": "c.createdAt"}) }}</option>
-                <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "c.createdAt", {"direction": "asc", "criteria": "c.createdAt"}) }}</option>
-            </select>
+        <div class="col-xxl-3 col-lg-5 col-md-12 col-12">
+            <div class="row justify-content-lg-end">
+                <label class="col-auto col-form-label" for="sortable-select" >{{ "Sort by"|trans }}</label>
+                <div class="col-auto">
+                    <select class="form-select" aria-label="{{ "Select an option"|trans }}" id="sortable-select">
+                        <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "c.createdAt", {"direction": "desc", "criteria": "c.createdAt"}) }}</option>
+                        <option value="">{{ knp_pagination_sortable(rows, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "c.createdAt", {"direction": "asc", "criteria": "c.createdAt"}) }}</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">

@@ -187,8 +187,8 @@
                             {{ 'My profile'|trans }}
                         </a>
                     </li>
-                    <li class="nav-item {% if routename == "dashboard_creator_account_change_password" %}active{% endif %}">
-                        <a class="nav-link" href="{{ path('dashboard_creator_account_change_password') }}">
+                    <li class="nav-item {% if routename == "dashboard_change_password" %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('dashboard_change_password') }}">
                             <i class="bi bi-person-badge nav-icon"></i>
                             {{ 'Change password'|trans }}
                         </a>
@@ -227,8 +227,8 @@
                     {{ 'Profile privacy'|trans }}
                 </a>
             </li>
-            <li class="nav-item {% if routename == "dashboard_creator_account_linked_profiles" %}active{% endif %}">
-                <a class="nav-link" href="{{ path('dashboard_creator_account_linked_profiles') }}">
+            <li class="nav-item {% if routename == "dashboard_linked_profiles" %}active{% endif %}">
+                <a class="nav-link" href="{{ path('dashboard_linked_profiles') }}">
                     <i class="bi bi-person nav-icon"></i>
                     {{ 'Linked accounts'|trans }}
                 </a>

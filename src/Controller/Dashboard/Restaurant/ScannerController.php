@@ -35,7 +35,7 @@ class ScannerController extends BaseController
         $username = '' == $request->query->get('username') ? 'all' : $request->query->get('username');
         $isVerified = '' == $request->query->get('isVerified') ? 'all' : $request->query->get('isVerified');
 
-        $rows = $paginator->paginate($this->settingService->getUsers(['role' => 'scanner', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()->getSlug(), 'username' => $username, 'isVerified' => $isVerified])->getQuery(), $request->query->getInt('page', 1), 10);
+        $rows = $paginator->paginate($this->settingService->getUsers(['role' => 'scanner', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()?->getSlug(), 'username' => $username, 'isVerified' => $isVerified])->getQuery(), $request->query->getInt('page', 1), 10);
 
         return $this->render('dashboard/restaurant/scanner/index.html.twig', compact('rows'));
     }
@@ -49,7 +49,7 @@ class ScannerController extends BaseController
             $form = $this->createForm(ScannerFormType::class, $scanner, ['validation_groups' => 'create'])->handleRequest($request);
         } else {
             /** @var User $scanner */
-            $scanner = $this->settingService->getUsers(['role' => 'scanner', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()->getSlug(), 'isVerified' => 'all', 'slug' => $slug])->getQuery()->getOneOrNullResult();
+            $scanner = $this->settingService->getUsers(['role' => 'scanner', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()?->getSlug(), 'isVerified' => 'all', 'slug' => $slug])->getQuery()->getOneOrNullResult();
             if (!$scanner) {
                 $this->addFlash('danger', $this->translator->trans('The scanner can not be found'));
 

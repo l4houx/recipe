@@ -22,13 +22,16 @@ class ScannerFormType extends AbstractType
         $passwordAttrs = ['minlength' => 16];
 
         $builder
-            ->add('username', TextType::class, [
-                'label' => t('User name :'),
+            ->add('name', TextType::class, [
                 'purify_html' => true,
                 'required' => true,
+                'label' => t('Name :'),
+            ])
+            ->add('username', TextType::class, [
+                'purify_html' => true,
                 'mapped' => false,
-                'empty_data' => '',
-                'attr' => ['placeholder' => t('User name')],
+                'required' => true,
+                'label' => t('Username :'),
                 'constraints' => [
                     new NotBlank(['groups' => ['create', 'update']]),
                     new Length([
@@ -38,27 +41,12 @@ class ScannerFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('slug', TextType::class, [
-                'label' => t('Slug :'),
-                'empty_data' => '',
-                'required' => false,
-                'help' => t('Field must contain an unique value.'),
-            ])
-            ->add('name', TextType::class, [
-                'purify_html' => true,
-                'required' => true,
-                'label' => t('Name :'),
-            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
                 'required' => true,
                 'invalid_message' => t('Password fields must correspond.'),
-                'options' => [
-                    'purify_html' => true,
-                    'toggle' => true,
-                    'translation_domain' => 'messages',
-                ],
+                'options' => ['purify_html' => true, 'toggle' => true, 'translation_domain' => 'messages',],
                 'first_options' => ['required' => true, 'label' => t('Password :'), 'constraints' => [
                     new Regex([
                         'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$/',

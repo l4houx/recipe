@@ -39,7 +39,7 @@ security:
                 target: home
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800
+                lifetime: 2592000 # 1 month in seconds
                 path: /
                 always_remember_me: true
             #switch_user: { role: ROLE_ADMIN_APPLICATION }
@@ -49,9 +49,15 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/%website_dashboard_path%/admin, roles: ROLE_TEAM }
-        - { path: ^/%website_dashboard_path%/account, roles: ROLE_USER }
-        - { path: ^/api/, roles: ROLE_APPLICATION}
+        - { path: ^(.*?)/%website_dashboard_path%/admin, roles: ROLE_TEAM }
+        - { path: ^(.*?)/%website_dashboard_path%/_trans/, roles: ROLE_ADMIN_APPLICATION }
+        - { path: ^(.*?)/%website_dashboard_path%/_console, roles: ROLE_ADMIN_APPLICATION }
+        - { path: ^(.*?)/%website_dashboard_path%/restaurant, roles: ROLE_RESTAURANT }
+        - { path: ^(.*?)/%website_dashboard_path%/creator, roles: ROLE_CREATOR }
+        - { path: ^(.*?)/%website_dashboard_path%/account, roles: ROLE_USER }
+        - { path: ^(.*?)/%website_dashboard_path%/scanner, roles: ROLE_SCANNER }
+        - { path: ^(.*?)/%website_dashboard_path%/pointofsale, roles: ROLE_POINTOFSALE }
+        - { path: ^(.*?)/api/, roles: ROLE_APPLICATION }
 
     role_hierarchy:
         ROLE_CREATOR: ROLE_USER

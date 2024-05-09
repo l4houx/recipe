@@ -17,13 +17,13 @@
                     {% set breadcrumb = [{ "dashboard_main": ('Dashboard' | trans), "dashboard_creator_ticket_index": ('My tickets'|trans), "current":(pagetitle) }] %}
                 {% endif %}
                 {% include "global/dashboard-breadcrumb.html.twig" with breadcrumb %}
-                {% if is_granted('ROLE_VERIFIED') %}
-                    <div>
+                <div>
+                    {% if is_granted('ROLE_VERIFIED') %}
                         <a href="{{ path('dashboard_creator_ticket_new') }}" class="btn btn-primary me-2">
                             {{ 'Create'|trans }}
                         </a>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

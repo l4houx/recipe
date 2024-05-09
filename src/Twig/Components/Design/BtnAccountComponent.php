@@ -19,7 +19,7 @@ class BtnAccountComponent
             'label' => 'My dashboard',
         ],
         [
-            'current' => 'dashboard_creator_account_change_password',
+            'current' => 'dashboard_change_password',
             'path' => 'dashboard_creator_account_dashboard',
             'label' => 'My dashboard',
         ],

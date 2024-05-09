@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { Toast } from 'bootstrap';
+import { Toast } from '../vendor/bootstrap/bootstrap.index.js';
 
 /**
  * @class FlashMessagesController

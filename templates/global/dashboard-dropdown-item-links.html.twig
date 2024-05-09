@@ -32,12 +32,14 @@
 			{% endif %}
 		</a>
 	</li>
-	<li>
-		<a class="dropdown-item" href="{{ path('dashboard_creator_account_dashboard') }}">
-			<i class="bi bi-person me-2"></i>
-			{{ 'My profile'|trans }}
-		</a>
-	</li>
+	{% if is_granted('ROLE_CREATOR') %}
+		<li>
+			<a class="dropdown-item" href="{{ path('dashboard_creator_account_dashboard') }}">
+				<i class="bi bi-person me-2"></i>
+				{{ 'My profile'|trans }}
+			</a>
+		</li>
+	{% endif %}
 	<li>
 		<a class="dropdown-item" href="#!">
 			<i class="bi bi-star me-2"></i>

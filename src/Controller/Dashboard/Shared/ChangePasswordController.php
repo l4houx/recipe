@@ -14,12 +14,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/** My Profile Creator */
-#[Route(path: '/%website_dashboard_path%/creator', name: 'dashboard_creator_')]
-#[IsGranted(HasRoles::CREATOR)]
+/** My Profile User */
+#[IsGranted(HasRoles::DEFAULT)]
 class ChangePasswordController extends BaseController
 {
-    #[Route(path: '/account-change-password', name: 'account_change_password', methods: ['GET', 'POST'])]
+    #[Route(path: '/%website_dashboard_path%/change-password', name: 'dashboard_change_password', methods: ['GET', 'POST'])]
     public function changePassword(
         Request $request,
         UserPasswordHasherInterface $hasher,
@@ -46,6 +45,6 @@ class ChangePasswordController extends BaseController
             }
         }
 
-        return $this->render('dashboard/shared/account/creator/change_password.html.twig', compact('form'));
+        return $this->render('dashboard/shared/auth/change_password.html.twig', compact('form'));
     }
 }

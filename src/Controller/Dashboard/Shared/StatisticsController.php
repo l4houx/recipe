@@ -14,8 +14,7 @@ use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\LineChart;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-#[Route(path: '/%website_dashboard_path%/admin/manage-recipes', name: 'dashboard_admin_recipe_date_statistics_')]
-#[Route(path: '/%website_dashboard_path%/restaurant/my-recipes', name: 'dashboard_restaurant_recipe_date_statistics_')]
+#[Route(path: '/%website_dashboard_path%')]
 #[IsGranted(HasRoles::DEFAULT)]
 class StatisticsController extends BaseController
 {
@@ -26,8 +25,8 @@ class StatisticsController extends BaseController
     ) {
     }
 
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'index', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'index', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/admin/manage-recipes/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'dashboard_admin_recipe_date_statistics_index', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/restaurant/my-recipes/{recipeSlug}/recipe-dates/{recipeDateReference}/statistics', name: 'dashboard_restaurant_recipe_date_statistics_index', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
     public function recipeDateStatistics(string $recipeDateReference)
     {
         $restaurant = 'all';
@@ -185,8 +184,8 @@ class StatisticsController extends BaseController
         ));
     }
 
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'reservedSeats', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
-    #[Route(path: '/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'reservedSeats', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/admin/manage-recipes/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'dashboard_admin_recipe_date_statistics_reservedSeats', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
+    #[Route(path: '/restaurant/my-recipes/{recipeSlug}/recipe-dates/{recipeDateReference}/reserved-seats', name: 'dashboard_restaurant_recipe_date_statistics_reservedSeats', methods: ['GET'], requirements: ['recipeSlug' => Requirement::ASCII_SLUG, 'recipeDateReference' => Requirement::ASCII_SLUG])]
     public function recipeDateReservedSeats(string $recipeDateReference)
     {
         $restaurant = 'all';

@@ -39,7 +39,7 @@
                                                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"></path>
                                             </svg>
                                         </span>
-                                        <span>{{ 'Recipes count'|trans }} {{ venue.recipedates|length }}</span>
+                                        <span>{{ 'Recipes count'|trans }} {{ venue.recipedates | length }}</span>
                                     </li>
                                     <li class="list-inline-item">
                                         <svg class="me-1 mt-n1" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -47,7 +47,7 @@
                                             <rect x="7" y="5" width="2" height="9" rx="1" fill="#DBD8E9"></rect>
                                             <rect x="11" y="2" width="2" height="12" rx="1" fill="#DBD8E9"></rect>
                                         </svg>
-                                        {{ 'Seating plans'|trans }} {{ venue.seatingPlans|length }}
+                                        {{ 'Seating plans'|trans }} {{ venue.seatingPlans | length }}
                                     </li>
                                     <li class="list-inline-item">
                                         <svg class="me-1 mt-n1" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,7 +122,18 @@
                                         </a>
                                     {% endif %}
                                     {% if venue.deletedAt %}
-
+                                        <a class="dropdown-item" href="{{ path('dashboard_admin_venue_restore', { slug : venue.slug }) }}">
+                                            <i class="bi bi-trash-fill dropdown-item-icon"></i>
+                                            {{ 'Restore'|trans }}
+                                        </a>
+                                        <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-venue-delete-form').submit();" class="dropdown-item">
+                                            <i class="bi bi-trash dropdown-item-icon"></i>
+                                            {{ 'Delete permanently'|trans }}
+                                        </a>
+                                        <form id="js-venue-delete-form" action="{{ path('dashboard_admin_venue_delete', { slug : venue.slug }) }}" method="post" class="">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('venue_deletion_' ~ venue.slug) }}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                        </form>
                                     {% else %}
                                         <a class="dropdown-item" href="{{ path('dashboard_admin_venue_disable', { slug : venue.slug }) }}">
                                             <i class="bi bi-eye-slash dropdown-item-icon"></i>
@@ -146,7 +157,14 @@
                                         </a>
                                     {% endif %}
                                     {% if venue.deletedAt %}
-
+                                        <a href="#" onclick="event.preventDefault(); confirm('{{ "Are you sure you want to delete this item?"|trans }}') && document.getElementById('js-restaurant-delete-form').submit();" class="dropdown-item">
+                                            <i class="bi bi-trash dropdown-item-icon"></i>
+                                            {{ 'Delete permanently'|trans }}
+                                        </a>
+                                        <form id="js-restaurant-delete-form" action="{{ path('dashboard_restaurant_venue_delete', { slug : venue.slug }) }}" method="post" class="">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('restaurant_deletion_' ~ venue.slug) }}">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                        </form>
                                     {% else %}
                                         <a class="dropdown-item" href="{{ path('dashboard_restaurant_venue_disable', { slug : venue.slug }) }}">
                                             <i class="bi bi-eye-slash dropdown-item-icon"></i>

@@ -124,7 +124,7 @@
                                     </a>
                                     <a class="dropdown-item" href="{{ path('dashboard_admin_orders', {recipe : recipe.slug, status: 1}) }}">
                                         <i class="bi bi-people dropdown-item-icon"></i>
-                                        {{ 'Attendees'|trans }}
+                                        {{ 'Creators'|trans }}
                                     </a>
                                     <a class="dropdown-item" href="{{ path('dashboard_admin_review_index', {recipe : recipe.slug}) }}">
                                         <i class="bi bi-star dropdown-item-icon"></i>
@@ -166,7 +166,7 @@
                                     </a>
                                     <a class="dropdown-item" href="{{ path('dashboard_restaurant_orders', {recipe : recipe.slug, status: 1}) }}">
                                         <i class="bi bi-people dropdown-item-icon"></i>
-                                        {{ 'Attendees'|trans }}
+                                        {{ 'Creators'|trans }}
                                     </a>
                                     <a class="dropdown-item" href="{{ path('dashboard_restaurant_review_index', {recipe : recipe.slug}) }}">
                                         <i class="bi bi-star dropdown-item-icon"></i>
@@ -266,7 +266,7 @@
                                                 {{ "View stats"|trans }}
                                             </a>
                                         {% elseif is_granted("ROLE_RESTAURANT") %}
-                                            <a href="{{ path("dashboard_restaurant_recipe_date_statistics__index", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
+                                            <a href="{{ path("dashboard_restaurant_recipe_date_statistics_index", {recipeDateReference: recipeDate.reference, recipeSlug: recipe.slug}) }}" class="float-end">
                                                 {{ "View stats"|trans }}
                                             </a>
                                         {% endif %}

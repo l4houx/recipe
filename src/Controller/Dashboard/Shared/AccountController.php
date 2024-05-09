@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/** My Profile Creator */
+/** My Profile Creator (User) */
 #[Route(path: '/%website_dashboard_path%/creator', name: 'dashboard_creator_')]
 #[IsGranted(HasRoles::CREATOR)]
 class AccountController extends BaseController
@@ -40,19 +40,5 @@ class AccountController extends BaseController
         }
 
         return $this->render('dashboard/shared/account/creator/index.html.twig', compact('form', 'user'));
-    }
-
-    #[Route(path: '/social-profile', name: 'account_social_profiles', methods: ['GET', 'POST'])]
-    public function socialProfiles(Request $request): Response
-    {
-        return $this->render('dashboard/shared/account/creator/social-profiles.html.twig');
-    }
-
-    #[Route(path: '/account-linked', name: 'account_linked_profiles', methods: ['GET', 'POST'])]
-    public function linkedProfiles(Request $request): Response
-    {
-        $user = $this->getUserOrThrow();
-
-        return $this->render('dashboard/shared/account/creator/linked-profiles.html.twig', compact('user'));
     }
 }

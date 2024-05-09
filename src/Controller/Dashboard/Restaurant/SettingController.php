@@ -76,8 +76,8 @@ class SettingController extends BaseController
                 $this->addFlash('danger', $this->translator->trans('The form contains invalid data'));
             }
         } else {
-            $form->get('showRecipeDateStatsOnScannerApp')->setData($this->getUser()->getRestaurant()->getShowRecipeDateStatsOnScannerApp());
-            $form->get('allowTapToCheckInOnScannerApp')->setData($this->getUser()->getRestaurant()->getAllowTapToCheckInOnScannerApp());
+            $form->get('showRecipeDateStatsOnScannerApp')->setData($this->getUser()->getRestaurant()?->getShowRecipeDateStatsOnScannerApp());
+            $form->get('allowTapToCheckInOnScannerApp')->setData($this->getUser()->getRestaurant()?->getAllowTapToCheckInOnScannerApp());
         }
 
         return $this->render('dashboard/restaurant/setting/scanner-app.html.twig', compact('form'));

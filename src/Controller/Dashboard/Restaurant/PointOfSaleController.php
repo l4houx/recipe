@@ -35,7 +35,7 @@ class PointOfSaleController extends BaseController
         $username = '' == $request->query->get('username') ? 'all' : $request->query->get('username');
         $isVerified = '' == $request->query->get('isVerified') ? 'all' : $request->query->get('isVerified');
 
-        $rows = $paginator->paginate($this->settingService->getUsers(['role' => 'pointofsale', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()->getSlug(), 'username' => $username, 'isVerified' => $isVerified])->getQuery(), $request->query->getInt('page', 1), 10);
+        $rows = $paginator->paginate($this->settingService->getUsers(['role' => 'pointofsale', 'createdbyrestaurantslug' => $this->getUser()->getRestaurant()?->getSlug(), 'username' => $username, 'isVerified' => $isVerified])->getQuery(), $request->query->getInt('page', 1), 10);
 
         return $this->render('dashboard/restaurant/pointofsale/index.html.twig', compact('rows'));
     }
