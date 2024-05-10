@@ -1,0 +1,34 @@
+<div class="card border-0 mb-4 {{ "recipe_new" in app.request.get("_route") ? "new-recipe" : "edit-recipe" }}">
+	<div class="card-header">
+        <h4 class="mb-0">
+            {{ pagetitle }}
+            {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                {% if app.request.attributes.get('_route') == 'dashboard_admin_recipe_edit' %}
+                    "{{ recipe.name }}"
+                {% endif %}
+            {% elseif is_granted('ROLE_RESTAURANT')  %}
+                {% if app.request.attributes.get('_route') == 'dashboard_restaurant_recipe_edit' %}
+                    "{{ recipe.name }}"
+                {% endif %}
+            {% endif %}
+        </h4>
+	</div>
+	{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+        {{ form_errors(form) }}
+        {{ form_widget(form._token) }}
+        <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+            </div>
+            {{ form_widget(form) }}
+            <div class="row">
+                <div class="col-12 pt-2">
+                    <button type="submit" class="{% if recipe.id %}btn btn-warning{% else %}btn btn-primary{% endif %} me-4">
+                        {% if recipe.id %}{{ 'Update'|trans }}{% else %}{{ 'Save'|trans }}{% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+	{{ form_end(form, {'render_rest': false}) }}
+</div>
+<div id="seating-plans-sections-seats-count" data-seating-plans-sections-seats-count="{{ seatingPlansSectionsSeatsCountArrayJson }}"></div>

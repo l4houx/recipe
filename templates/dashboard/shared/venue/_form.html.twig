@@ -1,0 +1,56 @@
+<div class="card border-0 mb-4">
+	<div class="card-header">
+        <h4 class="mb-0">
+            {{ pagetitle }}
+            {% if is_granted('ROLE_ADMIN_APPLICATION') %}
+                {% if app.request.attributes.get('_route') == 'dashboard_admin_venue_edit' %}
+                    "{{ venue.name }}"
+                {% endif %}
+            {% elseif is_granted('ROLE_RESTAURANT')  %}
+                {% if app.request.attributes.get('_route') == 'dashboard_restaurant_venue_edit' %}
+                    "{{ venue.name }}"
+                {% endif %}
+            {% endif %}
+        </h4>
+	</div>
+	{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'row gx-3 needs-validation'} }) }}
+        {{ form_errors(form) }}
+        {{ form_widget(form._token) }}
+        <div class="card-body">
+            <div>
+                {% include "global/message.html.twig" with { type: "info", icon: "bi bi-exclamation-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+            </div>
+            {{ form_row(form.type) }}
+            {{ form_row(form.amenities) }}
+            {{ form_row(form.neighborhoods) }}
+            {{ form_row(form.pricing) }}
+            {{ form_row(form.availibility) }}
+            {{ form_row(form.isQuoteform) }}
+            {{ form_row(form.contactemail) }}
+            <div class="row">
+                <div class="mb-3 col-md-6 col-12">
+                    {{ form_row(form.street) }}
+                    {{ form_row(form.street2) }}
+                    {{ form_row(form.city) }}
+                    {{ form_row(form.postalcode) }}
+                    {{ form_row(form.state) }}
+                    {{ form_row(form.country) }}
+                    {{ form_row(form.isShowmap) }}
+                </div>
+                <div class="mb-3 col-md-6 col-12">
+                    <div class="sticky-top sticky-sidebar pt-0">
+                        <iframe width="100%" height="300" class="venue-map" src="{{ setting.getCurrentRequestProtocol() }}://maps.google.com/maps?q=university%20of%20san%20francisco&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                    </div>
+                </div>
+            </div>
+            {{ form_row(form.images) }}
+            <div class="row">
+                <div class="col-12 pt-2">
+                    <button type="submit" class="{% if venue.id %}btn btn-warning{% else %}btn btn-primary{% endif %} me-4">
+                        {% if venue.id %}{{ 'Update'|trans }}{% else %}{{ 'Save'|trans }}{% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+	{{ form_end(form, {'render_rest': false}) }}
+</div>

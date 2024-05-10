@@ -84,9 +84,9 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="mb-1">
-                        {{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}
+                        {{ pagetitle }}
                     </h4>
-                    <p class="mb-0"></p>
+                    <p class="mb-0">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': rows.getTotalItemCount}) }}</p>
                 </div>
                 {% if rows.getTotalItemCount > 0 %}
                     {% include "dashboard/shared/reports/manage-reports-table.html.twig" with {rows: rows} %}
